@@ -1,69 +1,180 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .max-container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .input {
+    @apply sm:flex-1 max-sm:w-full text-base leading-normal text-secondary pl-5 max-sm:p-5 outline-none sm:border-none border max-sm:border-secondary max-sm:rounded-full;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo {
+    width: 4.75rem;
+    height: 4.75rem;
+    margin-right: 1rem;
+  }
+
+  .logo-text {
+    font-size: 2rem;
+    color: #000;
+    font-weight: 700;
+    font-family: Merriweather;
+    font-style: normal;
+  }
+
+  .button-1 {
+    display: inline-flex;
+    padding: 0.4375rem 1.25rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #000;
+    background: #FFF;
+    color: #000;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+  .button-2 {
+    display: inline-flex;
+    padding: 0.4375rem 1.25rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 0.3125rem;
+    background: #000;
+    color: #FFF;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+}
+
+
+@layer utilities {
+  .padding {
+    @apply sm:px-16 px-8 sm:py-24 py-12;
+  }
+
+  .padding-x {
+    @apply sm:px-16 px-8;
+  }
+
+  .padding-y {
+    @apply sm:py-24 py-12;
+  }
+
+  .padding-l {
+    @apply sm:pl-16 pl-8;
+  }
+
+  .padding-r {
+    @apply sm:pr-16 pr-8;
+  }
+
+  .padding-t {
+    @apply sm:pt-24 pt-12;
+  }
+
+  .padding-b {
+    @apply sm:pb-24 pb-12;
+  }
+
+  .info-text {
+    @apply font-merriweather text-secondary text-lg leading-7;
+  }
+
+  .body-text {
+    @apply font-crimson text-xl leading-normal;
+  }
+
+  .nav-text {
+    @apply font-crimson font-normal text-xl leading-normal;
+  }
+  
+  .header-text {
+    @apply font-merriweather font-bold md:text-3xl leading-normal py-6 text-2xl;
+  }
+  .text-container {
+    @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson;
+  }
+}
+
+.search {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  align-items: center;
+  color: #B3B3B3;
+  width: 250px;
+  height: 30px;
+  border: 1px solid #B3B3B3;
+  border-radius: 20px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.search:hover {
+  border: 2px solid #17A1FA66;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.hamburger {
+  display: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.underline-blue {
+  text-decoration-color: #17A1FA;
+}
+
+@media (max-width: 1024px) {
+  .hamburger {
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+    color: white;
+    position: fixed;
+    right: 1rem;
+    top: 5vh;
+    z-index: 10;
+    background: white;
+    border-radius: 5px;
   }
-  a:hover {
-    color: #747bff;
+
+  .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: #17A1FA;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
   }
+
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
 }
