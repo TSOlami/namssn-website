@@ -8,7 +8,7 @@ export default function App() {
       <Route path='/' exact element={<Landing/>} />
       <Route path='/signin' element={<SignIn/>} />
       <Route path='/signup' element={<SignUp/>} />
-      <Route path='/payment' element={<PaymentPage/>} />
+      <Route path='/payments' element={<PaymentPage/>} />
       <Route path='/home' element={<Home/>} />
       <Route path='/resources' element={<Resources/>} />
       <Route path='/profile' element={<Profile/>}/>

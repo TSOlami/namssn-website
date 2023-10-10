@@ -2,8 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import cookieParser from 'cookie-parser';
-
-
 import { notFound, errorHandler } from './middleware/errormiddleware.js';
 import connectDb from './config/db.js';
 connectDb();
@@ -21,6 +19,8 @@ import adminRoutes from './routes/adminRoutes.js'; // Admin-related routes
 
 // Create an Express application
 const app = express();
+// Define the API version from environment variables, default to 'v1'
+const apiVersion = process.env.API_VERSION || 'v1';
 
 
 // Middleware setup
@@ -29,8 +29,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 app.use(cookieParser()); // Parse cookies
 
 
-// Define the API version from environment variables, default to 'v1'
-const apiVersion = process.env.API_VERSION || 'v1';
+
 
 // Define routes for users and admin based on the API version
 app.use(`/api/${apiVersion}/users`, userRoutes); // User routes
