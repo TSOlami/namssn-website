@@ -45,7 +45,7 @@ const SignUpForm = () => {
 		password: "",
 	};
 	const validationSchema = Yup.object({
-		fullName: Yup.string()
+		name: Yup.string()
 			.min(5, "Must be 5 characters or more")
 			.required("Name is required"),
 		username: Yup.string().required("A username is required"),
