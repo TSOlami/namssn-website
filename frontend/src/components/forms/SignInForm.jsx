@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation, setCredentials } from '../../redux';
 import FormErrors from './FormErrors';
 import InputField from "../InputField";
+import { toast } from "react-toastify";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,8 +50,9 @@ const SignInForm = () => {
         const res = await login(values).unwrap();
         dispatch(setCredentials({...res}));
         navigate('/home');
+        toast.success('Login successful, Welcome back!');
       } catch (err) {
-        console.log(err?.data?.message || err?.error)
+        toast.error(err?.data?.message || err?.error)
       }
 		},
 	});
