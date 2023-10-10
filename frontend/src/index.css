@@ -141,6 +141,24 @@
   text-decoration-color: #17A1FA;
 }
 
+.orangish {
+  background: #FFF3E5;
+}
+
+.blueish {
+  background: #EAEFFF;
+}
+
+.reddish {
+  background: #FEEAEC;
+}
+
+.greenish {
+  background: #E3FFE8;
+}
+
+
+
 @media (max-width: 1024px) {
   .hamburger {
     display: block;
