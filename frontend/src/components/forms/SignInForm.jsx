@@ -1,27 +1,30 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FormErrors, InputField } from "../../components";
+/* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { useDispatch, useSelector } from 'react-redux';
 
+import { useLoginMutation, setCredentials } from '../../redux';
+import FormErrors from './FormErrors';
+import InputField from "../InputField";
 
 const SignInForm = () => {
-  const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    // const res = await fetch("http://localhost:5000/api/auth/signin", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ email, password }),
-    // });
-    console.log(email, password);
-	}
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [ login, { isLoading }]= useLoginMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/home');
+    }
+  }, [navigate, userInfo]);
 
 	// Schema and configuration for form validation
 	const initialvalues = {
@@ -41,8 +44,14 @@ const SignInForm = () => {
 	const formik = useFormik({
 		initialValues: initialvalues,
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			try {
+        const res = await login(values).unwrap();
+        dispatch(setCredentials({...res}));
+        navigate('/home');
+      } catch (err) {
+        console.log(err?.data?.message || err?.error)
+      }
 		},
 	});
 
@@ -59,7 +68,8 @@ const SignInForm = () => {
       type="text"
       name="email"
       id="email"
-      onChange={formik.handleChange("email")}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur("email")}
       value={formik.values.email}
       onBlur={formik.handleBlur("email")}
     />
@@ -77,7 +87,9 @@ const SignInForm = () => {
         type={showPassword ? "text" : "password"}
         name="password"
         id="password"
-        onChange={formik.handleChange("password")}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur("password")}
+
         value={formik.values.password}
         onBlur={formik.handleBlur("password")}
       />
