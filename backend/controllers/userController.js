@@ -1,8 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
+import { initiatePayment } from '../utils/paymentback.js';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
+import Payment from '../models/paymentModel.js';
 
 
 // @desc	Authenticate user/set token
@@ -276,6 +278,13 @@ const getUserPayment = asyncHandler(async (req, res) => {
 // Route	POST  /api/v1/users/payments
 // access	Private
 const postUserPayment = asyncHandler(async (req, res) => {
+  try {
+    await initiatePayment (req, res);
+    
+  } catch (error) {
+    
+  }
+  
 	res.status(200).json({ message: 'Payment sent' });
 });
 
