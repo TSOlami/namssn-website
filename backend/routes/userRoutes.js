@@ -66,13 +66,11 @@ router
   .delete(protect, deleteUserProfile);
 
 // Route for getting all blogs
-router
-.route("/blogs")
-.get(protect, getAllBlogs);
+router.get('/blogs', getAllBlogs);
 
 // Route for getting all posts
 router
-.route("/blogs")
+.route("/posts")
 .get(protect, getAllPosts);
 
 // Get, create, update and delete user posts
