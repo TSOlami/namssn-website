@@ -13,5 +13,6 @@ import PageBox from './PageBox';
 import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
+import AdminCard from './AdminCard';
 
-export {FeatureCard, ImageCard, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions };
+export {FeatureCard, ImageCard, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };

@@ -94,3 +94,53 @@ export const mockTeam = [
 		facebook: "",
 	},
 ];
+
+export const mockAccounts = [
+	{
+		name: "Slimanny",
+		reputation: 40,
+		verify: ""
+	},
+	{
+		name: "Ifedimeji",
+		reputation: 300,
+		verify: ""
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		reputation: 400,
+		verify: ""
+	},
+	{
+		name: "Henry Ugeida",
+		reputation: 200,
+		verify: ""
+	},
+]
+
+export const mockReportedAccounts = [
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		matric: "2017/123456",
+		avatar: "avatar2.png",
+		ignore: "",
+		suspend: "",
+	},
+	{
+		name: "Babatunde Oluwaseyi",
+		username: "olowodollarz",
+		matric: "2017/125",
+		avatar: "avatar2.png",
+		ignore: "",
+		suspend: "",
+	},
+	{
+		name: "Odunayo Olufunke",
+		username: "funkybaby",
+		matric: "2017/123456",
+		avatar: "avatar2.png",
+		ignore: "",
+		suspend: "",
+	},
+]
