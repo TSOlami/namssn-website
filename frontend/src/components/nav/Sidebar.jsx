@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import {Avatar} from "../../assets";
+import { RiUserSettingsLine } from "react-icons/ri";
 
 const Sidebar = () => {
 	const isAdmin = true;
@@ -111,6 +112,15 @@ const Sidebar = () => {
 							>
 								<FaPerson />
 								<span>Profile</span>
+							</Link>
+						</li>
+						<li>
+							<Link
+								to="/admin"
+								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
+							>
+								<RiUserSettingsLine />
+								<span>Admin Dashboard</span>
 							</Link>
 						</li>
 					</ul>

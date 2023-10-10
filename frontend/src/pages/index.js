@@ -12,5 +12,6 @@ import DepartmentalFees from './DepartmentalFees';
 import EventsPage from './EventsPage';
 import AboutUsPage from './AboutUsPage';
 import BlogPage from './BlogPage';
+import AdminDashboard from './AdminDashboard';
 
-export { Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage };
+export { Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard };
