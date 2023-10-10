@@ -1,3 +1,4 @@
-import store from "./store/store";
+import { useLoginMutation } from './slices/usersApiSlice';
+import { setCredentials } from "./slices/authSlice";
 
-export { store }
+export { useLoginMutation, setCredentials }
