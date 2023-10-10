@@ -11,7 +11,7 @@ import {
 	FaLock,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import FormErrors from "../components/FormErrors";
+import FormErrors from "../components/forms/FormErrors";
 import InputField from "../components/InputField";
 
 const SignUp = () => {
