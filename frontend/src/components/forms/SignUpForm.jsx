@@ -20,12 +20,6 @@ import { useRegisterMutation, setCredentials } from "../../redux";
 const SignUpForm = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/home');
-    }
-  }, [navigate, userInfo]);
-
   const [showPassword, setShowPassword] = useState(false);
 	const handleShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -35,11 +29,17 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/home');
+    }
+  }, [navigate, userInfo]);
+
   const [ register, { isLoading }] = useRegisterMutation();
 
 	// Formik and yup validation schema
 	const initialvalues = {
-		fullName: "",
+		name: "",
 		username: "",
 		email: "",
 		password: "",
@@ -73,24 +73,24 @@ const SignUpForm = () => {
 
 	return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col">
-					<label className="mt-2" htmlFor="fullName">
+					<label className="mt-2" htmlFor="name">
 						Full Name
 					</label>
 
 					<InputField
 						type="text"
-						name="fullName"
-						id="fullName"
-						onChange={formik.handleChange("fullName")}
-						value={formik.values.fullName}
-            onBlur={formik.handleBlur("fullName")}
+						name="name"
+						id="name"
+						onChange={formik.handleChange("name")}
+						value={formik.values.name}
+            onBlur={formik.handleBlur("name")}
 						icon={<FaRegUser />}
             pad
-            placeholder="Enter full name"
+            placeholder="Enter your full name"
 					/>
 
-					{formik.touched.fullName && formik.errors.fullName ? (
-						<FormErrors error={formik.errors.fullName} />
+					{formik.touched.name && formik.errors.name ? (
+						<FormErrors error={formik.errors.name} />
 					) : null}
 
 					<label className="mt-2" htmlFor="username">
