@@ -21,6 +21,10 @@ const Sidebar = () => {
 	const { userInfo } = useSelector((state) => state.auth);
 
   console.log(userInfo);
+
+  // Check if user is Verified
+  const isVerified = userInfo?.isVerified;
+
   // Check if user is admin
   const isAdmin = userInfo?.role === 'admin';
 
@@ -83,7 +87,7 @@ const Sidebar = () => {
 					<div className="flex flex-col text-sm">
 						<span className="font-semibold flex flex-row items-center gap-2">
 							{userInfo?.name}
-							{isAdmin && <FaCircleCheck color="#17A1FA" />}
+							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
 						<span>@{userInfo.username}</span>
 					</div>
@@ -138,7 +142,8 @@ const Sidebar = () => {
 								<span>Profile</span>
 							</Link>
 						</li>
-						<li>
+						{ isAdmin && (
+							<li>
 							<Link
 								to="/admin"
 								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
@@ -147,6 +152,7 @@ const Sidebar = () => {
 								<span>Admin Dashboard</span>
 							</Link>
 						</li>
+						)}
 					</ul>
 				</div>
 

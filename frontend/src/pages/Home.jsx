@@ -9,8 +9,14 @@ import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { userInfo } = useSelector((state) => state.userLogin);
+
+  // Check if user is Verified
+  const isVerified = userInfo?.isVerified;
+
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleModalOepen = () => {
 		setIsModalOpen(!isModalOpen)

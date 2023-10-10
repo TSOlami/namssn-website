@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
 	FaRegUser,
 	FaIdCard,
@@ -10,14 +11,31 @@ import {
 	FaLock,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import {FormErrors, InputField } from "../../components";
-
+import Loader from "../Loader";
+import { useRegisterMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/home');
+    }
+  }, [navigate, userInfo]);
+
   const [showPassword, setShowPassword] = useState(false);
 	const handleShowPassword = () => {
 		setShowPassword(!showPassword);
 	};
+
+  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [ register, { isLoading }] = useRegisterMutation();
 
 	// Formik and yup validation schema
 	const initialvalues = {
@@ -41,8 +59,15 @@ const SignUpForm = () => {
 	const formik = useFormik({
 		initialValues: initialvalues,
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			try {
+        const res = await register(values).unwrap();
+        dispatch(setCredentials({...res}));
+        navigate('/home');
+        toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
+      } catch (err) {
+        toast.error(err?.data?.message || err?.error)
+      }
 		},
 	});
 
@@ -139,6 +164,8 @@ const SignUpForm = () => {
 					{formik.touched.password && formik.errors.password ? (
 						<FormErrors error={formik.errors.password} />
 					) : null}
+
+          { isLoading && <Loader />}
 
 					<button
 						type="submit"
