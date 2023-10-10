@@ -22,7 +22,7 @@ const SignInForm = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/home');
     }
   }, [navigate, userInfo]);
 
@@ -48,7 +48,7 @@ const SignInForm = () => {
 			try {
         const res = await login(values).unwrap();
         dispatch(setCredentials({...res}));
-        navigate('/');
+        navigate('/home');
       } catch (err) {
         console.log(err?.data?.message || err?.error)
       }
