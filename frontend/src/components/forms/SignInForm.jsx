@@ -7,21 +7,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 
 const SignInForm = () => {
-  const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    // const res = await fetch("http://localhost:5000/api/auth/signin", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ email, password }),
-    // });
-    console.log(email, password);
-	}
 
 	// Schema and configuration for form validation
 	const initialvalues = {
@@ -60,6 +46,7 @@ const SignInForm = () => {
       name="email"
       id="email"
       onChange={formik.handleChange}
+      onBlur={formik.handleBlur("email")}
       value={formik.values.email}
     />
 
@@ -77,6 +64,7 @@ const SignInForm = () => {
         name="password"
         id="password"
         onChange={formik.handleChange}
+        onBlur={formik.handleBlur("password")}
         value={formik.values.password}
       />
       {showPassword ? (
