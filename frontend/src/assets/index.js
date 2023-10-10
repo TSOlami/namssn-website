@@ -1,6 +1,6 @@
 import NamssnLogo from './images/logo.png';
 import SignInImage from './images/Signin.png';
-import SignUpImage from './images/Signup.png';
+import SignUpImage from './images/Signup.svg';
 import Wrapper from './images/wrapper.png';
 import Hamburger from './icons/hamburger.svg';
 import polygon from './icons/polygon.svg';
@@ -32,5 +32,6 @@ import Image4 from './images/image4.svg';
 import Image5 from './images/image5.svg';
 import Image6 from './images/image6.svg';
 import Image7 from './images/image7.svg';
+import MembersImg from './images/MembersImg.png';
 
-export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4 };
+export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg };
