@@ -38,7 +38,7 @@ const PaymentForm = () => {
         };
 
         // Make a POST request to your Express server to initiate payment
-        const response = await axios.post('/api/v1/users/payment', paymentData);
+        const response = await axios.post('/api/v1/users/payments', paymentData);
 
                 // Check if the response contains the payment URL
         if (response.data.success) { 

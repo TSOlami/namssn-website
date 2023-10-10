@@ -91,6 +91,6 @@ router
 router
   .route('/payments')
   .get(protect, getUserPayment)
-  .post(protect, postUserPayment);
+  .post(protect,postUserPayment);
 
-export default router;
+  export default router;
