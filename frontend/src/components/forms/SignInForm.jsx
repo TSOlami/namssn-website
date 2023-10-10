@@ -71,7 +71,6 @@ const SignInForm = () => {
       onChange={formik.handleChange}
       onBlur={formik.handleBlur("email")}
       value={formik.values.email}
-      onBlur={formik.handleBlur("email")}
     />
 
     {formik.touched.email &&
@@ -91,7 +90,6 @@ const SignInForm = () => {
         onBlur={formik.handleBlur("password")}
 
         value={formik.values.password}
-        onBlur={formik.handleBlur("password")}
       />
       {showPassword ? (
         <FaRegEyeSlash
