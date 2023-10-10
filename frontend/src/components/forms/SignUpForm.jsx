@@ -56,9 +56,9 @@ const SignUpForm = () => {
 						type="text"
 						name="fullName"
 						id="fullName"
-						onChange={formik.handleChange("fullname")}
+						onChange={formik.handleChange("fullName")}
 						value={formik.values.fullName}
-            onBlur={formik.handleBlur("fullname")}
+            onBlur={formik.handleBlur("fullName")}
 						icon={<FaRegUser />}
             pad
             placeholder="Enter full name"
@@ -96,9 +96,9 @@ const SignUpForm = () => {
 						type="text"
 						name="email"
 						id="email"
-						onChange={formik.handleChange("e-mail")}
+						onChange={formik.handleChange("email")}
 						value={formik.values.email}
-            onBlur={formik.handleBlur("e-mail")}
+            onBlur={formik.handleBlur("email")}
             om
 						icon={<FaEnvelope />}
             pad
