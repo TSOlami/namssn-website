@@ -14,5 +14,7 @@ import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
+import FormErrors from '../components/forms/FormErrors'
+import InputField from './InputField'
 
-export {FeatureCard, ImageCard, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };

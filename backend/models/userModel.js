@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema(
     },
     matricNumber: {
       type: String,
-      unique: true,
+      default: '',
     },
     password: {
       type: String,

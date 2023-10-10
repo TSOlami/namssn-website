@@ -1,14 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard } from './pages';
 
 export default function App() {
   return (
     <BrowserRouter>
+    <ToastContainer />
     <Routes>
       <Route path='/' exact element={<Landing/>} />
       <Route path='/signin' element={<SignIn/>} />
       <Route path='/signup' element={<SignUp/>} />
-      <Route path='/payment' element={<PaymentPage/>} />
+      <Route path='/payments' element={<PaymentPage/>} />
       <Route path='/home' element={<Home/>} />
       <Route path='/resources' element={<Resources/>} />
       <Route path='/profile' element={<Profile/>}/>
