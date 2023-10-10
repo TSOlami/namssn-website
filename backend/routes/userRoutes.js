@@ -25,7 +25,7 @@ import {
   getUserPayment,
 } from "../controllers/userController.js";
 
-import { protect, isAdmin } from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 /**
  * Register a new user.

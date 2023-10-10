@@ -20,7 +20,8 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       username: user.username,
-      email: user.email
+      email: user.email,
+      role: user.role,
     });
   } else {
     res.status(401);
