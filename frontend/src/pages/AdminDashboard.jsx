@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 						/>
 					</div>
 				</div>
-				<div className="p-5 flex flex-row flex-wrap gap-4 items-center justify-center lg::justify-normal">
+				<div className="p-5 flex flex-row flex-wrap gap-4 items-center justify-center lg:justify-normal">
 					<div className="bg-yellow-100 w-fit  p-4 rounded-xl">
 						<h2 className="text-xl font-semibold">Team Members <img src={MembersImg} alt="" className="inline pl-5" /> </h2>
 						<div className="flex flex-row justify-between m-2 rounded-md border-gray-500 border-2 p-1">
