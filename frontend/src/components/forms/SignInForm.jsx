@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FormErrors, InputField } from "../components";
+import { FormErrors, InputField } from "../../components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
@@ -118,4 +118,4 @@ const SignInForm = () => {
   )
 }
 
-export default SignInForm
+export default SignInForm;
