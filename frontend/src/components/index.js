@@ -1,5 +1,3 @@
-import FeatureCard from './FeatureCard';
-import ImageCard from './ImageCard';
 import NavBar from './nav/NavBar';
 import Footer from './nav/Footer';
 import SignInForm from './forms/SignInForm';
@@ -14,7 +12,8 @@ import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
-import FormErrors from '../components/forms/FormErrors'
-import InputField from './InputField'
+import FormErrors from '../components/forms/FormErrors';
+import InputField from './InputField';
+import Loader from './Loader';
 
-export {FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader };
