@@ -16,5 +16,6 @@ import FormErrors from '../components/forms/FormErrors';
 import InputField from './InputField';
 import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
+import EditProfileForm from './forms/EditProfileForm';
 
-export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes };
+export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm };
