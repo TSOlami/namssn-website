@@ -20,11 +20,15 @@ import { logout } from "../../redux/slices/authSlice";
 const Sidebar = () => {
 	const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo);
-
-  // Check if user is Verified
-  const isVerified = userInfo?.isVerified;
-
+   // Fetch user info from redux store
+   const name = userInfo?.name;
+   const username = userInfo?.username;
+   const isVerified = userInfo?.isVerified;
+ 
+ 
+   // Check if user is admin
+   // const isAdmin = userInfo?.isAdmin;
+ 
   // Check if user is admin
   const isAdmin = userInfo?.role === 'admin';
 
@@ -86,10 +90,10 @@ const Sidebar = () => {
 					</div>
 					<div className="flex flex-col text-sm">
 						<span className="font-semibold flex flex-row items-center gap-2">
-							{userInfo?.name}
+							{name}
 							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
-						<span>@{userInfo.username}</span>
+						<span>@{username}</span>
 					</div>
 				</div>
 

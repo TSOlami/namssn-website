@@ -1,7 +1,7 @@
 import { FaCircleCheck } from "react-icons/fa6";
 import Actions from "./Actions";
 
-const Post = ({ isAdmin, upvotes, downvotes, shares, comments, text, name, username, avatar }) => {
+const Post = ({ isVerified, upvotes, downvotes, shares, comments, text, name, username, avatar }) => {
 	const date = new Date();
 	const day = date.getDay();
 	const month = date.toLocaleString("default", { month: "short" });
@@ -16,9 +16,9 @@ const Post = ({ isAdmin, upvotes, downvotes, shares, comments, text, name, usern
 				<div className="flex flex-row gap-2 lg:gap-5">
 					<span className="font-semibold flex flex-row items-center gap-2">
 						{name}
-            {isAdmin && <FaCircleCheck color="#17A1FA" />}
+            {isVerified && <FaCircleCheck color="#17A1FA" />}
 					</span>
-					<span>{username}</span>
+					<span>@{username}</span>
 					<span className="text-gray-500">
 						{month} {day}
 					</span>

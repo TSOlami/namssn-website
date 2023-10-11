@@ -7,12 +7,27 @@ import { BottomNav } from "../components";
 import { BsPlusLg } from "react-icons/bs";
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const handleModalOepen = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
+  console.log(userInfo);
+  
+  // Fetch user info from redux store
+  const name = userInfo?.name;
+  const username = userInfo?.username;
+  const isVerified = userInfo?.isVerified;
+
+
+  // Check if user is admin
+  // const isAdmin = userInfo?.isAdmin;
+
+  // Add post modal
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const handleModalOpen = () => {
 		setIsModalOpen(!isModalOpen)
 	}
 	const [ text, setText ] = useState('')
@@ -21,10 +36,10 @@ const Home = () => {
 	}
 
 	const handleSubmit = () => {
-		if (text === '') return alert('Please enter a text')
-		console.log(text)
-		setText('')
-		handleModalOepen()
+		if (text === '') return alert('Please enter a text');
+		console.log(text);
+		setText('');
+		handleModalOpen();
 		toast.success('Post created successfully', {
 			position: "top-center",
 			autoClose: 3000,
@@ -40,15 +55,15 @@ const Home = () => {
 			<Sidebar/>
 			<div className="flex flex-col relative">
 				<HeaderComponent title="Home"/>
-				<Post upvotes="3224" downvotes="30" shares="5" comments="10" isAdmin={true} text={mockTexts} name="Ifedimeji Omoniyi" username= "@design_hashira" avatar={Wrapper}/>
+				<Post upvotes="3224" downvotes="30" shares="5" comments="10" isVerified={isVerified} text={mockTexts} name={name} username={username} avatar={Wrapper}/>
 
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
+				<Post upvotes="20" downvotes="300" shares="200" comments="150" isVerified={isVerified} text={mockTexts2} name={name} username={username} avatar={Avatar}/>
+				<Post upvotes="20" downvotes="300" shares="200" comments="150" isVerified={isVerified} text={mockTexts2} name={name} username={username} avatar={Avatar}/>
+				<Post upvotes="20" downvotes="300" shares="200" comments="150" isVerified={isVerified} text={mockTexts2} name={name} username={username} avatar={Avatar}/>
 
 				{/* Add post button */}
 
-				<div onClick={handleModalOepen} className="fixed bottom-20 sm:bottom-16 text-3xl right-[7vw] md:right-[10vw] lg:right-[30vw] p-5 rounded-full text-white bg-primary cursor-pointer">
+				<div onClick={handleModalOpen} className="fixed bottom-20 sm:bottom-16 text-3xl right-[7vw] md:right-[10vw] lg:right-[30vw] p-5 rounded-full text-white bg-primary cursor-pointer">
 					<BsPlusLg/>
 				</div>
 
@@ -61,7 +76,7 @@ const Home = () => {
 							<div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[500px]">
 								<div className="flex justify-between items-center p-5 border-b border-gray-200">
 									<div className="text-2xl font-bold">Create Post</div>
-									<div className="text-3xl cursor-pointer p-2" onClick={handleModalOepen}><FaXmark/></div>
+									<div className="text-3xl cursor-pointer p-2" onClick={handleModalOpen}><FaXmark/></div>
 								</div>
 								<div className="p-5">
 									<textarea className="w-full h-[300px] border border-gray-200 rounded-lg p-5" placeholder="What's on your mind?" value={text} onChange={handleTextChange}></textarea>
