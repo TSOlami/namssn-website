@@ -135,4 +135,8 @@ export const {
   useDeletePostMutation,
   useUpvotePostMutation,
   useDownvotePostMutation,
+  useCommentPostMutation,
+  useDeleteCommentMutation,
+  useUpvoteCommentMutation,
+  useDownvoteCommentMutation,
 } = postsApiSlice;
