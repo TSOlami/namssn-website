@@ -18,5 +18,7 @@ import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
 import AdminPaymentManagement from './PaymentManagement';
+import HeaderComponent from './HeaderComponent';
+import AddPostForm from './forms/AddPostForm';
 
-export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, AdminPaymentManagement, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm };
+export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, AdminPaymentManagement, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm, HeaderComponent, AddPostForm };
