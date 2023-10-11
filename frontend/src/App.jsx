@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard } from './pages';
-import { PrivateRoutes } from './components';
+import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment } from './pages';
 
 export default function App() {
   return (
@@ -28,6 +27,8 @@ export default function App() {
       <Route path='*' element={<ErrorPage/>} />
       <Route path='/about-us' element={<AboutUsPage/>} />
       <Route path='/blog' element={<BlogPage/>} />
+      <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path='/admin/payment' element={<AdminPayment/>} />
     </Routes>
     </BrowserRouter>    
   )

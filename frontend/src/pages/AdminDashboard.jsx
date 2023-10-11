@@ -18,6 +18,7 @@ const AdminDashboard = () => {
 							amount="320"
 							card="payment"
 							bg="orangish"
+							route="/admin/payment"
 						/>
 
 						<AdminCard
@@ -74,34 +75,34 @@ const AdminDashboard = () => {
 							<table className="min-w-full shadow-md rounded-lg overflow-hidden">
 								<thead className="">
 									<tr>
-										<th className="px-2 py-2 text-left font-semibold text-gray-700">
+										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
 											NO
 										</th>
-										<th className="px-2 py-2 text-left font-semibold text-gray-700">
+										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
 											Name
 										</th>
-										<th className="px-2 py-2 text-left font-semibold text-gray-700">
+										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
 											Reputations
 										</th>
-										<th className="px-2 py-2 text-left font-semibold text-gray-700"></th>
+										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700"></th>
 									</tr>
 								</thead>
 								<tbody>
 									{mockAccounts.map((account, index) => (
 										<tr key={index}>
-											<td className="px-2 py-2 whitespace-nowrap">
+											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												{index + 1}
 											</td>
-											<td className="px-2 py-2 whitespace-nowrap">
+											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												{account.name}
 											</td>
-											<td className="px-2 py-2 whitespace-nowrap">
+											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												{account.reputation}
 											</td>
-											<td className="px-2 py-2 whitespace-nowrap">
+											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												<Link
 													to={account.verify}
-													className="ml-5 bg-primary px-2 rounded-md text-white"
+													className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
 												>
 													View
 												</Link>
