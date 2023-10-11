@@ -9,7 +9,6 @@ import { EditProfileForm } from "../components";
 import { ProfileImg } from "../assets";
 
 const Profile = () => {
-
 	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
 	const name = userInfo?.name;

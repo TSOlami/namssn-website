@@ -14,8 +14,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const Home = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo);
-  
   // Fetch user info from redux store
   const name = userInfo?.name;
   const username = userInfo?.username;

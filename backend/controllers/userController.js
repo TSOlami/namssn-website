@@ -21,7 +21,13 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       username: user.username,
       email: user.email,
+      studentEmail: user.studentEmail,
+      matricNumber: user.matricNumber,
+      bio: user.bio,
       role: user.role,
+      isVerified: user.isVerified,
+      points: user.points,
+      profilePicture: user.profilePicture,
     });
   } else {
     res.status(401);
@@ -90,8 +96,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
     email: req.user.email,
     username: req.user.username,
     studentEmail: req.user.studentEmail,
-    verified: req.user.verified,
+    isVerified: req.user.isverified,
     points: req.user.points,
+    bio: req.user.bio,
+    role: req.user.role,
+    profilePicture: req.user.profilePicture,
   }
   res.status(200).json(user);
 });
@@ -125,7 +134,19 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.username = req.body.username || user.username;
+
+    // Check for studentEmail and matricNumber changes
+    if (req.body.studentEmail !== user.studentEmail || req.body.matricNumber !== user.matricNumber) {
+      // If either studentEmail or matricNumber has changed, set isVerified to true.
+      user.isVerified = true;
+    }
+    
     user.studentEmail = req.body.studentEmail || user.studentEmail;
+    user.matricNumber = req.body.matricNumber || user.matricNumber;
+    user.bio = req.body.bio || user.bio;
+    user.role = req.body.role || user.role;
+
+
 
     if (req.body.password) {
       user.password = req.body.password;
@@ -139,6 +160,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       username: updatedUser.username,
+      studentEmail: updatedUser.studentEmail,
+      matricNumber: updatedUser.matricNumber,
+      bio: updatedUser.bio,
+      role: updatedUser.role,
     });
   } else {
     res.status(404);
