@@ -25,7 +25,7 @@ import {
   getUserPayment,
 } from "../controllers/userController.js";
 
-import { protect, isAdmin } from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 /**
  * Register a new user.
@@ -66,13 +66,11 @@ router
   .delete(protect, deleteUserProfile);
 
 // Route for getting all blogs
-router
-.route("/blogs")
-.get(protect, getAllBlogs);
+router.get('/blogs', getAllBlogs);
 
 // Route for getting all posts
 router
-.route("/blogs")
+.route("/posts")
 .get(protect, getAllPosts);
 
 // Get, create, update and delete user posts
@@ -93,6 +91,6 @@ router
 router
   .route('/payments')
   .get(protect, getUserPayment)
-  .post(protect, postUserPayment);
+  .post(protect,postUserPayment);
 
-export default router;
+  export default router;

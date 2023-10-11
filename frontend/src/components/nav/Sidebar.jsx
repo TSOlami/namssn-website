@@ -11,9 +11,41 @@ import {
 import { useEffect, useState } from "react";
 import {Avatar} from "../../assets";
 import { RiUserSettingsLine } from "react-icons/ri";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { useLogoutMutation } from "../../redux";
+import { logout } from "../../redux/slices/authSlice";
 
 const Sidebar = () => {
-	const isAdmin = true;
+	const { userInfo } = useSelector((state) => state.auth);
+
+   // Fetch user info from redux store
+   const name = userInfo?.name;
+   const username = userInfo?.username;
+   const isVerified = userInfo?.isVerified;
+ 
+ 
+   // Check if user is admin
+   // const isAdmin = userInfo?.isAdmin;
+ 
+  // Check if user is admin
+  const isAdmin = userInfo?.role === 'admin';
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 	const [isNavOpen, setIsNavOpen] = useState(false);
 	const handleNavOpen = () => {
 		setIsNavOpen(!isNavOpen);
@@ -58,10 +90,10 @@ const Sidebar = () => {
 					</div>
 					<div className="flex flex-col text-sm">
 						<span className="font-semibold flex flex-row items-center gap-2">
-							Ifedimeji Omoniyi
-							{isAdmin && <FaCircleCheck color="#17A1FA" />}
+							{name}
+							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
-						<span>Design_Hashira</span>
+						<span>@{username}</span>
 					</div>
 				</div>
 
@@ -114,7 +146,8 @@ const Sidebar = () => {
 								<span>Profile</span>
 							</Link>
 						</li>
-						<li>
+						{ isAdmin && (
+							<li>
 							<Link
 								to="/admin"
 								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
@@ -123,6 +156,7 @@ const Sidebar = () => {
 								<span>Admin Dashboard</span>
 							</Link>
 						</li>
+						)}
 					</ul>
 				</div>
 
@@ -131,6 +165,7 @@ const Sidebar = () => {
 				<div className="pt-10">
 					<Link
 						to="/"
+            onClick={ logoutHandler }
 						className="transition duration-500 text-red-500 flex flex-row gap-3 items-center hover:bg-red-500 hover:text-white p-2 rounded-lg"
 					>
 						<FaArrowRightFromBracket /> Log Out

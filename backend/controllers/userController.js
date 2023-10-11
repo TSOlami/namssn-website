@@ -1,39 +1,40 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
-import { initiatePayment } from '../utils/paymentback.js';
+import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
-import Payment from '../models/paymentModel.js';
+
 
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
 // access	Public
 const authUser = asyncHandler(async (req, res) => {
-	const { email, password } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
-  res.status(200).json({
-    _id: user._id,
-    name: user.name,
-    username: user.username,
-    email: user.email
-  });
-	} else {
-		res.status(401);
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    });
+  } else {
+    res.status(401);
     throw new Error('Invalid email or password')
-	}
+  }
 });
 
 // @desc	Resgister a new user/set token
 // Route	post  /api/v1/users
 // access	Public
 const registerUser = asyncHandler(async (req, res) => {
-	const { name, username, email, password, role } = req.body;
-	// Check if email or username already exists
+  const { name, username, email, password, role } = req.body;
+  // Check if email or username already exists
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
   });
@@ -46,26 +47,26 @@ const registerUser = asyncHandler(async (req, res) => {
   // By default, set the user's role to "user" if it's not specified
   const userRole = role || 'user';
 
-	const user = await User.create({
-		name,
-		username,
-		email,
-		password,
+  const user = await User.create({
+    name,
+    username,
+    email,
+    password,
     role: userRole,
-	});
-    if (user) {
-      generateToken(res, user._id);
-		res.status(201).json({
-			_id: user._id,
-			name: user.name,
-			username: user.username,
-			email: user.email,
+  });
+  if (user) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
       role: user.role,
-		});
-	} else {
-		res.status(400);
+    });
+  } else {
+    res.status(400);
     throw new Error('Invalid user data')
-	}
+  }
 });
 
 // @desc	Logout user
@@ -76,23 +77,23 @@ const logoutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(0)
   });
-	res.status(200).json({ message: 'User Logged Out' });
+  res.status(200).json({ message: 'User Logged Out' });
 });
 
 // @desc	Get user profile
 // Route	GET  /api/v1/users/profile
 // access	Private
 const getUserProfile = asyncHandler(async (req, res) => {
-	const user = {
-		_id: req.user._id,
-		name: req.user.name,
-		email: req.user.email,
-		username: req.user.username,
+  const user = {
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    username: req.user.username,
     studentEmail: req.user.studentEmail,
-		verified: req.user.verified,
+    verified: req.user.verified,
     points: req.user.points,
-	}
-	res.status(200).json(user);
+  }
+  res.status(200).json(user);
 });
 
 // @desc	Update user profile
@@ -132,7 +133,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     const updatedUser = await user.save();
-    
+
     res.status(200).json({
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -208,7 +209,7 @@ const getUserPosts = asyncHandler(async (req, res) => {
 
   // Fetch the user's posts from the database
   const userPosts = await Post.find({ user: userId })
-  .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest posts first)
+    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest posts first)
 
   res.status(200).json(userPosts);
 });
@@ -217,21 +218,21 @@ const getUserPosts = asyncHandler(async (req, res) => {
 // Route	PUT  /api/v1/users/posts
 // access	Private
 const updatePost = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Update a Post' });
+  res.status(200).json({ message: 'Update a Post' });
 });
 
 // @desc	Delete user post
 // Route	DELETE  /api/v1/users/posts
 // access	Private
 const deletePost = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Delete Post' });
+  res.status(200).json({ message: 'Delete Post' });
 });
 
 // @desc Create user resources
 // Route POST /api/v1/users/resources
 // Access Private
 const postUserResources = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Post user Resources' });
+  res.status(200).json({ message: 'Post user Resources' });
 });
 
 // @desc Get all blogs and sort by timestamp
@@ -250,28 +251,33 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'User Resources' });
+  res.status(200).json({ message: 'User Resources' });
 });
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
 // access	Private
 const updateUserResources = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Update user Resources' });
+  res.status(200).json({ message: 'Update user Resources' });
 });
 
 // @desc	Delete user resources
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Delete a Resource' });
+  res.status(200).json({ message: 'Delete a Resource' });
 });
 
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
 // access	Private
 const getUserPayment = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'User payments history' });
+  try {
+    await getAllPayments(req, res);
+  } catch (error) {
+    console.log(error)
+  }
+  res.status(200).json({ message: 'User payments history' });
 });
 
 // @desc	Send a user payments
@@ -279,32 +285,32 @@ const getUserPayment = asyncHandler(async (req, res) => {
 // access	Private
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
-    await initiatePayment (req, res);
-    
+    await initiatePayment(req, res);
+
   } catch (error) {
-    
+    console.log(error)
+
   }
-  
-	res.status(200).json({ message: 'Payment sent' });
+  res.status(200).json({ message: 'Payment sent' });
 });
 
 export {
-	authUser,
-	registerUser,
-	logoutUser,
-	getUserProfile,
-	updateUserProfile,
+  authUser,
+  registerUser,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
   deleteUserProfile,
   createPost,
-	getAllPosts,
-	getUserPosts,
+  getAllPosts,
+  getUserPosts,
   updatePost,
   deletePost,
   getAllBlogs,
   postUserResources,
-	getUserResources,
+  getUserResources,
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-	getUserPayment,
+  getUserPayment,
 };

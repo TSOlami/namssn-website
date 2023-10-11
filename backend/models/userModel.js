@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema(
     },
     matricNumber: {
       type: String,
-      unique: true,
+      default: '',
     },
     password: {
       type: String,
@@ -66,7 +66,7 @@ const userSchema = mongoose.Schema(
         },
       },
     ],
-    verified: {
+    isVerified: {
       type: Boolean,
       default: false, // Default to false
     },
