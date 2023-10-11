@@ -4,28 +4,26 @@ import Payment from '../models/paymentModel.js';
 
 const initiatePayment = async (req, res) => {
   try {
-       const { email, amount } = req.body;
+        const { email, amount } = req.body;
         const apiURL = process.env.PAYSTACK_URL;
-        console.log('PAYSTACK_SECRET_KEY:', process.env.PAYSTACK_SECRET_KEY);
-        console.log('PAYSTACK_URL:', process.env.PAYSTACK_URL);
-
+        
     // Make a POST requEst to the Paystack Initialize Transaction endpoint
-    const PaystackResponse = await axios.post( apiURL
-      ,
-      {
-        email,
-        amount: amount * 100, // Convert amount to kobo
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`, // Replace with your actual secret key
+      const paystackResponse = await axios.post( apiURL
+        ,
+        {
+          email,
+          amount: amount * 100, // Convert amount to kobo
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`, // Replace with your actual secret key
+          },
+        }
+      );
 
-    if (PaystackResponse.data.status) {
-      const { authorization_url } = PaystackResponse.data.data;
-      const { reference } = PaystackResponse.data.data;
+    if (paystackResponse.data.status) {
+      const { authorization_url } = paystackResponse.data.data;
+      const { reference } = paystackResponse.data.data;
 
       const newPayment = new Payment({
         matricNumber: req.body.matricNo,
