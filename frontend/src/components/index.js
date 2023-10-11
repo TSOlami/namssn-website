@@ -17,5 +17,6 @@ import InputField from './InputField';
 import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
+import AdminPaymentManagement from './PaymentManagement';
 
-export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm };
+export { FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, AdminPaymentManagement, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm };
