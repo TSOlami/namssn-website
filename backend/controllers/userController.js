@@ -146,8 +146,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.bio = req.body.bio || user.bio;
     user.role = req.body.role || user.role;
 
-
-
     if (req.body.password) {
       user.password = req.body.password;
       res.status(200).json({ message: 'Password updated successfully' });
@@ -196,15 +194,15 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // Route POST /api/v1/users/posts
 // Access Private
 const createPost = asyncHandler(async (req, res) => {
-  const { title, content } = req.body;
+  const { text, image } = req.body;
 
   // You can access the currently logged-in user's information from req.user
   const userId = req.user._id;
 
   // Create a new post
   const newPost = new Post({
-    title,
-    content,
+    text,
+    image,
     user: userId, // Associate the post with the user who created it
   });
 
