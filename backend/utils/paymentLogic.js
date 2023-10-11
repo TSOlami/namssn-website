@@ -25,10 +25,14 @@ const initiatePayment = async (req, res) => {
       const { authorization_url } = paystackResponse.data.data;
       const { reference } = paystackResponse.data.data;
 
+      const user = 'test_user'
       const newPayment = new Payment({
         matricNumber: req.body.matricNo,
         email: req.body.email,
         amount: req.body.amount,
+        session: req.body.session,
+        category: req.body.category,
+        user : user,
         transactionReference: reference,
       });
 

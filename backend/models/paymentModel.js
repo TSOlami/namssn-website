@@ -9,7 +9,8 @@ const paymentSchema = mongoose.Schema(
       type: String, // Matriculation number of the student
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId, // Reference to the Category model
+      type: String,
+      // type: mongoose.Schema.Types.ObjectId, // Reference to the Category model
       ref: 'Category',
       required: true,
     },
@@ -22,9 +23,15 @@ const paymentSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    transactionReference: {
+      type: String,
+      required: true,
+    },
+    // The status of the payment.
     // Reference to the user who made the payment.
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
+      // type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Reference to the user who made the payment
       required: true,
     },

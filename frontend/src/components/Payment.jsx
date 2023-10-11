@@ -6,23 +6,26 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const PaymentForm = () => {
   const [amount, setAmount] = useState(""); // State to store the payment amount
 
   // Initial form values and validation schema
   const initialValues = {
-    matricNo: "",
+    matricNumber: "", // matricNumber to match the model
     email: "",
+    category: "", // Add a field for category
+    session: "", // Add a field for session
   };
 
   const validationSchema = Yup.object({
-    matricNo: Yup.string()
+    matricNumber: Yup.string()
       .matches(/^[0-9]{5}[A-Za-z]{2}$/, 'Invalid Matriculation Number')
       .required('Matriculation Number is required'),
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
+    category: Yup.string().required('Category is required'),
+    session: Yup.string().required('Session is required'),
   });
 
   // Formik configuration
@@ -32,23 +35,25 @@ const PaymentForm = () => {
     onSubmit: async (values) => {
       try {
         const paymentData = {
-          matricNo: values.matricNo,
+          matricNumber: values.matricNumber, // Match field names with the model
           email: values.email,
+          category: values.category, // Match field names with the model
+          session: values.session, // Match field names with the model
           amount: parseFloat(amount), // Convert amount to a number
         };
 
         // Make a POST request to your Express server to initiate payment
         const response = await axios.post('/api/v1/users/payments', paymentData);
 
-                // Check if the response contains the payment URL
-        if (response.data.success) { 
+        // Check if the response contains the payment URL
+        if (response.data.success) {
           const { payment_url, reference, message } = response.data;
 
-          toast.success(message)
-                    // Redirect to the payment URL returned by the server
+          toast.success(message);
+
+          // Redirect to the payment URL returned by the server
           window.location.href = payment_url;
-          
-          
+
           // After the payment is successful, show the transaction reference
           showTransactionReference(reference);
         } else {
@@ -84,20 +89,20 @@ const PaymentForm = () => {
           Payment Form
         </h1>
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
-          <label className="mt-2" htmlFor="matricNo">Matriculation Number</label>
+          <label className="mt-2" htmlFor="matricNumber">Matriculation Number</label>
           <div className="flex flex-row relative w-full">
             <input
               type="text"
-              name="matricNo"
-              id="matricNo"
+              name="matricNumber"
+              id="matricNumber"
               onChange={formik.handleChange}
-              value={formik.values.matricNo}
+              value={formik.values.matricNumber}
               className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
-          {formik.touched.matricNo && formik.errors.matricNo ? (
-            <div className="text-red-500">{formik.errors.matricNo}</div>
+          {formik.touched.matricNumber && formik.errors.matricNumber ? (
+            <div className="text-red-500">{formik.errors.matricNumber}</div>
           ) : null}
 
           <label className="mt-2" htmlFor="email">E-mail</label>
@@ -114,6 +119,38 @@ const PaymentForm = () => {
           </div>
           {formik.touched.email && formik.errors.email ? (
             <div className="text-red-500">{formik.errors.email}</div>
+          ) : null}
+
+          <label className="mt-2" htmlFor="category">Category</label>
+          <div className="flex flex-row relative w-full">
+            <input
+              type="text"
+              name="category"
+              id="category"
+              onChange={formik.handleChange}
+              value={formik.values.category}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+            />
+            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
+          </div>
+          {formik.touched.category && formik.errors.category ? (
+            <div className="text-red-500">{formik.errors.category}</div>
+          ) : null}
+
+          <label className="mt-2" htmlFor="session">Session</label>
+          <div className="flex flex-row relative w-full">
+            <input
+              type="text"
+              name="session"
+              id="session"
+              onChange={formik.handleChange}
+              value={formik.values.session}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+            />
+            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
+          </div>
+          {formik.touched.session && formik.errors.session ? (
+            <div className="text-red-500">{formik.errors.session}</div>
           ) : null}
 
           <label className="mt-2" htmlFor="amount">Payment Amount (in Naira)</label>
