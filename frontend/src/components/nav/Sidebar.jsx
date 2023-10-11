@@ -85,7 +85,7 @@ const Sidebar = () => {
 							{userInfo?.name}
 							{isAdmin && <FaCircleCheck color="#17A1FA" />}
 						</span>
-						<span>@{userInfo.username}</span>
+						<span>Dhann</span>
 					</div>
 				</div>
 

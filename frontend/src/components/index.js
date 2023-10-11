@@ -16,5 +16,7 @@ import Actions from './Actions';
 import AdminCard from './AdminCard';
 import FormErrors from '../components/forms/FormErrors'
 import InputField from './InputField'
+import HeaderComponent from './HeaderComponent';
+import ResourceCard from './ResourceCard';
 
-export {FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
