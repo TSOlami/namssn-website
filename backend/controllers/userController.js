@@ -109,6 +109,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // Access Private
 const getUserById = asyncHandler(async (req, res) => {
   const userId = req.params.userId;
+  console.log(`The user id from the params is: `,userId);
 
   // Find the user by ID
   const user = await User.findById(userId);

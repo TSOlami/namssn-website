@@ -70,7 +70,7 @@ router
   .delete(protect, deleteUserProfile);
 
 // Route for getting a user by id
-router.get('/profile/:id', getUserById);
+router.get('/profile/:userId', getUserById);
 
 // Route for getting all blogs
 router.get('/blogs', getAllBlogs);
