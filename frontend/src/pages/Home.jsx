@@ -29,7 +29,7 @@ const Home = () => {
           <Loader />
         ) : (
           <>
-            {posts.map((post, index) => {
+            {posts?.map((post, index) => {
               console.log(`Post ${index + 1}:`, post);
               return (
                 <Post
@@ -60,7 +60,7 @@ const Home = () => {
 
 				<div>
 					{isModalOpen && (
-						<AddPostForm/>
+						<AddPostForm isModalOpen={isModalOpen} handleModalOpen={handleModalOpen}/>
 					)}
 				</div>
 			</div>
