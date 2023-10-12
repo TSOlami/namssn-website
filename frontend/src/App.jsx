@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment } from './pages';
+import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile } from './pages';
 import { PrivateRoutes } from './components';
 
 export default function App() {
@@ -19,6 +19,7 @@ export default function App() {
         <Route path='/payments' element={<PaymentPage/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/user-profile' element={<UserProfile/>}/>
         <Route path='/announcements' element={<AnnouncementMobile/>} />
         <Route path='/notifications' element={<NotificationPage/>}/>
         <Route path='/admin' element={<AdminDashboard/>}/>

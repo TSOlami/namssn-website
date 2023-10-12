@@ -2,30 +2,23 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { Post, Sidebar, AnnouncementContainer } from "../components";
 import Wrapper from "../assets/images/wrapper.png";
 import { mockTexts } from "../data";
-import { useState } from "react";
-import { useSelector } from "react-redux";
 
-import { EditProfileForm } from "../components";
 import { ProfileImg } from "../assets";
 
-const Profile = () => {
+const UserProfile = ({userInfo}) => {
 	// Fetch user info from redux store
-	const { userInfo } = useSelector((state) => state.auth);
 	const name = userInfo?.name;
 	const username = userInfo?.username;
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
 	// const isAdmin = userInfo?.role === 'admin';
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const handleModal = () => {
-		setIsModalOpen(!isModalOpen);
-	};
 	const noOfPosts = 120;
 
 	return (
-		<div className="flex flex-row">
+		<div className="flex">
 			<Sidebar />
+
 			<div>
 				<div className="p-3 pl-6 flex flex-col">
 					<span className="font-semibold text-lg">{name}</span>
@@ -34,12 +27,9 @@ const Profile = () => {
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />{" "}
-					<button
-						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
-					>
-						Edit Profile
+					<img src={ProfileImg} alt="" />
+					<button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+						Make admin
 					</button>
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
@@ -72,15 +62,8 @@ const Profile = () => {
 				</div>
 			</div>
 			<AnnouncementContainer />
-
-			{/* modal */}
-			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-					<EditProfileForm handleModal={handleModal} />
-				</div>
-			)}
 		</div>
 	);
 };
 
-export default Profile;
+export default UserProfile;

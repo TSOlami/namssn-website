@@ -44,6 +44,7 @@ const Home = () => {
 									avatar={Wrapper}
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
+									u_id={post?._id}
 								/>
               );
             })}
@@ -60,7 +61,7 @@ const Home = () => {
 
 				<div>
 					{isModalOpen && (
-						<AddPostForm handleModalOpen={handleModalOpen}/>
+						<AddPostForm isModalOpen={isModalOpen} handleModalOpen={handleModalOpen}/>
 					)}
 				</div>
 			</div>
