@@ -35,8 +35,8 @@ import {
 	useAllAdminPaymentsQuery,
 	useCreateAdminPaymentMutation,
 	useUpdateAdminPaymentMutation,
-	useDeleteAdminPaymentMutation
- } from './slices/paymentSlice'
+	useDeleteAdminPaymentMutation,
+	} from './slices/paymentSlice'
 
 export { 
 		useLoginMutation,

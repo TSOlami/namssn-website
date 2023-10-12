@@ -23,6 +23,7 @@ import {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
+  getPaymentOptions
 } from "../controllers/userController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -95,7 +96,8 @@ router
  */
 router
   .route('/payments')
-  .get(protect, getUserPayment)
+  .get(protect, getPaymentOptions)
+  // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
 
   export default router;

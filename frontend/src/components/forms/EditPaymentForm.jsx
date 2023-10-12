@@ -5,14 +5,14 @@ import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FormErrors, Loader } from "../../components";
-import { useEditAdminPaymentMutation, setCredentials } from "../../redux";
+import { useUpdateAdminPaymentMutation, setCredentials } from "../../redux";
 
 // ... (import statements and validationSchema)
 
 const EditPaymentForm = ({ handleModalOpen, paymentData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [editPayment, { isLoading }] = useEditAdminPaymentMutation();
+    const [editPayment, { isLoading }] = useUpdateAdminPaymentMutation();
     
     const validationSchema = Yup.object({
         category: Yup.string().required("Category is required"),

@@ -14,14 +14,15 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // Extract the JWT token from the request cookies.
   token = req.cookies.jwt;
-
+ 
   if (token) {
     try {
       // Verify and decode the JWT token using the secret key.
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+     
       // Fetch the user associated with the decoded token, excluding the password field.
       req.user = await User.findById(decoded.userId).select('-password');
+      
 
       next();
     } catch (error) {

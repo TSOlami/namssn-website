@@ -1,9 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
+import Payment from '../models/paymentModel.js';
+import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 
 
 
@@ -292,6 +293,32 @@ const deleteUserResources = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Delete a Resource' });
 });
 
+
+
+//@desc Get list of payments added by the admin
+// Route GET /api/v1/users/payments
+// Access Private
+// Get payment options for users
+const getPaymentOptions = async (req, res) => {
+  try {
+    // Example: Fetch a list of admin-added payments from your database
+    const adminAddedPayments = await Payment.find({ userType: 'admin' });
+
+    // Check if there are available payment options
+    if (adminAddedPayments.length === 0) {
+      return res.status(404).json({ message: 'No payment options available' });
+    }
+
+    // You can further process or format the payment options as needed
+    // For now, we'll simply send the list to the user
+    res.status(200).json(adminAddedPayments);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch payment options', error: error.message });
+  }
+};
+
+
+
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
 // access	Private
@@ -337,4 +364,5 @@ export {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
+  getPaymentOptions
 };

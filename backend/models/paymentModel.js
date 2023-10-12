@@ -1,55 +1,44 @@
 import mongoose from 'mongoose';
 
-/**
- * Defines the schema for payments in the database.
- */
 const paymentSchema = mongoose.Schema(
   {
-    matricNumber: {
-      type: String, // Matriculation number of the student
+    userType: {
+      type: String,
+      enum: ['user', 'admin'],
+      required: true,
     },
     category: {
       type: String,
-      // type: mongoose.Schema.Types.ObjectId, // Reference to the Category model
-      ref: 'Category',
-      required: true,
+      required: true, // Required for both admin and user
     },
     session: {
       type: String,
-      required: true,
+      required: true, // Required for both admin and user
     },
-    // The amount of the payment.
     amount: {
       type: Number,
-      required: true,
+      required: true, // Required for admin-added payments
+    },
+    name: {
+      type: String,
+      required: false, // Not required for admin-added payments
+    },
+    email: {
+      type: String,
+      required: false, // Not required for admin-added payments
     },
     transactionReference: {
       type: String,
-      required: true,
+      required: false, // Not required for admin-added payments
     },
-    // The status of the payment.
-    // Reference to the user who made the payment.
-    user: {
-      type: String,
-      // type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Reference to the user who made the payment
-      required: true,
-    },
-    // The date when the payment was created (defaults to the current date).
-    date: {
-      type: Date,
-      default: Date.now,
-    },
+    // Other fields and references specific to your application
+    // ...
   },
   {
-    // Automatically generate createdAt and updatedAt timestamps.
-    timestamps: true,
+    timestamps: true, // Automatically generate createdAt and updatedAt timestamps
   }
 );
 
-/**
- * Represents a payment record in the database.
- */
 const Payment = mongoose.model('Payment', paymentSchema);
 
 export default Payment;

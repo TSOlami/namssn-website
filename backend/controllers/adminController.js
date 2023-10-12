@@ -21,14 +21,14 @@ const createPayment = asyncHandler(async(req, res) =>  {
   const { category, session, amount }= req.body;
   const addPayment = new Payment(
     {
+      userType: 'admin',
       category,
       session,
       amount,
-      // user: 
     }
   )
   const createdPayment = await addPayment.save();
-  res.status(201).json(createPayment)
+  res.status(201).json(createdPayment)
 });
 
 // @desc Get a single payment

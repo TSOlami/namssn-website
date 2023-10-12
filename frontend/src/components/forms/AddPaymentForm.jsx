@@ -22,10 +22,11 @@ const AddPaymentForm = ({ handleModalOpen }) => {
 
   // Formik and yup validation schema
   const initialValues = {
+    userType: '',
     category: '',
     session: '',
     amount: '',
-    // transactionReference: '',
+    
     };
 
     const validationSchema = Yup.object({
@@ -53,7 +54,7 @@ const AddPaymentForm = ({ handleModalOpen }) => {
         navigate("/admin/payment");
         toast.success("Payment created successfully");
       } catch (err) {
-        console.error("Failed to create a post:", err);
+        console.error("Failed to create payment:", err);
         toast.error(err?.data?.message || err?.error)
       }
     },
@@ -72,6 +73,7 @@ const AddPaymentForm = ({ handleModalOpen }) => {
             </div>
         </div>
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
+          <input type="hidden" name="userType" value="admin" />
           <label className="mt-2" htmlFor="category">
             Category
           </label>

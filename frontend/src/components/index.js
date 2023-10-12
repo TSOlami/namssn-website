@@ -4,6 +4,7 @@ import SignInForm from './forms/SignInForm';
 import SignUpForm from './forms/SignUpForm';
 import Button from './Button';
 import Payment from './Payment';
+import PaymentList from './PaymentList'
 import Sidebar from './nav/Sidebar';
 import AnnouncementContainer from './AnnouncementContainer';
 import Post from './Post';
@@ -25,4 +26,4 @@ import AddPaymentForm from './forms/AddPaymentForm';
 import EditPaymentForm from './forms/EditPaymentForm';
 import DeletePaymentForm from './forms/DeletePaymentForm';
 
-export { FormErrors, InputField, NavBar, Modal, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, AdminPaymentManagement, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm, HeaderComponent, AddPostForm, AddPaymentForm, EditPaymentForm, DeletePaymentForm };
+export { FormErrors, InputField, NavBar, Modal, Footer, SignInForm, SignUpForm, Payment, PaymentList ,Button, Sidebar, AdminPaymentManagement, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm, HeaderComponent, AddPostForm, AddPaymentForm, EditPaymentForm, DeletePaymentForm };
