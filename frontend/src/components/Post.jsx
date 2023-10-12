@@ -18,7 +18,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 					</span>
 					<span>@{username}</span>
 					<span className="text-gray-500">
-            {formatDate(date)}
+                    {formatDate(date)}
 					</span>
 				</div>
 

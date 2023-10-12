@@ -6,7 +6,6 @@ import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
 
 
-
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
 // access	Public
@@ -105,6 +104,29 @@ const getUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
+// @desc Get user by ID
+// Route GET /api/v1/users/:userId
+// Access Private
+const getUserById = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  // Find the user by ID
+  const user = await User.findById(userId);
+
+  if (user) {
+    // Return the user data
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 // @desc	Update user profile
 // Route	PUT  /api/v1/users/profile
 // access	Private
@@ -191,67 +213,6 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Create a new post
-// Route POST /api/v1/users/posts
-// Access Private
-const createPost = asyncHandler(async (req, res) => {
-  const { text, image } = req.body;
-
-  // You can access the currently logged-in user's information from req.user
-  const userId = req.user._id;
-
-  // Create a new post
-  const newPost = new Post({
-    text,
-    image,
-    user: userId, // Associate the post with the user who created it
-  });
-
-  // Save the new post to the database
-  const createdPost = await newPost.save();
-
-  res.status(201).json(createdPost);
-});
-
-// @desc Get all posts and sort by timestamp
-// Route GET /api/v1/user/posts
-// Access Public
-const getAllPosts = asyncHandler(async (req, res) => {
-  // Fetch all posts from the database and sort by timestamp in descending order
-  const allPosts = await Post.find()
-    .populate('user') // 'user' is the field referencing the user who posted the post
-    .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-
-  res.status(200).json(allPosts);
-});
-
-// @desc Get user's posts (My Posts)
-// Route GET /api/v1/users/posts
-// Access Private
-const getUserPosts = asyncHandler(async (req, res) => {
-  const userId = req.user._id; // Get the user ID from the authenticated user
-
-  // Fetch the user's posts from the database
-  const userPosts = await Post.find({ user: userId })
-    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest posts first)
-
-  res.status(200).json(userPosts);
-});
-
-// @desc	Update user post
-// Route	PUT  /api/v1/users/posts
-// access	Private
-const updatePost = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Update a Post' });
-});
-
-// @desc	Delete user post
-// Route	DELETE  /api/v1/users/posts
-// access	Private
-const deletePost = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Delete Post' });
-});
-
 // @desc Create user resources
 // Route POST /api/v1/users/resources
 // Access Private
@@ -266,7 +227,7 @@ const getAllBlogs = asyncHandler(async (req, res) => {
   // Fetch all blogs from the database and sort by timestamp in descending order
   const allBlogs = await Blog.find()
     .populate('user') // 'user' is the field referencing the user who posted the blog
-    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest blogs first)
+    .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest blogs first)
 
   res.status(200).json(allBlogs);
 });
@@ -323,13 +284,9 @@ export {
   registerUser,
   logoutUser,
   getUserProfile,
+  getUserById,
   updateUserProfile,
   deleteUserProfile,
-  createPost,
-  getAllPosts,
-  getUserPosts,
-  updatePost,
-  deletePost,
   getAllBlogs,
   postUserResources,
   getUserResources,
