@@ -16,7 +16,7 @@ const Profile = () => {
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
 	// const isAdmin = userInfo?.role === 'admin';
-	
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
@@ -28,16 +28,17 @@ const Profile = () => {
 			<Sidebar />
 			<div>
 				<div className="p-3 pl-6 flex flex-col">
-					<span className="font-semibold text-lg">
-						{name}
-					</span>
+					<span className="font-semibold text-lg">{name}</span>
 					<span>{noOfPosts} posts</span>
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />
-					<button onClick={handleModal}className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none">
+					<img src={ProfileImg} alt="" />{" "}
+					<button
+						onClick={handleModal}
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
+					>
 						Edit Profile
 					</button>
 				</div>
@@ -53,7 +54,9 @@ const Profile = () => {
 					<span className="font-semibold text-xl">215</span> points
 				</div>
 
-				<div className="px-3 pt-3 border-b-2 pl-6 text-primary"><span className="border-b-4 border-primary">Posts</span></div>
+				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
+					<span className="border-b-4 border-primary">Posts</span>
+				</div>
 				<div>
 					<Post
 						upvotes="3224"
@@ -70,15 +73,12 @@ const Profile = () => {
 			</div>
 			<AnnouncementContainer />
 
-
-
 			{/* modal */}
 			{isModalOpen && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
 					<EditProfileForm handleModal={handleModal} />
 				</div>
-			)
-			}
+			)}
 		</div>
 	);
 };
