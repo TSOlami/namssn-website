@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -10,6 +9,7 @@ import { useLoginMutation, setCredentials } from '../../redux';
 import FormErrors from './FormErrors';
 import InputField from "../InputField";
 import { toast } from "react-toastify";
+import Loader from "../Loader";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +70,8 @@ const SignInForm = () => {
       type="text"
       name="email"
       id="email"
+      placeholder="Enter your email"
+      autoComplete="email"
       onChange={formik.handleChange}
       onBlur={formik.handleBlur("email")}
       value={formik.values.email}
@@ -88,6 +90,8 @@ const SignInForm = () => {
         type={showPassword ? "text" : "password"}
         name="password"
         id="password"
+        placeholder="Enter your password"
+        autoComplete="current-password"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur("password")}
 
@@ -111,6 +115,8 @@ const SignInForm = () => {
     {formik.touched.password && formik.errors.password ? (
       <FormErrors error={formik.errors.password} />
     ) : null}
+
+    { isLoading && <Loader />}
 
     <div className="text-gray-500 text-right text-md">
       Forgot Password?

@@ -1,5 +1,3 @@
-import FeatureCard from './FeatureCard';
-import ImageCard from './ImageCard';
 import NavBar from './nav/NavBar';
 import Footer from './nav/Footer';
 import SignInForm from './forms/SignInForm';
@@ -14,10 +12,16 @@ import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
+<<<<<<< HEAD
 import FormErrors from '../components/forms/FormErrors'
 import InputField from './InputField'
 import HeaderComponent from './HeaderComponent';
 import ResourceCard from './ResourceCard';
 import FileForm from './FileForm';
+import Loader from './Loader';
+import PrivateRoutes from './PrivateRoutes';
+import EditProfileForm from './forms/EditProfileForm';
+import AddPostForm from './forms/AddPostForm';
 
-export {FileForm, ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+

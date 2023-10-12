@@ -144,3 +144,64 @@ export const mockReportedAccounts = [
 		suspend: "",
 	},
 ]
+
+export const mockPayments = [
+	{
+		title: "Departmental dues",
+		amount: 50,
+	},
+	{
+		title: "Sin City Party",
+		amount: 10,
+	},
+	{
+		title: "Departmental Dinner",
+		amount: 22,
+	},
+	{
+		title: "Sport Jersey Dues",
+		amount: 15,
+	},
+	{
+		title: "Departmental dues",
+		amount: 5,
+	},
+	{
+		title: "Departmental dues",
+		amount: 111,
+	},
+]
+
+export const mockPaidUsers = [
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid"
+	},
+
+]

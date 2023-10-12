@@ -5,13 +5,8 @@ import mongoose from 'mongoose';
  */
 const postSchema = mongoose.Schema(
   {
-    // The title of the post.
-    title: {
-      type: String,
-      required: true,
-    },
     // The content of the post.
-    content: {
+    text: {
       type: String,
       required: true,
     },
