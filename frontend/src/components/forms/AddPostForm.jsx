@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { FormErrors, Loader } from "../../components";
 // import { Wrapper } from "../../assets";
 // import { Loader } from "../Loader";
-import { useCreatePostMutation, setCredentials } from "../../redux";
+import { useCreatePostMutation, setPosts } from "../../redux";
 
 
 const AddPostForm = ({ handleModalOpen }) => {
@@ -40,10 +40,10 @@ const AddPostForm = ({ handleModalOpen }) => {
     image: Yup.mixed()
     .test("is-valid-type", "Not a valid image type", (value) =>
       !value || isValidFileType(value.name.toLowerCase(), "image")
-    )
+    ) // Validate file type
     .test("is-valid-size", "Max allowed size is 500KB", (value) =>
       !value || value.size <= MAX_FILE_SIZE
-    )
+    ) // Validate file size
     .notRequired() // Make the image field optional
   });
   
@@ -55,7 +55,9 @@ const AddPostForm = ({ handleModalOpen }) => {
         console.log(values);
         const res = await createPost(values).unwrap();
         console.log(res);
-        dispatch(setCredentials({ ...res }));
+        dispatch(setPosts({ ...res }));
+        // Close the modal
+        handleModalOpen(); 
         navigate("/home");
         toast.success("Post created successfully");
       } catch (err) {
@@ -67,7 +69,7 @@ const AddPostForm = ({ handleModalOpen }) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
+      <div className="container fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
         <div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[500px]">
           <div className="flex justify-between items-center p-5 border-b border-gray-200">
             <div className="text-2xl font-bold">Create Post</div>
@@ -79,7 +81,7 @@ const AddPostForm = ({ handleModalOpen }) => {
             </div>
           </div>
           <div className="p-5">
-            <input
+            <textarea
               className="w-full h-[200px] border border-gray-200 rounded-lg p-5"
               id="text"
               name="text"

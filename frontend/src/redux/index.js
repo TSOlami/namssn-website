@@ -1,4 +1,4 @@
-import { setCredentials } from "./slices/authSlice";
+import { setCredentials, setPosts } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -70,4 +70,5 @@ export {
 	useCreateAdminPaymentMutation,
 	useUpdateAdminPaymentMutation,
 	useDeleteAdminPaymentMutation,
-		setCredentials }
+	setCredentials,
+	setPosts, }

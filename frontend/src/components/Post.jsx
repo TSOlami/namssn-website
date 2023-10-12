@@ -12,8 +12,8 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 
 			<div className="flex flex-col gap-2 w-full">
 				<div className="flex flex-row gap-2 lg:gap-5">
-					<span className="font-semibold flex flex-row items-center gap-2">
-						{name}
+					<span className="font-medium flex flex-row items-center gap-2">
+						<span className="font-semibold">{name}</span>
                         {isVerified && <FaCircleCheck color="#17A1FA" />}
 					</span>
 					<span>@{username}</span>
@@ -23,7 +23,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 				</div>
 
 				{/* Post content goes here */}
-				<div>{text}</div>
+				<div className="body-text">{text}</div>
 
 				{/* Post actions */}
 
