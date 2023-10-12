@@ -32,10 +32,10 @@ const Home = () => {
             {posts?.map((post, index) => {
               // console.log(`Post ${index + 1}:`, post);
               // console.log(`Post ${index + 1} user:`, post?.user);
-              console.log(`Post ${index + 1} user id`, post?.user?._id);
+              // console.log(`Post ${index + 1} user id`, post?.user?._id);
               return (
                 <Post
-									key={post?._id}
+									key={index}
 									upvotes={post?.upvotes?.length}
 									downvotes={post?.downvotes?.length}
 									comments={post?.comments?.length}

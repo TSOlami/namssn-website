@@ -24,6 +24,7 @@ const UserProfile = () => {
     return <div>User not found</div>;
   }
 
+  // console.log(user);
   const name = user?.name;
   const username = user?.username;
   const bio = user?.bio;
