@@ -1,31 +1,41 @@
+import { useParams } from 'react-router-dom';
 import { FaCircleCheck } from "react-icons/fa6";
-import { Post, Sidebar, AnnouncementContainer } from "../components";
+
+
+import { useGetUserQuery } from '../redux';
+import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
 import Wrapper from "../assets/images/wrapper.png";
 import { mockTexts } from "../data";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-
-import { EditProfileForm } from "../components";
 import { ProfileImg } from "../assets";
 
-const Profile = () => {
-	// Fetch user info from redux store
-	const { userInfo } = useSelector((state) => state.auth);
-	const name = userInfo?.name;
-	const username = userInfo?.username;
-	const bio = userInfo?.bio;
-	const isVerified = userInfo?.isVerified;
-	// const isAdmin = userInfo?.role === 'admin';
+const UserProfile = () => {
+  // Get the userId from the route params
+	const { userId } = useParams();
+	// // Fetch user info from redux store
+	// const name = userInfo?.name;
+	// const username = userInfo?.username;
+	// const bio = userInfo?.bio;
+	// const isVerified = userInfo?.isVerified;
+	// // const isAdmin = userInfo?.role === 'admin';
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const handleModal = () => {
-		setIsModalOpen(!isModalOpen);
-	};
+
+  const { data: user, isLoading } = useGetUserQuery({ _id: userId });
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  // console.log(user);
+  const name = user?.name;
+  const username = user?.username;
+  const bio = user?.bio;
+  const isVerified = user?.isVerified;
+
 	const noOfPosts = 120;
-
+  
 	return (
-		<div className="flex flex-row">
+		<div className="flex">
 			<Sidebar />
+
 			<div>
 				<div className="p-3 pl-6 flex flex-col">
 					<span className="font-semibold text-lg">{name}</span>
@@ -34,12 +44,9 @@ const Profile = () => {
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />{" "}
-					<button
-						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
-					>
-						Edit Profile
+					<img src={ProfileImg} alt="" />
+					<button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+						Make admin
 					</button>
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
@@ -53,7 +60,7 @@ const Profile = () => {
 				<div className="font-semibold px-3 pl-6">
 					<span className="font-semibold text-xl">215</span> points
 				</div>
-
+        {isLoading && <Loader />}
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
@@ -72,15 +79,8 @@ const Profile = () => {
 				</div>
 			</div>
 			<AnnouncementContainer />
-
-			{/* modal */}
-			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-					<EditProfileForm handleModal={handleModal} />
-				</div>
-			)}
 		</div>
 	);
 };
 
-export default Profile;
+export default UserProfile;

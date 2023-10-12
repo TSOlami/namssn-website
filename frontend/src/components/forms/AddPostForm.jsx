@@ -11,9 +11,16 @@ import { FormErrors, Loader } from "../../components";
 import { useCreatePostMutation, setPosts } from "../../redux";
 
 
-const AddPostForm = ({ handleModalOpen }) => {
+const AddPostForm = ({handleModalOpen, isModalOpen}) => {
   // Get user info from redux store
   // const { userInfo } = useSelector((state) => state.auth);
+
+
+  // const [isModalOpen, setIsModalOpen] = useState(false)
+	// const handleModalOpen = () => {
+	// 	setIsModalOpen(!isModalOpen)
+  //   console.log(isModalOpen)
+	// }
 
   // Setup Dispatch
   const dispatch = useDispatch();
@@ -36,7 +43,7 @@ const AddPostForm = ({ handleModalOpen }) => {
   }
 
   const validationSchema = Yup.object({
-    text: Yup.string().required("Required"),
+    text: Yup.string().required("").min(2, "Too short"),
     image: Yup.mixed()
     .test("is-valid-type", "Not a valid image type", (value) =>
       !value || isValidFileType(value.name.toLowerCase(), "image")
@@ -68,8 +75,9 @@ const AddPostForm = ({ handleModalOpen }) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className="container fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div>
+      {isModalOpen?     <form onSubmit={formik.handleSubmit}>
+      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
         <div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[500px]">
           <div className="flex justify-between items-center p-5 border-b border-gray-200">
             <div className="text-2xl font-bold">Create Post</div>
@@ -128,6 +136,8 @@ const AddPostForm = ({ handleModalOpen }) => {
         </div>
       </div>
     </form>
+: null}
+    </div>
   );
 };
 

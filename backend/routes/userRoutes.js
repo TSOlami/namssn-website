@@ -9,14 +9,10 @@ import {
   registerUser,
   logoutUser,
   getUserProfile,
+  getUserById,
   updateUserProfile,
   deleteUserProfile,
-  createPost,
-	getAllPosts,
-	getUserPosts,
-  updatePost,
-  deletePost,
-  getAllBlogs,
+  getAllBlogs, 
   postUserResources,
   getUserResources,
   updateUserResources,
@@ -25,6 +21,14 @@ import {
   getUserPayment,
   getPaymentOptions
 } from "../controllers/userController.js";
+
+import { 
+  createPost,
+	getAllPosts,
+	getUserPosts,
+  updatePost,
+  deletePost,
+} from "../controllers/postController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -65,6 +69,9 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
   .delete(protect, deleteUserProfile);
+
+// Route for getting a user by id
+router.get('/profile/:userId', getUserById);
 
 // Route for getting all blogs
 router.get('/blogs', getAllBlogs);
