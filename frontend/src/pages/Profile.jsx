@@ -15,21 +15,23 @@ const Profile = () => {
 	const username = userInfo?.username;
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
-	// const isAdmin = userInfo?.role === 'admin';
-
+	const points = userInfo?.points;
+	
+	// Fetch number of posts
+	const noOfPosts = userInfo?.posts?.length;
+    console.log(noOfPosts);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
-	const noOfPosts = 120;
 
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
 			<div>
 				<div className="p-3 pl-6 flex flex-col">
-					<span className="font-semibold text-lg">{name}</span>
-					<span>{noOfPosts} posts</span>
+					<span className="font-semibold text-black text-lg">{name}</span>
+					<span>{noOfPosts} {noOfPosts === 1 ? 'post' : 'posts'}</span>
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
@@ -51,7 +53,7 @@ const Profile = () => {
 					<span className="mt-2">{bio}</span>
 				</div>
 				<div className="font-semibold px-3 pl-6">
-					<span className="font-semibold text-xl">215</span> points
+					<span className="font-semibold text-xl">{points}</span> points
 				</div>
 
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">

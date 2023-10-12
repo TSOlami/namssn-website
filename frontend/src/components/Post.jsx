@@ -2,9 +2,29 @@ import { FaCircleCheck } from "react-icons/fa6";
 import Actions from "./Actions";
 import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 import { Link } from "react-router-dom";
+import { useState } from 'react';
 
 const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id }) => {
 	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
+
+	// Add a state to keep track of the upvote and downvote status
+	const [isUpvoted, setIsUpvoted] = useState(false);
+  const [isDownvoted, setIsDownvoted] = useState(false);
+
+	// Function to handle the upvote action
+  const handleUpvote = () => {
+    // Toggle the upvote state
+    setIsUpvoted(!isUpvoted);
+    // Perform the upvote logic here
+    // You can make an API call to update the upvote on the server
+  };
+
+  // Function to handle the downvote action
+  const handleDownvote = () => {
+    // Toggle the downvote state
+    setIsDownvoted(!isDownvoted);
+    // Add logic to send a downvote request to the server here
+  };
 
 	return (
 		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
@@ -39,9 +59,13 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 				{/* Post actions */}
 
 				<Actions
-					upvotes={upvotes}
-					downvotes={downvotes}
-					comments={comments}
+					upvotes={isUpvoted ? upvotes + 1 : upvotes}
+          downvotes={isDownvoted ? downvotes + 1 : downvotes}
+          comments={comments}
+          isUpvoted={isUpvoted}
+          onUpvote={handleUpvote}
+          isDownvoted={isDownvoted}
+          onDownvote={handleDownvote}
 					/>
 			</div>
 		</div>

@@ -161,7 +161,7 @@ const Sidebar = () => {
 				<div className="pt-10">
 					<Link
 						to="/"
-            onClick={ logoutHandler }
+                        onClick={logoutHandler}
 						className="transition duration-500 text-red-500 flex flex-row gap-3 items-center hover:bg-red-500 hover:text-white p-2 rounded-lg"
 					>
 						<FaArrowRightFromBracket /> Log Out

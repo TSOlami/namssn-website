@@ -27,6 +27,10 @@ const authUser = asyncHandler(async (req, res) => {
       isVerified: user.isVerified,
       points: user.points,
       profilePicture: user.profilePicture,
+      posts: user.posts,
+      blogs: user.blogs,
+      payments: user.payments,
+      resources: user.resources,
     });
   } else {
     res.status(401);
@@ -67,6 +71,14 @@ const registerUser = asyncHandler(async (req, res) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      isVerified: user.isVerified,
+      points: user.points,
+      profilePicture: user.profilePicture,
+      bio: user.bio,
+      posts: user.posts,
+      blogs: user.blogs,
+      payments: user.payments,
+      resources: user.resources,
     });
   } else {
     res.status(400);
@@ -100,6 +112,10 @@ const getUserProfile = asyncHandler(async (req, res) => {
     bio: req.user.bio,
     role: req.user.role,
     profilePicture: req.user.profilePicture,
+    posts: req.user.posts,
+    blogs: req.user.blogs,
+    payments: req.user.payments,
+    resources: req.user.resources,
   }
   res.status(200).json(user);
 });
@@ -109,7 +125,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // Access Private
 const getUserById = asyncHandler(async (req, res) => {
   const userId = req.params.userId;
-  console.log(`The user id from the params is: `,userId);
 
   // Find the user by ID
   const user = await User.findById(userId);

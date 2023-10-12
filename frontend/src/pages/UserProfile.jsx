@@ -4,6 +4,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 
 import { useGetUserQuery } from '../redux';
 import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
+import { ErrorPage } from '../pages';
 import Wrapper from "../assets/images/wrapper.png";
 import { mockTexts } from "../data";
 import { ProfileImg } from "../assets";
@@ -20,8 +21,15 @@ const UserProfile = () => {
 
 
   const { data: user, isLoading } = useGetUserQuery({ _id: userId });
+
+  // Display loading indicator while data is being fetched
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  // Display error message if user is not found
   if (!user) {
-    return <div>User not found</div>;
+    return <ErrorPage />;
   }
 
   // console.log(user);

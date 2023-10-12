@@ -65,9 +65,9 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
       // Upvote Post Query
       upvotePost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/upvote`,
+            url: `${POSTS_URL}/posts/${postId}/upvote`,
             method: 'PUT',
             body: data,
           };
@@ -77,9 +77,9 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
       // Downvote Post Query
       downvotePost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/downvote`,
+            url: `${POSTS_URL}/posts/${postId}/downvote`,
             method: 'PUT',
             body: data,
           };
@@ -89,9 +89,9 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
       // Comment on Post Query
       commentPost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/comment`,
+            url: `${POSTS_URL}/posts/${postId}/comment`,
             method: 'PUT',
             body: data,
           };
@@ -101,34 +101,10 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
       // Delete Comment Query
       deleteComment: builder.mutation({
-        query(data) {
+        query({ commentId, postId, data }) {
           return {
-            url: `${POSTS_URL}/post/comment`,
+            url: `${POSTS_URL}/posts/${postId}/comment/${commentId}`,
             method: 'DELETE',
-            body: data,
-          };
-        },
-        invalidatesTags: ['Post'],
-      }),
-
-      // Upvote Comment Query
-      upvoteComment: builder.mutation({
-        query(data) {
-          return {
-            url: `${POSTS_URL}/post/comment/upvote`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-        invalidatesTags: ['Post'],
-      }),
-
-      // Downvote Comment Query
-      downvoteComment: builder.mutation({
-        query(data) {
-          return {
-            url: `${POSTS_URL}/post/comment/downvote`,
-            method: 'PUT',
             body: data,
           };
         },
@@ -148,6 +124,4 @@ export const {
   useDownvotePostMutation,
   useCommentPostMutation,
   useDeleteCommentMutation,
-  useUpvoteCommentMutation,
-  useDownvoteCommentMutation,
 } = postsApiSlice;

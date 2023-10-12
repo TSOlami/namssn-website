@@ -27,6 +27,7 @@ import {
 	getUserPosts,
   updatePost,
   deletePost,
+  upvotePost,
 } from "../controllers/postController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -80,6 +81,8 @@ router
 .route("/posts")
 .get(protect, getAllPosts);
 
+// Route for upvoting a post
+router.post('/posts/:postId/upvote', protect, upvotePost);
 
 router
 .route("/post")

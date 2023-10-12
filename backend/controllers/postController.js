@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 
 // @desc Create a new post
@@ -25,6 +26,9 @@ const createPost = asyncHandler(async (req, res) => {
   
 	// Add the post's _id to the user's posts array field
 	user.posts.push(createdPost._id);
+
+	// Increase the user's points by 10
+	user.points += 10;
   
 	// Save the updated user document to the database
 	await user.save();
@@ -71,4 +75,33 @@ const deletePost = asyncHandler(async (req, res) => {
 	res.status(200).json({ message: 'Delete Post' });
   });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost };
+// @desc Toggle upvote on a post
+// Route PUT /api/v1/posts/:postId/upvote
+// Access Private
+const upvotePost = asyncHandler(async (req, res) => {
+const postId = req.params.postId;
+const userId = req.user._id;
+
+// Find the post by ID
+const post = await Post.findById(postId);
+
+if (post) {
+  // Check if the user has already upvoted the post
+  const upvotedIndex = post.upvotes.indexOf(userId);
+  if (upvotedIndex === -1) {
+  // The user hasn't upvoted the post, so add their ID to the upvotes array.
+  post.upvotes.push(userId);
+  } else {
+  // The user has already upvoted the post, so remove their ID from the upvotes array to undo the upvote.
+  post.upvotes.splice(upvotedIndex, 1);
+  }
+
+  await post.save();
+  res.status(200).json(post);
+} else {
+  res.status(404);
+  throw new Error('Post not found');
+}
+});
+
+export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost };
