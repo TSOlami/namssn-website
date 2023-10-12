@@ -19,7 +19,7 @@ export default function App() {
         <Route path='/payments' element={<PaymentPage/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/profile' element={<Profile/>}/>
-        <Route path='/user-profile' element={<UserProfile/>}/>
+        <Route path='/profile/:userId' element={<UserProfile/>}/>
         <Route path='/announcements' element={<AnnouncementMobile/>} />
         <Route path='/notifications' element={<NotificationPage/>}/>
         <Route path='/admin' element={<AdminDashboard/>}/>

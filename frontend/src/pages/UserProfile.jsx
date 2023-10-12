@@ -1,20 +1,36 @@
+import { useParams } from 'react-router-dom';
 import { FaCircleCheck } from "react-icons/fa6";
-import { Post, Sidebar, AnnouncementContainer } from "../components";
+
+
+import { useGetUserQuery } from '../redux';
+import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
 import Wrapper from "../assets/images/wrapper.png";
 import { mockTexts } from "../data";
-
 import { ProfileImg } from "../assets";
 
-const UserProfile = ({userInfo}) => {
-	// Fetch user info from redux store
-	const name = userInfo?.name;
-	const username = userInfo?.username;
-	const bio = userInfo?.bio;
-	const isVerified = userInfo?.isVerified;
-	// const isAdmin = userInfo?.role === 'admin';
+const UserProfile = () => {
+  // Get the userId from the route params
+	const { userId } = useParams();
+	// // Fetch user info from redux store
+	// const name = userInfo?.name;
+	// const username = userInfo?.username;
+	// const bio = userInfo?.bio;
+	// const isVerified = userInfo?.isVerified;
+	// // const isAdmin = userInfo?.role === 'admin';
+
+
+  const { data: user, isLoading } = useGetUserQuery({ _id: userId });
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  const name = user?.name;
+  const username = user?.username;
+  const bio = user?.bio;
+  const isVerified = user?.isVerified;
 
 	const noOfPosts = 120;
-
+  
 	return (
 		<div className="flex">
 			<Sidebar />
@@ -43,7 +59,7 @@ const UserProfile = ({userInfo}) => {
 				<div className="font-semibold px-3 pl-6">
 					<span className="font-semibold text-xl">215</span> points
 				</div>
-
+        {isLoading && <Loader />}
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
