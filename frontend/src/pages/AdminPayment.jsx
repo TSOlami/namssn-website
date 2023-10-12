@@ -1,9 +1,33 @@
-import { Sidebar } from "../components";
+import { useState } from "react";
+import { Sidebar,  AddPaymentForm, EditPaymentForm, DeletePaymentForm } from "../components";
 import HeaderComponent from "../components/HeaderComponent";
 import PaymentDetails from "../components/PaymentDetails";
 import { mockPaidUsers, mockPayments } from "../data";
 
 const AdminPayment = () => {
+    const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
+    const [showEditPaymentForm, setShowEditPaymentForm] = useState(false);
+    const [showDeletePaymentForm, setShowDeletePaymentForm] = useState(false);
+  
+    const openAddPaymentForm = () => {
+      setShowAddPaymentForm(true);
+      setShowEditPaymentForm(false);
+      setShowDeletePaymentForm(false);
+    };
+  
+    const openEditPaymentForm = () => {
+      setShowAddPaymentForm(false);
+      setShowEditPaymentForm(true);
+      setShowDeletePaymentForm(false);
+    };
+  
+    const openDeletePaymentForm = () => {
+      setShowAddPaymentForm(false);
+      setShowEditPaymentForm(false);
+      setShowDeletePaymentForm(true);
+    };
+  
+  
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
@@ -21,8 +45,8 @@ const AdminPayment = () => {
 							/>
 						))}
 
-						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm">
-							Add New Payment
+						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm" onClick={openAddPaymentForm} >
+            Add New Payment
 						</button>
 					</div>
 
@@ -53,8 +77,8 @@ const AdminPayment = () => {
 
             {/* Delete and Edit payment button */}
             <div className="p-5 py-10 ">
-              <button className="border-gray-300 border-2 text-black p-2 rounded-md mr-5">Edit Payment</button>
-              <button className="bg-red-600 text-white p-2 rounded-md">Delete Payment</button>
+              <button className="border-gray-300 border-2 text-black p-2 rounded-md mr-5" onClick={openEditPaymentForm}>Edit Payment</button>
+              <button className="bg-red-600 text-white p-2 rounded-md" onClick={openDeletePaymentForm} >Delete Payment</button>
             </div>
 
 
@@ -102,6 +126,9 @@ const AdminPayment = () => {
 					</div>
 				</div>
 			</div>
+      {showAddPaymentForm && <AddPaymentForm />}
+      {showEditPaymentForm && <EditPaymentForm />}
+      {showDeletePaymentForm && <DeletePaymentForm />}
 		</div>
 	);
 };

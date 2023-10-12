@@ -9,7 +9,7 @@ export const adminPaymentApiSlice = apiSlice.injectEndpoints({
       allAdminPayments: builder.query({
         query() {
           return {
-            url: `${ADMIN_PAYMENTS_URL}/payment`,
+            url: `${ADMIN_PAYMENTS_URL}/all-payments`,
             method: 'GET',
           };
         },
