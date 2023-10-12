@@ -3,7 +3,7 @@ import Actions from "./Actions";
 import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi'
 import { useNavigate } from "react-router-dom";
 
-const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id }) => {
+const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt }) => {
 	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
 	const navigate = useNavigate()
 	const handleViewProfile = ()=> {
