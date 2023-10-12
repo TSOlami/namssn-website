@@ -70,6 +70,8 @@ const SignInForm = () => {
       type="text"
       name="email"
       id="email"
+      placeholder="Enter your email"
+      autoComplete="email"
       onChange={formik.handleChange}
       onBlur={formik.handleBlur("email")}
       value={formik.values.email}
@@ -88,6 +90,8 @@ const SignInForm = () => {
         type={showPassword ? "text" : "password"}
         name="password"
         id="password"
+        placeholder="Enter your password"
+        autoComplete="current-password"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur("password")}
 

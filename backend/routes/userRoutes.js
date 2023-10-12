@@ -73,13 +73,18 @@ router
 .route("/posts")
 .get(protect, getAllPosts);
 
-// Get, create, update and delete user posts
+
 router
-.route('/blog')
+.route("/post")
 .get(protect, getUserPosts)
 .post(protect, createPost)
 .put(protect, updatePost)
 .delete(protect, deletePost);
+
+// Get, create, update and delete user posts
+router
+.route('/blog')
+.get(protect, getAllBlogs)
 
 /**
  * Get and create user payment history.

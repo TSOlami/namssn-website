@@ -18,6 +18,7 @@ import Loader from "../Loader";
 import { useRegisterMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
+  // Get user info from redux store
   const { userInfo } = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +62,6 @@ const SignUpForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-        console.log(values);
         const res = await register(values).unwrap();
         console.log(res);
         dispatch(setCredentials({...res}));
@@ -146,8 +146,8 @@ const SignUpForm = () => {
         name="password"
         id="password"
         onChange={formik.handleChange("password")}
-      value={formik.values.password}
-      onBlur={formik.handleBlur("password")}
+        value={formik.values.password}
+        onBlur={formik.handleBlur("password")}
         icon={<FaLock />}
         pad
         placeholder='Enter password'
