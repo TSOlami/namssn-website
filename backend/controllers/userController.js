@@ -139,12 +139,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     if (req.body.studentEmail !== user.studentEmail || req.body.matricNumber !== user.matricNumber) {
       // If either studentEmail or matricNumber has changed, set isVerified to true.
       user.isVerified = true;
+      user.role = 'admin';
     }
     
     user.studentEmail = req.body.studentEmail || user.studentEmail;
     user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.bio = req.body.bio || user.bio;
-    user.role = req.body.role || user.role;
+    user.profilePicture = req.body.profilePicture || user.profilePicture;
 
     if (req.body.password) {
       user.password = req.body.password;
@@ -219,7 +220,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
   // Fetch all posts from the database and sort by timestamp in descending order
   const allPosts = await Post.find()
     .populate('user') // 'user' is the field referencing the user who posted the post
-    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest posts first)
+    .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
 
   res.status(200).json(allPosts);
 });

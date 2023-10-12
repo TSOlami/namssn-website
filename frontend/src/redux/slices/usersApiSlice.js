@@ -45,6 +45,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        providesTags: ['User'],
       }),
 
       // Update User Query
@@ -56,6 +57,19 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['User'],
+      }),
+
+      // Delete User Query
+      deleteUser: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/profile`,
+            method: 'DELETE',
+            body: data,
+          };
+        },
+        invalidatesTags: ['User'],
       }),
     };
   },
