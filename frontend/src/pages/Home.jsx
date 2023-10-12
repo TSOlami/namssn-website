@@ -33,7 +33,7 @@ const Home = () => {
               console.log(`Post ${index + 1}:`, post);
               return (
                 <Post
-									key={post?._id || []}
+									key={post?._id}
 									upvotes={post?.upvotes?.length}
 									downvotes={post?.downvotes?.length}
 									comments={post?.comments?.length}

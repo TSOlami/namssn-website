@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { FormErrors, Loader } from "../../components";
 // import { Wrapper } from "../../assets";
 // import { Loader } from "../Loader";
-import { useCreatePostMutation, setCredentials } from "../../redux";
+import { useCreatePostMutation, setPosts } from "../../redux";
 
 
 const AddPostForm = ({handleModalOpen, isModalOpen}) => {
@@ -47,10 +47,10 @@ const AddPostForm = ({handleModalOpen, isModalOpen}) => {
     image: Yup.mixed()
     .test("is-valid-type", "Not a valid image type", (value) =>
       !value || isValidFileType(value.name.toLowerCase(), "image")
-    )
+    ) // Validate file type
     .test("is-valid-size", "Max allowed size is 500KB", (value) =>
       !value || value.size <= MAX_FILE_SIZE
-    )
+    ) // Validate file size
     .notRequired() // Make the image field optional
   });
   
@@ -62,7 +62,9 @@ const AddPostForm = ({handleModalOpen, isModalOpen}) => {
         console.log(values);
         const res = await createPost(values).unwrap();
         console.log(res);
-        dispatch(setCredentials({ ...res }));
+        dispatch(setPosts({ ...res }));
+        // Close the modal
+        handleModalOpen(); 
         navigate("/home");
         toast.success("Post created successfully");
       } catch (err) {

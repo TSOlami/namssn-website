@@ -25,10 +25,6 @@ const Sidebar = () => {
    const username = userInfo?.username;
    const isVerified = userInfo?.isVerified;
  
- 
-   // Check if user is admin
-   // const isAdmin = userInfo?.isAdmin;
- 
   // Check if user is admin
   const isAdmin = userInfo?.role === 'admin';
 

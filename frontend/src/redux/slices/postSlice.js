@@ -13,6 +13,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        providesTags: ['Post'], 
       }),
 
       // Get User Posts Query
@@ -23,6 +24,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Create Post Query
@@ -34,6 +36,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Update Post Query
@@ -45,6 +48,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Delete Post Query
@@ -56,6 +60,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Upvote Post Query
@@ -67,6 +72,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Downvote Post Query
@@ -78,6 +84,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Comment on Post Query
@@ -89,6 +96,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Delete Comment Query
@@ -100,6 +108,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Upvote Comment Query
@@ -111,6 +120,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Downvote Comment Query
@@ -122,6 +132,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 		};
 	},

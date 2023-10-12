@@ -1,4 +1,4 @@
-import { setCredentials } from "./slices/authSlice";
+import { setCredentials, setPosts } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -59,4 +59,5 @@ export {
   useUpvoteBlogCommentMutation,
   useDownvoteBlogCommentMutation,
   useDeleteBlogCommentMutation,
-	setCredentials }
+	setCredentials,
+	setPosts, }

@@ -1,8 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit';
 
+// Helper function to get items from local storage
+const getLocalStorageItem = (key) => {
+	try {
+		const item = localStorage.getItem(key);
+		return item ? JSON.parse(item) : null;
+	} catch (error) {
+		console.error('Error retrieving item from local storage:', error);
+		return null;
+	}
+  };
+
 const initialState = {
-	userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+	userInfo: getLocalStorageItem('userInfo') || null,
+  posts: getLocalStorageItem('userPosts') || null,
 }
 
 const authSlice = createSlice({
@@ -15,11 +27,17 @@ const authSlice = createSlice({
 		},
     logout: (state, action) => {
       state.userInfo = null;
+      state.posts = null;
       localStorage.removeItem('userInfo');
+      localStorage.removeItem('userPosts');
+    },
+    setPosts(state, action) {
+      state.posts = action.payload;
+      localStorage.setItem('userPosts', JSON.stringify(action.payload));
     },
 	},
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, setPosts, logout } = authSlice.actions;
 
 export default authSlice.reducer;
