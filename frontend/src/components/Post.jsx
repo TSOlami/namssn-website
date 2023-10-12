@@ -3,28 +3,74 @@ import Actions from "./Actions";
 import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 import { Link } from "react-router-dom";
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id }) => {
+import { useUpvotePostMutation, useDownvotePostMutation } from '../redux';
+
+const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id, postId }) => {
 	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
+
+  // Get the user ID from the redux store
+  const { _id: userId } = useSelector((state) => state.auth.userInfo);
 
 	// Add a state to keep track of the upvote and downvote status
 	const [isUpvoted, setIsUpvoted] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
 
+  // Add the upvote and downvote mutations
+  const [upvotePost] = useUpvotePostMutation();
+  const [downvotePost] = useDownvotePostMutation();
+
+  // Create a data object to pass user details to the mutation
+  const data = {
+    user: { _id: userId }
+  };
+
 	// Function to handle the upvote action
-  const handleUpvote = () => {
-    // Toggle the upvote state
-    setIsUpvoted(!isUpvoted);
-    // Perform the upvote logic here
-    // You can make an API call to update the upvote on the server
+  const handleUpvote = async () => {
+    // Add logic to prevent the user from upvoting and downvoting at the same time
+    if (isDownvoted) {
+      setIsDownvoted(false);
+    }
+  
+    try {
+      // Perform the upvote logic to send an API call to the server
+      const response = await upvotePost({ postId: postId, data: data }).unwrap();
+  
+      if (response.status === 'success') {
+        // Toggle the upvote state
+        setIsUpvoted(!isUpvoted);
+        console.log('Upvote successful:', response);
+      } else {
+        console.error('Upvote failed:', response);
+      }
+    } catch (error) {
+      console.error('Upvote failed:', error);
+    }
   };
 
   // Function to handle the downvote action
-  const handleDownvote = () => {
-    // Toggle the downvote state
-    setIsDownvoted(!isDownvoted);
-    // Add logic to send a downvote request to the server here
+  const handleDownvote = async () => {
+    // Add logic to prevent the user from upvoting and downvoting at the same time
+    if (isUpvoted) {
+      setIsUpvoted(false);
+    }
+  
+    try {
+      // Perform the downvote logic to send an API call to the server
+      const response = await downvotePost({ postId: postId, data: {} }).unwrap();
+  
+      if (response.status === 'success') {
+        // Toggle the downvote state
+        setIsDownvoted(!isDownvoted);
+      } else {
+        console.error('Downvote failed:', response);
+      }
+    } catch (error) {
+      console.error('Downvote failed:', error);
+    }
   };
+
 
 	return (
 		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">

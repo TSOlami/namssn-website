@@ -1,7 +1,6 @@
 import { BiDownvote, BiShareAlt, BiSolidDownvote, BiSolidUpvote, BiUpvote } from "react-icons/bi"
 
 const Actions = ({ upvotes, downvotes, shares, isUpvoted, onUpvote, isDownvoted, onDownvote }) => {
-  console.log(upvotes, downvotes);
   return (
     <div className="py-4 flex flex-row justify-start gap-20 pr-4 items-center">
     <div>

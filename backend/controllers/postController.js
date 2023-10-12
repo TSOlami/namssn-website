@@ -74,34 +74,70 @@ const updatePost = asyncHandler(async (req, res) => {
 const deletePost = asyncHandler(async (req, res) => {
 	res.status(200).json({ message: 'Delete Post' });
   });
-
 // @desc Toggle upvote on a post
 // Route PUT /api/v1/posts/:postId/upvote
 // Access Private
 const upvotePost = asyncHandler(async (req, res) => {
-const postId = req.params.postId;
-const userId = req.user._id;
+	const postId = req.params.postId;
+	const userId = req.user._id;
 
-// Find the post by ID
-const post = await Post.findById(postId);
+	// Find the post by ID
+	const post = await Post.findById(postId);
 
-if (post) {
-  // Check if the user has already upvoted the post
-  const upvotedIndex = post.upvotes.indexOf(userId);
-  if (upvotedIndex === -1) {
-  // The user hasn't upvoted the post, so add their ID to the upvotes array.
-  post.upvotes.push(userId);
-  } else {
-  // The user has already upvoted the post, so remove their ID from the upvotes array to undo the upvote.
-  post.upvotes.splice(upvotedIndex, 1);
-  }
+	if (post) {
+		// Check if the user has already upvoted the post
+		const upvotedIndex = post.upvotes.indexOf(userId);
+		const downvotedIndex = post.downvotes.indexOf(userId);
 
-  await post.save();
-  res.status(200).json(post);
-} else {
-  res.status(404);
-  throw new Error('Post not found');
-}
+		if (downvotedIndex !== -1) {
+			// The user has already downvoted the post, so remove their ID from the downvotes array.
+			post.downvotes.splice(downvotedIndex, 1);
+		}
+
+		if (upvotedIndex === -1) {
+			// The user hasn't upvoted the post, so add their ID to the upvotes array.
+			post.upvotes.push(userId);
+		}
+
+		await post.save();
+		res.status(200).json(post);
+	} else {
+		res.status(404);
+		throw new Error('Post not found');
+	}
 });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost };
+// @desc Toggle downvote on a post
+// Route PUT /api/v1/posts/:postId/downvote
+// Access Private
+const downvotePost = asyncHandler(async (req, res) => {
+	const postId = req.params.postId;
+	const userId = req.user._id;
+
+	// Find the post by ID
+	const post = await Post.findById(postId);
+
+	if (post) {
+		// Check if the user has already downvoted the post
+		const upvotedIndex = post.upvotes.indexOf(userId);
+		const downvotedIndex = post.downvotes.indexOf(userId);
+
+		if (upvotedIndex !== -1) {
+			// The user has already upvoted the post, so remove their ID from the upvotes array.
+			post.upvotes.splice(upvotedIndex, 1);
+		}
+
+		if (downvotedIndex === -1) {
+			// The user hasn't downvoted the post, so add their ID to the downvotes array.
+			post.downvotes.push(userId);
+		}
+
+		await post.save();
+		res.status(200).json(post);
+	} else {
+		res.status(404);
+		throw new Error('Post not found');
+	}
+});
+
+export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost };

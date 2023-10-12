@@ -36,6 +36,7 @@ const Home = () => {
               return (
                 <Post
 									key={index}
+									postId={post?._id}
 									upvotes={post?.upvotes?.length}
 									downvotes={post?.downvotes?.length}
 									comments={post?.comments?.length}
