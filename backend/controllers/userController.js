@@ -4,7 +4,7 @@ import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
-
+import multer from 'multer';
 
 
 // @desc	Authenticate user/set token
@@ -231,8 +231,12 @@ const deletePost = asyncHandler(async (req, res) => {
 // @desc Create user resources
 // Route POST /api/v1/users/resources
 // Access Private
+
 const postUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Post user Resources' });
+
+  // res.status(200).json({ message: 'Post user Resources' });
+  console.log(req.cookies.jwt)
+  res.send(req.body);
 });
 
 // @desc Get all blogs and sort by timestamp

@@ -18,5 +18,6 @@ import FormErrors from '../components/forms/FormErrors'
 import InputField from './InputField'
 import HeaderComponent from './HeaderComponent';
 import ResourceCard from './ResourceCard';
+import FileForm from './FileForm';
 
-export {ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {FileForm, ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };

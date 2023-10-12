@@ -1,10 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors'
 dotenv.config();
 import cookieParser from 'cookie-parser';
-
 import { notFound, errorHandler } from './middleware/errormiddleware.js';
 import connectDb from './config/db.js';
+import bodyParser from 'body-parser';
 connectDb();
 
 // Define the port number for the server, default to 5000 if not provided in the environment
@@ -23,7 +24,8 @@ const apiVersion = process.env.API_VERSION || 'v1';
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 app.use(cookieParser()); // Parse cookies
-
+app.use(cors());
+app.use(bodyParser.json())
 
 
 

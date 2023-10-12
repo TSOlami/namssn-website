@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
@@ -92,5 +93,20 @@ router
   .route('/payments')
   .get(protect, getUserPayment)
   .post(protect,postUserPayment);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    console.log(file)
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({storage});
+
+router
+  .route('/resources')
+  .post(protect, upload.single('file'), postUserResources)
 
   export default router;
