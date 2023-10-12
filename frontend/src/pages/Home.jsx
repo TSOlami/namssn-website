@@ -30,7 +30,9 @@ const Home = () => {
         ) : (
           <>
             {posts?.map((post, index) => {
-              console.log(`Post ${index + 1}:`, post);
+              // console.log(`Post ${index + 1}:`, post);
+              // console.log(`Post ${index + 1} user:`, post?.user);
+              console.log(`Post ${index + 1} user id`, post?.user?._id);
               return (
                 <Post
 									key={post?._id}
@@ -44,7 +46,7 @@ const Home = () => {
 									avatar={Wrapper}
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
-									u_id={post?._id}
+									u_id={post?.user?._id}
 								/>
               );
             })}
