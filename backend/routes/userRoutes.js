@@ -103,7 +103,7 @@ router
   .post(protect,postUserPayment);
 
 router
-  .get('/resources/:filename', (req, res) => {
+  .get(protect, '/resources/:filename', (req, res) => {
     const filePath = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website/uploads', req.params.filename)
     res.sendFile(filePath)
   })
@@ -117,9 +117,9 @@ router
     fs.promises.readdir(directory)
     .then((files) => {
       const fileList = files.map((fileName) => {
-      return path.join(directory, fileName);
+      return (fileName);
       });
-      res.json({files: {}});
+      res.json({files: fileList});
     }) .catch((err) => {
       console.log(err);
       res.status(500).send("Error")
