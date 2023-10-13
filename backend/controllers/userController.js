@@ -237,7 +237,7 @@ const postUserResources = asyncHandler(async (req, res) => {
 });
 
 // @desc Get all blogs and sort by timestamp
-// Route GET /api/v1/user/blogs
+// Route GET /api/v1/users/blogs
 // Access Public
 const getAllBlogs = asyncHandler(async (req, res) => {
   // Fetch all blogs from the database and sort by timestamp in descending order
@@ -247,6 +247,17 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 
   res.status(200).json(allBlogs);
 });
+// Route GET /api/v1/users/blog
+// Access Public
+const getUserBlogs = asyncHandler(async (req, res) => {
+  // Fetch all blogs from the database and sort by timestamp in descending order
+  const userBlogs = await Blog.find({ user: req.user._id })
+    .populate('user') // 'user' is the field referencing the user who posted the blog
+    .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest blogs first)
+  
+  res.status(200).json(userBlogs);
+});
+
 
 // @desc	Get user resources
 // Route	GET  /api/v1/users/Resources
@@ -304,6 +315,7 @@ export {
   updateUserProfile,
   deleteUserProfile,
   getAllBlogs,
+  getUserBlogs,
   postUserResources,
   getUserResources,
   updateUserResources,

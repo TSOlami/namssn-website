@@ -65,15 +65,58 @@ const getUserPosts = asyncHandler(async (req, res) => {
 // Route	PUT  /api/v1/users/posts
 // access	Private
 const updatePost = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Update a Post' });
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Check if the user who made the request is the owner of the post (or has the required privileges)
+	if (post.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+  
+	// Update the post with the new data from the request
+	post.text = req.body.text; // You can add more fields to update as needed
+  
+	// Save the updated post
+	await post.save();
+  
+	res.status(200).json(post);
   });
 
 // @desc	Delete user post
 // Route	DELETE  /api/v1/users/posts
 // access	Private
 const deletePost = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Delete Post' });
-  });
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Check if the user who made the request is the owner of the post, or if they are an admin (you can define an admin role as needed)
+	if (post.user.toString() === req.user._id.toString() || req.user.isAdmin) {
+	  // If the user is the owner of the post or an admin, delete the post
+	  await post.remove();
+	  res.status(200).json({ message: 'Post deleted' });
+	} else {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+});
+
 // @desc Toggle upvote on a post
 // Route PUT /api/v1/posts/:postId/upvote
 // Access Private
@@ -140,4 +183,152 @@ const downvotePost = asyncHandler(async (req, res) => {
 	}
 });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost };
+/**
+ * @desc Get all comments for a post.
+ * @route GET /api/v1/users/posts/:postId/comments
+ * @access Private (Requires authentication)
+ */
+const getPostComments = asyncHandler(async (req, res) => {
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Retrieve the comments associated with the post
+	const comments = await PostComment.find({ post: postId });
+  
+	res.status(200).json(comments);
+  });
+
+/**
+ * @desc Create a new comment for a post.
+ * @route POST /api/v1/users/posts/:postId/comments
+ * @access Private (Requires authentication)
+ */
+const createPostComment = asyncHandler(async (req, res) => {
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+  
+	// Extract the comment text from the request body
+	const { text } = req.body;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Create a new comment
+	const newComment = new PostComment({
+	  text,
+	  user: req.user._id, // Assuming you have user authentication in place
+	  post: postId,
+	});
+  
+	// Save the new comment to the database
+	const createdComment = await newComment.save();
+  
+	res.status(201).json(createdComment);
+  });
+
+/**
+ * @desc Update a comment for a post.
+ * @route PUT /api/v1/users/posts/:postId/comments/:commentId
+ * @access Private (Requires authentication)
+ */
+const updatePostComment = asyncHandler(async (req, res) => {
+	// Extract the post ID and comment ID from the request parameters
+	const postId = req.params.postId;
+	const commentId = req.params.commentId;
+  
+	// Extract the updated comment text from the request body
+	const { text } = req.body;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Find the comment by its ID
+	const comment = await PostComment.findById(commentId);
+  
+	if (!comment) {
+	  res.status(404);
+	  throw new Error('Comment not found');
+	}
+  
+	// Check if the user who made the request is the owner of the comment (or has the required privileges)
+	if (comment.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+  
+	// Update the comment text
+	comment.text = text;
+  
+	// Save the updated comment to the database
+	const updatedComment = await comment.save();
+  
+	res.status(200).json(updatedComment);
+  });
+
+/**
+ * @desc Delete a comment for a post.
+ * @route DELETE /api/v1/users/posts/:postId/comments/:commentId
+ * @access Private (Requires authentication)
+ */
+const deletePostComment = asyncHandler(async (req, res) => {
+	// Extract the post ID and comment ID from the request parameters
+	const postId = req.params.postId;
+	const commentId = req.params.commentId;
+  
+	// Find the post by its ID
+	const post = await Post.findById(postId);
+  
+	if (!post) {
+	  res.status(404);
+	  throw new Error('Post not found');
+	}
+  
+	// Find the comment by its ID
+	const comment = await PostComment.findById(commentId);
+  
+	if (!comment) {
+	  res.status(404);
+	  throw new Error('Comment not found');
+	}
+  
+	// Check if the user who made the request is the owner of the comment (or has the required privileges)
+	if (comment.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+  
+	// Remove the comment from the post's comments array
+	const commentIndex = post.comments.indexOf(commentId);
+  
+	if (commentIndex !== -1) {
+	  post.comments.splice(commentIndex, 1);
+	}
+  
+	// Remove the comment from the database
+	await comment.remove();
+  
+	// Save the updated post
+	await post.save();
+  
+	res.status(200).json({ message: 'Comment deleted' });
+  });
+
+export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment };

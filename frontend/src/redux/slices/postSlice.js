@@ -87,11 +87,34 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['Post'],
       }),
 
+      // Get Post Comments Query
+      postComments: builder.query({
+        query({ postId }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}/comments`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Post'],
+      }),
+
       // Comment on Post Query
       commentPost: builder.mutation({
         query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/posts/${postId}/comment`,
+            url: `${POSTS_URL}/posts/${postId}/comments`,
+            method: 'POST',
+            body: data,
+          };
+        },
+        invalidatesTags: ['Post'],
+      }),
+
+      // Update Comment Query
+      updateComment: builder.mutation({
+        query({ commentId, postId, data }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}`,
             method: 'PUT',
             body: data,
           };
@@ -103,7 +126,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
       deleteComment: builder.mutation({
         query({ commentId, postId, data }) {
           return {
-            url: `${POSTS_URL}/posts/${postId}/comment/${commentId}`,
+            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}`,
             method: 'DELETE',
             body: data,
           };
@@ -122,6 +145,8 @@ export const {
   useDeletePostMutation,
   useUpvotePostMutation,
   useDownvotePostMutation,
+
+  usePostCommentsQuery,
   useCommentPostMutation,
   useDeleteCommentMutation,
 } = postsApiSlice;

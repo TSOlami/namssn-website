@@ -24,9 +24,6 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 app.use(cookieParser()); // Parse cookies
 
-
-
-
 // Define routes for users and admin based on the API version
 app.use(`/api/${apiVersion}/users`, userRoutes); // User routes
 app.use(`/api/${apiVersion}/admin`, adminRoutes); // Admin routes
