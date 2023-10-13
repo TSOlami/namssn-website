@@ -93,7 +93,7 @@ const Sidebar = () => {
 							{name}
 							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
-						<span>Dhann</span>
+						<span>@{username}</span>
 
 					</div>
 				</div>

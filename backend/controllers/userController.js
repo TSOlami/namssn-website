@@ -1,11 +1,11 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
+import checkUploadDirectory from '../utils/checkUploadDirectory.js';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
-import multer from 'multer';
-
+import * as fs from 'fs';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -256,10 +256,27 @@ const deletePost = asyncHandler(async (req, res) => {
 // Access Private
 
 const postUserResources = asyncHandler(async (req, res) => {
-
-  // res.status(200).json({ message: 'Post user Resources' });
-  console.log(req.cookies.jwt)
-  res.send(req.body);
+  const {file} = req.files;
+  if (!file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  // Define the directory where you want to save the uploaded file
+  const uploadDirectory = 'uploads';
+  
+  checkUploadDirectory(uploadDirectory)
+  .then(() => {
+    console.log(file.name)
+    const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
+    const fileName = uniquefileName + '_' + file.name;
+    fs.promises.writeFile(`${uploadDirectory}/${fileName}`, file.data)
+    .then(() => {
+      console.log("File has been saved successfully");
+    }) .catch((err) => {
+      console.log(err)
+    })
+    }) .catch((err) => {
+      console.log(err);
+    })
 });
 
 // @desc Get all blogs and sort by timestamp

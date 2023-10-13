@@ -13,14 +13,14 @@ const FileForm = (props) => {
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('file', selectedFile);
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/api/v1/users/resources', formData);
-            console.log(response);
-        } catch(err) {
+        console.log(formData.get('file'))
+        axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData)
+        .then((res) => {
+                console.log(res)
+            }) .catch((err) => {
             console.log(err);
-        }
-    }
-
+        })
+    } 
     if(props.show) {
         return (
             <div className="z-999 w-[70%] flex flex-col bg-white gap-4 border rounded-lg px-[2.5%] py-[2.5%]">
@@ -43,7 +43,7 @@ const FileForm = (props) => {
                 <div className="flex flex-col">
                     <span className={textStyle}> File </span>
                     <input
-                        type="file" onChange={handleFileChange}
+                        type="file" name="file" onChange={handleFileChange}
                     />
                 </div> 
                 <div className="flex justify-between px-[%]">

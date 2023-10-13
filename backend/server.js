@@ -1,7 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'
+import fileUpload from 'express-fileupload';
 dotenv.config();
+import path from 'path';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errormiddleware.js';
 import connectDb from './config/db.js';
@@ -26,7 +28,9 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 app.use(cookieParser()); // Parse cookies
 app.use(cors());
 app.use(bodyParser.json())
-
+app.use(fileUpload());
+const uploadsDirectory = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website', 'uploads');
+app.use('/uploads', express.static(uploadsDirectory));
 
 
 // Define routes for users and admin based on the API version

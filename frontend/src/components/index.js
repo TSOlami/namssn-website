@@ -12,7 +12,6 @@ import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
-<<<<<<< HEAD
 import FormErrors from '../components/forms/FormErrors'
 import InputField from './InputField'
 import HeaderComponent from './HeaderComponent';
@@ -23,5 +22,5 @@ import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
 import AddPostForm from './forms/AddPostForm';
 
-export {Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FeatureCard, FormErrors, ImageCard,InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
 
