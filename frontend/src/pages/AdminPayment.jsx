@@ -1,9 +1,15 @@
-import { Sidebar } from "../components";
+import { useState } from "react";
+import { AddPayment, Sidebar } from "../components";
 import HeaderComponent from "../components/HeaderComponent";
 import PaymentDetails from "../components/PaymentDetails";
 import { mockPaidUsers, mockPayments } from "../data";
 
 const AdminPayment = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
@@ -21,10 +27,20 @@ const AdminPayment = () => {
 							/>
 						))}
 
-						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm">
+            {/* Add payment btn */}
+
+						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80" onClick={handleModalOpen}>
 							Add New Payment
 						</button>
 					</div>
+
+          {/* Add payment modal */}
+
+          {isModalOpen && (
+            <AddPayment handleModalOpen={handleModalOpen}/>
+          )}
+            
+          
 
 					{/* Payment details and breakdown section */}
 					<div className="border-r-gray-300 border-l-2 h-full">
