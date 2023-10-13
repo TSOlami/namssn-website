@@ -143,7 +143,11 @@ const upvotePost = asyncHandler(async (req, res) => {
 		}
 
 		await post.save();
-		res.status(200).json(post);
+    console.log("Upvoted post successfully");
+		res.status(200).json({
+      message: "success",
+      post
+    });
 	} else {
 		res.status(404);
 		throw new Error('Post not found');
@@ -176,7 +180,11 @@ const downvotePost = asyncHandler(async (req, res) => {
 		}
 
 		await post.save();
-		res.status(200).json(post);
+    console.log("Downvoted post successfully");
+		res.status(200).json({
+      message: "success",
+      post
+    });
 	} else {
 		res.status(404);
 		throw new Error('Post not found');
@@ -203,8 +211,11 @@ const getPostComments = asyncHandler(async (req, res) => {
 	// Retrieve the comments associated with the post
 	const comments = await PostComment.find({ post: postId });
   
-	res.status(200).json(comments);
+	res.status(200).json({
+    message: "success",
+    comments
   });
+});
 
 /**
  * @desc Create a new comment for a post.
@@ -236,7 +247,11 @@ const createPostComment = asyncHandler(async (req, res) => {
 	// Save the new comment to the database
 	const createdComment = await newComment.save();
   
-	res.status(201).json(createdComment);
+	res.status(201).json({
+    message: "success",
+    createdComment
+  });
+  console.log("Created comment successfully");
   });
 
 /**
@@ -280,7 +295,11 @@ const updatePostComment = asyncHandler(async (req, res) => {
 	// Save the updated comment to the database
 	const updatedComment = await comment.save();
   
-	res.status(200).json(updatedComment);
+	res.status(200).json({
+    message: "success",
+    updatedComment
+  });
+  console.log("Updated comment successfully");
   });
 
 /**
@@ -328,7 +347,8 @@ const deletePostComment = asyncHandler(async (req, res) => {
 	// Save the updated post
 	await post.save();
   
-	res.status(200).json({ message: 'Comment deleted' });
+	res.status(200).json({ message: "success" });
+  console.log("Deleted comment successfully");
   });
 
 export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment };

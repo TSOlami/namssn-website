@@ -37,15 +37,15 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
       // Perform the upvote logic to send an API call to the server
       const response = await upvotePost({ postId: postId, data: data }).unwrap();
   
-      if (response.status === 'success') {
+      if (response.message === "success") {
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
-        console.log('Upvote successful:', response);
+        // console.log('Upvote successful:', response);
       } else {
-        console.error('Upvote failed:', response);
+        // console.error('Upvote failed:', response);
       }
     } catch (error) {
-      console.error('Upvote failed:', error);
+      // console.error('Upvote failed:', error);
     }
   };
 
@@ -60,7 +60,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
       // Perform the downvote logic to send an API call to the server
       const response = await downvotePost({ postId: postId, data: {} }).unwrap();
   
-      if (response.status === 'success') {
+      if (response.message === "success") {
         // Toggle the downvote state
         setIsDownvoted(!isDownvoted);
       } else {
@@ -105,8 +105,8 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 				{/* Post actions */}
 
 				<Actions
-					upvotes={isUpvoted ? upvotes + 1 : upvotes}
-          downvotes={isDownvoted ? downvotes + 1 : downvotes}
+					upvotes={upvotes}
+          downvotes={downvotes}
           comments={comments}
           isUpvoted={isUpvoted}
           onUpvote={handleUpvote}
