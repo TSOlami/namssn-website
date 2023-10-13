@@ -8,7 +8,8 @@ const categorySchema = mongoose.Schema({
 	unique: true,
   },
   session: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Session', // Reference to sessions
     required: true,
   },
   amount: {
