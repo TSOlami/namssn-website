@@ -7,10 +7,6 @@ const sessionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    duesPrice: {
-      type: Number,
-      required: true,
-    },
     active: {
       type: Boolean,
       default: false, // Default to false (inactive)

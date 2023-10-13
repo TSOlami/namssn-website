@@ -7,12 +7,18 @@ const categorySchema = mongoose.Schema({
     required: true,
 	unique: true,
   },
-  status: {
-    type: Boolean,
+  session: {
+    type: String,
     required: true,
-	default: false,
   },
-});
+  amount: {
+    type: Number,
+    required: true,
+  },
+}, {
+  timestamps: true,
+}
+);
 
 const Category = mongoose.model('Category', categorySchema);
 
