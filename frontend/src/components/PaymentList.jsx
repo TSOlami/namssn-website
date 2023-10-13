@@ -10,8 +10,7 @@ const PaymentList = () => {
     axios.get('/api/v1/users/payments') // Replace with your API endpoint
       .then((response) => {
         setPayments(response.data);
-        console.log(payments);
-      })
+        })
       .catch((error) => {
         console.error('Error fetching payments:', error);
       });
