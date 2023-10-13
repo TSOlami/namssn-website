@@ -34,6 +34,7 @@ const createPost = asyncHandler(async (req, res) => {
 	await user.save();
   
 	res.status(201).json(createdPost);
+  console.log(createdPost);
   });
   
 // @desc Get all posts and sort by timestamp
@@ -48,18 +49,21 @@ const getAllPosts = asyncHandler(async (req, res) => {
 	res.status(200).json(allPosts);
   });
   
+// UserController.js
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts
 // Access Private
 const getUserPosts = asyncHandler(async (req, res) => {
-	const userId = req.user._id; // Get the user ID from the authenticated user
-  
+	const userId = req.query.userId; // Get the user ID from the query parameters
+	
 	// Fetch the user's posts from the database
 	const userPosts = await Post.find({ user: userId })
-	  .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-  
+	.sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
+	
 	res.status(200).json(userPosts);
-  });  
+	console.log(userPosts);
+	console.log("Got user posts successfully");
+});
 
 // @desc	Update user post
 // Route	PUT  /api/v1/users/posts

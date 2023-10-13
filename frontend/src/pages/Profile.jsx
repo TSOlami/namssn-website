@@ -1,12 +1,10 @@
 import { FaCircleCheck } from "react-icons/fa6";
-import { Post, Sidebar, AnnouncementContainer } from "../components";
-import Wrapper from "../assets/images/wrapper.png";
-import { mockTexts } from "../data";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { EditProfileForm } from "../components";
-import { ProfileImg } from "../assets";
+import { EditProfileForm, Post, Sidebar, AnnouncementContainer, Loader } from "../components";
+import { ProfileImg, Wrapper } from "../assets";
+import { useUserPostsQuery, setPosts } from "../redux";
 
 const Profile = () => {
 	// Fetch user info from redux store
@@ -20,11 +18,24 @@ const Profile = () => {
 	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
 
+	const dispatch = useDispatch();
+
+	// Fetch user posts from redux store
+	const { data: userPosts, isLoading } = useUserPostsQuery({ _id: userInfo?._id });
+
+	// Set posts in redux store
+	dispatch(setPosts(userPosts));
+
 	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
+
+	// Display loading indicator while data is being fetched
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<div className="flex flex-row">
@@ -61,18 +72,21 @@ const Profile = () => {
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
 				<div>
-					<Post
-						upvotes="3224"
-						downvotes="30"
-						shares="5"
-						comments="10"
-						isVerified={isVerified}
-						text={mockTexts}
-						name={name}
-						username={username}
-						image={Wrapper}
-					/>
-				</div>
+          {userPosts?.map((post, index) => (
+            <Post
+              key={index}
+              upvotes={post.upvotes.length}
+              downvotes={post.downvotes.length}
+              shares="5" // You may need to fetch the actual share count
+              comments={post.comments.length}
+              isVerified={isVerified}
+              text={post.text}
+              name={name}
+              username={username}
+              image={Wrapper}
+            />
+          ))}
+        </div>
 			</div>
 			<AnnouncementContainer />
 

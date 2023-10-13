@@ -79,10 +79,24 @@ router
 // Route for getting a user by id
 router.get('/profile/:userId', getUserById);
 
+/**
+ * Get, create, update, and delete user posts.
+ * 
+ * @route GET /api/v1/users/posts
+ * @route GET /api/v1/users/posts/:postId
+ * @route POST /api/v1/users/posts
+ * @route PUT /api/v1/users/posts/:postId
+ * @route DELETE /api/v1/users/posts/:postId
+ * @access Private (Requires authentication)
+ */
+
 // Route for getting all posts
 router
 .route("/posts")
 .get(protect, getAllPosts);
+
+// Route for getting a user post by id
+router.get('/post/:userId', protect, getUserPosts);
 
 // Route for upvoting a post
 router.put('/posts/:postId/upvote', protect, upvotePost);
@@ -90,9 +104,9 @@ router.put('/posts/:postId/upvote', protect, upvotePost);
 // Route for downvoting a post
 router.put('/posts/:postId/downvote', protect, downvotePost);
 
+// Route for creating, updating, and deleting a post
 router
 .route("/post")
-.get(protect, getUserPosts)
 .post(protect, createPost)
 .put(protect, updatePost)
 .delete(protect, deletePost);

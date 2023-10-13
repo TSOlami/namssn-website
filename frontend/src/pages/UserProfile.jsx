@@ -29,7 +29,7 @@ const UserProfile = () => {
 
   // Display error message if user is not found
   if (!user) {
-    return <ErrorPage />;
+    return <ErrorPage/>;
   }
 
   // console.log(user);

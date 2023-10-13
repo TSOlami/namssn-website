@@ -1,19 +1,19 @@
 import { BsPlusLg } from "react-icons/bs";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Sidebar, Post, AnnouncementContainer, HeaderComponent, BottomNav, Loader, AddPostForm } from "../components";
 import { Wrapper } from '../assets';
-import { useAllPostsQuery } from "../redux";
+import { useAllPostsQuery, setPosts } from "../redux";
 
 const Home = () => {
-  // const { userInfo } = useSelector((state) => state.userLogin);
-
-  // Check if user is Verified
-  // const isVerified = userInfo?.isVerified;
-
-	// Fetch all posts
+  // Fetch all posts
   const { data: posts, isLoading } = useAllPostsQuery();
+  const dispatch = useDispatch();
+
+  // Set posts in redux store
+  dispatch(setPosts(posts));
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleModalOpen = () => {
