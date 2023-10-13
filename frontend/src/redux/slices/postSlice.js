@@ -13,6 +13,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        providesTags: ['Post'], 
       }),
 
       // Get User Posts Query
@@ -23,6 +24,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Create Post Query
@@ -34,6 +36,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Update Post Query
@@ -45,6 +48,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Delete Post Query
@@ -56,72 +60,78 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Upvote Post Query
       upvotePost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/upvote`,
+            url: `${POSTS_URL}/posts/${postId}/upvote`,
             method: 'PUT',
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Downvote Post Query
       downvotePost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/downvote`,
+            url: `${POSTS_URL}/posts/${postId}/downvote`,
             method: 'PUT',
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
+      }),
+
+      // Get Post Comments Query
+      postComments: builder.query({
+        query({ postId }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}/comments`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Post'],
       }),
 
       // Comment on Post Query
       commentPost: builder.mutation({
-        query(data) {
+        query({ postId, data }) {
           return {
-            url: `${POSTS_URL}/post/comment`,
+            url: `${POSTS_URL}/posts/${postId}/comments`,
+            method: 'POST',
+            body: data,
+          };
+        },
+        invalidatesTags: ['Post'],
+      }),
+
+      // Update Comment Query
+      updateComment: builder.mutation({
+        query({ commentId, postId, data }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}`,
             method: 'PUT',
             body: data,
           };
         },
+        invalidatesTags: ['Post'],
       }),
 
       // Delete Comment Query
       deleteComment: builder.mutation({
-        query(data) {
+        query({ commentId, postId, data }) {
           return {
-            url: `${POSTS_URL}/post/comment`,
+            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}`,
             method: 'DELETE',
             body: data,
           };
         },
-      }),
-
-      // Upvote Comment Query
-      upvoteComment: builder.mutation({
-        query(data) {
-          return {
-            url: `${POSTS_URL}/post/comment/upvote`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-      }),
-
-      // Downvote Comment Query
-      downvoteComment: builder.mutation({
-        query(data) {
-          return {
-            url: `${POSTS_URL}/post/comment/downvote`,
-            method: 'PUT',
-            body: data,
-          };
-        },
+        invalidatesTags: ['Post'],
       }),
 		};
 	},
@@ -135,8 +145,8 @@ export const {
   useDeletePostMutation,
   useUpvotePostMutation,
   useDownvotePostMutation,
+
+  usePostCommentsQuery,
   useCommentPostMutation,
   useDeleteCommentMutation,
-  useUpvoteCommentMutation,
-  useDownvoteCommentMutation,
 } = postsApiSlice;

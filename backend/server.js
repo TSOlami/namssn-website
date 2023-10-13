@@ -32,7 +32,6 @@ app.use(fileUpload());
 const uploadsDirectory = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website', 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 
-
 // Define routes for users and admin based on the API version
 app.use(`/api/${apiVersion}/users`, userRoutes); // User routes
 app.use(`/api/${apiVersion}/admin`, adminRoutes); // Admin routes

@@ -1,4 +1,4 @@
-import { setCredentials } from "./slices/authSlice";
+import { setCredentials, setPosts } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -15,8 +15,7 @@ import {
 	useDownvotePostMutation,
 	useCommentPostMutation,
 	useDeleteCommentMutation,
-	useUpvoteCommentMutation,
-	useDownvoteCommentMutation } from './slices/postSlice';
+} from './slices/postSlice';
 import {
   useAllBlogsQuery,
   useUserBlogsQuery,
@@ -46,8 +45,6 @@ export {
 	useDownvotePostMutation,
 	useCommentPostMutation,
 	useDeleteCommentMutation,
-	useUpvoteCommentMutation,
-	useDownvoteCommentMutation,
   useAllBlogsQuery,
   useUserBlogsQuery,
   useCreateBlogMutation,
@@ -59,4 +56,5 @@ export {
   useUpvoteBlogCommentMutation,
   useDownvoteBlogCommentMutation,
   useDeleteBlogCommentMutation,
-	setCredentials }
+	setCredentials,
+	setPosts, }

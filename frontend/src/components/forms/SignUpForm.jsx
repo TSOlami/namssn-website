@@ -63,7 +63,6 @@ const SignUpForm = () => {
 		onSubmit: async (values) => {
 			try {
         const res = await register(values).unwrap();
-        console.log(res);
         dispatch(setCredentials({...res}));
         navigate('/home');
         toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
