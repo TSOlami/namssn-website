@@ -16,10 +16,11 @@ const Profile = () => {
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
 	const points = userInfo?.points;
-	
-	// Fetch number of posts
+
+	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
-    console.log(noOfPosts);
+
+	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
