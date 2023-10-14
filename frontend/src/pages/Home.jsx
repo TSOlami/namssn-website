@@ -50,6 +50,8 @@ const Home = () => {
 									avatar={Wrapper}
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
+									u_id={post?.user?._id}
+									postId={post?._id}
 								/>
               );
             })}

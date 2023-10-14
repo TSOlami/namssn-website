@@ -85,13 +85,14 @@ const Profile = () => {
               key={post._id}
               upvotes={post.upvotes.length}
               downvotes={post.downvotes.length}
-              shares="5" // You may need to fetch the actual share count
               isVerified={isVerified}
               text={post.text}
               name={name}
               username={username}
               createdAt={post.createdAt}
               image={Wrapper}
+              postId={post._id}
+              u_id={userInfo._id}
             />
           ))}
         </div>

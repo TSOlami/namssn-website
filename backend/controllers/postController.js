@@ -134,6 +134,7 @@ const upvotePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
 	const userId = req.user._id;
 
+  console.log("Upvoting post: ", postId);
 	// Find the post by ID
 	const post = await Post.findById(postId);
 

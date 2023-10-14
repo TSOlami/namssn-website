@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { formatDateToTime } from "../utils";
 import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 
-const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	image,	createdAt, u_id, postId, }) => {
+const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	image,	createdAt, u_id, postId }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
@@ -141,8 +141,8 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	
 				{/* Post actions */}
 
 				<Actions
-					upvotes={isUpvoted ? upvotes + 1 : upvotes}
-					downvotes={isDownvoted ? downvotes + 1 : downvotes}
+					upvotes={upvotes}
+					downvotes={downvotes}
 					comments={comments}
 					isUpvoted={isUpvoted}
 					onUpvote={handleUpvote}
