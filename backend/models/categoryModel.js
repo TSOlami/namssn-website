@@ -7,7 +7,8 @@ const categorySchema = mongoose.Schema({
     required: true,
   },
   session: {
-    type: mongoose.Schema.Types.ObjectId,
+    // type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Session', // Reference to sessions
     required: true,
   },

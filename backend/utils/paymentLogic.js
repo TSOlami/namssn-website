@@ -1,12 +1,21 @@
 // Import necessary modules
 import axios from 'axios';
 import Payment from '../models/paymentModel.js';
+import Category from '../models/categoryModel.js';
+import User from '../models/userModel.js';
+
+
+
 
 const initiatePayment = async (req, res) => {
   try {
-        const { email, amount } = req.body;
+        const { email, amount, category } = req.body;
         const apiURL = process.env.PAYSTACK_URL;
-        
+        const categoryResult = await Category.findOne({ name: category });
+        const userResult = await User.findOne({ email: email });
+        const categoryId = categoryResult._id;
+        const userId = userResult._id;
+ 
     // Make a POST requEst to the Paystack Initialize Transaction endpoint
       const paystackResponse = await axios.post( apiURL
         ,
@@ -24,16 +33,11 @@ const initiatePayment = async (req, res) => {
     if (paystackResponse.data.status) {
       const { authorization_url } = paystackResponse.data.data;
       const { reference } = paystackResponse.data.data;
-
-      const user = 'test_user'
+      
       const newPayment = new Payment({
-        matricNumber: req.body.matricNo,
-        email: req.body.email,
-        amount: req.body.amount,
-        session: req.body.session,
-        category: req.body.category,
-        user : user,
+        category : categoryId,
         transactionReference: reference,
+        user: userId
       });
 
       await newPayment.save();

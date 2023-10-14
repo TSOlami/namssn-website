@@ -1,4 +1,5 @@
 import { useAllPaymentsQuery } from '../redux'; // Import Redux Toolkit Query hook and action creator
+import { Link } from 'react-router-dom'
 
 import HeaderComponent from '../components/HeaderComponent';
 
@@ -30,7 +31,7 @@ const PaymentList = () => {
                     className="shadow-3xl flex flex-row justify-between items-center rounded-2xl m-8 p-4 gap-20 pr-14"
                   >
                     <div className="flex flex-col">
-                      <p>Category: {payment.category}</p>
+                      <p>Category: {payment.name}</p>
                       <p>Session: {payment.session}</p>
                       <div className="py-4 flex flex-row items-center gap-2">
                         Amount :{' '}
@@ -40,7 +41,11 @@ const PaymentList = () => {
                       </div>
                     </div>
                     <div className="border-gray-500 border-2 rounded-xl flex flex-row p-2 text-xl font-semibold">
-                      Pay Now
+                      <Link
+                 to={`/payments/pay/${payment._id}?name=${payment.name}&amount=${payment.amount}&session=${payment.session}`} // Pass the payment details as a parameter
+              >
+                Pay Now
+              </Link>
                     </div>
                   </li>
                 ))}

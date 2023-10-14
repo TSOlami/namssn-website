@@ -1,21 +1,29 @@
-import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useLocation } from "react-router-dom";
 import { FaEnvelope, FaMoneyBillWave } from "react-icons/fa6";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector} from 'react-redux';
+
+
 
 const PaymentForm = () => {
-  const [amount, setAmount] = useState(""); // State to store the payment amount
+  // const [amount, setAmount] = useState(""); // State to store the payment amount
+  const { userInfo } = useSelector((state) => state.auth);
+	const email = userInfo?.email;
+	const matricNumber = userInfo?.matricNumber;
+	const location = useLocation("") ; // for current Location
+  const searchParams = new URLSearchParams(location.search); // seacrh Params
 
-  // Initial form values and validation schema
-  const initialValues = {
-    matricNumber: "", // matricNumber to match the model
-    email: "",
-    category: "", // Add a field for category
-    session: "", // Add a field for session
-  };
+  
+  // // for initial values 
+  const initialMatricNumber = matricNumber || "";
+  const initialEmail = email || "";
+  const initialCategory = searchParams.get('name') || "";
+  const initialSession = searchParams.get('session') || "";
+  const initialAmount = searchParams.get('amount') || ""
 
   const validationSchema = Yup.object({
     matricNumber: Yup.string()
@@ -30,7 +38,14 @@ const PaymentForm = () => {
 
   // Formik configuration
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      matricNumber: initialMatricNumber,
+      email: initialEmail,
+      category: initialCategory,
+      session: initialSession,
+      amount: initialAmount
+      
+    },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
@@ -39,7 +54,7 @@ const PaymentForm = () => {
           email: values.email,
           category: values.category, // Match field names with the model
           session: values.session, // Match field names with the model
-          amount: parseFloat(amount), // Convert amount to a number
+          amount: parseFloat(values.amount), // Convert amount to a number
         };
 
         // Make a POST request to your Express server to initiate payment
@@ -97,7 +112,7 @@ const PaymentForm = () => {
               id="matricNumber"
               onChange={formik.handleChange}
               value={formik.values.matricNumber}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
@@ -113,7 +128,7 @@ const PaymentForm = () => {
               id="email"
               onChange={formik.handleChange}
               value={formik.values.email}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaEnvelope className="absolute left-2 flex self-center justify-center" />
           </div>
@@ -129,7 +144,7 @@ const PaymentForm = () => {
               id="category"
               onChange={formik.handleChange}
               value={formik.values.category}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
@@ -145,7 +160,7 @@ const PaymentForm = () => {
               id="session"
               onChange={formik.handleChange}
               value={formik.values.session}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
@@ -159,9 +174,9 @@ const PaymentForm = () => {
               type="number"
               name="amount"
               id="amount"
-              onChange={(e) => setAmount(e.target.value)}
-              value={amount}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              onChange={formik.handleChange}
+              value={formik.values.amount}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>

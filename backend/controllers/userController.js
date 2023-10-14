@@ -351,13 +351,12 @@ const getUserPayment = asyncHandler(async (req, res) => {
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
     await initiatePayment(req, res);
-
   } catch (error) {
-    console.log(error)
-
+    console.log(error);
   }
-  res.status(200).json({ message: 'Payment sent' });
 });
+
+
 
 export {
   authUser,
