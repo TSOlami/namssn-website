@@ -4,13 +4,13 @@ import { FaMoneyBillWave } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components";
-import { useDeleteAdminPaymentMutation, setCredentials } from "../../redux";
+import { useDeleteCategoryMutation, setCredentials } from "../../redux";
 
 
 const DeletePaymentForm = ({ handleModalOpen, paymentData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [deletePayment, { isLoading }] = useDeleteAdminPaymentMutation();
+    const [deletePayment, { isLoading }] = useDeleteCategoryMutation();
   
     const formik = useFormik({
       initialValues: {},

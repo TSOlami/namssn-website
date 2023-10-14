@@ -1,7 +1,7 @@
 import { apiSlice } from "./apiSlice";
 
 const ADMIN_PAYMENTS_URL = '/api/v1/admin';
-const USER_PAYMENT_URL = ' /api/v1/user';
+const USER_PAYMENT_URL = ' /api/v1/users';
 
 export const CategoryApiSlice = apiSlice.injectEndpoints({
   endpoints(builder) {

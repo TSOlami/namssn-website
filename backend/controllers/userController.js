@@ -320,7 +320,7 @@ const getPaymentOptions = async (req, res) => {
 
     // Check if there are available payment options
     if (category.length === 0) {
-      return res.status(404).json({ message: 'No Category available' });
+      return res.status(204).json({ message: 'No Category available' });
     }
 
     // You can further process or format the payment options as needed
