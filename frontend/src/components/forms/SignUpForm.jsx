@@ -79,7 +79,10 @@ const SignUpForm = () => {
 			.min(5, "Must be 5 characters or more")
 			.required("Name is required"),
     level: Yup.string().required("Please select your level"),
-		username: Yup.string().required("A username is required"),
+		username: Yup.string()
+    .required("A username is required")
+    .matches(/^\S*$/, 'Username should not contain empty spaces')
+    .matches(/^[a-zA-Z0-9_]*$/, 'Username should only contain letters, numbers, or underscores'),
 		email: Yup.string()
 			.email("Invalid email address")
 			.required("Email is required"),

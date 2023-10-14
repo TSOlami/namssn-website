@@ -1,5 +1,5 @@
 import { BsPlusLg } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,10 +10,16 @@ import { useAllPostsQuery, setPosts } from "../redux";
 const Home = () => {
   // Fetch all posts
   const { data: posts, isLoading } = useAllPostsQuery();
+
+  console.log("All posts:", posts);
   const dispatch = useDispatch();
 
-  // Set posts in redux store
-  dispatch(setPosts(posts));
+  // Use useEffect to set posts after component mounts
+  useEffect(() => {
+    if (posts) {
+      dispatch(setPosts(posts));
+    }
+  }, [dispatch, posts]);
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleModalOpen = () => {

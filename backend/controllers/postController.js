@@ -34,7 +34,6 @@ const createPost = asyncHandler(async (req, res) => {
 	await user.save();
   
 	res.status(201).json(createdPost);
-  console.log(createdPost);
   });
   
 // @desc Get all posts and sort by timestamp
@@ -48,21 +47,28 @@ const getAllPosts = asyncHandler(async (req, res) => {
   
 	res.status(200).json(allPosts);
   });
-  
-// UserController.js
+
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts
 // Access Private
 const getUserPosts = asyncHandler(async (req, res) => {
-	const userId = req.query.userId; // Get the user ID from the query parameters
-	
-	// Fetch the user's posts from the database
-	const userPosts = await Post.find({ user: userId })
-	.sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-	
-	res.status(200).json(userPosts);
-	console.log(userPosts);
-	console.log("Got user posts successfully");
+	try {
+	  const userId = req.params.userId; // Get the user ID from the query parameters
+  
+	  // Fetch the user's posts from the database
+    console.log("Fetching posts for user: ", userId);
+	  const userPosts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+  
+	  if (!userPosts) {
+		res.status(404).json({ message: "No posts found for this user." });
+	  } else {
+		res.status(200).json(userPosts);
+		console.log("Got user posts successfully: ", userPosts.length);
+	  }
+	} catch (error) {
+	  console.error("Error fetching user posts:", error);
+	  res.status(500).json({ message: "Server error while fetching user posts." });
+	}
 });
 
 // @desc	Update user post
@@ -132,6 +138,7 @@ const upvotePost = asyncHandler(async (req, res) => {
 	const post = await Post.findById(postId);
 
 	if (post) {
+    console.log("Found post: ", post);
 		// Check if the user has already upvoted the post
 		const upvotedIndex = post.upvotes.indexOf(userId);
 		const downvotedIndex = post.downvotes.indexOf(userId);

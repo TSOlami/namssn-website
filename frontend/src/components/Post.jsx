@@ -6,9 +6,10 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useUpvotePostMutation, useDownvotePostMutation } from '../redux';
+import { formatDateToTime } from "../utils";
 
-const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id, postId }) => {
-	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
+const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, u_id, postId }) => {
+	const date = new Date(createdAt);
 
   // Get the user ID from the redux store
   const { _id: userId } = useSelector((state) => state.auth.userInfo);
@@ -90,7 +91,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 					</Link>
 					<span>@{username}</span>
 					<span className="text-gray-500">
-                    {formatDate(date)}
+                    {formatDateToTime(date)}
 					</span>
 
 					<span className="absolute right-0">
@@ -119,20 +120,3 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 };
 
 export default Post;
-
-// Helper function to format the date as "Month Day, Year, Hour:Minute AM/PM"
-function formatDate(date) {
-	if (!date) {
-			return "";
-	}
-
-	const options = {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-	};
-
-	return date.toLocaleDateString(undefined, options);
-}
