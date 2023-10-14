@@ -5,14 +5,20 @@ const categorySchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-	unique: true,
   },
-  status: {
-    type: Boolean,
+  session: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Session', // Reference to sessions
     required: true,
-	default: false,
   },
-});
+  amount: {
+    type: Number,
+    required: true,
+  },
+}, {
+  timestamps: true,
+}
+);
 
 const Category = mongoose.model('Category', categorySchema);
 

@@ -67,7 +67,7 @@ const SignInForm = () => {
   >
     <label htmlFor="email">Email</label>
     <InputField
-      type="text"
+      type="email"
       name="email"
       id="email"
       placeholder="Enter your email"

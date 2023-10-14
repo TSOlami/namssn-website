@@ -14,9 +14,10 @@ import {
 	useUpvotePostMutation,
 	useDownvotePostMutation,
 	useCommentPostMutation,
-	useDeleteCommentMutation,
 	useUpvoteCommentMutation,
-	useDownvoteCommentMutation } from './slices/postSlice';
+	useDownvoteCommentMutation,
+	useDeleteCommentMutation,
+} from './slices/postSlice';
 import {
   useAllBlogsQuery,
   useUserBlogsQuery,

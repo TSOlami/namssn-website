@@ -25,7 +25,6 @@ const postSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to users who upvoted the post
-        default: 0
       },
     ],
     // An array of user references who downvoted the post.
@@ -33,7 +32,6 @@ const postSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to users who downvoted the post
-        default: 0
       },
     ],
   },

@@ -1,12 +1,10 @@
 import { FaCircleCheck } from "react-icons/fa6";
-import { Post, Sidebar, AnnouncementContainer } from "../components";
-import Wrapper from "../assets/images/wrapper.png";
-import { mockTexts } from "../data";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { EditProfileForm } from "../components";
-import { ProfileImg } from "../assets";
+import { EditProfileForm, Post, Sidebar, AnnouncementContainer, Loader } from "../components";
+import { ProfileImg, Wrapper } from "../assets";
+import { useUserPostsQuery, setPosts } from "../redux";
 
 const Profile = () => {
 	// Fetch user info from redux store
@@ -15,21 +13,37 @@ const Profile = () => {
 	const username = userInfo?.username;
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
-	// const isAdmin = userInfo?.role === 'admin';
+	const points = userInfo?.points;
 
+	// Fetch number of posts from redux store
+	const noOfPosts = userInfo?.posts?.length;
+
+	const dispatch = useDispatch();
+
+	// Fetch user posts from redux store
+	const { data: userPosts, isLoading } = useUserPostsQuery({ _id: userInfo?._id });
+
+	// Set posts in redux store
+	dispatch(setPosts(userPosts));
+
+	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
-	const noOfPosts = 120;
+
+	// Display loading indicator while data is being fetched
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
 			<div>
 				<div className="p-3 pl-6 flex flex-col">
-					<span className="font-semibold text-lg">{name}</span>
-					<span>{noOfPosts} posts</span>
+					<span className="font-semibold text-black text-lg">{name}</span>
+					<span>{noOfPosts} {noOfPosts === 1 ? 'post' : 'posts'}</span>
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
@@ -51,25 +65,28 @@ const Profile = () => {
 					<span className="mt-2">{bio}</span>
 				</div>
 				<div className="font-semibold px-3 pl-6">
-					<span className="font-semibold text-xl">215</span> points
+					<span className="font-semibold text-xl">{points}</span> points
 				</div>
 
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
 				<div>
-					<Post
-						upvotes="3224"
-						downvotes="30"
-						shares="5"
-						comments="10"
-						isVerified={isVerified}
-						text={mockTexts}
-						name={name}
-						username={username}
-						image={Wrapper}
-					/>
-				</div>
+          {userPosts?.map((post, index) => (
+            <Post
+              key={index}
+              upvotes={post.upvotes.length}
+              downvotes={post.downvotes.length}
+              shares="5" // You may need to fetch the actual share count
+              comments={post.comments.length}
+              isVerified={isVerified}
+              text={post.text}
+              name={name}
+              username={username}
+              image={Wrapper}
+            />
+          ))}
+        </div>
 			</div>
 			<AnnouncementContainer />
 

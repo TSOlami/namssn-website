@@ -48,8 +48,8 @@ const AdminPayment = () => {
 						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm" onClick={openAddPaymentForm} >
             Add New Payment
 						</button>
-					</div>
-
+					</div>             
+          
 					{/* Payment details and breakdown section */}
 					<div className="border-r-gray-300 border-l-2 h-full">
 

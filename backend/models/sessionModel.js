@@ -7,14 +7,6 @@ const sessionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    duesPrice: {
-      type: Number,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      default: false, // Default to false (inactive)
-    },
   },
   {
     timestamps: true, // Automatically generate createdAt and updatedAt timestamps

@@ -1,50 +1,41 @@
 import { BiDownvote, BiShareAlt, BiSolidDownvote, BiSolidUpvote, BiUpvote } from "react-icons/bi"
-import { FaRegComment } from "react-icons/fa6"
 
-const Actions = ({upvotes, downvotes, comments, shares}) => {
+const Actions = ({ upvotes, downvotes, shares, isUpvoted, onUpvote, isDownvoted, onDownvote }) => {
   return (
-    <div className="py-4 flex flex-row justify-between pr-5 items-center">
+    <div className="py-4 flex flex-row justify-start gap-20 pr-4 items-center">
     <div>
-      <span className="flex items-center gap-1">
-        {upvotes ? (
-          <>
-            <BiSolidUpvote color="#17A1FA" /> {upvotes}
-          </>
+      <span className="flex flex-row items-center gap-1">
+        {isUpvoted ? (
+          <button onClick={onUpvote}>
+              <BiSolidUpvote color="#17A1FA" /> {upvotes}{" "}
+          </button>
         ) : (
-          <>
-            <BiUpvote /> {0}{" "}
-          </>
+          <button onClick={onUpvote}>
+            <BiUpvote /> {upvotes}{" "}
+          </button>
         )}
       </span>
       <span>Upvotes</span>
     </div>
     <div>
-      <span className="flex items-center gap-1">
-        {downvotes ? (
-          <>
-            {" "}
+      <span className="flex flex-row items-center gap-1">
+        {isDownvoted ? (
+          <button onClick={onDownvote}>
             <BiSolidDownvote color="red" /> {downvotes}{" "}
-          </>
+          </button>
         ) : (
-          <>
-            {" "}
-            <BiDownvote /> {0}{" "}
-          </>
+          <button onClick={onDownvote}>
+            <BiDownvote /> {downvotes}{" "}
+          </button>
         )}
       </span>
       <span>Downvotes</span>
     </div>
     <div>
       <span className="flex items-center gap-1">
-        <FaRegComment /> {comments}
-      </span>
-      <span>Comments</span>
-    </div>
-    <div>
-      <span className="flex items-center gap-1">
         <BiShareAlt /> {shares}
       </span>
-      <span>Shares</span>
+      <span>Share</span>
     </div>
   </div>
   )
