@@ -6,11 +6,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 import { formatDateToTime } from "../utils";
+import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 
-const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id, postId }) => {
-	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
+const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	image,	createdAt, u_id, postId, }) => {
+	const [openOptions, setopenOptions] = useState(false);
+	const handleOpenOptions = () => {
+		setopenOptions(!openOptions);
+	};
+
+  const navigate = useNavigate();
+  const routeToComments = () => {
+    navigate(`/comments/${postId}`);
+  };
+
+  const date = new Date(createdAt);
 
   // Post deletion
   const [deletePost] = useDeletePostMutation();
@@ -55,15 +65,15 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
       // Perform the upvote logic to send an API call to the server
       const response = await upvotePost({ postId: postId, data: data }).unwrap();
   
-      if (response.status === 'success') {
+      if (response.message === "success") {
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
-        console.log('Upvote successful:', response);
+        // console.log('Upvote successful:', response);
       } else {
-        console.error('Upvote failed:', response);
+        // console.error('Upvote failed:', response);
       }
     } catch (error) {
-      console.error('Upvote failed:', error);
+      // console.error('Upvote failed:', error);
     }
   };
 
@@ -78,7 +88,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
       // Perform the downvote logic to send an API call to the server
       const response = await downvotePost({ postId: postId, data: {} }).unwrap();
   
-      if (response.status === 'success') {
+      if (response.message === "success") {
         // Toggle the downvote state
         setIsDownvoted(!isDownvoted);
       } else {
@@ -88,7 +98,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
       console.error('Downvote failed:', error);
     }
   };
-
+  
 	return (
 		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
 			<div>
@@ -109,7 +119,7 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 					</Link>
 					<span>@{username}</span>
 					<span className="text-gray-500">
-                    {formatDate(date)}
+                    {formatDateToTime(date)}
 					</span>
 
 					<span
@@ -132,33 +142,17 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 
 				<Actions
 					upvotes={isUpvoted ? upvotes + 1 : upvotes}
-          downvotes={isDownvoted ? downvotes + 1 : downvotes}
-          comments={comments}
-          isUpvoted={isUpvoted}
-          onUpvote={handleUpvote}
-          isDownvoted={isDownvoted}
-          onDownvote={handleDownvote}
-					/>
+					downvotes={isDownvoted ? downvotes + 1 : downvotes}
+					comments={comments}
+					isUpvoted={isUpvoted}
+					onUpvote={handleUpvote}
+					isDownvoted={isDownvoted}
+					onDownvote={handleDownvote}
+          postId={postId}
+				/>
 			</div>
 		</div>
 	);
 };
 
 export default Post;
-
-// Helper function to format the date as "Month Day, Year, Hour:Minute AM/PM"
-function formatDate(date) {
-	if (!date) {
-			return "";
-	}
-
-	const options = {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-	};
-
-	return date.toLocaleDateString(undefined, options);
-}
