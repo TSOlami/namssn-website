@@ -36,13 +36,10 @@ const Home = () => {
         ) : (
           <>
             {posts?.map((post, index) => {
-              // console.log(`Post ${index + 1}:`, post);
-              // console.log(`Post ${index + 1} user:`, post?.user);
-              // console.log(`Post ${index + 1} user id`, post?.user?._id);
+              console.log(`Post ${index + 1}:`, post);
               return (
                 <Post
-									key={index}
-									postId={post?._id}
+									key={post?._id}
 									upvotes={post?.upvotes?.length}
 									downvotes={post?.downvotes?.length}
 									comments={post?.comments?.length}
@@ -53,7 +50,6 @@ const Home = () => {
 									avatar={Wrapper}
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
-									u_id={post?.user?._id}
 								/>
               );
             })}
@@ -70,7 +66,7 @@ const Home = () => {
 
 				<div>
 					{isModalOpen && (
-						<AddPostForm isModalOpen={isModalOpen} handleModalOpen={handleModalOpen}/>
+						<AddPostForm handleModalOpen={handleModalOpen}/>
 					)}
 				</div>
 			</div>
