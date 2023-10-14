@@ -11,7 +11,6 @@ const Home = () => {
   // Fetch all posts
   const { data: posts, isLoading } = useAllPostsQuery();
 
-  console.log("All posts:", posts);
   const dispatch = useDispatch();
 
   // Use useEffect to set posts after component mounts
@@ -23,6 +22,7 @@ const Home = () => {
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleModalOpen = () => {
+    console.log("Handle modal open");
 		setIsModalOpen(!isModalOpen)
 	}
 
@@ -35,8 +35,7 @@ const Home = () => {
           <Loader />
         ) : (
           <>
-            {posts?.map((post, index) => {
-              console.log(`Post ${index + 1}:`, post);
+            {posts?.map((post) => {
               return (
                 <Post
 									key={post?._id}
