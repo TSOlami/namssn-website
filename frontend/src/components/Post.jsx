@@ -68,7 +68,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	
       if (response.message === "success") {
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
-        // console.log('Upvote successful:', response);
+        console.log('Upvote successful:', response);
       } else {
         // console.error('Upvote failed:', response);
       }
@@ -148,7 +148,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	
 					onUpvote={handleUpvote}
 					isDownvoted={isDownvoted}
 					onDownvote={handleDownvote}
-          postId={postId}
+                    postId={postId}
 				/>
 			</div>
 		</div>

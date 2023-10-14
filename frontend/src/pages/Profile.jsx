@@ -75,27 +75,27 @@ const Profile = () => {
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
-        <div>
-          {userPosts && userPosts?.length === 0 ? ( // Check if userPosts is defined and has no posts
-            <div className="text-center mt-28 p-4 text-gray-500">
-              No posts to display.
-            </div>
-          ) : userPosts?.map((post) => ( // Use post._id as the key
-            <Post
-              key={post._id}
-              upvotes={post.upvotes.length}
-              downvotes={post.downvotes.length}
-              isVerified={isVerified}
-              text={post.text}
-              name={name}
-              username={username}
-              createdAt={post.createdAt}
-              image={Wrapper}
-              postId={post._id}
-              u_id={userInfo._id}
-            />
-          ))}
-        </div>
+				<div>
+				{userPosts && userPosts?.length === 0 ? ( // Check if userPosts is defined and has no posts
+					<div className="text-center mt-28 p-4 text-gray-500">
+					No posts to display.
+					</div>
+				) : userPosts?.map((post) => ( // Use post._id as the key
+					<Post
+					key={post._id}
+					upvotes={post.upvotes.length}
+					downvotes={post.downvotes.length}
+					isVerified={isVerified}
+					text={post.text}
+					name={name}
+					username={username}
+					createdAt={post.createdAt}
+					image={Wrapper}
+					postId={post._id}
+					u_id={userInfo._id}
+					/>
+				))}
+				</div>
 			</div>
 			<AnnouncementContainer />
 

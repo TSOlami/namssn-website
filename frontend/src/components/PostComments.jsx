@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { useDeletePostMutation } from "../redux";
+import { formatDateToTime } from "../utils";
 
 const PostComments = ({
 	isVerified,
@@ -62,7 +63,7 @@ const PostComments = ({
 						</span>
 					</Link>
 					<span>@{username}</span>
-					<span className="text-gray-500 ml-3">{formatDate(date)}</span>
+					<span className="text-gray-500 ml-3">{formatDateToTime(date)}</span>
 
 					<span
 						className="absolute right-0 active:bg-greyish rounded-md p-2"
@@ -86,21 +87,3 @@ const PostComments = ({
 };
 
 export default PostComments;
-
-// Helper function to format the date as "Month Day, Year, Hour:Minute AM/PM"
-function formatDate(date) {
-	if (!date) {
-		return "";
-	}
-
-	const options = {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	};
-
-	return date.toLocaleDateString(undefined, options);
-}
-
