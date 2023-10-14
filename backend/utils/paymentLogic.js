@@ -55,7 +55,8 @@ const initiatePayment = async (req, res) => {
 
 const getAllPayments = async (req, res) => {
   try {
-    const allPayments = await Payment.find({});
+    const userId = req.user._id
+    const allPayments = await Payment.find({ user: userId});
     res.json({ allPayments });
   } catch (error) {
     console.error('Error fetching payment records:', error);

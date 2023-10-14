@@ -22,7 +22,7 @@ import EditProfileForm from './forms/EditProfileForm';
 import AdminPaymentManagement from './PaymentManagement';
 import HeaderComponent from './HeaderComponent';
 import AddPostForm from './forms/AddPostForm';
-import AddPaymentForm from './forms/AddPaymentForm';
+import AddPaymentForm from './forms/AddCategoryForm';
 import EditPaymentForm from './forms/EditPaymentForm';
 import DeletePaymentForm from './forms/DeletePaymentForm';
 

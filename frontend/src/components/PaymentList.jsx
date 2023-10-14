@@ -6,7 +6,7 @@ const PaymentList = () => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    // Make an API request to retrieve the user's payments
+    // Make an API request to retrieve the payments to be made
     axios.get('/api/v1/users/payments') // Replace with your API endpoint
       .then((response) => {
         setPayments(response.data);

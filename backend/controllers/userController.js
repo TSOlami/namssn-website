@@ -3,8 +3,8 @@ import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
-import Payment from '../models/paymentModel.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
+import Category from '../models/categoryModel.js';
 
 
 // @desc	Authenticate user/set token
@@ -316,18 +316,18 @@ const deleteUserResources = asyncHandler(async (req, res) => {
 const getPaymentOptions = async (req, res) => {
   try {
     // Example: Fetch a list of admin-added payments from your database
-    const adminAddedPayments = await Payment.find({ userType: 'admin' });
+    const category = await Category.find({});
 
     // Check if there are available payment options
-    if (adminAddedPayments.length === 0) {
-      return res.status(404).json({ message: 'No payment options available' });
+    if (category.length === 0) {
+      return res.status(404).json({ message: 'No Category available' });
     }
 
     // You can further process or format the payment options as needed
     // For now, we'll simply send the list to the user
-    res.status(200).json(adminAddedPayments);
+    res.status(200).json(category);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch payment options', error: error.message });
+    res.status(500).json({ message: 'Failed to fetch category options', error: error.message });
   }
 };
 

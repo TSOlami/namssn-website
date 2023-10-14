@@ -13,9 +13,9 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
-  createPayment,
-  editPayment,
-  deletePayment
+  createCategory,
+  deleteCategory,
+  editCategory
 } from '../controllers/adminController.js';
 
 // Define admin routes and protect them with admin middleware
@@ -25,9 +25,9 @@ router.route('/all-payments').get(protect, isAdmin, getAllPayments);
 //create, Edit and Delete payments
 router
 .route('/payment')
-.post(protect, isAdmin, createPayment)
-.put(protect, isAdmin, editPayment)
-.delete(protect, isAdmin, deletePayment);
+.post(protect, isAdmin, createCategory)
+.put(protect, isAdmin, editCategory)
+.delete(protect, isAdmin, deleteCategory);
 
 // Get, create, update and delete user blogs
 router

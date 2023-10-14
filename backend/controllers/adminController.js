@@ -1,83 +1,9 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
 import { isAdmin } from '../middleware/authMiddleware.js';
-
-// @desc Get all payments for all users
-// Route GET /api/v1/admin/payments
-// Access Private (only accessible to admin users)
-const getAllPayments = asyncHandler(async (req, res) => {
-  // Fetch all payment records from the payment model
-  const allPayments = await Payment.find().populate('user');
-
-  res.status(200).json(allPayments);
-});
-
-// @desc Create a new payment
-// Route POST /api/v1/admin/payments
-// Access Private (only accessible to admin users)  
-const createPayment = asyncHandler(async(req, res) =>  {
-  const { category, session, amount }= req.body;
-  const addPayment = new Payment(
-    {
-      userType: 'admin',
-      category,
-      session,
-      amount,
-    }
-  )
-  const createdPayment = await addPayment.save();
-  res.status(201).json(createdPayment)
-});
-
-// @desc Get a single payment
-// Route GET /api/v1/admin/payments/:id
-// Access Private (only accessible to admin users)
-const editPayment = asyncHandler(async (req, res) => {
-  const paymentId = req.params.id; // Extract payment ID from the request parameters
-  const { category, session, amount } = req.body;
-
-  // Find the payment by its ID
-  const payment = await Payment.findById(paymentId);
-
-  if (!payment) {
-    res.status(404);
-    throw new Error('Payment not found');
-  }
-
-  // Update payment properties
-  payment.category = category;
-  payment.session = session;
-  payment.amount = amount;
-
-  // Save the updated payment
-  const updatedPayment = await payment.save();
-
-  res.status(200).json(updatedPayment);
-});
-
-// @desc Delete a single payment
-// Route DELETE /api/v1/admin/payments/:id
-// Access Private (only accessible to admin users)
-const deletePayment = asyncHandler(async (req, res) => {
-  const paymentId = req.params.id; // Extract payment ID from the request parameters
-
-  // Find the payment by its ID
-  const payment = await Payment.findById(paymentId);
-
-  if (!payment) {
-    res.status(404);
-    throw new Error('Payment not found');
-  }
-
-  // Remove the payment from the database
-  await payment.remove();
-
-  res.status(204).json({ message: 'Payment removed' });
-});
-
-
 
 // @desc Create a new blog
 // Route POST /api/v1/users/blogs
@@ -128,13 +54,89 @@ const deleteBlog = asyncHandler(async (req, res) => {
 	res.status(200).json({ message: 'Delete Blog' });
 });
 
+
+// @desc Create a new payment category
+// Route POST /api/v1/admin/payments
+// Access Private (only accessible to admin users)  
+const createCategory = asyncHandler(async(req, res) =>  {
+  const { name, session, amount }= req.body;
+  const addCategory = new Category(
+    {
+      name,
+      session,
+      amount,
+    }
+  )
+  const craetedCategory = await addCategory.save();
+  res.status(201).json(craetedCategory)
+});
+
+// @desc edit a single payment category
+// Route GET /api/v1/admin/payments/:id
+// Access Private (only accessible to admin users)
+const editCategory = asyncHandler(async (req, res) => {
+    const { name, session, amount } = req.body;
+    const categoryName = req.params.name; // Extract category ID from the request parameters
+
+  // Find the category by its ID
+  const category  = await Category.findById(categoryName);
+
+  if (!category) {
+    res.status(404);
+    throw new Error('Category not found');
+  }
+
+  // Update category properties
+  category.name = name;
+  category.session = session;
+  category.amount = amount;
+
+  // Save the updated category
+  const updatedCategory = await category.save();
+
+  res.status(200).json(updatedCategory);
+});
+
+// @desc Delete a single payment category
+// Route DELETE /api/v1/admin/payments/:id
+// Access Private (only accessible to admin users)
+const deleteCategory = asyncHandler(async (req, res) => {
+  const categoryId = req.params.name; // Extract payment ID from the request parameters
+
+  // Find the payment by its ID
+  const category = await Category.findById(categoryId);
+
+  if (!category) {
+    res.status(404);
+    throw new Error('Category not found');
+  }
+
+  // Remove the payment from the database
+  await category.remove();
+
+  res.status(204).json({ message: 'category removed' });
+});
+
+// @desc Get all payments for all users
+// Route GET /api/v1/admin/payments
+// Access Private (only accessible to admin users)
+const getAllPayments = asyncHandler(async (req, res) => {
+  // Fetch all payment records from the payment model
+  const allPayments = await Payment.find().populate('user');
+
+  res.status(200).json(allPayments);
+});
+
+
+
+
 export {
   getAllPayments,
   createBlog,
   getUserBlogs,
   updateBlog,
   deleteBlog,
-  createPayment,
-  editPayment,
-  deletePayment,
+  createCategory,
+  editCategory,
+  deleteCategory,
 };

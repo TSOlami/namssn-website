@@ -33,10 +33,12 @@ import {
 } from './slices/blogSlice';
 
 import { 
-	useAllAdminPaymentsQuery,
-	useCreateAdminPaymentMutation,
-	useUpdateAdminPaymentMutation,
-	useDeleteAdminPaymentMutation,
+	useAllCategorysQuery,
+	useAllPaymentsQuery,
+	useCreateCategoryMutation,
+	useCreatePaymentMutation,
+	useDeleteCategoryMutation,
+	useUpdateCategoryMutation,
 	} from './slices/paymentSlice'
 
 export { 
@@ -67,9 +69,11 @@ export {
 	useUpvoteBlogCommentMutation,
 	useDownvoteBlogCommentMutation,
 	useDeleteBlogCommentMutation,
-	useAllAdminPaymentsQuery,
-	useCreateAdminPaymentMutation,
-	useUpdateAdminPaymentMutation,
-	useDeleteAdminPaymentMutation,
+	useAllCategorysQuery,
+	useAllPaymentsQuery,
+	useCreateCategoryMutation,
+	useCreatePaymentMutation,
+	useDeleteCategoryMutation,
+	useUpdateCategoryMutation,
 	setCredentials,
 	setPosts, }

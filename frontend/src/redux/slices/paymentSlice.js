@@ -1,12 +1,13 @@
 import { apiSlice } from "./apiSlice";
 
 const ADMIN_PAYMENTS_URL = '/api/v1/admin';
+const USER_PAYMENT_URL = ' /api/v1/user';
 
-export const adminPaymentApiSlice = apiSlice.injectEndpoints({
+export const CategoryApiSlice = apiSlice.injectEndpoints({
   endpoints(builder) {
     return {
       // Get All Admin Payments Query
-      allAdminPayments: builder.query({
+      allCategory: builder.query({
         query() {
           return {
             url: `${ADMIN_PAYMENTS_URL}/all-payments`,
@@ -15,8 +16,8 @@ export const adminPaymentApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
-      // Create Admin Payment Query
-      createAdminPayment: builder.mutation({
+      // Create Category
+      createCategory: builder.mutation({
         query(data) {
           return {
             url: `${ADMIN_PAYMENTS_URL}/payment`,
@@ -26,8 +27,8 @@ export const adminPaymentApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
-      // Update Admin Payment Query
-      updateAdminPayment: builder.mutation({
+      // Update Category
+      updateCategory: builder.mutation({
         query(data) {
           return {
             url: `${ADMIN_PAYMENTS_URL}/payment`,
@@ -37,8 +38,8 @@ export const adminPaymentApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
-      // Delete Admin Payment Query
-      deleteAdminPayment: builder.mutation({
+      // Delete Category
+      deleteCategory: builder.mutation({
         query(data) {
           return {
             url: `${ADMIN_PAYMENTS_URL}/payment`,
@@ -47,13 +48,38 @@ export const adminPaymentApiSlice = apiSlice.injectEndpoints({
           };
         },
       }),
+
+      // Get All Admin Payments Query
+      allPayments: builder.query({
+        query() {
+          return {
+            url: `${USER_PAYMENT_URL}/payments`,
+            method: 'GET',
+          };
+        },
+      }),
+      // Create Payment
+      createPayment: builder.mutation({
+        query(data) {
+          return {
+            url: `${USER_PAYMENT_URL}/payments`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
     };
+
+
+
   },
 });
 
 export const {
-  useAllAdminPaymentsQuery,
-  useCreateAdminPaymentMutation,
-  useUpdateAdminPaymentMutation,
-  useDeleteAdminPaymentMutation,
-} = adminPaymentApiSlice;
+  useAllCategorysQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+  useCreatePaymentMutation,
+  useAllPaymentsQuery
+} = CategoryApiSlice;
