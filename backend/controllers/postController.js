@@ -1,7 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
-import PostComment from '../models/postCommentModel.js';
 
 // @desc Create a new post
 // Route POST /api/v1/users/posts
@@ -28,10 +27,14 @@ const createPost = asyncHandler(async (req, res) => {
 	// Add the post's _id to the user's posts array field
 	user.posts.push(createdPost._id);
 
+	// Increase the user's points by 10
+	user.points += 10;
+  
 	// Save the updated user document to the database
 	await user.save();
   
 	res.status(201).json(createdPost);
+  console.log(createdPost);
   });
   
 // @desc Get all posts and sort by timestamp
@@ -45,28 +48,21 @@ const getAllPosts = asyncHandler(async (req, res) => {
   
 	res.status(200).json(allPosts);
   });
-
+  
+// UserController.js
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts
 // Access Private
 const getUserPosts = asyncHandler(async (req, res) => {
-	try {
-	  const userId = req.params.userId; // Get the user ID from the query parameters
-  
-	  // Fetch the user's posts from the database
-    console.log("Fetching posts for user: ", userId);
-	  const userPosts = await Post.find({ user: userId }).sort({ createdAt: -1 });
-  
-	  if (!userPosts) {
-		res.status(404).json({ message: "No posts found for this user." });
-	  } else {
-		res.status(200).json(userPosts);
-		console.log("Got user posts successfully: ", userPosts.length);
-	  }
-	} catch (error) {
-	  console.error("Error fetching user posts:", error);
-	  res.status(500).json({ message: "Server error while fetching user posts." });
-	}
+	const userId = req.query.userId; // Get the user ID from the query parameters
+	
+	// Fetch the user's posts from the database
+	const userPosts = await Post.find({ user: userId })
+	.sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
+	
+	res.status(200).json(userPosts);
+	console.log(userPosts);
+	console.log("Got user posts successfully");
 });
 
 // @desc	Update user post
@@ -132,12 +128,10 @@ const upvotePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
 	const userId = req.user._id;
 
-  console.log("Upvoting post: ", postId);
 	// Find the post by ID
 	const post = await Post.findById(postId);
 
 	if (post) {
-    console.log("Found post: ", post);
 		// Check if the user has already upvoted the post
 		const upvotedIndex = post.upvotes.indexOf(userId);
 		const downvotedIndex = post.downvotes.indexOf(userId);
@@ -145,25 +139,11 @@ const upvotePost = asyncHandler(async (req, res) => {
 		if (downvotedIndex !== -1) {
 			// The user has already downvoted the post, so remove their ID from the downvotes array.
 			post.downvotes.splice(downvotedIndex, 1);
-
-			// Deduct 2 points for removing a downvote
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points -= 2;
-			  await user.save();
-			}
 		}
 
 		if (upvotedIndex === -1) {
 			// The user hasn't upvoted the post, so add their ID to the upvotes array.
 			post.upvotes.push(userId);
-
-			// Add 5 points for upvoting
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points += 5;
-			  await user.save();
-			}
 		}
 
 		await post.save();
@@ -196,25 +176,11 @@ const downvotePost = asyncHandler(async (req, res) => {
 		if (upvotedIndex !== -1) {
 			// The user has already upvoted the post, so remove their ID from the upvotes array.
 			post.upvotes.splice(upvotedIndex, 1);
-
-			// Deduct 5 points for removing an upvote
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points -= 5;
-			  await user.save();
-			}
 		}
 
 		if (downvotedIndex === -1) {
 			// The user hasn't downvoted the post, so add their ID to the downvotes array.
 			post.downvotes.push(userId);
-
-			// Deduct 2 points for downvoting
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points -= 2;
-			  await user.save();
-			}
 		}
 
 		await post.save();
@@ -237,9 +203,7 @@ const downvotePost = asyncHandler(async (req, res) => {
 const getPostComments = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
 	const postId = req.params.postId;
-	console.log(req.params);
   
-	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
 	const post = await Post.findById(postId);
   
@@ -265,11 +229,10 @@ const getPostComments = asyncHandler(async (req, res) => {
 const createPostComment = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
 	const postId = req.params.postId;
-
+  
 	// Extract the comment text from the request body
 	const { text } = req.body;
   
-	console.log("Comment text: ", text);
 	// Find the post by its ID
 	const post = await Post.findById(postId);
   
@@ -277,7 +240,7 @@ const createPostComment = asyncHandler(async (req, res) => {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
-    console.log("Creating comment for post: ", postId);
+  
 	// Create a new comment
 	const newComment = new PostComment({
 	  text,

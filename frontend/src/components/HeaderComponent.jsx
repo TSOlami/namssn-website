@@ -1,11 +1,8 @@
-import { useState } from 'react';
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Avatar } from "../assets";
-import { useDispatch } from "react-redux";
-import { setNavOpen } from "../redux/slices/navSlice";
+import { useState } from "react";
 
 const HeaderComponent = ({ title }) => {
-	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
@@ -17,14 +14,9 @@ const HeaderComponent = ({ title }) => {
 		setSearch("");
 	}
 
-	// handle nav open with redux
-	const handleNavOpen = () => {
-		dispatch(setNavOpen());
-	};
-
 	return (
-		<div className="flex flex-row-reverse md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 " >
-			<img src={Avatar} alt="avatar" className="md:hidden" onClick={handleNavOpen}/>
+		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300">
+			<img src={Avatar} alt="avatar" className="md:hidden" />
 
 			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
 			<form action="" onSubmit={handleSubmit} className="hidden md:flex  relative">

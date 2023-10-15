@@ -1,10 +1,10 @@
 import { EventImg, MainEvent } from "../assets";
-import { NavBar, Footer } from "../components";
+import { NavBar } from "../components";
 import Event from "../components/Event";
 
 const EventsPage = () => {
 	return (
-		<main>
+		<div>
 			<NavBar />
 			<div className="p-5">
 				<div className="flex flex-col pt-24 pb-5">
@@ -42,8 +42,7 @@ const EventsPage = () => {
 					/>
 				</div>
 			</div>
-			<Footer />
-		</main>
+		</div>
 	);
 };
 

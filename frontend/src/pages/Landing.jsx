@@ -17,7 +17,7 @@ const Landing = () => {
       <section className="padding">
         <FAQs />
       </section>
-      <section className="padding" id="contact-us">
+      <section className="padding">
         <ContactUs />
       </section>
       <section>
