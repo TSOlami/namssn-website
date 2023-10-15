@@ -68,10 +68,10 @@ const EditProfileForm = ({ handleModal }) => {
           <FaXmark />
         </button>
       </div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 mx-2 mt-4">
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
         <div className="scale-75 flex-row">
-          <FaCameraRetro color="white" className="absolute left-[20%] bottom-[48%] scale-[2]" />
-          <img src={ProfileImg} alt="" />
+          <FaCameraRetro color="white" className="absolute left-[17%] bottom-[48%] scale-[2]" />
+          <img src={ProfileImg} alt="" className='h-[130px]'/>
         </div>
         <div>
           <label htmlFor="name">Name</label>
@@ -150,7 +150,7 @@ const EditProfileForm = ({ handleModal }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.matricNumber}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
+            className="border-2 rounded-lg border-gray-700 p-2 w-full resize-none"
             placeholder="New matric number"
           />
           {formik.touched.matricNumber &&
@@ -166,7 +166,7 @@ const EditProfileForm = ({ handleModal }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.bio}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
+            className="border-2 rounded-lg border-gray-700 p-2 w-full resize-none"
             placeholder="New bio"
           />
           {formik.touched.bio &&
