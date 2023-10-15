@@ -89,7 +89,9 @@ const FileForm = (props) => {
     const errorStyle = "text-red-500 text-sm";
 
     const validationSchema = Yup.object().shape({
-        file: Yup.mixed().test('fileSize', 'File is too large', (value) => value && value.size <= 5000000),
+        file: Yup.mixed()
+        .test('fileSize', 'File is too large', (value) => value && value.size <= 5000000)
+        .test('fileType', 'Videos are not allowed', (value) => value && value.type && value.type.indexOf('video') === -1)
     });
 
     const formik = useFormik({
