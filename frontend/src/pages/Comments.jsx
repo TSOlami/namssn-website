@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import { IoSend } from "react-icons/io5";
 
 import {
 	AnnouncementContainer,
@@ -52,12 +53,12 @@ const Comments = () => {
     }
   };
 	return (
-		<div className="flex flex-row">
+		<div className="flex flex-row w-full">
 			<Sidebar />
 
-			<div>
+			<div className="flex flex-col flex-1 relative">
 				<HeaderComponent title="Post" />
-				<div>
+				<div className="w-full">
 					<Post
 						key={post?._id}
             upvotes={post?.upvotes?.length}
@@ -74,25 +75,24 @@ const Comments = () => {
 				</div>
 
 				{/* Add comment */}
-				<div>
+				<div className="flex flex-row fixed bottom-3 lg:left-[250px] xl:w-[700px] lg:w-[500px] md:left-[2px] md:w-[450px] w-screen left-0">
 					<textarea
 						name="comment"
 						placeholder="Add comment"
 						id=""
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
-						className="resize-none border-2 border-gray-400 w-full p-2 rounded-xl mb-2 m-4 mr-14 "
+						className="resize-none border-2 border-gray-40 h-[47px] w-full p-2 rounded-xl mr-1 m-2 "
 					></textarea>
 
-					<button 
-          type="submit"
+					<div 
           onClick={() => {
             // Handle comment submission here
             handleCommentSubmit();
           }}
-          className="p-2 bg-primary rounded-xl text-white flex ml-auto hover:opacity-80">
-						Add Comment
-					</button>
+          className="p-2 m-2 bg-primary rounded-xl text-white flex items-center text-2xl hover:opacity-80">
+						<IoSend/>
+					</div>
 				</div>
 
 				<div>
