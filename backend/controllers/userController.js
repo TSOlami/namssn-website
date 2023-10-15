@@ -28,6 +28,7 @@ const authUser = asyncHandler(async (req, res) => {
       matricNumber: user.matricNumber,
       bio: user.bio,
       role: user.role,
+      level: user.level,
       isVerified: user.isVerified,
       points: user.points,
       profilePicture: user.profilePicture,
@@ -46,7 +47,7 @@ const authUser = asyncHandler(async (req, res) => {
 // Route	post  /api/v1/users
 // access	Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, email, password, role } = req.body;
+  const { name, username, email, password, role, level, profilePicture } = req.body;
   // Check if email or username already exists
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
@@ -66,6 +67,8 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     role: userRole,
+    level,
+    profilePicture,
   });
   if (user) {
     generateToken(res, user._id);
@@ -75,6 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      level: user.level,
       isVerified: user.isVerified,
       points: user.points,
       profilePicture: user.profilePicture,
@@ -115,6 +119,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     points: req.user.points,
     bio: req.user.bio,
     role: req.user.role,
+    level: req.user.level,
     profilePicture: req.user.profilePicture,
     posts: req.user.posts,
     blogs: req.user.blogs,
@@ -140,6 +145,18 @@ const getUserById = asyncHandler(async (req, res) => {
       name: user.name,
       username: user.username,
       email: user.email,
+      studentEmail: user.studentEmail,
+      matricNumber: user.matricNumber,
+      bio: user.bio,
+      role: user.role,
+      level: user.level,
+      isVerified: user.isVerified,
+      points: user.points,
+      profilePicture: user.profilePicture,
+      posts: user.posts,
+      blogs: user.blogs,
+      payments: user.payments,
+      resources: user.resources,
     });
   } else {
     res.status(404);
@@ -176,6 +193,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.username = req.body.username || user.username;
+    user.level = req.body.level || user.level;
 
     // Check for studentEmail and matricNumber changes
     if (req.body.studentEmail !== user.studentEmail || req.body.matricNumber !== user.matricNumber) {
@@ -205,6 +223,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       matricNumber: updatedUser.matricNumber,
       bio: updatedUser.bio,
       role: updatedUser.role,
+      level: updatedUser.level,
+      isVerified: updatedUser.isVerified,
+      points: updatedUser.points,
+      profilePicture: updatedUser.profilePicture,
+      posts: updatedUser.posts,
+      blogs: updatedUser.blogs,
+      payments: updatedUser.payments,
+      resources: updatedUser.resources,
     });
   } else {
     res.status(404);

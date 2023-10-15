@@ -145,7 +145,6 @@ export const {
   useDeletePostMutation,
   useUpvotePostMutation,
   useDownvotePostMutation,
-
   usePostCommentsQuery,
   useCommentPostMutation,
   useDeleteCommentMutation,

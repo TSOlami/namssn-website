@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { FaXmark, FaCameraRetro } from 'react-icons/fa6';
+import { FaXmark } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
@@ -10,8 +11,11 @@ import InputField from '../InputField';
 import FormErrors from './FormErrors';
 import { useUpdateUserMutation, setCredentials } from '../../redux';
 import { Loader } from '../../components';
+import { convertToBase64 } from '../../utils';
 
 const EditProfileForm = ({ handleModal }) => {
+
+  const [file, setFile] = useState();
   // Use the useDispatch hook to dispatch actions 
   const dispatch = useDispatch();
 
@@ -32,11 +36,15 @@ const EditProfileForm = ({ handleModal }) => {
     studentEmail: userInfo?.studentEmail || '',
     matricNumber: userInfo?.matricNumber || '',
     bio: userInfo?.bio || '',
+    level: userInfo?.level || '100',
 	};
+
+  const levelOptions = ['100', '200', '300', '400', '500', 'Non-student'];
   
 	// Define the validation schema using Yup
 	const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
+    level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
     studentEmail: Yup.string().email('Invalid email format'),
@@ -50,15 +58,23 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
+          values = await Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
           navigate('/home');
+          console.log(values);
           toast.success('Profile updated!');
         } catch (err) {
           toast.error(err?.data?.message || err?.error)
         }
       },
 	});
+
+  // File upload handler
+  const onUpload = async e => {
+    const base64 = await convertToBase64(e.target.files[0]);
+    setFile(base64);
+  };
   
   return (
     <div className="bg-white rounded-2xl p-4 w-96">
@@ -68,10 +84,13 @@ const EditProfileForm = ({ handleModal }) => {
           <FaXmark />
         </button>
       </div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 mx-2 mt-4">
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
         <div className="scale-75 flex-row">
-          <FaCameraRetro color="white" className="absolute left-[20%] bottom-[48%] scale-[2]" />
-          <img src={ProfileImg} alt="" />
+          <label htmlFor="profile">
+          <img src={file || ProfileImg} alt="" className='profile-image'/>
+          </label>
+
+          <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
         </div>
         <div>
           <label htmlFor="name">Name</label>
@@ -89,6 +108,30 @@ const EditProfileForm = ({ handleModal }) => {
             <div>{formik.errors.name}</div>
           ) : null}
         </div>
+        <label className="mt-2" htmlFor="level">
+        Level
+      </label>
+      <select
+        name="level"
+        id="level"
+        onChange={formik.handleChange("level")}
+        onBlur={formik.handleBlur("level")}
+        value={formik.values.level}
+        className="w-full border border-gray-300 rounded p-2"
+      >
+        <option value="" disabled>
+          Select your level
+        </option>
+        {levelOptions.map((level) => (
+          <option key={level} value={level}>
+            {level}
+          </option>
+        ))}
+      </select>
+
+      {formik.touched.level && formik.errors.level ? (
+        <FormErrors error={formik.errors.level} />
+      ) : null}
         <div>
           <label htmlFor="username">Username</label>
           <InputField
@@ -150,7 +193,7 @@ const EditProfileForm = ({ handleModal }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.matricNumber}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
+            className="border-2 rounded-lg border-gray-700 p-2 w-full resize-none"
             placeholder="New matric number"
           />
           {formik.touched.matricNumber &&
@@ -166,7 +209,7 @@ const EditProfileForm = ({ handleModal }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.bio}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
+            className="border-2 rounded-lg border-gray-700 p-2 w-full resize-none"
             placeholder="New bio"
           />
           {formik.touched.bio &&
