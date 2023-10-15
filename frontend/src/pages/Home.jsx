@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Sidebar, Post, AnnouncementContainer, HeaderComponent, BottomNav, Loader, AddPostForm } from "../components";
-import { ProfileImg } from '../assets';
 import { useAllPostsQuery, setPosts } from "../redux";
 
 const Home = () => {
@@ -46,7 +45,7 @@ const Home = () => {
 									text={post?.text}
 									name={post?.user?.name}
 									username={post?.user?.username}
-									avatar={post?.user?.profilePicture || ProfileImg}
+									avatar={post?.user?.profilePicture}
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
 									u_id={post?.user?._id}
