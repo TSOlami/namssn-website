@@ -1,3 +1,4 @@
-import { formatDateToTime } from "./dateUtils";
+import { formatDateToTime } from "./formatDate";
+import { convertToBase64 } from "./convertToBase64";
 
-export { formatDateToTime };
+export { formatDateToTime, convertToBase64 };

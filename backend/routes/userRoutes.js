@@ -180,8 +180,8 @@ router
   .post(protect,postUserPayment);
 
 router
-  .get(protect, '/resources/:filename', (req, res) => {
-    const filePath = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website/uploads', req.params.filename)
+  .get('/resources/:filename', protect, (req, res) => {
+    const filePath = path.join('C:/Users/SAHEED PC/Desktop/Portfolio/namssn-website/uploads', req.params.filename)
     res.sendFile(filePath)
   })
 

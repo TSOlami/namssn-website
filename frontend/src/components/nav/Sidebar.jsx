@@ -9,7 +9,7 @@ import {
 	FaCircleCheck,
 } from "react-icons/fa6";
 // import { useEffect, useState } from "react";
-import { Avatar } from "../../assets";
+import { ProfileImg } from "../../assets";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ const Sidebar = () => {
 	const name = userInfo?.name;
 	const username = userInfo?.username;
 	const isVerified = userInfo?.isVerified;
+	const profileImage = userInfo?.profilePicture;
 
 	// Check if user is admin
 	const isAdmin = userInfo?.role === "admin";
@@ -92,7 +93,7 @@ const Sidebar = () => {
 				{/* profile info */}
 				<div className="pb-8 flex gap-2">
 					<div>
-						<img src={Avatar} alt="" />
+						<img src={profileImage||ProfileImg} alt="" className="profile-image-small" />
 					</div>
 					<div className="flex flex-col text-sm">
 						<span className="font-semibold flex flex-row items-center gap-2">
