@@ -6,7 +6,7 @@ export const navLinks = [
   { href: "/blog", label: "Blog" },
   { href: "/departmental-fees", label: "Departmental Fees" },
   { href: "/events", label: "Events" },
-  { href: "/contact-us", label: "Contact Us" },
+  { href: "/#contact-us", label: "Contact Us" },
 ];
 
 export const blogPosts = [
