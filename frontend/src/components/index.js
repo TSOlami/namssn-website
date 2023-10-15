@@ -14,16 +14,17 @@ import Notification from './Notification';
 import Actions from './Actions';
 import Modal from './Modal';
 import AdminCard from './AdminCard';
-import FormErrors from '../components/forms/FormErrors';
-import InputField from './InputField';
+import FormErrors from '../components/forms/FormErrors'
+import InputField from './InputField'
+import HeaderComponent from './HeaderComponent';
+import ResourceCard from './ResourceCard';
+import FileForm from './FileForm';
 import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
 // import AdminPaymentManagement from './PaymentManagement';
-import HeaderComponent from './HeaderComponent';
 import AddPostForm from './forms/AddPostForm';
 import AddPaymentForm from './forms/AddCategoryForm';
-import EditPaymentForm from './forms/EditPaymentForm';
-import DeletePaymentForm from './forms/DeletePaymentForm';
+import PostComments from './PostComments';
 
-export { FormErrors, InputField, NavBar, Modal, Footer, SignInForm, SignUpForm, Payment, PaymentList ,Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm, HeaderComponent, AddPostForm, AddPaymentForm, EditPaymentForm, DeletePaymentForm };
+export {AddPaymentForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments};

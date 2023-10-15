@@ -205,3 +205,36 @@ export const mockPaidUsers = [
 	},
 
 ]
+
+export const mockComments = [
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "Only broke people think, rich people outsource every thing, including thinking",
+		username: "richkid222",
+		name: "Sulaimon Abubakar",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+]

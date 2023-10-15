@@ -1,5 +1,5 @@
 import { BsPlusLg } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,13 +10,19 @@ import { useAllPostsQuery, setPosts } from "../redux";
 const Home = () => {
   // Fetch all posts
   const { data: posts, isLoading } = useAllPostsQuery();
+
   const dispatch = useDispatch();
 
-  // Set posts in redux store
-  dispatch(setPosts(posts));
+  // Use useEffect to set posts after component mounts
+  useEffect(() => {
+    if (posts) {
+      dispatch(setPosts(posts));
+    }
+  }, [dispatch, posts]);
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleModalOpen = () => {
+    console.log("Handle modal open");
 		setIsModalOpen(!isModalOpen)
 	}
 
@@ -29,14 +35,10 @@ const Home = () => {
           <Loader />
         ) : (
           <>
-            {posts?.map((post, index) => {
-              // console.log(`Post ${index + 1}:`, post);
-              // console.log(`Post ${index + 1} user:`, post?.user);
-              // console.log(`Post ${index + 1} user id`, post?.user?._id);
+            {posts?.map((post) => {
               return (
                 <Post
-									key={index}
-									postId={post?._id}
+									key={post?._id}
 									upvotes={post?.upvotes?.length}
 									downvotes={post?.downvotes?.length}
 									comments={post?.comments?.length}
@@ -48,6 +50,7 @@ const Home = () => {
 									createdAt={post?.createdAt}
 									updatedAt={post?.updatedAt}
 									u_id={post?.user?._id}
+									postId={post?._id}
 								/>
               );
             })}
@@ -64,7 +67,7 @@ const Home = () => {
 
 				<div>
 					{isModalOpen && (
-						<AddPostForm isModalOpen={isModalOpen} handleModalOpen={handleModalOpen}/>
+						<AddPostForm handleModalOpen={handleModalOpen}/>
 					)}
 				</div>
 			</div>

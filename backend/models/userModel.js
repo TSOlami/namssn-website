@@ -28,8 +28,6 @@ const userSchema = mongoose.Schema(
     },
     level: {
       type: String,
-      default: '',
-      required: true,
     },
     password: {
       type: String,
