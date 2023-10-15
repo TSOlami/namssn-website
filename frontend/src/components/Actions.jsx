@@ -26,7 +26,7 @@ const Actions = ({
 	// };
 	// const location = useLocation();
 	return (
-		<div className="py-4 flex flex-row justify-start gap-20 pr-4 items-center">
+		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>
 				<span className="flex flex-row items-center gap-1">
 					<button
