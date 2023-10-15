@@ -14,7 +14,6 @@ const PostComments = ({
 	username,
 	image,
 	createdAt,
-	updatedAt,
 	u_id,
 	postId,
 }) => {
@@ -23,7 +22,7 @@ const PostComments = ({
 		setopenOptions(!openOptions);
 	};
 
-  const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
+  const date = new Date(createdAt);
 
   // Post deletion
   const [deletePost] = useDeletePostMutation();

@@ -10,10 +10,15 @@ import {
 	Sidebar,
 } from "../components";
 import { useCommentPostMutation, usePostCommentsQuery } from "../redux";
-import { Loader } from "../components";
+import { Loader, PostComments } from "../components";
 
 const Comments = () => {
 	const { postId } = useParams();
+  console.log("Post ID: ", postId);
+  console.log("Fetching comments for post with id: ", postId);
+
+  const { data: comments, isLoading } = usePostCommentsQuery({ postId: postId });
+  console.log("Comments: ", comments);
   const [commentPost] = useCommentPostMutation();
 
 	// Use useSelector to select the 'auth' slice of the state
@@ -22,16 +27,15 @@ const Comments = () => {
 	// Find the post with a matching _id within the 'auth.posts' array
   const post = auth.posts.find((p) => p._id === postId);
 
-  const { data: comments, isLoading } = usePostCommentsQuery(postId);
-
+  // Use the usePostCommentsQuery hook to fetch comments for the post
   const [commentText, setCommentText] = useState("");
 
 	// Check if the post was found
   if (!post) {
-    return <p className="text-center">This post has been deleted</p>;
+    return <p className="text-center mt-28">This post has been deleted</p>;
   }
   
-	console.log(comments);
+	console.log("Comments :",comments);
 	// Loading indicator while data is being fetched
 	if (isLoading) {
     return <Loader />;
@@ -94,37 +98,27 @@ const Comments = () => {
 						<IoSend/>
 					</div>
 				</div>
-
-				<div>
-					{/* {post?.comments?.map((comment, index) => {
-            return (
-              <PostComments
-                key={index}
-                postId={postId}
-                commentId={comment?._id}
-                text={comment?.text}
-                name={comment?.user?.name}
-                username={comment?.user?.username}
-                avatar={comment?.user?.avatar}
-                createdAt={comment?.createdAt}
-                updatedAt={comment?.updatedAt}
-                u_id={comment?.user?._id}
-              />
-            );
-
-          }
-          )} */}
-
-					{/* {mockComments.map((item, index) => (
-						<PostComments
-							key={index}
-							text={item.text}
-							username={item.username}
-							name={item.name}
-							createdAt={"Oct 14, 2023, 07:50 AM"}
-						/>
-					))} */}
-				</div>
+        {/* <div>
+				{comments && comments?.length === 0 ? ( // Check if post comments is defined and has no comments
+					<div className="text-center mt-4 p-4 text-gray-500">
+					No comments to display.
+					</div>
+				) : comments?.map((comment) => ( // Use post._id as the key
+					<PostComments
+          key={comment._id}
+          postId={postId}
+          commentId={comment._id}
+					upvotes={post.upvotes.length}
+					downvotes={post.downvotes.length}
+          isVerified={comment.user.isVerified}
+          text={comment.text}
+          name={comment.user.name}
+          username={comment.user.username}
+					createdAt={comment.createdAt}
+					u_id={comment.user._id}
+					/>
+				))}
+				</div> */}
 			</div>
 
 			<AnnouncementContainer />

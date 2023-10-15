@@ -237,6 +237,7 @@ const downvotePost = asyncHandler(async (req, res) => {
 const getPostComments = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
 	const postId = req.params.postId;
+	console.log(req.params);
   
 	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
