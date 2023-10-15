@@ -23,4 +23,4 @@ import EditProfileForm from './forms/EditProfileForm';
 import AddPostForm from './forms/AddPostForm';
 import AddPayment from './forms/AddPayment';
 
-export {Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };

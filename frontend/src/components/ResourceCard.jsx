@@ -1,7 +1,7 @@
 import {FaGraduationCap} from "react-icons/fa6";
 import CerHat from "../assets/CerHat.png";
 
-const cardClass = "font-crimson flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 h-20 w-20 text-xs center"
+const cardClass = "font-crimson md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-15 sm:w-15 md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
 
 const ResourceCard = ({course, fileUrl}) => {
     const viewFile = (fileUrl) => {
