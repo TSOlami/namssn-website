@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Avatar } from "../assets";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNavOpen } from "../redux/slices/navSlice";
 

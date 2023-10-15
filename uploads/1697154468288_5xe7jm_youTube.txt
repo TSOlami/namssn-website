@@ -1,0 +1,30 @@
+
+Range of integers and integer value
+Differences between double and float
+Explanation of Backend 
+EOF in C
+
+Converting from decimal to hexadecimal
+#define
+#ifndef
+Why most functions always take an int data type
+Memory layout in C
+Recursion
+Function that adds two numbers in C
+Function that prints a buffer in C
+Differences between getc, gets, scanf
+time.h in C
+Variable number of arguments
+
+shift operators
+bitwise operators
+bitwise exclusive  OR operator
+bitwise inclusive OR operator
+conditional compilation
+Include guards
+
+When a typedef declaration should be made
+
+Why va_arg can't accept 'char' and 'float' data types
+
+Assembly language
