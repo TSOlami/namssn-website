@@ -11,7 +11,6 @@ import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation }
 import { ProfileImg } from "../assets";
 
 const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, avatar, createdAt, u_id, postId }) => {
-	console.log(avatar);
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
