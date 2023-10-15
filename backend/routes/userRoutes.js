@@ -2,10 +2,10 @@ import * as fs from "fs";
 import { fileURLToPath } from 'url';
 import path from 'path'
 import express from "express";
-import multer from "multer";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
+const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
 // Import controllers and middleware
 import {
@@ -129,15 +129,15 @@ router
  * @access Private (Requires authentication)
  */
 
-router
-  .route('/resources')
-  .get(protect, getUserResources)
-  .post(protect, postUserResources);
+// router
+//   .route('/resources')
+//   .get(protect, getUserResources)
+//   .post(protect, postUserResources);
 
-router
-  .route('/resources/:resourceId')
-  .put(protect, updateUserResources)
-  .delete(protect, deleteUserResources);
+// router
+//   .route('/resources/:resourceId')
+//   .put(protect, updateUserResources)
+//   .delete(protect, deleteUserResources);
 
 /**
  * Get all blogs and blogs by user.
@@ -166,32 +166,14 @@ router
   .post(protect,postUserPayment);
 
 router
-  .get(protect, '/resources/:filename', (req, res) => {
-    const filePath = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website/uploads', req.params.filename)
+  .get('/resources/:filename', (req, res) => {
+    const filePath = path.join(fileDir + '/uploads', req.params.filename)
     res.sendFile(filePath)
   })
 
 router
   .route('/resources')
   .post(postUserResources)
-  .get((req, res) => {
-    const baseURL = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
-    const directory = baseURL + '/uploads';
-    fs.promises.readdir(directory)
-    .then((files) => {
-      const fileList = files.map((fileName) => {
-      return (fileName);
-      });
-      res.json({files: fileList});
-    }) .catch((err) => {
-      console.log(err);
-      res.status(500).send("Error")
-    })
-    // const __filename = fileURLToPath(import.meta.url);
-    // console.log(__filename)
-    // const __dirname = path.dirname(__filename);
-    // const filePath = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website', 'uploads/1697152427029_91qtlm_carbon_download.png');
-    // res.sendFile(filePath)
-  });
+  .get(getUserResources);
 
 export default router;

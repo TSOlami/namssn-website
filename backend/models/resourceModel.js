@@ -29,6 +29,10 @@ const resourceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    course: {
+      type: String,
+      required: true,
+    }
   },
   {
     // Automatically generate createdAt and updatedAt timestamps.

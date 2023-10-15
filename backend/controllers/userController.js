@@ -6,6 +6,9 @@ import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
 import * as fs from 'fs';
+import uploadResource from '../utils/uploadResource.js';
+import getAllResources from '../utils/getAllResources.js';
+import getUser from '../utils/getUser.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -236,19 +239,26 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 
 const postUserResources = asyncHandler(async (req, res) => {
   const {file} = req.files;
+  const {userId, date, description, semester, course} = req.body;
+  console.log(userId);
+  console.log(date);
+  console.log(semester);
+  console.log(course);
+  console.log(description);
   if (!file) {
     return res.status(400).send('No file uploaded.');
   }
   // Define the directory where you want to save the uploaded file
+  const filename = file.name;
   const uploadDirectory = 'uploads';
   
   checkUploadDirectory(uploadDirectory)
   .then(() => {
-    console.log(file.name)
     const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-    const fileName = uniquefileName + '_' + file.name;
-    fs.promises.writeFile(`${uploadDirectory}/${fileName}`, file.data)
+    const fileUrl = uniquefileName + '_' + filename;
+    fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data)
     .then(() => {
+      uploadResource(filename, description, userId, fileUrl, semester, course)
       console.log("File has been saved successfully");
     }) .catch((err) => {
       console.log(err)
@@ -256,6 +266,7 @@ const postUserResources = asyncHandler(async (req, res) => {
     }) .catch((err) => {
       console.log(err);
     })
+    res.status(200).send("Uploaded");
 });
 
 // @desc Get all blogs and sort by timestamp
@@ -285,7 +296,25 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'User Resources' });
+  // res.status(200).json({ message: 'User Resources'});
+
+  await getAllResources()
+  .then ((response) => {
+    const fileList = response.map((resource) => {
+      const uploaderUsername = getUser(resource.user)._id;
+      const fileDetails = {[resource.get('fileUrl')]: {uploaderUsername: uploaderUsername, date: resource.get('updatedAt'), semester: resource.level, course: resource.get('course')}}
+      return (fileDetails);
+    })
+    if (fileList) {
+      console.log(fileList)
+      res.json({files: fileList});
+    } else {
+      res.status(500).send("Error");  
+    }
+  }) .catch((err) => {
+    console.log(err);
+    res.status(500).send("Error")
+  })
 });
 
 // @desc	Update a user resources
