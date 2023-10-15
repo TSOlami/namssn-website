@@ -24,13 +24,7 @@ import HeaderComponent from './HeaderComponent';
 import AddPostForm from './forms/AddPostForm';
 import AddPaymentForm from './forms/AddCategoryForm';
 import EditPaymentForm from './forms/EditPaymentForm';
-<<<<<<< HEAD
 import DeletePaymentForm from './forms/EditPaymentForm';
 import PostComments from './PostComments';
 
 export {AddPaymentForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList,EditPaymentForm, DeletePaymentForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments};
-=======
-import DeletePaymentForm from './forms/DeletePaymentForm';
-
-export { FormErrors, InputField, NavBar, Modal, Footer, SignInForm, SignUpForm, Payment, PaymentList ,Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, Loader, PrivateRoutes, EditProfileForm, HeaderComponent, AddPostForm, AddPaymentForm, EditPaymentForm, DeletePaymentForm };
->>>>>>> parent of 25d03a7 (Revert "Revert "Merge branch 'TJ' into slimany"")
