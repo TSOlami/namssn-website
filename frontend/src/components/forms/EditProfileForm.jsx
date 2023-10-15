@@ -32,11 +32,15 @@ const EditProfileForm = ({ handleModal }) => {
     studentEmail: userInfo?.studentEmail || '',
     matricNumber: userInfo?.matricNumber || '',
     bio: userInfo?.bio || '',
+    level: userInfo?.level || '100',
 	};
+
+  const levelOptions = ['100', '200', '300', '400', '500', 'Non-student'];
   
 	// Define the validation schema using Yup
 	const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
+    level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
     studentEmail: Yup.string().email('Invalid email format'),
@@ -89,6 +93,30 @@ const EditProfileForm = ({ handleModal }) => {
             <div>{formik.errors.name}</div>
           ) : null}
         </div>
+        <label className="mt-2" htmlFor="level">
+        Level
+      </label>
+      <select
+        name="level"
+        id="level"
+        onChange={formik.handleChange("level")}
+        onBlur={formik.handleBlur("level")}
+        value={formik.values.level}
+        className="w-full border border-gray-300 rounded p-2"
+      >
+        <option value="" disabled>
+          Select your level
+        </option>
+        {levelOptions.map((level) => (
+          <option key={level} value={level}>
+            {level}
+          </option>
+        ))}
+      </select>
+
+      {formik.touched.level && formik.errors.level ? (
+        <FormErrors error={formik.errors.level} />
+      ) : null}
         <div>
           <label htmlFor="username">Username</label>
           <InputField
