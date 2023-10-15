@@ -100,7 +100,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	
   };
   
 	return (
-		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
+		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
 			<div>
 				<Link to={`/profile/${u_id}`}>
 					<img src={image} alt="avatar" className="cursor-pointer" />
@@ -123,7 +123,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name,	username,	
 					</span>
 
 					<span
-						className="absolute right-0 active:bg-greyish rounded-md p-2"
+						className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
 						onClick={handleOpenOptions}
 					>
 						<PiDotsThreeOutlineVerticalFill />
