@@ -27,4 +27,5 @@ import EditPaymentForm from './forms/EditPaymentForm';
 import DeletePaymentForm from './forms/EditPaymentForm';
 import PostComments from './PostComments';
 
-export {AddPaymentForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList,EditPaymentForm, DeletePaymentForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments};
+
+export { AddPaymentForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList, EditPaymentForm, DeletePaymentForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments };
