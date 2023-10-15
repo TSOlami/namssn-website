@@ -12,7 +12,7 @@ const getLocalStorageItem = (key) => {
 	}
   };
 
-const initialState = {
+export const initialState = {
 	userInfo: getLocalStorageItem('userInfo') || null,
   posts: getLocalStorageItem('userPosts') || null,
 }

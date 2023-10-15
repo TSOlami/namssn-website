@@ -3,10 +3,17 @@ import { HeaderComponent, AnnouncementContainer, FileForm } from "../components"
 import { Sidebar } from "../components";
 import { ResourceCard } from "../components";
 import Upload from "../assets/Upload.png";
-import Cookies from "js-cookie";
 import axios from "axios";
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../redux/slices/authSlice';
+import { initialState } from "../redux/slices/authSlice"
+import store from "../redux/store/store";
 
 const base_url = 'http://localhost:5000/api/v1/users/resources/'
+
+const state = store.getState();
+const userInfo = state.auth.userInfo;
+console.log(userInfo)
 
 const Resources = () => {
     const [data, setData] = useState(null);
@@ -32,8 +39,8 @@ const Resources = () => {
 
     
         
-        if (data && Object.keys(data.files).length !== 0) {
-            const urlList = Object.values(data);
+        if (data && Object.keys(data).length !== 0) {
+            const fileList = Object.keys(data)
             return (
                 <div className="relative">
                     <div className="flex relative z-2">
@@ -43,7 +50,7 @@ const Resources = () => {
                             <div className="lg:pt-5 gap:4 w-[100%]">
                                 <span className="px-4 pb-4 font-bold font-crimson text-xl">YEAR 1 FIRST SEMESTER</span>
                                 <div  className="px-4 flex flex-wrap gap-4 justify-items-start">
-                                    {data.files.map((file, index) => (
+                                    {fileList.map((file, index) => (
                                         <ResourceCard key={index} fileUrl={base_url + file} />
                                     ))}
                                 </div>
@@ -58,7 +65,7 @@ const Resources = () => {
                         </div>
                     </div>
                     <div className="fixed z-1 bottom-[10em] left-[20em] w-[60%]">
-                        <FileForm show={isPopUpVisible} onClose={handlePopUpClose} />
+                        <FileForm userId={userInfo._id} show={isPopUpVisible} onClose={handlePopUpClose} />
                     </div>
                 </div>   
             );

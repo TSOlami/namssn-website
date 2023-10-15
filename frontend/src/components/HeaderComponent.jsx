@@ -1,16 +1,7 @@
 import { useState } from 'react';
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import "../index.css"
-const style = {
-    width: '100',
-    height: '100%',
-    fontFamily: "Crimson Text",
-    marginLeft: "2%",
-    marginRight: "2%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
-}
+
 
 
 const HeaderComponent = (props) => {
