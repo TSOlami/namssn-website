@@ -44,6 +44,6 @@ const postCommentSchema = mongoose.Schema(
 /**
  * Represents a post in the database.
  */
-const PostComment = mongoose.model('PostComment', postCommentSchema);
+const PostComment = model('PostComment', postCommentSchema);
 
 export default PostComment;

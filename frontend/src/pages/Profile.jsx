@@ -1,5 +1,5 @@
 import { FaCircleCheck } from "react-icons/fa6";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { EditProfileForm, Post, Sidebar, AnnouncementContainer, Loader } from "../components";
@@ -23,12 +23,8 @@ const Profile = () => {
 	// Fetch user posts from redux store
 	const { data: userPosts, isLoading } = useUserPostsQuery({ _id: userInfo?._id });
 
-  // Use useEffect to set posts after component mounts
-  useEffect(() => {
-    if (userPosts) {
-      dispatch(setPosts(userPosts));
-    }
-  }, [dispatch, userPosts]);
+	// Set posts in redux store
+	dispatch(setPosts(userPosts));
 
 	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,26 +72,21 @@ const Profile = () => {
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
 				<div>
-				{userPosts && userPosts?.length === 0 ? ( // Check if userPosts is defined and has no posts
-					<div className="text-center mt-28 p-4 text-gray-500">
-					No posts to display.
-					</div>
-				) : userPosts?.map((post) => ( // Use post._id as the key
-					<Post
-					key={post._id}
-					upvotes={post.upvotes.length}
-					downvotes={post.downvotes.length}
-					isVerified={isVerified}
-					text={post.text}
-					name={name}
-					username={username}
-					createdAt={post.createdAt}
-					image={Wrapper}
-					postId={post._id}
-					u_id={userInfo._id}
-					/>
-				))}
-				</div>
+          {userPosts?.map((post, index) => (
+            <Post
+              key={index}
+              upvotes={post.upvotes.length}
+              downvotes={post.downvotes.length}
+              shares="5" // You may need to fetch the actual share count
+              comments={post.comments.length}
+              isVerified={isVerified}
+              text={post.text}
+              name={name}
+              username={username}
+              image={Wrapper}
+            />
+          ))}
+        </div>
 			</div>
 			<AnnouncementContainer />
 

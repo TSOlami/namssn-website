@@ -11,9 +11,16 @@ import { FormErrors, Loader } from "../../components";
 import { useCreatePostMutation, setPosts } from "../../redux";
 
 
-const AddPostForm = ({handleModalOpen}) => {
+const AddPostForm = ({handleModalOpen, isModalOpen}) => {
   // Get user info from redux store
   // const { userInfo } = useSelector((state) => state.auth);
+
+
+  // const [isModalOpen, setIsModalOpen] = useState(false)
+	// const handleModalOpen = () => {
+	// 	setIsModalOpen(!isModalOpen)
+  //   console.log(isModalOpen)
+	// }
 
   // Setup Dispatch
   const dispatch = useDispatch();
@@ -69,7 +76,7 @@ const AddPostForm = ({handleModalOpen}) => {
 
   return (
     <div>
-       <form onSubmit={formik.handleSubmit}>
+      {isModalOpen?     <form onSubmit={formik.handleSubmit}>
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
         <div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[500px]">
           <div className="flex justify-between items-center p-5 border-b border-gray-200">
@@ -83,7 +90,7 @@ const AddPostForm = ({handleModalOpen}) => {
           </div>
           <div className="p-5">
             <textarea
-              className="w-full h-[200px] border border-gray-200 rounded-lg p-5 resize-none"
+              className="w-full h-[200px] border border-gray-200 rounded-lg p-5"
               id="text"
               name="text"
               type="text"
@@ -129,6 +136,7 @@ const AddPostForm = ({handleModalOpen}) => {
         </div>
       </div>
     </form>
+: null}
     </div>
   );
 };

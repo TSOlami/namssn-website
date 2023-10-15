@@ -2,9 +2,11 @@ import { useParams } from 'react-router-dom';
 import { FaCircleCheck } from "react-icons/fa6";
 
 
-import { useGetUserQuery, useUserPostsQuery } from '../redux';
+import { useGetUserQuery } from '../redux';
 import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
 import { ErrorPage } from '../pages';
+import Wrapper from "../assets/images/wrapper.png";
+import { mockTexts } from "../data";
 import { ProfileImg } from "../assets";
 
 const UserProfile = () => {
@@ -18,12 +20,10 @@ const UserProfile = () => {
 	// // const isAdmin = userInfo?.role === 'admin';
 
 
-  const { data: user, isLoading: userLoading  } = useGetUserQuery({ _id: userId });
-
-  const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
+  const { data: user, isLoading } = useGetUserQuery({ _id: userId });
 
   // Display loading indicator while data is being fetched
-  if (userLoading || postsLoading) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -37,9 +37,8 @@ const UserProfile = () => {
   const username = user?.username;
   const bio = user?.bio;
   const isVerified = user?.isVerified;
-  const isAdmin = user?.role === 'admin';
-  const points = user?.points;
-	const noOfPosts = userPosts?.length;
+
+	const noOfPosts = 120;
   
 	return (
 		<div className="flex">
@@ -54,9 +53,9 @@ const UserProfile = () => {
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
 					<img src={ProfileImg} alt="" />
-					{isAdmin && <button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+					<button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
 						Make admin
-					</button>}
+					</button>
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
 					<span className="font-semibold flex flex-row items-center gap-2 text-lg">
@@ -67,33 +66,25 @@ const UserProfile = () => {
 					<span className="mt-2">{bio}</span>
 				</div>
 				<div className="font-semibold px-3 pl-6">
-					<span className="font-semibold text-xl">{points}</span> points
+					<span className="font-semibold text-xl">215</span> points
 				</div>
+        {isLoading && <Loader />}
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">Posts</span>
 				</div>
 				<div>
-          {userPosts && userPosts.length === 0 ? ( // Check if userPosts is defined and has no posts
-            <div className="text-center mt-28 p-4 text-gray-500">
-              No posts to display.
-            </div>
-          ) : (
-            userPosts?.map((post) => (
-              <Post
-                key={post._id}
-                upvotes={post.upvotes.length}
-                downvotes={post.downvotes.length}
-                isVerified={isVerified}
-                text={post.text}
-                name={name}
-                username={username}
-                createdAt={post.createdAt}
-                postId={post._id}
-                u_id={user._id}
-              />
-            ))
-          )}
-        </div>
+					<Post
+						upvotes="3224"
+						downvotes="30"
+						shares="5"
+						comments="10"
+						isVerified={isVerified}
+						text={mockTexts}
+						name={name}
+						username={username}
+						image={Wrapper}
+					/>
+				</div>
 			</div>
 			<AnnouncementContainer />
 		</div>
