@@ -21,14 +21,14 @@ const NavBar = () => {
 	}, [isNavOpen]);
 
 	return (
-		<header className="px-[10px] my-4 mx-2 z-[10px] w-full fixed top-[-16px] z-[200]">
+		<header className="px-[10px] my-4 mx-2 w-full fixed top-[-16px] z-[200]">
 
 
-			{/* Namssn logo */}
+			{/* Namssn logo, absolute code, avoid abeg */}
 			<div>
 				<div className="flex flex-row items-center absolute lg:hidden">
 					<Link to="/">
-						<img src={NamssnLogo} alt="Logo" className="logo" />
+						<img src={NamssnLogo} alt="Logo" className="logo pt-3"/>
 					</Link>
 					<span className="logo-text py-[2px]">NAMSSN</span>
 				</div>
@@ -42,7 +42,7 @@ const NavBar = () => {
 						: "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-screen lg:h-auto z-10 fixed left-[-100%] w-[315px] lg:static lg:w-auto transition-all duration-400"
 				}
 			>
-				<div className="logo-container">
+				<div className="logo-container pt-2">
 					<Link to="/">
 						<img src={NamssnLogo} alt="Logo" className="logo" />
 					</Link>
