@@ -47,7 +47,6 @@ const Home = () => {
 									username={post?.user?.username}
 									avatar={post?.user?.profilePicture}
 									createdAt={post?.createdAt}
-									updatedAt={post?.updatedAt}
 									u_id={post?.user?._id}
 									postId={post?._id}
 								/>

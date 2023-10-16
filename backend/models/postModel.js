@@ -34,6 +34,12 @@ const postSchema = mongoose.Schema(
         ref: 'User', // Reference to users who downvoted the post
       },
     ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment', // Reference to comments associated with the post
+      },
+    ],
   },
   {
     // Automatically generate createdAt and updatedAt timestamps.

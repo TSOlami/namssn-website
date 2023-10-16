@@ -42,8 +42,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
 	const allPosts = await Post.find()
 	  .populate('user') // 'user' is the field referencing the user who posted the post
 	  .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-  
-	res.status(200).json(allPosts);
+  	res.status(200).json(allPosts);
   });
 
 // @desc Get user's posts (My Posts)
@@ -104,7 +103,7 @@ const updatePost = asyncHandler(async (req, res) => {
 // access	Private
 const deletePost = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
-	const postId = req.params.postId;
+	const postId = req.body.postId;
   
 	// Find the post by its ID
 	const post = await Post.findById(postId);
@@ -113,12 +112,11 @@ const deletePost = asyncHandler(async (req, res) => {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
-  
 	// Check if the user who made the request is the owner of the post, or if they are an admin (you can define an admin role as needed)
 	if (post.user.toString() === req.user._id.toString() || req.user.isAdmin) {
 	  // If the user is the owner of the post or an admin, delete the post
-	  await post.remove();
-	  res.status(200).json({ message: 'Post deleted' });
+	  await Post.deleteOne({ _id: postId });
+	  res.status(200).json({ message: 'success' });
 	} else {
 	  res.status(403);
 	  throw new Error('Permission denied');
@@ -237,7 +235,6 @@ const downvotePost = asyncHandler(async (req, res) => {
 const getPostComments = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
 	const postId = req.params.postId;
-	console.log(req.params);
   
 	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
@@ -249,12 +246,9 @@ const getPostComments = asyncHandler(async (req, res) => {
 	}
   
 	// Retrieve the comments associated with the post
-	const comments = await PostComment.find({ post: postId });
+	const comments = await PostComment.find({ post: postId }).populate('user');
   
-	res.status(200).json({
-    message: "success",
-    comments
-  });
+	res.status(200).json(comments);
 });
 
 /**
@@ -383,7 +377,7 @@ const deletePostComment = asyncHandler(async (req, res) => {
 	}
   
 	// Remove the comment from the database
-	await comment.remove();
+	await Comment.deleteOne({ _id: commentId });
   
 	// Save the updated post
 	await post.save();

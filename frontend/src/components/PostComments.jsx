@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { useDeletePostMutation } from "../redux";
 import { formatDateToTime } from "../utils";
+import { ProfileImg } from "../assets";
 
 const PostComments = ({
 	isVerified,
@@ -47,7 +48,7 @@ const PostComments = ({
 		<div className="border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] pl:15 md:pl-24 m-2">
 			<div>
 				<Link to={`/profile/${u_id}`}>
-					<img src={image} alt="avatar" className="cursor-pointer" />
+					<img src={image || ProfileImg} alt="avatar" className="profile-image-small" />
 				</Link>
 			</div>
 
@@ -68,11 +69,12 @@ const PostComments = ({
 						className="absolute right-0 active:bg-greyish rounded-md p-2"
 						onClick={handleOpenOptions}
 					>
-						<PiDotsThreeOutlineVerticalFill />
+						<div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
+						</div>
 					</span>
 					{openOptions && (
 						<button onClick={handleDeletePost} className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2">
-							<MdDelete /> <span>Delete Post</span>
+							<MdDelete /> <span>Delete</span>
 						</button>
 					)}
 				</div>

@@ -27,8 +27,9 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
   const [deletePost] = useDeletePostMutation();
   const handleDeletePost = async () =>{
     try {
-      const response = await deletePost(postId).unwrap();
-      if (response.status === "success") {
+      const response = await deletePost({postId: postId}).unwrap();
+      console.log(response);
+      if (response.message === "success") {
         console.log("Post deleted successfully", response);
       } else {
         console.error("Post deletion failed", response);
@@ -127,7 +128,8 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
 						className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
 						onClick={handleOpenOptions}
 					>
-						<PiDotsThreeOutlineVerticalFill />
+						<div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
+						</div>
 					</span>
 					{openOptions && (
 						<button onClick={handleDeletePost} className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2">
@@ -149,7 +151,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
 					onUpvote={handleUpvote}
 					isDownvoted={isDownvoted}
 					onDownvote={handleDownvote}
-                    postId={postId}
+          postId={postId}
 				/>
 			</div>
 		</div>
