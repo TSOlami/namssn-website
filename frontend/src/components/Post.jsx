@@ -101,7 +101,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
   };
   
 	return (
-		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
+		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 			<div>
 				<Link to={`/profile/${u_id}`}>
 					<img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
