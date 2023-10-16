@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { FaXmark } from 'react-icons/fa6';
+import { FaXmark, FaCameraRetro } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
@@ -11,11 +10,8 @@ import InputField from '../InputField';
 import FormErrors from './FormErrors';
 import { useUpdateUserMutation, setCredentials } from '../../redux';
 import { Loader } from '../../components';
-import { convertToBase64 } from '../../utils';
 
 const EditProfileForm = ({ handleModal }) => {
-
-  const [file, setFile] = useState();
   // Use the useDispatch hook to dispatch actions 
   const dispatch = useDispatch();
 
@@ -54,23 +50,15 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          values = await Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
           navigate('/home');
-          console.log(values);
           toast.success('Profile updated!');
         } catch (err) {
           toast.error(err?.data?.message || err?.error)
         }
       },
 	});
-
-  // File upload handler
-  const onUpload = async e => {
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
-  };
   
   return (
     <div className="bg-white rounded-2xl p-4 w-96">
@@ -82,11 +70,8 @@ const EditProfileForm = ({ handleModal }) => {
       </div>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 mx-2 mt-4">
         <div className="scale-75 flex-row">
-          <label htmlFor="profile">
-          <img src={file || ProfileImg} alt="" className='profile-image'/>
-          </label>
-
-          <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
+          <FaCameraRetro color="white" className="absolute left-[20%] bottom-[48%] scale-[2]" />
+          <img src={ProfileImg} alt="" />
         </div>
         <div>
           <label htmlFor="name">Name</label>

@@ -5,15 +5,10 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { formatDateToTime } from "../utils";
-import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
-import { ProfileImg } from "../assets";
+import { useUpvotePostMutation, useDownvotePostMutation } from '../redux';
 
-const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, avatar, createdAt, u_id, postId }) => {
-	const [openOptions, setopenOptions] = useState(false);
-	const handleOpenOptions = () => {
-		setopenOptions(!openOptions);
-	};
+const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id, postId }) => {
+	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
 
   // Get the user ID from the redux store
   const { _id: userId } = useSelector((state) => state.auth.userInfo);
@@ -81,7 +76,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
 		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
 			<div>
 				<Link to={`/profile/${u_id}`}>
-					<img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
+					<img src={image} alt="avatar" className="cursor-pointer" />
 				</Link>
 			</div>
 

@@ -15,15 +15,7 @@ import {
   deleteBlog,
   createCategory,
   deleteCategory,
-  editCategory,
-  getAllAnnouncements,
-  createAnnouncement,
-  updateAnnouncement,
-  deleteAnnouncement,
-  getAllEvents,
-  createEvent,
-  updateEvent,
-  deleteEvent,
+  editCategory
 } from '../controllers/adminController.js';
 
 // Define admin routes and protect them with admin middleware
@@ -45,20 +37,5 @@ router
 .put(protect,isAdmin, updateBlog)
 .delete(protect, isAdmin, deleteBlog);
 
-// CRUD routes for Announcements
-router
-  .route('/announcements')
-  .get(protect, isAdmin, getAllAnnouncements) // Get all announcements
-  .post(protect, isAdmin, createAnnouncement) // Create a new announcement
-  .put(protect, isAdmin, updateAnnouncement) // Update an announcement
-  .delete(protect, isAdmin, deleteAnnouncement); // Delete an announcement
-
-// CRUD routes for Events
-router
-  .route('/events')
-  .get(protect, isAdmin, getAllEvents) // Get all events
-  .post(protect, isAdmin, createEvent) // Create a new event
-  .put(protect, isAdmin, updateEvent) // Update an event
-  .delete(protect, isAdmin, deleteEvent); // Delete an event
 
 export default router;

@@ -111,24 +111,11 @@
     @apply font-crimson font-normal text-xl leading-normal;
   }
   
-  .profile-image {
-    @apply rounded-full border-2 border-white bg-white w-[10rem] h-[10rem] object-cover shadow-lg cursor-pointer;
-    @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
-  }
-
-  .profile-image-small {
-    @apply rounded-full border-2 border-white bg-white w-[2.5rem] h-[2.5rem] object-cover shadow-lg cursor-pointer;
-    @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
-  }
-
   .header-text {
     @apply font-merriweather font-bold md:text-3xl leading-normal py-6 text-2xl;
   }
   .text-container {
     @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson;
-  }
-  input[type='file'] {
-    @apply hidden;
   }
 }
 
