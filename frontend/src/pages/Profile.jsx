@@ -14,6 +14,7 @@ const Profile = () => {
 	const bio = userInfo?.bio;
 	const isVerified = userInfo?.isVerified;
 	const points = userInfo?.points;
+	const profileImage = userInfo?.profilePicture;
 
 	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
@@ -48,7 +49,7 @@ const Profile = () => {
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />{" "}
+					<img src={profileImage||ProfileImg} alt="avatar" className="profile-image"/>{" "}
 					<button
 						onClick={handleModal}
 						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"

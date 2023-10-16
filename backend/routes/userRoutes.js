@@ -177,4 +177,33 @@ router
   // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
 
-  export default router;
+router
+  .get('/resources/:filename', protect, (req, res) => {
+    const filePath = path.join('C:/Users/SAHEED PC/Desktop/Portfolio/namssn-website/uploads', req.params.filename)
+    res.sendFile(filePath)
+  })
+
+router
+  .route('/resources')
+  .post(postUserResources)
+  .get((req, res) => {
+    const baseURL = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
+    const directory = baseURL + '/uploads';
+    fs.promises.readdir(directory)
+    .then((files) => {
+      const fileList = files.map((fileName) => {
+      return (fileName);
+      });
+      res.json({files: fileList});
+    }) .catch((err) => {
+      console.log(err);
+      res.status(500).send("Error")
+    })
+    // const __filename = fileURLToPath(import.meta.url);
+    // console.log(__filename)
+    // const __dirname = path.dirname(__filename);
+    // const filePath = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website', 'uploads/1697152427029_91qtlm_carbon_download.png');
+    // res.sendFile(filePath)
+  });
+
+export default router;
