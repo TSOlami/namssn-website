@@ -3,7 +3,7 @@ import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Event from '../models/eventModel.js';
-import Announcement from '../models/announcementModel.js';
+// import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import Category from '../models/categoryModel.js';
@@ -399,6 +399,8 @@ export {
   getUserAnnouncements,
   getAllBlogs,
   getUserBlogs,
+
+
   postUserResources,
   getUserResources,
   updateUserResources,

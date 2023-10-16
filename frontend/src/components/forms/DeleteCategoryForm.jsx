@@ -3,13 +3,12 @@ import * as Yup from "yup";
 import { FaTrash, FaMoneyBillWave } from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
 // import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { FormErrors, Loader } from "..";
 import { useDeleteCategoryMutation } from "../../redux";
 
 const DeleteCategoryForm = ({ handleModalOpen }) => {
   // const dispatch = useDispatch();
-  const navigate = useNavigate();
+ 
 
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
 
@@ -37,33 +36,26 @@ const formik = useFormik({
   validationSchema: validationSchema,
   onSubmit: async (values) => {
     try {
-      console.log(values);
-  
-      // Call the deleteCategory function and pass the values
       const res = await deleteCategory(values);
-  
-      console.log(res);
-  
-      // Handle success response
+    
       if (res.status === 200) {
-        navigate("/admin/payment");
+        // The category was successfully deleted
         toast.success(res.data.message);
+      } else if (res.status === 404) {
+        // The category was not found
+        toast.error(res.data.message);
       } else {
-        // Handle other success responses if needed
-        // For example, res.status === 204 or other success status codes
+        // Handle other server errors
+        toast.error(res?.data?.message || "An error occurred while deleting the category.");
       }
     } catch (err) {
+      // Handle errors during the request
+      toast.error("An error occurred while deleting the category.");
       console.error("Failed to delete payment category:", err);
-  
-      // Handle error response
-      if (err.response && err.response.status === 404) {
-        // Handle the case where the category was not found
-        toast.error("Category not found");
-      } else {
-        toast.error(err?.response?.data?.message || err.message);
-      }
     }
+    
   }
+  
   });
 
   const closeForm = () => {
