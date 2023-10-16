@@ -133,30 +133,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         },
         invalidatesTags: ['Post'],
       }),
-
-      // Upvote Comment Query
-      upvoteComment: builder.mutation({
-        query({ commentId, postId, data }) {
-          return {
-            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}/upvote`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-        invalidatesTags: ['Post'],
-      }),
-
-      // Downvote Comment Query
-      downvoteComment: builder.mutation({
-        query({ commentId, postId, data }) {
-          return {
-            url: `${POSTS_URL}/posts/${postId}/comments/${commentId}/downvote`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-        invalidatesTags: ['Post'],
-      }),
 		};
 	},
 });
@@ -172,7 +148,4 @@ export const {
   usePostCommentsQuery,
   useCommentPostMutation,
   useDeleteCommentMutation,
-  useUpdateCommentMutation,
-  useUpvoteCommentMutation,
-  useDownvoteCommentMutation,
 } = postsApiSlice;

@@ -23,7 +23,6 @@ import HeaderComponent from './HeaderComponent';
 import AddPostForm from './forms/AddPostForm';
 import AddCategoryForm from './forms/AddCategoryForm';
 import DeleteCategoryForm from './forms/DeleteCategoryForm';
-import PostComments from './PostComments';
-import CommentActions from './CommentActions';
 
-export {AddCategoryForm, Loader, PrivateRoutes, EditProfileForm, PaymentList, AddPostForm, DeleteCategoryForm, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions,Modal, AdminCard, PostComments, CommentActions};
+
+export { AddCategoryForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList, DeleteCategoryForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };

@@ -10,32 +10,8 @@ import { useUpvotePostMutation, useDownvotePostMutation } from '../redux';
 const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, image, createdAt, updatedAt, u_id, postId }) => {
 	const date = updatedAt ? new Date(updatedAt) : new Date(createdAt);
 
-  const navigate = useNavigate();
-  const routeToComments = () => {
-    navigate(`/comments/${postId}`);
-  };
-
-  const date = new Date(createdAt);
-
-  // Post deletion
-  const [deletePost] = useDeletePostMutation();
-  const handleDeletePost = async () =>{
-    try {
-      const response = await deletePost({postId: postId}).unwrap();
-      console.log(response);
-      if (response.message === "success") {
-        console.log("Post deleted successfully", response);
-      } else {
-        console.error("Post deletion failed", response);
-      }
-    }
-    catch (error) {
-      console.error("Post deletion failed", error);
-    }
-    handleOpenOptions();
-  }
-	// Get the user ID from the redux store
-	const { _id: userId } = useSelector((state) => state.auth.userInfo);
+  // Get the user ID from the redux store
+  const { _id: userId } = useSelector((state) => state.auth.userInfo);
 
 	// Add a state to keep track of the upvote and downvote status
 	const [isUpvoted, setIsUpvoted] = useState(false);
@@ -117,12 +93,8 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
                     {formatDate(date)}
 					</span>
 
-					<span
-						className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
-						onClick={handleOpenOptions}
-					>
-						<div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
-						</div>
+					<span className="absolute right-0">
+						<PiDotsThreeOutlineVerticalFill/>
 					</span>
 
 				</div>
@@ -134,14 +106,13 @@ const Post = ({ isVerified, upvotes, downvotes, comments, text, name, username, 
 
 				<Actions
 					upvotes={upvotes}
-					downvotes={downvotes}
-					comments={comments}
-					isUpvoted={isUpvoted}
-					onUpvote={handleUpvote}
-					isDownvoted={isDownvoted}
-					onDownvote={handleDownvote}
-          postId={postId}
-				/>
+          downvotes={downvotes}
+          comments={comments}
+          isUpvoted={isUpvoted}
+          onUpvote={handleUpvote}
+          isDownvoted={isDownvoted}
+          onDownvote={handleDownvote}
+					/>
 			</div>
 		</div>
 	);

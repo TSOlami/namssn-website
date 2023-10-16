@@ -45,7 +45,8 @@ const getAllPosts = asyncHandler(async (req, res) => {
 	const allPosts = await Post.find()
 	  .populate('user') // 'user' is the field referencing the user who posted the post
 	  .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-  	res.status(200).json(allPosts);
+  
+	res.status(200).json(allPosts);
   });
   
 // UserController.js
@@ -99,7 +100,7 @@ const updatePost = asyncHandler(async (req, res) => {
 // access	Private
 const deletePost = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
-	const postId = req.body.postId;
+	const postId = req.params.postId;
   
 	// Find the post by its ID
 	const post = await Post.findById(postId);
@@ -108,11 +109,12 @@ const deletePost = asyncHandler(async (req, res) => {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
+  
 	// Check if the user who made the request is the owner of the post, or if they are an admin (you can define an admin role as needed)
 	if (post.user.toString() === req.user._id.toString() || req.user.isAdmin) {
 	  // If the user is the owner of the post or an admin, delete the post
-	  await Post.deleteOne({ _id: postId });
-	  res.status(200).json({ message: 'success' });
+	  await post.remove();
+	  res.status(200).json({ message: 'Post deleted' });
 	} else {
 	  res.status(403);
 	  throw new Error('Permission denied');
@@ -211,9 +213,12 @@ const getPostComments = asyncHandler(async (req, res) => {
 	}
   
 	// Retrieve the comments associated with the post
-	const comments = await PostComment.find({ post: postId }).populate('user');
+	const comments = await PostComment.find({ post: postId });
   
-	res.status(200).json(comments);
+	res.status(200).json({
+    message: "success",
+    comments
+  });
 });
 
 /**
@@ -341,7 +346,7 @@ const deletePostComment = asyncHandler(async (req, res) => {
 	}
   
 	// Remove the comment from the database
-	await Comment.deleteOne({ _id: commentId });
+	await comment.remove();
   
 	// Save the updated post
 	await post.save();
@@ -350,126 +355,4 @@ const deletePostComment = asyncHandler(async (req, res) => {
   console.log("Deleted comment successfully");
   });
 
-/**
- * @desc Toggle upvote on a comment
- * @route PUT /api/v1/posts/:postId/comments/:commentId/upvote
- * @access Private
- */
-const upvoteComment = asyncHandler(async (req, res) => {
-	// Extract the post ID and comment ID from the request parameters
-	const postId = req.params.postId;
-	const commentId = req.params.commentId;
-	const userId = req.user._id;
-  
-	// Find the post by ID
-	const post = await Post.findById(postId);
-  
-	if (post) {
-	  // Find the comment by ID
-	  const comment = await PostComment.findById(commentId);
-  
-	  if (comment) {
-		// Check if the user has already upvoted the comment
-		const upvotedIndex = comment.upvotes.indexOf(userId);
-		const downvotedIndex = comment.downvotes.indexOf(userId);
-  
-		if (downvotedIndex !== -1) {
-		  // The user has already downvoted the comment, so remove their ID from the downvotes array.
-		  comment.downvotes.splice(downvotedIndex, 1);
-  
-		  // Deduct 2 points for removing a downvote
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 2;
-			await user.save();
-		  }
-		}
-  
-		if (upvotedIndex === -1) {
-		  // The user hasn't upvoted the comment, so add their ID to the upvotes array.
-		  comment.upvotes.push(userId);
-		  console.log("Upvoting comment: ", comment);
-  
-		  // Add 5 points for upvoting
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points += 5;
-		    console.log("Adding 5 points to user: ", user);
-			await user.save();
-		  }
-		}
-  
-		await comment.save();
-  
-		res.status(200).json({ message: "success" });
-	  } else {
-		res.status(404);
-		throw new Error('Comment not found');
-	  }
-	} else {
-	  res.status(404);
-	  throw new Error('Post not found');
-	}
-	  });
-
-/**
- * @desc Toggle downvote on a comment
- * @route PUT /api/v1/posts/:postId/comments/:commentId/downvote
- * @access Private
- */
-const downvoteComment = asyncHandler(async (req, res) => {
-	// Extract the post ID and comment ID from the request parameters
-	const postId = req.params.postId;
-	const commentId = req.params.commentId;
-	const userId = req.user._id;
-  
-	// Find the post by ID
-	const post = await Post.findById(postId);
-  
-	if (post) {
-	  // Find the comment by ID
-	  const comment = await PostComment.findById(commentId);
-  
-	  if (comment) {
-		// Check if the user has already downvoted the comment
-		const upvotedIndex = comment.upvotes.indexOf(userId);
-		const downvotedIndex = comment.downvotes.indexOf(userId);
-  
-		if (upvotedIndex !== -1) {
-		  // The user has already upvoted the comment, so remove their ID from the upvotes array.
-		  comment.upvotes.splice(upvotedIndex, 1);
-  
-		  // Deduct 5 points for removing an upvote
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 5;
-			await user.save();
-		  }
-		}
-  
-		if (downvotedIndex === -1) {
-		  // The user hasn't downvoted the comment, so add their ID to the downvotes array.
-		  comment.downvotes.push(userId);
-  
-		  // Deduct 2 points for downvoting
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 2;
-			await user.save();
-		  }
-		}
-  
-		await comment.save();
-  
-		res.status(200).json({ message: "success" });
-	  } else {
-		res.status(404);
-		throw new Error('Comment not found');
-	  }
-	} else {
-	  res.status(404);
-	  throw new Error('Post not found');
-	}
-});
-
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment };
+export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment };

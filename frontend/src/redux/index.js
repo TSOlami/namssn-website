@@ -17,9 +17,6 @@ import {
 	// useUpvoteCommentMutation,
 	// useDownvoteCommentMutation,
 	useDeleteCommentMutation,
-  useUpdateCommentMutation,
-	useUpvoteCommentMutation,
-	useDownvoteCommentMutation,
 } from './slices/postSlice';
 import {
   useAllBlogsQuery,
@@ -72,9 +69,6 @@ export {
 	useUpvoteBlogCommentMutation,
 	useDownvoteBlogCommentMutation,
 	useDeleteBlogCommentMutation,
-	useUpdateCommentMutation,
-	useUpvoteCommentMutation,
-	useDownvoteCommentMutation,
 	useAllCategorysQuery,
 	useAllPaymentsQuery,
 	useCreateCategoryMutation,

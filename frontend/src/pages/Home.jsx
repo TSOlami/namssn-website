@@ -46,6 +46,7 @@ const Home = () => {
 									username={post?.user?.username}
 									avatar={Wrapper}
 									createdAt={post?.createdAt}
+									updatedAt={post?.updatedAt}
 									u_id={post?.user?._id}
 								/>
               );
