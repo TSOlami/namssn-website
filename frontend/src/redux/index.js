@@ -4,7 +4,10 @@ import {
 	useLogoutMutation,
 	useRegisterMutation,
 	useUpdateUserMutation,
-	useGetUserQuery } from './slices/usersApiSlice';
+	useGetUserQuery,
+	useMakeUserAdminMutation,
+	useRemoveAdminMutation
+} from './slices/usersApiSlice';
 import { 
 	useAllPostsQuery,
 	useUserPostsQuery,
@@ -40,6 +43,8 @@ export {
 	useRegisterMutation,
 	useUpdateUserMutation,
 	useGetUserQuery,
+	useMakeUserAdminMutation,
+	useRemoveAdminMutation,
 	useAllPostsQuery,
 	useUserPostsQuery,
 	useCreatePostMutation,

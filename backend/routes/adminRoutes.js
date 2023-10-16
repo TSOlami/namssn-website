@@ -19,9 +19,17 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
+  makeUserAdmin,
+  removeAdmin
 } from '../controllers/adminController.js';
 
 // Define admin routes and protect them with admin middleware
+
+// Make a user an admin
+router.route('/make-admin/:userId').put(protect, isAdmin, makeUserAdmin);
+
+// Remove admin privileges from a user
+router.route('/remove-admin/:userId').put(protect, isAdmin, removeAdmin);
 
 // Get all users payments
 router.route('/all-payments').get(protect, isAdmin, getAllPayments);
