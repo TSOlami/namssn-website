@@ -424,11 +424,13 @@ const upvoteComment = asyncHandler(async (req, res) => {
 		if (upvotedIndex === -1) {
 		  // The user hasn't upvoted the comment, so add their ID to the upvotes array.
 		  comment.upvotes.push(userId);
+		  console.log("Upvoting comment: ", comment);
   
 		  // Add 5 points for upvoting
 		  const user = await User.findById(comment.user);
 		  if (user) {
 			user.points += 5;
+		    console.log("Adding 5 points to user: ", user);
 			await user.save();
 		  }
 		}
