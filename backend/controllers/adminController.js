@@ -35,7 +35,7 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 
   // Fetch the user's blogs from the database
   const userBlogs = await Blog.find({ user: userId })
-  .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest blogs first)
+    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest blogs first)
 
   res.status(200).json(userBlogs);
 });
@@ -44,22 +44,22 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	PUT  /api/v1/users/blogs
 // access	Private
 const updateBlog = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Update a Blog' });
+  res.status(200).json({ message: 'Update a Blog' });
 });
 
 // @desc	Delete user blog
 // Route	DELETE  /api/v1/users/blogs
 // access	Private
 const deleteBlog = asyncHandler(async (req, res) => {
-	res.status(200).json({ message: 'Delete Blog' });
+  res.status(200).json({ message: 'Delete Blog' });
 });
 
 
 // @desc Create a new payment category
 // Route POST /api/v1/admin/payments
 // Access Private (only accessible to admin users)  
-const createCategory = asyncHandler(async(req, res) =>  {
-  const { name, session, amount }= req.body;
+const createCategory = asyncHandler(async (req, res) => {
+  const { name, session, amount } = req.body;
   const addCategory = new Category(
     {
       name,
