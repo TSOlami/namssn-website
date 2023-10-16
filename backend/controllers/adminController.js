@@ -85,9 +85,10 @@ const deleteCategory = asyncHandler(async (req, res) => {
       // Step 2: Handle the case where no matching category is found
       return res.status(404).json({ message: 'Category not found' });
     }
+    const categoryId = category._id
 
     // Step 3: If the category is found, remove it
-    await category.remove();
+    await Category.deleteOne(categoryId)
 
     // Step 4: Handle success response
     return res.status(200).json({ message: 'Category deleted successfully' });
@@ -110,8 +111,7 @@ const getAllPayments = asyncHandler(async (req, res) => {
 
 
   // Save the new announcement to the database
-  const createdAnnouncement = await newAnnouncement.save();
-
+const createdAnnouncement = await newAnnouncement.save();
   res.status(201).json(createdAnnouncement);
 
 // Update Announcement
