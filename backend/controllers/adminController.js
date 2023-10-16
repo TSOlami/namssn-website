@@ -67,55 +67,37 @@ const createCategory = asyncHandler(async(req, res) =>  {
       amount,
     }
   )
-  const craetedCategory = await addCategory.save();
-  res.status(201).json(craetedCategory)
-});
-
-// @desc edit a single payment category
-// Route GET /api/v1/admin/payments/:id
-// Access Private (only accessible to admin users)
-const editCategory = asyncHandler(async (req, res) => {
-    const { name, session, amount } = req.body;
-    const categoryName = req.params.name; // Extract category ID from the request parameters
-
-  // Find the category by its ID
-  const category  = await Category.findById(categoryName);
-
-  if (!category) {
-    res.status(404);
-    throw new Error('Category not found');
-  }
-
-  // Update category properties
-  category.name = name;
-  category.session = session;
-  category.amount = amount;
-
-  // Save the updated category
-  const updatedCategory = await category.save();
-
-  res.status(200).json(updatedCategory);
+  const createdCategory = await addCategory.save();
+  res.status(201).json(createdCategory)
 });
 
 // @desc Delete a single payment category
 // Route DELETE /api/v1/admin/payments/:id
 // Access Private (only accessible to admin users)
 const deleteCategory = asyncHandler(async (req, res) => {
-  const categoryId = req.params.name; // Extract payment ID from the request parameters
+  const { name, session, amount } = req.body;
 
-  // Find the payment by its ID
-  const category = await Category.findById(categoryId);
+  try {
+    // Step 1: Find the category that matches the criteria
+    const category = await Category.findOne({ name, amount, session }).exec();
 
-  if (!category) {
-    res.status(404);
-    throw new Error('Category not found');
+    if (!category) {
+      // Step 2: Handle the case where no matching category is found
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    // Step 3: If the category is found, remove it
+    await category.remove();
+
+    // Step 4: Handle success response
+    return res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+    // Step 5: Handle any errors that occur during removal
+    return res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
-
-  // Remove the payment from the database
-  await category.remove();
-
-  res.status(204).json({ message: 'category removed' });
 });
+
+
 
 // @desc Get all payments for all users
 // Route GET /api/v1/admin/payments
@@ -137,6 +119,5 @@ export {
   updateBlog,
   deleteBlog,
   createCategory,
-  editCategory,
   deleteCategory,
 };

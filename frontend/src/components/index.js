@@ -19,13 +19,10 @@ import InputField from './InputField';
 import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
-// import AdminPaymentManagement from './PaymentManagement';
 import HeaderComponent from './HeaderComponent';
 import AddPostForm from './forms/AddPostForm';
-import AddPaymentForm from './forms/AddCategoryForm';
-import EditPaymentForm from './forms/EditPaymentForm';
-import DeletePaymentForm from './forms/EditPaymentForm';
-import PostComments from './PostComments';
+import AddCategoryForm from './forms/AddCategoryForm';
+import DeleteCategoryForm from './forms/DeleteCategoryForm';
 
 
-export { AddPaymentForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList, EditPaymentForm, DeletePaymentForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments };
+export { AddCategoryForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, PaymentList, DeleteCategoryForm, Button, Modal, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
