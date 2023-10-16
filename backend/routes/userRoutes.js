@@ -16,6 +16,9 @@ import {
   getUserById,
   updateUserProfile,
   deleteUserProfile,
+  getAllEvents,
+  getAllAnnouncements,
+  getUserAnnouncements,
   getAllBlogs,
   getUserBlogs,
   postUserResources,
@@ -81,7 +84,26 @@ router
   .delete(protect, deleteUserProfile);
 
 // Route for getting a user by id
-router.get('/profile/:userId', getUserById);
+router.route('/profile/:userId').get(protect, getUserById);
+
+/**
+ * Get Events
+ * @route GET /api/v1/users/events
+ * @access Public (Does not require authentication)
+ */
+router.get('/events', getAllEvents);
+
+/**
+ * Get Announcements
+ * @route GET /api/v1/users/announcements
+ * @access Private 
+ */
+router.route('/announcements')
+.get(protect, getAllAnnouncements);
+// Route for getting all announcements by user
+router
+.route('/announcement')
+.get(protect, getUserAnnouncements);
 
 /**
  * Get, create, update, and delete user posts.

@@ -284,6 +284,32 @@ const postUserResources = asyncHandler(async (req, res) => {
     })
 });
 
+// Get All Events
+const getAllEvents = asyncHandler(async (req, res) => {
+  // Fetch all events from the event model
+  const allEvents = await Event.find().populate('user');
+
+  res.status(200).json(allEvents);
+});
+
+// Get All Announcements
+const getAllAnnouncements = asyncHandler(async (req, res) => {
+  // Fetch all announcements from the announcement model
+  const allAnnouncements = await Announcement.find().populate('user');
+
+  res.status(200).json(allAnnouncements);
+});
+
+// Get User's Announcements (My Announcements)
+const getUserAnnouncements = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // Get the user ID from the authenticated user
+
+  // Fetch the user's announcements from the database
+  const userAnnouncements = await Announcement.find({ user: userId }).sort({ createdAt: -1 }); // Sort by creation date in descending order (latest first)
+
+  res.status(200).json(userAnnouncements);
+});
+
 // @desc Get all blogs and sort by timestamp
 // Route GET /api/v1/users/blogs
 // Access Public
@@ -362,6 +388,9 @@ export {
   getUserById,
   updateUserProfile,
   deleteUserProfile,
+  getAllEvents,
+  getAllAnnouncements,
+  getUserAnnouncements,
   getAllBlogs,
   getUserBlogs,
   postUserResources,

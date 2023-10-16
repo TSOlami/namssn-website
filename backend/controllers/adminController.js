@@ -121,24 +121,6 @@ const createAnnouncement = asyncHandler(async (req, res) => {
   res.status(201).json(createdAnnouncement);
 });
 
-// Get All Announcements
-const getAllAnnouncements = asyncHandler(async (req, res) => {
-  // Fetch all announcements from the announcement model
-  const allAnnouncements = await Announcement.find().populate('user');
-
-  res.status(200).json(allAnnouncements);
-});
-
-// Get User's Announcements (My Announcements)
-const getUserAnnouncements = asyncHandler(async (req, res) => {
-  const userId = req.user._id; // Get the user ID from the authenticated user
-
-  // Fetch the user's announcements from the database
-  const userAnnouncements = await Announcement.find({ user: userId }).sort({ createdAt: -1 }); // Sort by creation date in descending order (latest first)
-
-  res.status(200).json(userAnnouncements);
-});
-
 // Update Announcement
 const updateAnnouncement = asyncHandler(async (req, res) => {
   const { text } = req.body;
@@ -207,14 +189,6 @@ const createEvent = asyncHandler(async (req, res) => {
   res.status(201).json(createdEvent);
 });
 
-// Get All Events
-const getAllEvents = asyncHandler(async (req, res) => {
-  // Fetch all events from the event model
-  const allEvents = await Event.find().populate('user');
-
-  res.status(200).json(allEvents);
-});
-
 // Get User's Events (My Events)
 const getUserEvents = asyncHandler(async (req, res) => {
   const userId = req.user._id; // Get the user ID from the authenticated user
@@ -227,10 +201,34 @@ const getUserEvents = asyncHandler(async (req, res) => {
 
 // Update Event
 const updateEvent = asyncHandler(async (req, res) => {
-  // Add logic to update event properties
-  // ...
+  const eventId = req.params.eventId; // Get the event ID from the request parameters
+  const { image } = req.body;
 
-  res.status(200).json({ message: 'Update an Event' });
+  try {
+    // Find the event by ID
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      // Event not found
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    // Check if the user making the request is the owner of the event
+    if (event.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'You are not authorized to update this event' });
+    }
+
+    // Update the event's image
+    event.image = image;
+
+    // Save the updated event
+    const updatedEvent = await event.save();
+
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
 // Delete Event
@@ -264,12 +262,9 @@ export {
   updateBlog,
   deleteBlog,
   createAnnouncement,
-  getAllAnnouncements,
-  getUserAnnouncements,
   updateAnnouncement,
   deleteAnnouncement,
   createEvent,
-  getAllEvents,
   getUserEvents,
   updateEvent,
   deleteEvent,

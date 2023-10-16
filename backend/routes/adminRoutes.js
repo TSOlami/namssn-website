@@ -13,11 +13,9 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
-  getAllAnnouncements,
   createAnnouncement,
   updateAnnouncement,
   deleteAnnouncement,
-  getAllEvents,
   createEvent,
   updateEvent,
   deleteEvent,
@@ -36,18 +34,24 @@ router
 .put(protect,isAdmin, updateBlog)
 .delete(protect, isAdmin, deleteBlog);
 
-// CRUD routes for Announcements
+/**
+ * @description POST, PUT and DELETE operations for announcements
+ * @route /api/admin/events
+ * @access Private/Admin
+ */
 router
   .route('/announcements')
-  .get(protect, isAdmin, getAllAnnouncements) // Get all announcements
   .post(protect, isAdmin, createAnnouncement) // Create a new announcement
   .put(protect, isAdmin, updateAnnouncement) // Update an announcement
   .delete(protect, isAdmin, deleteAnnouncement); // Delete an announcement
 
-// CRUD routes for Events
-router
+/**
+ * @description POST, PUT and DELETE operations for events
+ * @route /api/admin/events
+ * @access Private/Admin
+ */
+  router
   .route('/events')
-  .get(protect, isAdmin, getAllEvents) // Get all events
   .post(protect, isAdmin, createEvent) // Create a new event
   .put(protect, isAdmin, updateEvent) // Update an event
   .delete(protect, isAdmin, deleteEvent); // Delete an event
