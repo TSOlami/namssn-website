@@ -38,6 +38,8 @@ import {
   createPostComment,
   updatePostComment,
   deletePostComment,
+  upvoteComment,
+  downvoteComment,
 } from "../controllers/postController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -152,6 +154,12 @@ router
   .route('/posts/:postId/comments/:commentId')
   .put(protect, updatePostComment)
   .delete(protect, deletePostComment);
+
+// Route for upvoting a post comment
+router.put('/posts/:postId/comments/:commentId/upvote', protect, upvoteComment);
+
+// Route for downvoting a post comment
+router.put('/posts/:postId/comments/:commentId/downvote', protect, downvoteComment);
 
 /**
  * GET, POST, PUT, and DELETE user resources.
