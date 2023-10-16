@@ -16,6 +16,9 @@ import {
 	usePostCommentsQuery,
 	useCommentPostMutation,
 	useDeleteCommentMutation,
+  useUpdateCommentMutation,
+	useUpvoteCommentMutation,
+	useDownvoteCommentMutation,
 } from './slices/postSlice';
 import {
   useAllBlogsQuery,
@@ -46,7 +49,10 @@ export {
 	useDownvotePostMutation,
 	usePostCommentsQuery,
 	useCommentPostMutation,
+  useUpdateCommentMutation,
 	useDeleteCommentMutation,
+	useUpvoteCommentMutation,
+	useDownvoteCommentMutation,
   useAllBlogsQuery,
   useUserBlogsQuery,
   useCreateBlogMutation,

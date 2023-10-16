@@ -4,15 +4,14 @@ import {
 	BiSolidUpvote,
 } from "react-icons/bi";
 
-const Actions = ({
+const CommentActions = ({
 	upvotes,
 	downvotes,
 	shares,
 	onUpvote,
 	onDownvote,
-	CommentId,
 }) => {
-	
+	console.log("CommentActions: ", upvotes, downvotes, shares);
 	return (
 		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>
@@ -71,4 +70,4 @@ const Actions = ({
 	);
 };
 
-export default Actions;
+export default CommentActions;

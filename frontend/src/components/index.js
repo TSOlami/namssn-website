@@ -23,5 +23,6 @@ import EditProfileForm from './forms/EditProfileForm';
 import AddPostForm from './forms/AddPostForm';
 import AddPayment from './forms/AddPayment';
 import PostComments from './PostComments';
+import CommentActions from './CommentActions';
 
-export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments};
+export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, CommentActions};

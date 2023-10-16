@@ -156,6 +156,12 @@ router
   .put(protect, updatePostComment)
   .delete(protect, deletePostComment);
 
+// Route for upvoting a post comment
+router.put('/posts/:postId/comments/:commentId/upvote', protect, upvotePost);
+
+// Route for downvoting a post comment
+router.put('/posts/:postId/comments/:commentId/downvote', protect, downvotePost);
+
 /**
  * GET, POST, PUT, and DELETE user resources.
  * @route GET /api/v1/users/resources
