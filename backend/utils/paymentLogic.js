@@ -17,7 +17,7 @@ const initiatePayment = async (req, res) => {
         const userId = userResult._id;
  
     // Make a POST requEst to the Paystack Initialize Transaction endpoint
-      const paystackResponse = await axios.post( apiURL
+      const paystackResponse = await axios.post( `${process.env.PAYSTACK_URL}`
         ,
         {
           email,
@@ -57,6 +57,53 @@ const initiatePayment = async (req, res) => {
   }
 };
 
+const verifyPayments = async (req, res) => {
+  try {
+    const last10Payments = await Payment.find()
+      .sort({ createdAt: -1 }) // Sort by createdAt in descending order to get the latest
+      .limit(10); // Limit to the last 10 payments
+      console.log(last10Payments)
+    const verificationResults = [];
+
+    for (const payment of last10Payments) {
+      const transactionReference = payment.transactionReference;
+      try {
+        // Make a request to Paystack's verify endpoint
+        const verifyResponse = await axios.get(`${process.env.PAYSTACK_VERIFY_URL}/${transactionReference}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          },
+        });
+
+        const paymentData = verifyResponse.data;
+
+        // Check the transaction status within the data object
+        const transactionStatus = paymentData.data.status;
+
+        verificationResults.push({
+          user: payment.user,
+          category: payment.category,
+          reference: payment.transactionReference,
+          status: transactionStatus === 'success' ? 'success' : 'failed',
+        });
+      } catch (error) {
+        console.error('Error verifying payment:', error);
+        verificationResults.push({
+          user: payment.user,
+          category: payment.category,
+          reference: payment.transactionReference,
+          status: 'error',
+        });
+      }
+    }
+
+    res.status(200).json(verificationResults);
+  } catch (error) {
+    console.error('Error retrieving payments:', error);
+    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+  }
+};
+
 const getAllPayments = async (req, res) => {
   try {
     const userId = req.user._id
@@ -68,4 +115,4 @@ const getAllPayments = async (req, res) => {
   }
 };
 
-export { initiatePayment, getAllPayments };
+export { initiatePayment,verifyPayments, getAllPayments };

@@ -9,6 +9,7 @@ import { protect, isAdmin } from '../middleware/authMiddleware.js';
 // Import controllers for admin operations.
 import {
   getAllPayments,
+  getPaymentStatus,
   getUserBlogs,
   createBlog,
   updateBlog,
@@ -31,6 +32,7 @@ router.route('/all-payments').get(protect, isAdmin, getAllPayments);
 router
 .route('/payment')
 .post(protect, isAdmin, createCategory)
+.get(protect, isAdmin, getPaymentStatus)
 .delete(protect, isAdmin, deleteCategory);
 
 // Get, create, update and delete user blogs

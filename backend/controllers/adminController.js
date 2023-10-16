@@ -4,6 +4,7 @@ import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
 import { isAdmin } from '../middleware/authMiddleware.js';
+import { verifyPayments } from '../utils/paymentLogic.js';
 
 // @desc Create a new blog
 // Route POST /api/v1/users/blogs
@@ -98,6 +99,17 @@ const deleteCategory = asyncHandler(async (req, res) => {
   }
 });
 
+
+// @desc Show all payment status for last 10 users
+// Route GET /api/v1/admin/payments
+// Access Private (only accessible to admin users)
+const getPaymentStatus = asyncHandler(async (req, res) => {
+  try {
+    await verifyPayments(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 
 // @desc Get all payments for all users
@@ -252,11 +264,12 @@ export {
   deleteBlog,
   createCategory,
   deleteCategory,
-  createAnnouncement,
+  createdAnnouncement,
   updateAnnouncement,
   deleteAnnouncement,
-  createEvent,
+  createdEvent,
   getUserEvents,
   updateEvent,
   deleteEvent,
+  getPaymentStatus,
 };

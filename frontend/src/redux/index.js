@@ -38,7 +38,7 @@ import {
 	useCreateCategoryMutation,
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
-	useUpdateCategoryMutation,
+	useVerifyPaymentsMutation,
 	} from './slices/paymentSlice'
 
 export { 
@@ -74,6 +74,6 @@ export {
 	useCreateCategoryMutation,
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
-	useUpdateCategoryMutation,
+	useVerifyPaymentsMutation,
 	setCredentials,
 	setPosts, }

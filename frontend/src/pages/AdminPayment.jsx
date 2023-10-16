@@ -2,11 +2,15 @@ import { useState } from "react";
 import { Sidebar,  AddCategoryForm, DeleteCategoryForm } from "../components";
 import HeaderComponent from "../components/HeaderComponent";
 import PaymentDetails from "../components/PaymentDetails";
-import { useAllPaymentsQuery } from '../redux'; // 
 import { mockPaidUsers } from "../data";
+import { useAllPaymentsQuery, useVerifyPaymentsMutation} from '../redux'; // 
+
 
 const AdminPayment = () => {
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
+  const { data: verifiedPayments, Loading, Error } = useVerifyPaymentsMutation();
+  console.log(verifiedPayments)
+  
     const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
     const [showDeleteCategoryForm, setShowDeleteCategoryForm] = useState(false);
   

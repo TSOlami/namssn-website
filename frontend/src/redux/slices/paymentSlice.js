@@ -28,11 +28,11 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
       }),
 
       // Update Category
-      updateCategory: builder.mutation({
+      verifyPayments: builder.mutation({
         query(data) {
           return {
             url: `${ADMIN_PAYMENTS_URL}/payment`,
-            method: 'PUT',
+            method: 'GET',
             body: data,
           };
         },
@@ -78,7 +78,7 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
 export const {
   useAllCategorysQuery,
   useCreateCategoryMutation,
-  useUpdateCategoryMutation,
+  useVerifyPaymentsMutation,
   useDeleteCategoryMutation,
   useCreatePaymentMutation,
   useAllPaymentsQuery
