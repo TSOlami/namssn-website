@@ -27,5 +27,6 @@ import RecentPayments from './RecentPayments';
 import AdminEventsCard from './AdminEventsCard';
 import EventForm from './forms/EventForm';
 import AdminAnnouncementCard from './AdminAnnouncementCard';
+import UsersCard from './UsersCard';
 
-export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard};
+export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard};
