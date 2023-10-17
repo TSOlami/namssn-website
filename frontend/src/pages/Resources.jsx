@@ -4,9 +4,7 @@ import { Sidebar } from "../components";
 import { ResourceCard } from "../components";
 import Upload from "../assets/Upload.png";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../redux/slices/authSlice';
-import { initialState } from "../redux/slices/authSlice"
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import store from "../redux/store/store";
 
 const base_url = 'http://localhost:5000/api/v1/users/resources/'
@@ -51,9 +49,16 @@ const Resources = () => {
                             <HeaderComponent name="Resources" />
                             <div className="lg:pt-5 gap:4 w-[100%]">
                                 <div className="mb-4">
-                                    <span className="px-4 pb-4 font-bold font-crimson text-blue-900 text-xl">RESOURCES</span>
+                                    <span className="px-4 pb-4  font-bold font-crimson text-blue-900 text-xl">RESOURCES</span>
                                 </div>
-                                <div  className="px-4 flex flex-wrap gap-4 justify-items-start">
+                                <div className="sticky shadow-lg opacity-[100%] border-2 pl-4 pr-4 top-[2%] left-[38%] border-gray-300 rounded-xl w-[45%]">
+                                    <FaMagnifyingGlass className="absolute top-1 left-2 flex self-center justify-center" />
+                                    <input
+                                        type='input' placeholder="Search here"
+                                        className="ml-5 outline-none"
+                                    />
+                                </div>
+                                <div  className="px-4 pt-12 flex flex-wrap gap-4 justify-items-start">
                                     {fileList.map((file, index) => (
                                         <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}
                                         uploaderUsername = {data[index][file]['uploaderUsername']}
