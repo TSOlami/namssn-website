@@ -37,7 +37,7 @@ const postSchema = mongoose.Schema(
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment', // Reference to comments associated with the post
+        ref: 'PostComment', // Reference to comments associated with the post
       },
     ],
   },

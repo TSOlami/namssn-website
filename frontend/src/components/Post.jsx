@@ -10,7 +10,7 @@ import { formatDateToTime } from "../utils";
 import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 import { ProfileImg } from "../assets";
 
-const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, avatar, createdAt, u_id, postId }) => {
+const Post = ({ isVerified, upvotes, downvotes,	text,	name, username, avatar, createdAt, u_id, postId }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
@@ -146,7 +146,6 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
 				<Actions
 					upvotes={upvotes}
 					downvotes={downvotes}
-					comments={comments}
 					isUpvoted={isUpvoted}
 					onUpvote={handleUpvote}
 					isDownvoted={isDownvoted}

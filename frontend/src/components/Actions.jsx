@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 const Actions = ({
 	upvotes,
 	downvotes,
-	comments,
 	shares,
 	onUpvote,
 	onDownvote,
@@ -57,7 +56,7 @@ const Actions = ({
 						className="flex flex-row items-center gap-1"
 						onClick={routeToComments}
 					>
-						<BiComment /> {comments}
+						<BiComment />
 					</button>
 				</span>
 				<span>Comments</span>

@@ -40,7 +40,19 @@ const createPost = asyncHandler(async (req, res) => {
 const getAllPosts = asyncHandler(async (req, res) => {
 	// Fetch all posts from the database and sort by timestamp in descending order
 	const allPosts = await Post.find()
-	  .populate('user') // 'user' is the field referencing the user who posted the post
+    .populate({
+      path: 'comments',
+      model: 'PostComment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: '-password', // Exclude the 'password' field
+      }, // 'comments' is the field referencing the comments associated with the post
+    })
+    .populate({
+      path: 'user',
+      select: '-password', // Exclude the 'password' field
+    }) // 'user' is the field referencing the user who posted the post
 	  .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
   	res.status(200).json(allPosts);
   });

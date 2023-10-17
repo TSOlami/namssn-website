@@ -35,6 +35,7 @@ const Home = () => {
         ) : (
           <>
             {posts?.map((post) => {
+              console.log("Post: ", post);
               return (
                 <Post
 									key={post?._id}
