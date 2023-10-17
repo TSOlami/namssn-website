@@ -83,6 +83,9 @@ const Resources = () => {
             return (
             <div className="flex">
                 <Sidebar/>
+                <div className="text-xl font-crimson w-[100%] fixed left-[43%] font-medium top-[40%]">
+                    Fetching files....
+                </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
                     <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
                         <img className="lg:w-[30px]" src={Upload} alt="Upload" />
