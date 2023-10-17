@@ -16,17 +16,33 @@ const userInfo = state.auth.userInfo;
 const Resources = () => {
     const [data, setData] = useState(null);
     const [isPopUpVisible, setPopUpVisible] = useState(false);
+    const [tempData, setTempData] = useState(null);
 
     useEffect(() => {
         axios.get("http://127.0.0.1:5000/api/v1/users/resources")
             .then((res) => {
                 // console.log(res.data.files[0])
                 setData(res.data.files);
+                setTempData(res.data.files)
+                console.log(res.data.files)
             })
             .catch((err) => {
                 console.log(err);
             });
     }, []);
+
+    const [selectedOption, setSelectedOption] = useState('title');
+    const handleSelectChange = (e) => {
+        setSelectedOption(e.target.value);
+        };
+    useEffect(() => {
+    }, [selectedOption]);
+
+    const [value, setValue] = useState("")
+
+    const handleSearch = (e) => {
+        setValue(e.target.value)
+    }
 
     const handlePopUpOpen = () => {
         setPopUpVisible(true);
@@ -36,11 +52,32 @@ const Resources = () => {
         setPopUpVisible(false);
     };
 
-    
+    useEffect(() => {
+        if (value === "" && data) {
+            setData(tempData)
+        } else if (selectedOption) {
+            if (data) {
+                const myfileList = data.map(obj => Object.keys(obj)[0]);
+                // const newList = [];
+                const newData = [];
+                const pawn = myfileList.map((file, index) => {
+            
+                    const Tfile = data[index]
+                    // console.log(Tfile[file])
+                    if (data[index][file][selectedOption].includes(value)) {
+                        newData.push({[file]: data[index][file]})
+                        setData(newData)
+                        return ({[file]: data[index][file]})
+                    };
+                });
+            }
+        }
+
+    }, [value]);
         
         if (data && data.length !== 0) {
-            const fileList = data.map(obj => Object.keys(obj)[0]);
-            console.log(data)
+            // console.log(`============${data}============`)
+            const fileList = data.map(obj => Object.keys(obj)[0])
             return (
                 <div className="relative">
                     <div className="flex relative z-2">
@@ -48,14 +85,25 @@ const Resources = () => {
                         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
                             <HeaderComponent name="Resources" />
                             <div className="lg:pt-5 gap:4 w-[100%]">
-                                <div className="mb-4">
+        
+                                <div className="mb-4 flex justify-between">
                                     <span className="px-4 pb-4  font-bold font-crimson text-blue-900 text-xl">RESOURCES</span>
+                                    <div className="flex gap-2 mr-4">
+                                        <span className="font-serif text-blue-900 text-[0.95em]">Filter By: </span>
+                                        <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                                            <option value="title" className="text-black font-crimson text-lg">Title</option>
+                                            <option value="course" className="text-black font-crimson text-lg">Course</option>
+                                            <option value="semester" className="text-black font-crimson text-lg">Level</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div className="sticky shadow-lg opacity-[100%] border-2 pl-4 pr-4 top-[2%] left-[38%] border-gray-300 rounded-xl w-[45%]">
+                              
+                                <div className="sticky shadow-lg opacity-[100%] border-2 pl-4 pr-4 top-[2%] left-[33%] border-gray-300 rounded-xl w-[50%]">
                                     <FaMagnifyingGlass className="absolute top-1 left-2 flex self-center justify-center" />
                                     <input
                                         type='input' placeholder="Search here"
-                                        className="ml-5 outline-none"
+                                        className="ml-5 outline-none w-[95%]"
+                                        onChange={handleSearch}
                                     />
                                 </div>
                                 <div  className="px-4 pt-12 flex flex-wrap gap-4 justify-items-start">
@@ -84,17 +132,19 @@ const Resources = () => {
                     </div>
                 </div>   
             );
+        } else if (data && data.length === 0) {
+            return (<div>No Resource was fetched</div>)
         } else {
             return (
             <div className="flex">
                 <Sidebar/>
-                <div className="text-xl font-crimson w-[100%] fixed left-[43%] font-medium top-[40%]">
+                <div className="text-xl font-crimson w-[100%] fixed left-[40%] font-medium top-[40%]">
                     Fetching files....
                 </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
-                    <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
+                    {/* <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
                         <img className="lg:w-[30px]" src={Upload} alt="Upload" />
-                    </button>
+                    </button> */}
                 </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block": "w-[35%] sm:hidden md:block hidden lg:block"}>
                     <AnnouncementContainer />
