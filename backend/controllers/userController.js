@@ -1,13 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
-import generateToken from '../utils.js/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils.js/paymentLogic.js'
+import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
 import Category from '../models/categoryModel.js';
-import {postResource, getResources, deleteResource} from '../utils.js/resourceLogic.js';
+import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth

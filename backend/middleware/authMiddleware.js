@@ -53,3 +53,6 @@ const isAdmin = asyncHandler(async (req, res, next) => {
    res.status(500).json({ message: 'Server error: Unable to check admin privileges.' });
  }
 });
+
+
+export { protect, isAdmin }; // Export the middleware functions.

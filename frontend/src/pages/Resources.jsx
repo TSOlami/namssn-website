@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { HeaderComponent, AnnouncementContainer, FileForm } from "../components";
 import { Sidebar } from "../components";
 import { ResourceCard } from "../components";
-import Upload from "../assets/Upload.png";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import store from "../redux/store/store";
