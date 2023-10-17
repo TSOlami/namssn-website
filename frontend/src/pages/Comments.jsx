@@ -79,7 +79,7 @@ const Comments = () => {
 				</div>
 
 				{/* Add comment */}
-				<div className="flex flex-row fixed bottom-3 lg:left-[250px] xl:w-[700px] lg:w-[500px] md:left-[2px] md:w-[450px] w-screen left-0">
+				<div className="flex flex-row fixed bottom-3 lg:left-[250px] xl:w-[700px] lg:w-[500px] md:left-[2px] md:w-[450px] w-screen left-0 wide:w-[850px]">
 					<textarea
 						name="comment"
 						placeholder="Add comment"
