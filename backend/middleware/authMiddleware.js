@@ -42,11 +42,14 @@ const protect = asyncHandler(async (req, res, next) => {
  * @param {Object} res - Express response object.
  * @param {Function} next - Express next function.
  */
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-    return next(); // User is an admin, continue with the request
-  }
-  res.status(403).json({ message: 'Access denied: Admin privileges required.' });
-};
-
-export { protect, isAdmin };
+const isAdmin = asyncHandler(async (req, res, next) => {
+ try {
+   if (req.user && req.user.role === 'admin') {
+     return next(); // User is an admin, continue with the request
+   } else {
+     res.status(403).json({ message: 'Access denied: Admin privileges required.' });
+   }
+ } catch (error) {
+   res.status(500).json({ message: 'Server error: Unable to check admin privileges.' });
+ }
+});

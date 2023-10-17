@@ -78,5 +78,7 @@ export {
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
 	useVerifyPaymentsMutation,
+	useMakeUserAdminMutation,
+	useRemoveAdminMutation,
 	setCredentials,
 	setPosts, }
