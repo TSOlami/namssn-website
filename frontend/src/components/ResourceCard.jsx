@@ -28,7 +28,7 @@ const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, se
             if (res.data === "Access Approved") {
                 console.log(200)
                 toast.success("File Successfully Deleted!");
-                // window.location.reload();
+                window.location.reload();
             } else if (res.data === "Access Denied") {
                 console.log(400)
                 toast.error("You are not priviledged to delete this file");
@@ -49,7 +49,7 @@ const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, se
                 <span>{title}</span>
             </div>
             <div className="flex flex-col items-center border border-b-blue-800">
-                <span>{description}</span>
+                <span className={lgStyle}>{description}</span>
                 <div><span className={smStyle}>category: </span><span className={lgStyle}>{semester}</span></div>
                 <div><span className={smStyle}>course: </span><span className={lgStyle}>{course}</span></div>
                 <div><span className={smStyle}>By: </span> <span className={lgStyle}>{uploaderUsername}</span></div>

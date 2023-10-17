@@ -11,7 +11,7 @@ const FileForm = (props) => {
     const [inputValue, setInputValue] = useState("");
     useEffect(() => {
     }, [inputValue]);
-    const [selectedOption1, setSelectedOption1] = useState("Y1F1");
+    const [selectedOption1, setSelectedOption1] = useState("100 Level");
     const [selectedOption2, setSelectedOption2] = useState("option1");
     const handleSelectChange1 = (e) => {
         setSelectedOption1(e.target.value);
@@ -66,16 +66,11 @@ const FileForm = (props) => {
                     <div>
                         <span className={textStyle}> Semester</span>
                         <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                            <option value="Y1S1" className="text-black font-crimson text-lg">Year 1 First Semester</option>
-                            <option value="Y1S2" className="text-black font-crimson text-lg">Year 1 Second Semester</option>
-                            <option value="Y2S1" className="text-black font-crimson text-lg">Year 2 First Semester</option>
-                            <option value="Y2S2" className="text-black font-crimson text-lg">Year 2 Second Semester</option>
-                            <option value="Y3S1" className="text-black font-crimson text-lg">Year 3 First Semester</option>
-                            <option value="Y3S2" className="text-black font-crimson text-lg">Year 3 Second Semester</option>
-                            <option value="Y4S1" className="text-black font-crimson text-lg">Year 4 First Semester</option>
-                            <option value="Y4S2" className="text-black font-crimson text-lg">Year 4 Second Semester</option>
-                            <option value="Y5S1" className="text-black font-crimson text-lg">Year 5 First Semester</option>
-                            <option value="Y5S2" className="text-black font-crimson text-lg">Year 5 Second Semester</option>
+                            <option value="100 Level" className="text-black font-crimson text-lg">Year 1 </option>
+                            <option value="200 Level" className="text-black font-crimson text-lg">Year 2 </option>
+                            <option value="300 Level" className="text-black font-crimson text-lg">Year 3 </option>
+                            <option value="400 Level" className="text-black font-crimson text-lg">Year 4 </option>
+                            <option value="500 Level" className="text-black font-crimson text-lg">Year 5 </option>
                         </select>
                     </div> 
                     <div>
