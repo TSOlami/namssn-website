@@ -75,21 +75,12 @@ const Comments = () => {
           />
         </div>
 
-<<<<<<< HEAD
-        {/* Add comment */}
-        <div className="flex flex-row fixed bottom-3 lg:left-[250px] xl:w-[700px] lg:w-[500px] md:left-[2px] md:w-[450px] w-screen left-0">
-          <textarea
-            name="comment"
-            placeholder="Add comment"
-            id=""
-=======
 				{/* Add comment */}
 				<div className="flex flex-row fixed bottom-3 lg:left-[250px] xl:w-[700px] lg:w-[500px] md:left-[2px] md:w-[450px] w-screen left-0 wide:w-[850px]">
 					<textarea
 						name="comment"
 						placeholder="Add comment"
 						id=""
->>>>>>> origin/Dr_strange
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             className="resize-none border-2 border-gray-40 h-[47px] w-full p-2 rounded-xl mr-1 m-2 "
