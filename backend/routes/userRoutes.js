@@ -2,6 +2,7 @@ import express from "express";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
+const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
 // Import controllers and middleware
 import {
@@ -199,4 +200,18 @@ router
   // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
 
-  export default router;
+
+router
+  .route('/resources/:filename')
+  .get((req, res) => {
+    const filePath = path.join(fileDir + '/uploads', req.params.filename)
+    res.sendFile(filePath)
+  })
+  .delete(deleteUserResources)
+
+router
+  .route('/resources')
+  .post(postUserResources)
+  .get(getUserResources);
+
+export default router;

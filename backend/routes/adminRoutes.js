@@ -16,10 +16,23 @@ import {
   deleteBlog,
   createCategory,
   deleteCategory,
-
+  createAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  makeUserAdmin,
+  removeAdmin
 } from '../controllers/adminController.js';
 
 // Define admin routes and protect them with admin middleware
+
+// Make a user an admin
+router.route('/make-admin/:userId').put(protect, isAdmin, makeUserAdmin);
+
+// Remove admin privileges from a user
+router.route('/remove-admin/:userId').put(protect, isAdmin, removeAdmin);
 
 // Get all users payments
 router.route('/all-payments').get(protect, isAdmin, getAllPayments);
@@ -43,21 +56,21 @@ router
  * @route /api/admin/events
  * @access Private/Admin
  */
-// router
-//   .route('/announcements')
-//   .post(protect, isAdmin, createAnnouncement) // Create a new announcement
-//   .put(protect, isAdmin, updateAnnouncement) // Update an announcement
-//   .delete(protect, isAdmin, deleteAnnouncement); // Delete an announcement
+router
+  .route('/announcements')
+  .post(protect, isAdmin, createAnnouncement) // Create a new announcement
+  .put(protect, isAdmin, updateAnnouncement) // Update an announcement
+  .delete(protect, isAdmin, deleteAnnouncement); // Delete an announcement
 
 /**
  * @description POST, PUT and DELETE operations for events
  * @route /api/admin/events
  * @access Private/Admin
  */
-  // router
-  // .route('/events')
-  // .post(protect, isAdmin, createEvent) // Create a new event
-  // .put(protect, isAdmin, updateEvent) // Update an event
-  // .delete(protect, isAdmin, deleteEvent); // Delete an event
+  router
+  .route('/events')
+  .post(protect, isAdmin, createEvent) // Create a new event
+  .put(protect, isAdmin, updateEvent) // Update an event
+  .delete(protect, isAdmin, deleteEvent); // Delete an event
 
 export default router;

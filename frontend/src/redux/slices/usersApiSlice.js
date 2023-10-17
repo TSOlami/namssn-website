@@ -71,8 +71,32 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
         invalidatesTags: ['User'],
       }),
+
+      // Make a user admin
+      makeUserAdmin: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/make-admin/${data.userId}`,
+            method: 'PUT',
+            body: data,
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
+
+      // Remove admin privileges from a user
+      removeAdmin: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/remove-admin/${data.userId}`,
+            method: 'PUT',
+            body: data,
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
     };
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useMakeUserAdminMutation, useRemoveAdminMutation } = usersApiSlice;

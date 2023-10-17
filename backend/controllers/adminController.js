@@ -3,8 +3,68 @@ import User from '../models/userModel.js';
 import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
-import { isAdmin } from '../middleware/authMiddleware.js';
 import { verifyPayments } from '../utils/paymentLogic.js';
+
+
+// @desc Make a user an admin
+// Route PUT /api/v1/admin/users/makeadmin/:userId
+// Access Private (only accessible to admin users)
+const makeUserAdmin = asyncHandler(async (req, res) => {
+  const userId = req.body.userId;
+
+  // Find the user by ID
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  // Check if the user is already an admin
+  if (user.role === 'admin') {
+    res.status(400);
+    throw new Error('User is already an admin');
+  }
+
+  // Make the user an admin
+  user.role = 'admin';
+
+  // Save the updated user
+  await user.save();
+
+  res.status(200).json({ message: 'User is now an admin' });
+});
+
+
+// @desc Remove admin privileges from a user
+// Route PUT /api/v1/admin/users/removeadmin/:userId
+// Access Private (only accessible to admin users)
+const removeAdmin = asyncHandler(async (req, res) => {
+  const userId = req.body.userId;
+
+  // Find the user by ID
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  // Check if the user is not an admin
+  if (user.role !== 'admin') {
+    res.status(400);
+    throw new Error('User is not an admin');
+  }
+
+  // Remove admin privileges from the user
+  user.role = 'user';
+
+  // Save the updated user
+  await user.save();
+
+  res.status(200).json({ message: 'User is no longer an admin' });
+});
+
 
 // @desc Create a new blog
 // Route POST /api/v1/users/blogs
@@ -133,4 +193,13 @@ export {
   createCategory,
   deleteCategory,
   getPaymentStatus,
+  createAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement,
+  createEvent,
+  getUserEvents,
+  updateEvent,
+  deleteEvent,
+  makeUserAdmin,
+  removeAdmin,
 };

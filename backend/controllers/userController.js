@@ -1,13 +1,14 @@
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
+import generateToken from '../utils.js/generateToken.js';
+import { initiatePayment, getAllPayments } from '../utils.js/paymentLogic.js'
 import User from '../models/userModel.js';
-import Post from '../models/postModel.js';
 import Event from '../models/eventModel.js';
 // import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import Category from '../models/categoryModel.js';
-
+import {postResource, getResources, deleteResource} from '../utils.js/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -262,7 +263,12 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // Route POST /api/v1/users/resources
 // Access Private
 const postUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Post user Resources' });
+  try {
+    await postResource(req, res);
+  } catch (err) {
+    console.log(err)
+  }
+  res.status(200).send('')
 });
 
 // Get All Events
@@ -318,8 +324,14 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'User Resources' });
+  try {
+    const fileList = await getResources(req, res);
+    res.json(fileList);
+  } catch (err) {
+    console.log(err);
+  }
 });
+
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
@@ -332,8 +344,18 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Delete a Resource' });
-});
+  // res.status(200).json({ message: 'Delete a Resource' });
+    try {
+      const response = await deleteResource(req, res);
+      if (response === "Access Approved") {
+        res.status(200).send(response)
+      } else if (response === "Access Denied") {
+        res.status(200).send(response);
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  });
 
 
 
@@ -399,8 +421,6 @@ export {
   getUserAnnouncements,
   getAllBlogs,
   getUserBlogs,
-
-
   postUserResources,
   getUserResources,
   updateUserResources,
