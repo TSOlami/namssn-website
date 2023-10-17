@@ -42,6 +42,7 @@ const AdminDashboard = () => {
 							amount="12"
 							card="announcements"
 							bg="greenish"
+							route="/admin/announcements"
 						/>
 					</div>
 				</div>
