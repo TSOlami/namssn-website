@@ -11,14 +11,10 @@ const Features = () => {
 					<div className="flex md:flex-row bg-tertiary mx-auto rounded-2xl shadow-xl flex-col pb-5">
 						<div className="flex flex-col justify-center px-8 pt-5 pb-4">
 							<h3 className="text-3xl font-bold font-crimson">
-								Blog
+								Access to Past Questions and Answers
 							</h3>
 							<p className="text-xl font-crimson">
-								Get access to daily educational blog posts to
-								keep you informed about the daily happenings in
-								the department. Get your questions answered
-								without issues and never be clueless about the
-								department
+							Ace your exams with free access to a comprehensive database of past questions and answers, specifically tailored to FUTMINNA courses and exams.
 							</p>
 						</div>
 						<div className="md:w-full flex justify-center md:justify-end m-auto p-3">
@@ -28,14 +24,10 @@ const Features = () => {
 					<div className="flex flex-row bg-tertiary rounded-2xl max-w-[25rem] mx-auto shadow-xl">
 						<div className="flex flex-col justify-center px-8 pt-10 pb-10">
 							<h3 className="text-3xl font-bold font-crimson">
-								Blog
+							Interactive Discussions
 							</h3>
 							<p className="text-xl font-crimson mx-auto">
-								Get access to daily educational blog posts to
-								keep you informed about the daily happenings in
-								the department. Get your questions answered
-								without issues and never be clueless about the
-								department
+							Engage in thought-provoking discussions, share your opinions on various topics, and ask questions – all within a vibrant and welcoming community of like-minded students.
 							</p>
 						</div>
 					</div>
@@ -45,28 +37,20 @@ const Features = () => {
 					<div className="flex flex-row bg-tertiary rounded-2xl mx-auto max-w-[25rem] shadow-xl">
 						<div className="flex flex-col justify-center px-10 pt-10 pb-5">
 							<h3 className="text-3xl font-bold font-crimson">
-								Blog
+							Effortless Payment
 							</h3>
 							<p className="text-xl font-crimson">
-								Get access to daily educational blog posts to
-								keep you informed about the daily happenings in
-								the department. Get your questions answered
-								without issues and never be clueless about the
-								department
+							Easily pay your departmental dues, making financial transactions a breeze.
 							</p>
 						</div>
 					</div>
 					<div className="flex md:flex-row flex-col bg-zinc-900 mx-auto rounded-2xl shadow-xl">
 						<div className="flex flex-col justify-center px-10 pt-20 pb-10">
 							<h3 className="text-3xl text-white font-bold font-crimson">
-								Blog
+							Stay Informed
 							</h3>
 							<p className="text-xl text-white font-crimson">
-								Get access to daily educational blog posts to
-								keep you informed about the daily happenings in
-								the department. Get your questions answered
-								without issues and never be clueless about the
-								department
+							Keep up to date with all the latest campus events, blog news, and important updates. Never miss a beat when it comes to what's happening at FUTMINNA.
 							</p>
 						</div>
 						<img src={Image6} alt="" className="w-fit self-center"/>

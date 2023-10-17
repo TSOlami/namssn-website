@@ -17,19 +17,14 @@ const AboutUsPage = () => {
 					<img src={AboutImg} alt="" />
 				</div>
 
-				<p className="md:p-10 p-5 md:w-[80%] m-auto my-5">
-					At NAMSSN, we foster a community of passionate individuals
-					who share a common love for mathematics and its
-					applications. Our association brings together students,
-					faculty, and enthusiasts to explore, learn, and grow
-					together. At NAMSSN, we foster a community of passionate
-					individuals who share a common love for mathematics and its
-					applications. Our association brings together students,
-					faculty, and enthusiasts to explore, learn, and grow
-					together. Mathematics Department is hard like mad and i dont
-					see wy a person would want a website designed for it. But i
-					would try to make it beautiful sha. Using Illustratons and
-					images{" "}
+				<p className="text-xl font-crimson md:p-10 p-5 md:w-[80%] m-auto my-5">
+				We believe in the power of collective learning, and we've designed this platform to help you excel academically while also providing a space for social interaction. Join us and be part of a community dedicated to success, growth, and unity.
+				<br />
+				<br />
+				Get started today by registering or logging in to your account. Explore our features, connect with your peers, and take advantage of the resources at your fingertips.
+				<br />
+				<br />
+				NAMSSN FUTMINNA Chapter is your key to academic excellence, a thriving social network, and a source of endless inspiration. Welcome to the journey of knowledge, connection, and success.{" "}
 				</p>
 
 				{/* Principal offices */}

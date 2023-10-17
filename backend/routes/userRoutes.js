@@ -102,6 +102,7 @@ router.get('/events', getAllEvents);
  */
 router.route('/announcements')
 .get(protect, getAllAnnouncements);
+
 // Route for getting all announcements by user
 router
 .route('/announcement')
