@@ -53,7 +53,7 @@ const UserProfile = () => {
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />
+					<img src={ProfileImg} alt="" className='profile-image' />
 					{isAdmin && <button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
 						Make admin
 					</button>}
