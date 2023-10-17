@@ -1,30 +1,17 @@
 import {
-	BiComment,
 	BiShareAlt,
 	BiSolidDownvote,
 	BiSolidUpvote,
 } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
 
-const Actions = ({
+const CommentActions = ({
 	upvotes,
 	downvotes,
-	comments,
 	shares,
 	onUpvote,
 	onDownvote,
-	postId,
 }) => {
-	const navigate = useNavigate();
-	const routeToComments = () => {
-		navigate(`/comments/${postId}`);
-	};
-
-	// const [openComment, setOpencomment] = useState(false);
-	// const handleOpenComment = () => {
-	// 	setOpencomment(!openComment);
-	// };
-	// const location = useLocation();
+	console.log("CommentActions: ", upvotes, downvotes, shares);
 	return (
 		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>
@@ -49,18 +36,6 @@ const Actions = ({
 					</button>
 				</span>
 				<span>Downvotes</span>
-			</div>
-
-			<div>
-				<span className="flex flex-row items-center gap-1">
-					<button
-						className="flex flex-row items-center gap-1"
-						onClick={routeToComments}
-					>
-						<BiComment /> {comments}
-					</button>
-				</span>
-				<span>Comments</span>
 			</div>
 
 			<div>
@@ -95,4 +70,4 @@ const Actions = ({
 	);
 };
 
-export default Actions;
+export default CommentActions;

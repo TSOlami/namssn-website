@@ -12,7 +12,6 @@ import PageBox from './PageBox';
 import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
-import Modal from './Modal';
 import AdminCard from './AdminCard';
 import FormErrors from '../components/forms/FormErrors';
 import InputField from './InputField';
@@ -29,5 +28,9 @@ import AdminEventsCard from './AdminEventsCard';
 import EventForm from './forms/EventForm';
 import AdminAnnouncementCard from './AdminAnnouncementCard';
 import UsersCard from './UsersCard';
+import FileForm from './FileForm';
+import ResourceCard from './ResourceCard';
+import CommentActions from './CommentActions';
 
-export {AddCategoryForm, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment,  PaymentList, DeleteCategoryForm, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard};
+
+export {AddCategoryForm,CommentActions, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment,  PaymentList, DeleteCategoryForm, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard};

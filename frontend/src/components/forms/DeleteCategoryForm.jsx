@@ -1,15 +1,12 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FaTrash, FaMoneyBillWave } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
-// import { useDispatch } from "react-redux";
 import { FormErrors, Loader } from "..";
 import { useDeleteCategoryMutation } from "../../redux";
 
 const DeleteCategoryForm = ({ handleModalOpen }) => {
-  // const dispatch = useDispatch();
  
-
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
 
   const initialValues = {
@@ -64,15 +61,14 @@ const formik = useFormik({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col justify-center items-center">
-      <div className="text-2xl font-bold">Delete Payment Category</div>
-      <div className="text-3xl cursor-pointer p-2" onClick={closeForm}>
-        <FaTrash />
-      </div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col">
-            <label className="mt-2" htmlFor="category">
-            Category
-          </label>
-          <div className="flex flex-row relative w-full">
+      <div className="bg-white p-5 w-[400px] rounded-3xl">
+        <div className="rounded w-fit p-2 hover:text-white hover:bg-black place-self-end" onClick={closeForm}>
+          <FaTrash />
+        </div>
+        <form onSubmit={formik.handleSubmit} className="flex flex-col">
+          <label htmlFor="category" className="pt-2 font-bold text-xl">Delete Payment Category</label>
+          <div className="pt-3">
+            <label htmlFor="name" className="text-lg">Category</label>
             <input
               type="text"
               name="name"
@@ -81,16 +77,13 @@ const formik = useFormik({
               value={formik.values.name}
               className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
             />
-            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
           {formik.touched.name && formik.errors.name ? (
-            <FormErrors error={formik.errors.text} />
+            <FormErrors error={formik.errors.name} />
           ) : null}
-
-          <label className="mt-2" htmlFor="session">
-            Session
-          </label>
-          <div className="flex flex-row relative w-full">
+  
+          <div className="pt-3">
+            <label htmlFor="session" className="text-lg">Session</label>
             <input
               type="text"
               name="session"
@@ -99,16 +92,13 @@ const formik = useFormik({
               value={formik.values.session}
               className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
             />
-            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
           {formik.touched.session && formik.errors.session ? (
-             <FormErrors error={formik.errors.text} />
+            <FormErrors error={formik.errors.session} />
           ) : null}
-
-          <label className="mt-2" htmlFor="amount">
-            Payment Amount (in Naira)
-          </label>
-          <div className="flex flex-row relative w-full">
+  
+          <div className="pt-3">
+            <label htmlFor="amount" className="text-lg">Payment Amount (in Naira)</label>
             <input
               type="number"
               name="amount"
@@ -117,28 +107,32 @@ const formik = useFormik({
               value={formik.values.amount}
               className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
             />
-            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
           {formik.touched.amount && formik.errors.amount ? (
-             <FormErrors error={formik.errors.text} />
+            <FormErrors error={formik.errors.amount} />
           ) : null}
-            {isLoading && <Loader />}
+          
+          {isLoading && <Loader />}
+  
           <button
             type="submit"
-            className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
+            className="bg-black text-white rounded-lg p-2 mt-5 hover:bg-slate-700"
           >
-          Delete Payment Category
+            Delete Payment Category
           </button>
-          <button type='button'
-          onClick={closeForm}
-          className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
-        >
-          Close
-        </button>
+          <button
+            type="button"
+            onClick={closeForm}
+            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 mt-3"
+          >
+            Close
+          </button>
         </form>
+      </div>
       <ToastContainer />
     </div>
   );
+  
 }
 
 export default DeleteCategoryForm;
