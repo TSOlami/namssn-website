@@ -50,7 +50,9 @@ const Resources = () => {
                         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
                             <HeaderComponent name="Resources" />
                             <div className="lg:pt-5 gap:4 w-[100%]">
-                                <span className="px-4 pb-4 font-bold font-crimson text-xl">YEAR 1 FIRST SEMESTER</span>
+                                <div className="mb-4">
+                                    <span className="px-4 pb-4 font-bold font-crimson text-blue-900 text-xl">RESOURCES</span>
+                                </div>
                                 <div  className="px-4 flex flex-wrap gap-4 justify-items-start">
                                     {fileList.map((file, index) => (
                                         <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}

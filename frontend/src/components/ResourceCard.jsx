@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const state = store.getState();
 const userInfo = state.auth.userInfo;
 
-const cardClass = "font-crimson md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-15 sm:w-15 md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
+const cardClass = "font-crimson cursor-pointer md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-15 sm:w-15 md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
 
 const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, semester, date}) => {
     const viewFile = (fileUrl) => {
@@ -38,17 +38,17 @@ const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, se
         });
     }
 
-    const smStyle = "italic text-xs text-gray-400";
+    const smStyle = "text-xs text-gray-400";
     const lgStyle = "font-crimson text-sm text-blue-600"
 
     return (
         <div className="w-[10em] flex flex-col items-center">
-            <span className="text-xs" onClick={() => handleFileDelete(fileUrl)}>del</span>
+            <span className="text-xs cursor-pointer hover:text-[0.8em] border rounded-sm border-blue-800 text-red-800" onClick={() => handleFileDelete(fileUrl)}>delete</span>
             <div className={cardClass} onClick={() => viewFile(fileUrl)}>
                 <img src={CerHat}/>
                 <span>{title}</span>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center border border-b-blue-800">
                 <span>{description}</span>
                 <div><span className={smStyle}>category: </span><span className={lgStyle}>{semester}</span></div>
                 <div><span className={smStyle}>course: </span><span className={lgStyle}>{course}</span></div>
