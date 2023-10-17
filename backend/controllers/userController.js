@@ -1,13 +1,13 @@
 import asyncHandler from 'express-async-handler';
-import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
-import checkUploadDirectory from '../utils/checkUploadDirectory.js';
+import generateToken from '../utils.js/generateToken.js';
+import { initiatePayment, getAllPayments } from '../utils.js/paymentLogic.js'
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
-import * as fs from 'fs';
+
+import {postResource, getResources, deleteResource} from '../utils.js/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -263,27 +263,12 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // Access Private
 
 const postUserResources = asyncHandler(async (req, res) => {
-  const {file} = req.files;
-  if (!file) {
-    return res.status(400).send('No file uploaded.');
+  try {
+    await postResource(req, res);
+  } catch (err) {
+    console.log(err)
   }
-  // Define the directory where you want to save the uploaded file
-  const uploadDirectory = 'uploads';
-  
-  checkUploadDirectory(uploadDirectory)
-  .then(() => {
-    console.log(file.name)
-    const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-    const fileName = uniquefileName + '_' + file.name;
-    fs.promises.writeFile(`${uploadDirectory}/${fileName}`, file.data)
-    .then(() => {
-      console.log("File has been saved successfully");
-    }) .catch((err) => {
-      console.log(err)
-    })
-    }) .catch((err) => {
-      console.log(err);
-    })
+  res.status(200).send('')
 });
 
 // Get All Events
@@ -339,8 +324,14 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'User Resources' });
+  try {
+    const fileList = await getResources(req, res);
+    res.json(fileList);
+  } catch (err) {
+    console.log(err);
+  }
 });
+
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
@@ -353,8 +344,18 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Delete a Resource' });
-});
+  // res.status(200).json({ message: 'Delete a Resource' });
+    try {
+      const response = await deleteResource(req, res);
+      if (response === "Access Approved") {
+        res.status(200).send(response)
+      } else if (response === "Access Denied") {
+        res.status(200).send(response);
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  });
 
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments

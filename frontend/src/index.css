@@ -128,7 +128,7 @@
     @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson;
   }
   input[type='file'] {
-    @apply hidden;
+    @apply block;
   }
 }
 
