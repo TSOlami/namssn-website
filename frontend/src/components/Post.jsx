@@ -5,8 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
-import { formatDateToTime } from "../utils";
+// import { formatDateToTime } from "../utils";
 import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 import { ProfileImg } from "../assets";
 
@@ -121,7 +120,7 @@ const Post = ({ isVerified, upvotes, downvotes,	comments,	text,	name, username, 
 					</Link>
 					<span>@{username}</span>
 					<span className="text-gray-500">
-                    {formatDateToTime(date)}
+                    {/* {formatDateToTime(date)} */}
 					</span>
 
 					<span

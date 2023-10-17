@@ -3,9 +3,8 @@ import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
 import { useDeleteCommentMutation, useUpvoteCommentMutation, useDownvoteCommentMutation } from "../redux";
-import { formatDateToTime } from "../utils";
+// import { formatDateToTime } from "../utils";
 import { ProfileImg } from "../assets";
 import { CommentActions } from "../components";
 
@@ -96,7 +95,7 @@ const PostComments = ({
                         </span>
                     </Link>
                     <span>@{username}</span>
-                    <span className="text-gray-500 ml-3">{formatDateToTime(date)}</span>
+                    {/* <span className="text-gray-500 ml-3">{formatDateToTime(date)}</span> */}
 
                     <span
                         className="absolute right-0 active:bg-greyish rounded-md p-2"

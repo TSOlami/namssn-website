@@ -47,7 +47,7 @@ const PaymentForm = () => {
       
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       try {
         const paymentData = {
           matricNumber: values.matricNumber, // Match field names with the model
@@ -67,10 +67,26 @@ const PaymentForm = () => {
           toast.success(message);
 
           // Redirect to the payment URL returned by the server
-          window.location.href = payment_url;
+          // Open the Paystack payment page in a popup window
+          const popup = window.open(payment_url, '_blank', 'width=800, height=600');
+
+          // Check if the popup window is closed
+          const checkPopup = setInterval(() => {
+            if (popup.closed) {
+              clearInterval(checkPopup);
+              // After the payment is successful, show the transaction reference
+              showTransactionReference(reference);
+              // Popup window is closed, navigate back to the previous page
+              window.history.back();
+            }
+          }, 2000); // Check every 1 second
+
 
           // After the payment is successful, show the transaction reference
-          showTransactionReference(reference);
+          // showTransactionReference(reference);
+
+          resetForm();
+          
         } else {
           console.error('Payment initiation failed. Missing payment_url in response.');
           toast.error('Payment initiation failed. Please try again.');
