@@ -180,10 +180,12 @@ router
   .post(protect,postUserPayment);
 
 router
-  .get('/resources/:filename', (req, res) => {
+  .route('/resources/:filename')
+  .get((req, res) => {
     const filePath = path.join(fileDir + '/uploads', req.params.filename)
     res.sendFile(filePath)
   })
+  .delete(deleteUserResources)
 
 router
   .route('/resources')

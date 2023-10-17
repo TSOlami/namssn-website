@@ -1,4 +1,4 @@
-import Resource from '../models/resourceModel.js';
+import Resource from '../../models/resourceModel.js';
 
 const getAllResources = async () => {
     try {

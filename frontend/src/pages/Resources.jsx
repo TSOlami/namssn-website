@@ -13,7 +13,7 @@ const base_url = 'http://localhost:5000/api/v1/users/resources/'
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;
-console.log(userInfo)
+// console.log(`================ ${userInfo._id} ================`)
 
 const Resources = () => {
     const [data, setData] = useState(null);
@@ -22,7 +22,8 @@ const Resources = () => {
     useEffect(() => {
         axios.get("http://127.0.0.1:5000/api/v1/users/resources")
             .then((res) => {
-                setData(res.data);
+                // console.log(res.data.files[0])
+                setData(res.data.files);
             })
             .catch((err) => {
                 console.log(err);
@@ -39,8 +40,9 @@ const Resources = () => {
 
     
         
-        if (data && Object.keys(data).length !== 0) {
-            const fileList = Object.keys(data)
+        if (data && data.length !== 0) {
+            const fileList = data.map(obj => Object.keys(obj)[0]);
+            console.log(data)
             return (
                 <div className="relative">
                     <div className="flex relative z-2">
@@ -51,7 +53,13 @@ const Resources = () => {
                                 <span className="px-4 pb-4 font-bold font-crimson text-xl">YEAR 1 FIRST SEMESTER</span>
                                 <div  className="px-4 flex flex-wrap gap-4 justify-items-start">
                                     {fileList.map((file, index) => (
-                                        <ResourceCard key={index} fileUrl={base_url + file} />
+                                        <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}
+                                        uploaderUsername = {data[index][file]['uploaderUsername']}
+                                        title = {data[index][file]['title']}
+                                        date = {data[index][file]['date']}
+                                        semester = {data[index][file]['semester']}
+                                        course = {data[index][file]['course']}
+                                        />
                                     ))}
                                 </div>
                             </div>

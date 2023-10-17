@@ -1,14 +1,11 @@
 import asyncHandler from 'express-async-handler';
-import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
-import checkUploadDirectory from '../utils/checkUploadDirectory.js';
+import generateToken from '../utils.js/generateToken.js';
+import { initiatePayment, getAllPayments } from '../utils.js/paymentLogic.js'
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import Blog from '../models/blogModel.js';
-import * as fs from 'fs';
-import uploadResource from '../utils/uploadResource.js';
-import getAllResources from '../utils/getAllResources.js';
-import getUser from '../utils/getUser.js';
+
+import {postResource, getResources, deleteResource} from '../utils.js/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -264,35 +261,12 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // Access Private
 
 const postUserResources = asyncHandler(async (req, res) => {
-  const {file} = req.files;
-  const {userId, date, description, semester, course} = req.body;
-  console.log(userId);
-  console.log(date);
-  console.log(semester);
-  console.log(course);
-  console.log(description);
-  if (!file) {
-    return res.status(400).send('No file uploaded.');
+  try {
+    await postResource(req, res);
+  } catch (err) {
+    console.log(err)
   }
-  // Define the directory where you want to save the uploaded file
-  const filename = file.name;
-  const uploadDirectory = 'uploads';
-  
-  checkUploadDirectory(uploadDirectory)
-  .then(() => {
-    const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-    const fileUrl = uniquefileName + '_' + filename;
-    fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data)
-    .then(() => {
-      uploadResource(filename, description, userId, fileUrl, semester, course)
-      console.log("File has been saved successfully");
-    }) .catch((err) => {
-      console.log(err)
-    })
-    }) .catch((err) => {
-      console.log(err);
-    })
-    res.status(200).send("Uploaded");
+  res.status(200).send('')
 });
 
 // @desc Get all blogs and sort by timestamp
@@ -322,26 +296,14 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  // res.status(200).json({ message: 'User Resources'});
-
-  await getAllResources()
-  .then ((response) => {
-    const fileList = response.map((resource) => {
-      const uploaderUsername = getUser(resource.user)._id;
-      const fileDetails = {[resource.get('fileUrl')]: {uploaderUsername: uploaderUsername, date: resource.get('updatedAt'), semester: resource.level, course: resource.get('course')}}
-      return (fileDetails);
-    })
-    if (fileList) {
-      console.log(fileList)
-      res.json({files: fileList});
-    } else {
-      res.status(500).send("Error");  
-    }
-  }) .catch((err) => {
+  try {
+    const fileList = await getResources(req, res);
+    res.json(fileList);
+  } catch (err) {
     console.log(err);
-    res.status(500).send("Error")
-  })
+  }
 });
+
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
@@ -354,8 +316,18 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Delete a Resource' });
-});
+  // res.status(200).json({ message: 'Delete a Resource' });
+    try {
+      const response = await deleteResource(req, res);
+      if (response === "Access Approved") {
+        res.status(200).send(response)
+      } else if (response === "Access Denied") {
+        res.status(200).send(response);
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  });
 
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
