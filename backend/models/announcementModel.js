@@ -15,6 +15,11 @@ const announcementSchema = mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
+		level: {
+			type: String,
+       	 	enum: ['100', '200', '300', '400', '500', 'Non-Student'],
+ 		    required: true,
+		  },
 	},
 	{
 		timestamps: true,

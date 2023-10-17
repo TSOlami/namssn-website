@@ -36,10 +36,10 @@ const EditProfileForm = ({ handleModal }) => {
     studentEmail: userInfo?.studentEmail || '',
     matricNumber: userInfo?.matricNumber || '',
     bio: userInfo?.bio || '',
-    level: userInfo?.level || '100',
+    level: userInfo?.level || 'Non-Student',
 	};
 
-  const levelOptions = ['100', '200', '300', '400', '500', 'Non-student'];
+  const levelOptions = ['100', '200', '300', '400', '500', 'Non-Student'];
   
 	// Define the validation schema using Yup
 	const validationSchema = Yup.object({

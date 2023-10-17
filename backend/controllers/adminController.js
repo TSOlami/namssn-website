@@ -2,6 +2,8 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
+import Announcement from '../models/announcementModel.js';
+import Event from '../models/eventModel.js';
 
 
 // @desc Make a user an admin
@@ -166,12 +168,13 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
 // Create Announcement
 const createAnnouncement = asyncHandler(async (req, res) => {
-  const { text } = req.body;
+  const { text, level } = req.body; // Add level to the destructured request body
   const userId = req.user._id;
 
   // Create a new announcement
   const newAnnouncement = new Announcement({
     text,
+    level, // Set the level field with the value from the request body
     user: userId, // Associate the announcement with the user who created it
   });
 
@@ -183,7 +186,7 @@ const createAnnouncement = asyncHandler(async (req, res) => {
 
 // Update Announcement
 const updateAnnouncement = asyncHandler(async (req, res) => {
-  const { text } = req.body;
+  const { text, level } = req.body; // Add level to the destructured request body
   const announcementId = req.params.announcementId;
 
   // Find the announcement by ID
@@ -194,14 +197,15 @@ const updateAnnouncement = asyncHandler(async (req, res) => {
     throw new Error('Announcement not found');
   }
 
-  // Check if the user has permission to update this announcement (e.g., they are the owner)
-  if (announcement.user.toString() !== req.user._id.toString()) {
+  // Check if the user has permission to update this announcement (e.g., they are the owner or an admin)
+  if (announcement.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
     res.status(401);
     throw new Error('Unauthorized to update this announcement');
   }
 
   // Update the announcement
   announcement.text = text;
+  announcement.level = level; // Update the level field
   const updatedAnnouncement = await announcement.save();
 
   res.status(200).json(updatedAnnouncement);
@@ -219,8 +223,8 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
     throw new Error('Announcement not found');
   }
 
-  // Check if the user has permission to delete this announcement (e.g., they are the owner)
-  if (announcement.user.toString() !== req.user._id.toString()) {
+  // Check if the user has permission to delete this announcement (e.g., they are the owner or an admin)
+  if (announcement.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
     res.status(401);
     throw new Error('Unauthorized to delete this announcement');
   }

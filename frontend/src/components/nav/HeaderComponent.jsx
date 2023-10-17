@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Avatar } from "../assets";
+import { Avatar } from "../../assets";
 import { useDispatch } from "react-redux";
-import { setNavOpen } from "../redux/slices/navSlice";
+import { setNavOpen } from "../../redux/slices/navSlice";
 
 const HeaderComponent = ({ title, url }) => {
 	const dispatch = useDispatch();

@@ -1,5 +1,4 @@
-import { AnnouncementContainer, BottomNav, Notification, Sidebar } from "../components";
-import HeaderComponent from "../components/HeaderComponent";
+import { AnnouncementContainer, BottomNav, Notification, Sidebar, HeaderComponent } from "../components";
 import { mockReplies } from "../data";
 
 const NotificationPage = () => {

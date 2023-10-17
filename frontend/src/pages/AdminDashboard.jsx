@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { AdminCard, RecentPayments, Sidebar } from "../components";
-import HeaderComponent from "../components/HeaderComponent";
+import { HeaderComponent } from "../components";
 import { mockAccounts, mockRecentPayments } from "../data";
-// import Report from "../components/Report";
 import { MembersImg } from "../assets";
 import { Avatar } from "../assets";
 

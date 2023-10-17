@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { AddPayment, Sidebar } from "../components";
-import HeaderComponent from "../components/HeaderComponent";
-import PaymentDetails from "../components/PaymentDetails";
+import { HeaderComponent, PaymentDetails, AddPayment, Sidebar } from "../components";
 import { mockPaidUsers, mockPayments } from "../data";
 
 const AdminPayment = () => {

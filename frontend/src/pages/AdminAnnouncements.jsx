@@ -27,7 +27,7 @@ const AdminAnnouncements = () => {
 								className="resize-none border-2 border-gray-300 p-3 rounded-lg"
 							></textarea>
 							<button className="p-2 px-3 rounded-lg bg-black text-white">
-								Add new Announcement
+								Make Announcement
 							</button>
 
 							{/* The other annoucements map inside input fields where they can be edited and deleted directly */}
