@@ -65,6 +65,7 @@ const UserProfile = () => {
   const noOfPosts = userPosts?.length;
   const image = user?.profilePicture;
 
+<<<<<<< HEAD
   const currentUserIsAdmin = currentUser?.role === 'admin';
   
     return (
@@ -107,6 +108,36 @@ const UserProfile = () => {
                     <span className="border-b-4 border-primary">Posts</span>
                 </div>
                 <div>
+=======
+			<div>
+				<div className="p-3 pl-6 flex flex-col">
+					<span className="font-semibold text-lg">{name}</span>
+					<span>{noOfPosts} posts</span>
+				</div>
+				{/* profile image and cover image */}
+				<div className="w-full h-32 bg-primary z-[-1]"></div>
+				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
+					<img src={ProfileImg} alt="" className='profile-image' />
+					{isAdmin && <button className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+						Make admin
+					</button>}
+				</div>
+				<div className="flex flex-col text-sm p-3 pl-6">
+					<span className="font-semibold flex flex-row items-center gap-2 text-lg">
+						{name}
+						{isVerified && <FaCircleCheck color="#17A1FA" />}
+					</span>
+					<span>@{username}</span>
+					<span className="mt-2">{bio}</span>
+				</div>
+				<div className="font-semibold px-3 pl-6">
+					<span className="font-semibold text-xl">{points}</span> points
+				</div>
+				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
+					<span className="border-b-4 border-primary">Posts</span>
+				</div>
+				<div>
+>>>>>>> origin/Dr_strange
           {userPosts && userPosts.length === 0 ? ( // Check if userPosts is defined and has no posts
             <div className="text-center mt-28 p-4 text-gray-500">
               No posts to display.
