@@ -24,7 +24,7 @@ const Home = () => {
 		<div className="flex ">
 			<Sidebar/>
 			<div className="flex flex-col relative w-full">
-				<HeaderComponent title="Home"/>
+				<HeaderComponent title="Home" url={"Placeholder"}/>
 				{isLoading ? (
           <Loader />
         ) : (

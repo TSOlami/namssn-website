@@ -15,5 +15,8 @@ import BlogPage from './BlogPage';
 import AdminDashboard from './AdminDashboard';
 import AdminPayment from './AdminPayment';
 import UserProfile from './UserProfile';
+import Comments from './Comments';
+import AdminEvents from './AdminEvents';
+import AdminAnnouncements from './AdminAnnouncements';
 
-export { Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile };
+export { Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile , Comments, AdminEvents, AdminAnnouncements };

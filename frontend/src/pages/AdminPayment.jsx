@@ -101,7 +101,7 @@ const AdminPayment = () => {
 
             {/* Payment details table */}
 
-            <HeaderComponent title="Payment Details" />
+            <HeaderComponent title="Payment Details" url={"placeholder"}/>
 
             <div>
               <table>
