@@ -322,3 +322,42 @@ export const mockEvents = [
 	},
 
 ]
+
+export const mockUsers = [
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+]
