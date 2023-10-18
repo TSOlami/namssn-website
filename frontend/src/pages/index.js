@@ -16,8 +16,7 @@ import AdminDashboard from './AdminDashboard';
 import AdminPayment from './AdminPayment';
 import UserProfile from './UserProfile';
 import Comments from './Comments';
-import AddPayment from '../components/forms/AddPayment';
 import AdminEvents from './AdminEvents';
 import AdminAnnouncement from './AdminAnnouncement';
 
-export { AddPayment, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement };
+export { Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement };

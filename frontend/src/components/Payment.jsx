@@ -1,56 +1,93 @@
-import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useLocation } from "react-router-dom";
 import { FaEnvelope, FaMoneyBillWave } from "react-icons/fa6";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector} from 'react-redux';
+
 
 
 const PaymentForm = () => {
-  const [amount, setAmount] = useState(""); // State to store the payment amount
+  // const [amount, setAmount] = useState(""); // State to store the payment amount
+  const { userInfo } = useSelector((state) => state.auth);
+	const email = userInfo?.email;
+	const matricNumber = userInfo?.matricNumber;
+	const location = useLocation("") ; // for current Location
+  const searchParams = new URLSearchParams(location.search); // seacrh Params
 
-  // Initial form values and validation schema
-  const initialValues = {
-    matricNo: "",
-    email: "",
-  };
+  
+  // // for initial values 
+  const initialMatricNumber = matricNumber || "";
+  const initialEmail = email || "";
+  const initialCategory = searchParams.get('name') || "";
+  const initialSession = searchParams.get('session') || "";
+  const initialAmount = searchParams.get('amount') || ""
 
   const validationSchema = Yup.object({
-    matricNo: Yup.string()
+    matricNumber: Yup.string()
       .matches(/^[0-9]{5}[A-Za-z]{2}$/, 'Invalid Matriculation Number')
       .required('Matriculation Number is required'),
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
+    category: Yup.string().required('Category is required'),
+    session: Yup.string().required('Session is required'),
   });
 
   // Formik configuration
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      matricNumber: initialMatricNumber,
+      email: initialEmail,
+      category: initialCategory,
+      session: initialSession,
+      amount: initialAmount
+      
+    },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       try {
         const paymentData = {
-          matricNo: values.matricNo,
+          matricNumber: values.matricNumber, // Match field names with the model
           email: values.email,
-          amount: parseFloat(amount), // Convert amount to a number
+          category: values.category, // Match field names with the model
+          session: values.session, // Match field names with the model
+          amount: parseFloat(values.amount), // Convert amount to a number
         };
 
         // Make a POST request to your Express server to initiate payment
         const response = await axios.post('/api/v1/users/payments', paymentData);
 
-                // Check if the response contains the payment URL
-        if (response.data.success) { 
+        // Check if the response contains the payment URL
+        if (response.data.success) {
           const { payment_url, reference, message } = response.data;
 
-          toast.success(message)
-                    // Redirect to the payment URL returned by the server
-          window.location.href = payment_url;
+          toast.success(message);
+
+          // Redirect to the payment URL returned by the server
+          // Open the Paystack payment page in a popup window
           
-          
+          const popup = window.open(payment_url, '_blank', 'width=800, height=600');
+
+          // Check if the popup window is closed
+          const checkPopup = setInterval(() => {
+            if (popup.closed) {
+              clearInterval(checkPopup);
+              // After the payment is successful, show the transaction reference
+              showTransactionReference(reference);
+              // Popup window is closed, navigate back to the previous page
+              window.history.back();
+            }
+          }, 2000); // Check every 1 second
+
+
           // After the payment is successful, show the transaction reference
-          showTransactionReference(reference);
+          // showTransactionReference(reference);
+
+          resetForm();
+          
         } else {
           console.error('Payment initiation failed. Missing payment_url in response.');
           toast.error('Payment initiation failed. Please try again.');
@@ -67,7 +104,7 @@ const PaymentForm = () => {
   // Function to show a toast message with the transaction reference
   const showTransactionReference = (reference) => {
     console.log("Transaction Reference:", reference); // Add this line for debugging
-    toast.success(`Transaction Reference: ${reference}`, {
+    toast.success(`Transaction Reference: ${reference}.`, {
       position: 'top-right',
       autoClose: 20000, // Close after 5 seconds
       hideProgressBar: false,
@@ -75,7 +112,18 @@ const PaymentForm = () => {
       pauseOnHover: true,
       draggable: true,
     });
+    toast.success(`A payment receipt will be sent to your registered mailbox upon successful payment.`, {
+      position: 'top-right',
+      autoClose: 20000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  
   };
+
+  
 
   return (
     <div className="flex flex-row md:bg-primary h-screen">
@@ -84,20 +132,20 @@ const PaymentForm = () => {
           Payment Form
         </h1>
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
-          <label className="mt-2" htmlFor="matricNo">Matriculation Number</label>
+          <label className="mt-2" htmlFor="matricNumber">Matriculation Number</label>
           <div className="flex flex-row relative w-full">
             <input
               type="text"
-              name="matricNo"
-              id="matricNo"
+              name="matricNumber"
+              id="matricNumber"
               onChange={formik.handleChange}
-              value={formik.values.matricNo}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              value={formik.values.matricNumber}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>
-          {formik.touched.matricNo && formik.errors.matricNo ? (
-            <div className="text-red-500">{formik.errors.matricNo}</div>
+          {formik.touched.matricNumber && formik.errors.matricNumber ? (
+            <div className="text-red-500">{formik.errors.matricNumber}</div>
           ) : null}
 
           <label className="mt-2" htmlFor="email">E-mail</label>
@@ -108,12 +156,44 @@ const PaymentForm = () => {
               id="email"
               onChange={formik.handleChange}
               value={formik.values.email}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaEnvelope className="absolute left-2 flex self-center justify-center" />
           </div>
           {formik.touched.email && formik.errors.email ? (
             <div className="text-red-500">{formik.errors.email}</div>
+          ) : null}
+
+          <label className="mt-2" htmlFor="category">Category</label>
+          <div className="flex flex-row relative w-full">
+            <input
+              type="text"
+              name="category"
+              id="category"
+              onChange={formik.handleChange}
+              value={formik.values.category}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
+            />
+            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
+          </div>
+          {formik.touched.category && formik.errors.category ? (
+            <div className="text-red-500">{formik.errors.category}</div>
+          ) : null}
+
+          <label className="mt-2" htmlFor="session">Session</label>
+          <div className="flex flex-row relative w-full">
+            <input
+              type="text"
+              name="session"
+              id="session"
+              onChange={formik.handleChange}
+              value={formik.values.session}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
+            />
+            <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
+          </div>
+          {formik.touched.session && formik.errors.session ? (
+            <div className="text-red-500">{formik.errors.session}</div>
           ) : null}
 
           <label className="mt-2" htmlFor="amount">Payment Amount (in Naira)</label>
@@ -122,9 +202,9 @@ const PaymentForm = () => {
               type="number"
               name="amount"
               id="amount"
-              onChange={(e) => setAmount(e.target.value)}
-              value={amount}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              onChange={formik.handleChange}
+              value={formik.values.amount}
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10" disabled
             />
             <FaMoneyBillWave className="absolute left-2 flex self-center justify-center" />
           </div>

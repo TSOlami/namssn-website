@@ -1,8 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
-import Announcement from '../models/announcementModel.js';
+import Announcement from '../models/announcementModel.js'
+import { verifyPayments } from '../utils/paymentLogic.js';
 import Event from '../models/eventModel.js';
 
 
@@ -65,15 +67,6 @@ const removeAdmin = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'User is no longer an admin' });
 });
 
-// @desc Get all payments for all users
-// Route GET /api/v1/admin/payments
-// Access Private (only accessible to admin users)
-const getAllPayments = asyncHandler(async (req, res) => {
-  // Fetch all payment records from the payment model
-  const allPayments = await Payment.find().populate('user');
-
-  res.status(200).json(allPayments);
-});
 
 // @desc Create a new blog
 // Route POST /api/v1/users/blogs
@@ -105,65 +98,90 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 
   // Fetch the user's blogs from the database
   const userBlogs = await Blog.find({ user: userId })
-  .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest blogs first)
+    .sort({ timestamp: -1 }); // Sort by timestamp in descending order (latest blogs first)
 
   res.status(200).json(userBlogs);
 });
 
-// @desc Update user blog
-// Route PUT /api/v1/users/blogs/:blogId
-// Access Private
+// @desc	Update user blog
+// Route	PUT  /api/v1/users/blogs
+// access	Private
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, content } = req.body;
-  const blogId = req.params.blogId;
-
-  // Find the blog by ID
-  const blog = await Blog.findById(blogId);
-
-  if (!blog) {
-    res.status(404);
-    throw new Error('Blog not found');
-  }
-
-  // Check if the user has permission to update this blog (e.g., they are the owner)
-  if (blog.user.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error('Unauthorized to update this blog');
-  }
-
-  // Update the blog
-  blog.title = title;
-  blog.content = content;
-  const updatedBlog = await blog.save();
-
-  res.status(200).json(updatedBlog);
+  res.status(200).json({ message: 'Update a Blog' });
 });
 
-// @desc Delete user blog
-// Route DELETE /api/v1/users/blogs/:blogId
-// Access Private
+// @desc	Delete user blog
+// Route	DELETE  /api/v1/users/blogs
+// access	Private
 const deleteBlog = asyncHandler(async (req, res) => {
-  const blogId = req.params.blogId;
-
-  // Find the blog by ID
-  const blog = await Blog.findById(blogId);
-
-  if (!blog) {
-    res.status(404);
-    throw new Error('Blog not found');
-  }
-
-  // Check if the user has permission to delete this blog (e.g., they are the owner)
-  if (blog.user.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error('Unauthorized to delete this blog');
-  }
-
-  // Delete the blog
-  await blog.remove();
-
-  res.status(200).json({ message: 'Blog deleted' });
+  res.status(200).json({ message: 'Delete Blog' });
 });
+
+
+// @desc Create a new payment category
+// Route POST /api/v1/admin/payments
+// Access Private (only accessible to admin users)  
+const createCategory = asyncHandler(async (req, res) => {
+  const { name, session, amount } = req.body;
+  const addCategory = new Category(
+    {
+      name,
+      session,
+      amount,
+    }
+  )
+  const createdCategory = await addCategory.save();
+  res.status(201).json(createdCategory)
+});
+
+// @desc Delete a single payment category
+// Route DELETE /api/v1/admin/payments/:id
+// Access Private (only accessible to admin users)
+const deleteCategory = asyncHandler(async (req, res) => {
+  const { name, session, amount } = req.body;
+
+  try {
+    // Step 1: Find the category that matches the criteria
+    const category = await Category.findOne({ name, amount, session }).exec();
+
+    if (!category) {
+      // Step 2: Handle the case where no matching category is found
+      return res.status(404).json({ message: 'Category not found' });
+    }
+    const categoryId = category._id
+
+    // Step 3: If the category is found, remove it
+    await Category.deleteOne(categoryId)
+
+    // Step 4: Handle success response
+    return res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+    // Step 5: Handle any errors that occur during removal
+    return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+
+// @desc Show all payment status for last 10 users
+// Route GET /api/v1/admin/payments
+// Access Private (only accessible to admin users)
+const getPaymentStatus = asyncHandler(async (req, res) => {
+  try {
+    await verifyPayments(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+// @desc Get all payments for all users
+// Route GET /api/v1/admin/payments
+// Access Private (only accessible to admin users)
+const getAllPayments = asyncHandler(async (req, res) => {
+  // Fetch all payment records from the payment model
+  const allPayments = await Payment.find().populate('user');
+  res.status(200).json(allPayments);
+  });
 
 
 // Create Announcement
@@ -319,12 +337,17 @@ const deleteEvent = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Event deleted' });
 });
 
+  // Save the new announcement to the database
+
 export {
   getAllPayments,
   createBlog,
   getUserBlogs,
   updateBlog,
   deleteBlog,
+  createCategory,
+  deleteCategory,
+  getPaymentStatus,
   createAnnouncement,
   updateAnnouncement,
   deleteAnnouncement,

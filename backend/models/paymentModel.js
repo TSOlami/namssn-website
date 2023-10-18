@@ -1,16 +1,17 @@
 import mongoose from 'mongoose';
 
-/**
- * Defines the schema for payments in the database.
- */
 const paymentSchema = mongoose.Schema(
   {
     category: {
-      type: mongoose.Schema.Types.ObjectId, // Reference to the Category model
+      type:  mongoose.Schema.Types.ObjectId,
       ref: 'Category',
-      required: true,
+      required: true, // Required for both admin and user
     },
     // Reference to the user who made the payment.
+    transactionReference: {
+      type: String,
+      required: false, // Not required for admin-added payments
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Reference to the user who made the payment
@@ -18,14 +19,10 @@ const paymentSchema = mongoose.Schema(
     },
   },
   {
-    // Automatically generate createdAt and updatedAt timestamps.
-    timestamps: true,
+    timestamps: true, // Automatically generate createdAt and updatedAt timestamps
   }
 );
 
-/**
- * Represents a payment record in the database.
- */
 const Payment = mongoose.model('Payment', paymentSchema);
 
 export default Payment;

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement } from './pages';
+import { Payment } from './components';
+import { Landing, SignIn, SignUp, Home, Resources, PaymentPage, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncements } from './pages';
 import { PrivateRoutes } from './components';
 
 export default function App() {
@@ -17,6 +17,7 @@ export default function App() {
       <Route path='' element={<PrivateRoutes />} />
         <Route path='/home' element={<Home/>} />
         <Route path='/payments' element={<PaymentPage/>} />
+        <Route path='/payments/pay/:id' element={<Payment/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/profile/:userId' element={<UserProfile/>}/>
@@ -33,7 +34,7 @@ export default function App() {
       <Route path='/admin/payment' element={<AdminPayment/>} />
       <Route path='/comments/:postId' element={<Comments/>} />
       <Route path='/admin/events' element={<AdminEvents/>} />
-      <Route path='/admin/announcements' element={<AdminAnnouncement/>} />
+      <Route path='/admin/announcements' element={<AdminAnnouncements/>} />
     </Routes>
     </BrowserRouter>    
   )

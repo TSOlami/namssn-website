@@ -14,15 +14,15 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // Extract the JWT token from the request cookies.
   token = req.cookies.jwt;
-  console.log(token)
-
+ 
   if (token) {
     try {
       // Verify and decode the JWT token using the secret key.
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+     
       // Fetch the user associated with the decoded token, excluding the password field.
       req.user = await User.findById(decoded.userId).select('-password');
+      
 
       next();
     } catch (error) {
@@ -43,15 +43,16 @@ const protect = asyncHandler(async (req, res, next) => {
  * @param {Function} next - Express next function.
  */
 const isAdmin = asyncHandler(async (req, res, next) => {
-  try {
-    if (req.user && req.user.role === 'admin') {
-      return next(); // User is an admin, continue with the request
-    } else {
-      res.status(403).json({ message: 'Access denied: Admin privileges required.' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Server error: Unable to check admin privileges.' });
-  }
+ try {
+   if (req.user && req.user.role === 'admin') {
+     return next(); // User is an admin, continue with the request
+   } else {
+     res.status(403).json({ message: 'Access denied: Admin privileges required.' });
+   }
+ } catch (error) {
+   res.status(500).json({ message: 'Server error: Unable to check admin privileges.' });
+ }
 });
 
-export { protect, isAdmin };
+
+export { protect, isAdmin }; // Export the middleware functions.

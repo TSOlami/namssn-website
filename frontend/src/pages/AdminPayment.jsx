@@ -1,13 +1,35 @@
 import { useState } from "react";
-import { HeaderComponent, PaymentDetails, AddPayment, Sidebar } from "../components";
-import { mockPaidUsers, mockPayments } from "../data";
+import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails } from "../components";
+import { mockPaidUsers } from "../data";
+import { useAllPaymentsQuery, useVerifyPaymentsMutation} from '../redux'; // 
+
 
 const AdminPayment = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalOpen = () => {
-    setIsModalOpen(!isModalOpen);
+  const { data: payments, isLoading, isError } = useAllPaymentsQuery();
+  const { data: verifiedPayments } = useVerifyPaymentsMutation();
+  console.log(verifiedPayments)
+  
+    const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
+    const [showDeleteCategoryForm, setShowDeleteCategoryForm] = useState(false);
+  
+    const openAddCategoryForm = () => {
+      setShowAddCategoryForm(true);
+      setShowDeleteCategoryForm(false);
+    };
+  
+  
+    const openDeleteCategoryForm = () => {
+      setShowAddCategoryForm(false);
+      setShowDeleteCategoryForm(true);
+    };
+
+    const closeAddCategoryForm = () => {
+    setShowAddCategoryForm(false);
+    setShowDeleteCategoryForm(false);
   };
 
+    
+  
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
@@ -16,30 +38,34 @@ const AdminPayment = () => {
 				<HeaderComponent title="Payments" />
 
 				<div className="flex flex-row w-full h-full ">
-					<div className="h-full w-[500px] ">
-						{mockPayments.map((payment, index) => (
-							<PaymentDetails
-								key={index}
-								title={payment.title}
-								amount={payment.amount}
-							/>
-						))}
+          <div className="h-full w-[500px] ">
+              {isLoading ? (
+                <p>Loading payments...</p>
+              ) : isError ? (
+                <p>Error loading payments</p>
+              ) : !payments || !Array.isArray(payments) || payments.length === 0 ? (
+                <p>No payments available.</p>
+              ) : (
+                payments.map((payment, index) => (
+                  <PaymentDetails
+                    key={index}
+                    title={payment.name}
+                    amount={payment.amount}
+                  />
+                ))
+              )}
 
-            {/* Add payment btn */}
-
-						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80" onClick={handleModalOpen}>
-							Add New Payment
-						</button>
-					</div>
-
-          {/* Add payment modal */}
-
-          {isModalOpen && (
-            <AddPayment handleModalOpen={handleModalOpen}/>
-          )}
+              <button
+                className="m-5 my-10 p-3 bg-primary text-white rounded-sm"
+                onClick={openAddCategoryForm}
+              >
+                Add New Payment
+              </button>
             
+            </div>
+					
+					</div>             
           
-
 					{/* Payment details and breakdown section */}
 					<div className="border-r-gray-300 border-l-2 h-full">
 
@@ -67,8 +93,7 @@ const AdminPayment = () => {
 
             {/* Delete and Edit payment button */}
             <div className="p-5 py-10 ">
-              <button className="border-gray-300 border-2 text-black p-2 rounded-md mr-5">Edit Payment</button>
-              <button className="bg-red-600 text-white p-2 rounded-md">Delete Payment</button>
+              <button className="bg-red-600 text-white p-2 rounded-md" onClick={openDeleteCategoryForm} >Delete Payment</button>
             </div>
 
 
@@ -118,8 +143,13 @@ const AdminPayment = () => {
             </div>
 					</div>
 				</div>
-			</div>
+        {showAddCategoryForm && (
+        <AddCategoryForm handleModalOpen={openAddCategoryForm} onClose={closeAddCategoryForm} />
+      )}
+        {showDeleteCategoryForm && <DeleteCategoryForm handleModalOpen={openDeleteCategoryForm} />}
 		</div>
+      
+		
 	);
 };
 

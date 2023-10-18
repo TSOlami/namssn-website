@@ -1,12 +1,12 @@
 import asyncHandler from 'express-async-handler';
-import generateToken from '../utils.js/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils.js/paymentLogic.js'
+import generateToken from '../utils/generateToken.js';
+import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
-
-import {postResource, getResources, deleteResource} from '../utils.js/resourceLogic.js';
+import Category from '../models/categoryModel.js';
+import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -260,7 +260,6 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // @desc Create user resources
 // Route POST /api/v1/users/resources
 // Access Private
-
 const postUserResources = asyncHandler(async (req, res) => {
   try {
     await postResource(req, res);
@@ -356,6 +355,32 @@ const deleteUserResources = asyncHandler(async (req, res) => {
     }
   });
 
+
+
+//@desc Get list of payments added by the admin
+// Route GET /api/v1/users/payments
+// Access Private
+// Get payment options for users
+const getPaymentOptions = async (req, res) => {
+  try {
+    // Example: Fetch a list of admin-added payments from your database
+    const category = await Category.find({});
+
+    // Check if there are available payment options
+    if (category.length === 0) {
+      return res.status(204).json({ message: 'No Category available' });
+    }
+
+    // You can further process or format the payment options as needed
+    // For now, we'll simply send the list to the user
+    res.status(200).json(category);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch category options', error: error.message });
+  }
+};
+
+
+
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
 // access	Private
@@ -374,13 +399,12 @@ const getUserPayment = asyncHandler(async (req, res) => {
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
     await initiatePayment(req, res);
-
   } catch (error) {
-    console.log(error)
-
+    console.log(error);
   }
-  res.status(200).json({ message: 'Payment sent' });
 });
+
+
 
 export {
   authUser,
@@ -401,4 +425,5 @@ export {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
+  getPaymentOptions
 };

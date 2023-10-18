@@ -21,7 +21,6 @@ import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
 import AddPostForm from './forms/AddPostForm';
-import AddPayment from './forms/AddPayment';
 import PostComments from './PostComments';
 import RecentPayments from './RecentPayments';
 import AdminEventsCard from './AdminEventsCard';
@@ -30,5 +29,8 @@ import AdminAnnouncementCard from './AdminAnnouncementCard';
 import UsersCard from './UsersCard';
 import CommentActions from './CommentActions';
 import PaymentDetails from './PaymentDetails';
+import AddCategoryForm from './forms/AddCategoryForm';
+import DeleteCategoryForm from './forms/DeleteCategoryForm';
+import PaymentList from './PaymentList';
 
-export {AddPayment, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails};
+export { Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList };
