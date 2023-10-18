@@ -5,6 +5,7 @@ import { mockAccounts, mockRecentPayments } from "../data";
 // import Report from "../components/Report";
 import { MembersImg } from "../assets";
 import { Avatar } from "../assets";
+import { FaPerson } from "react-icons/fa6";
 
 const AdminDashboard = () => {
 	return (
@@ -44,6 +45,14 @@ const AdminDashboard = () => {
 							bg="greenish"
 							route="/admin/announcements"
 						/>
+
+						<AdminCard
+							title={<FaPerson/>}
+							amount="Verify users"
+							card="users"
+							bg="bg-purple-100"
+							route="/admin/users"
+							/>
 					</div>
 				</div>
 				<div className="p-5 flex flex-row flex-wrap gap-4 items-center justify-center lg:justify-normal">
