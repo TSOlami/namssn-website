@@ -36,7 +36,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 						body: data,
 					};
 				},
-				invalidatesTags: ["Announcements"],
+				invalidatesTags: ["Announcement"],
 			}),
 
 			// Update Announcement Query

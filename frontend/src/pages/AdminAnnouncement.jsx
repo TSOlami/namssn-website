@@ -5,13 +5,14 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import { AdminAnnouncementCard, HeaderComponent, Sidebar, Loader } from "../components";
-import { mockAnnouncements } from "../data";
-import { useCreateAnnouncementMutation, setAnnouncements } from "../redux";
+import { useCreateAnnouncementMutation, useAllAnnouncementsQuery, setAnnouncements } from "../redux";
 
 const AdminAnnouncements = () => {
+  // Fetch all announcements
+  const { data: announcements, isLoading: isFetching } = useAllAnnouncementsQuery();
 
   // Create the createAnnouncement mutation
-  const [createAnnouncement, { isLoading }] = useCreateAnnouncementMutation();
+  const [createAnnouncement, { isLoading: isCreating }] = useCreateAnnouncementMutation();
 
   // Create a dispatch function
   const dispatch = useDispatch();
@@ -145,7 +146,7 @@ const AdminAnnouncements = () => {
               <h3 className="text-xl font-semibold pt-8">
                 Announcements
               </h3>
-              {mockAnnouncements.map((announcement, index) => (
+              {announcements?.map((announcement, index) => (
                 <div
                   key={index}
                   className="flex flex-col gap-3 mb-4"
@@ -176,7 +177,7 @@ const AdminAnnouncements = () => {
                 </div>
               ))}
             </form>
-                {isLoading && <Loader />}
+                {isFetching || isCreating && <Loader />}
           </div>
         </div>
       </div>
