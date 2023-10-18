@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import { AdminAnnouncementCard, HeaderComponent, Sidebar, Loader } from "../components";
-import { useCreateAnnouncementMutation, useAllAnnouncementsQuery, setAnnouncements } from "../redux";
+import { useCreateAnnouncementMutation, useAllAnnouncementsQuery, useUpdateAnnouncementMutation, useDeleteAnnouncementMutation, setAnnouncements } from "../redux";
 
 const AdminAnnouncements = () => {
   // Fetch all announcements
@@ -53,6 +53,18 @@ const AdminAnnouncements = () => {
       console.log("Error:", err?.data?.message || err?.error);
     }
   };
+
+  // Define a function to handle announcement text changes
+  const handleAnnouncementChange = (e, index) => {
+    const { name, value } = e.target;
+    // Clone the announcements array and update the text of the edited announcement
+    const updatedAnnouncements = [...announcements];
+    updatedAnnouncements[index] = { ...updatedAnnouncements[index], text: value };
+    // Update the state with the new announcements
+    // This may vary depending on how you've set up your state management
+    // For example, if using Redux, you'd dispatch an action to update the state
+    // dispatch(updateAnnouncement(updatedAnnouncements));
+  };
   
   // Handler for "Edit" button
   const handleEditClick = (announcement) => {
@@ -90,10 +102,10 @@ const AdminAnnouncements = () => {
             }}
            />
             <AdminAnnouncementCard title="100L Announcements"
-           onClick={() => {
+            onClick={() => {
             setSelectedLevel('100');
             console.log("Selected level: 100L");
-          }}
+            }}
             />
             <AdminAnnouncementCard title="200L Announcements" 
             onClick={() => {
@@ -152,24 +164,23 @@ const AdminAnnouncements = () => {
                   className="flex flex-col gap-3 mb-4"
                 >
                   <textarea
-                    name="announcement"
-                    placeholder="Type in a new announcement"
-                    id="announcement"
+                    name={`announcement${index}`}
+                    id={`announcement${index}`}
                     className="resize-none border-2 border-gray-300 p-3 rounded-lg"
-                    value={formik.values.text}
-                    onBlur={formik.handleBlur("anouncement")}
-                    onChange={formik.handleChange("announcement")}
+                    value={announcement.text}  // Set the value to the announcement's text
+                    onBlur={formik.handleBlur(`announcement${index}`)}
+                    onChange={(e) => handleAnnouncementChange(e, index)}
                   />
                   <div className="flex flex-row gap-5 ml-auto">
                     <button
                       className="p-2 px-3 rounded-lg bg-black text-white"
-                      onClick={() => handleEditClick(announcement)}
+                      onClick={() => handleEditClick(announcement, index)}
                     >
                       Edit
                     </button>
                     <button
                       className="p-2 px-3 rounded-lg bg-red-500 text-white"
-                      onClick={() => handleDeleteClick(announcement)}
+                      onClick={() => handleDeleteClick(announcement, index)}
                     >
                       Delete
                     </button>

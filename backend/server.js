@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
 import fileUpload from 'express-fileupload';
 dotenv.config();
 import path from 'path';
