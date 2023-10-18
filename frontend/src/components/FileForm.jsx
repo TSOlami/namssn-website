@@ -3,10 +3,13 @@ import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+import Loader from "./Loader";
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-crimson text-lg"
     const errorStyle = "text-red-500 text-sm";
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [inputValue, setInputValue] = useState("");
     useEffect(() => {
@@ -39,6 +42,7 @@ const FileForm = (props) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
+            setIsLoading(true);
             const date = new Date();
             const formData = new FormData();
             formData.append('file', values.file);
@@ -49,12 +53,15 @@ const FileForm = (props) => {
             formData.append('course', selectedOption2)
 
             try {
-                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
-                // window.location.reload(); 
+                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData); 
                 toast.success("File Uploaded Successfully");
+                window.location.reload();
+                // setIsLoading(false);
+                
             } catch (err) {
                 console.log(err);
                 toast.error("File not uploaded, an error occurred");
+                setIsLoading(false);
             }
         },
     });
@@ -106,6 +113,7 @@ const FileForm = (props) => {
                     </div>
                 </form>
                 <ToastContainer/>
+                {isLoading && <Loader />}
             </div>
         )
     }
