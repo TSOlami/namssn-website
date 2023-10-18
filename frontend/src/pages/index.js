@@ -19,5 +19,6 @@ import Comments from './Comments';
 import AddPayment from '../components/forms/AddPayment';
 import AdminEvents from './AdminEvents';
 import AdminAnnouncements from './AdminAnnouncements';
+import VerifyUsers from './VerifyUsers';
 
-export { AddPayment, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncements };
+export { AddPayment, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncements, VerifyUsers };
