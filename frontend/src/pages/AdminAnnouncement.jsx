@@ -1,25 +1,56 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AdminAnnouncementCard, HeaderComponent, Sidebar } from "../components";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+
+import { AdminAnnouncementCard, HeaderComponent, Sidebar, Loader } from "../components";
 import { mockAnnouncements } from "../data";
+import { useCreateAnnouncementMutation, setAnnouncements } from "../redux";
 
 const AdminAnnouncements = () => {
+
+  // Create the createAnnouncement mutation
+  const [createAnnouncement, { isLoading }] = useCreateAnnouncementMutation();
+
+  // Create a dispatch function
+  const dispatch = useDispatch();
+
+  // Define the initial values for the form fields
   const initialValues = {
     text: "",
-    level: "Non-Student",
   };
+
+  // Define a state variable to track the selected "level"
+  const [selectedLevel, setSelectedLevel] = useState('Non-Student');
+
   
   // Define a Yup validation schema for the form fields
   const validationSchema = Yup.object({
     text: Yup.string().required("Text is required"),
-    level: Yup.string().required("Level is required"),
   });
   
   // Create a function to handle form submission
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Perform the submission logic here, e.g., make an API request
-    console.log("Submitted values:", formik.values);
+    try {
+      // Append the selectedLevel to the formik.values
+    const values = Object.assign( formik.values, { level: selectedLevel });
+
+    console.log("Submitted values:", values);
+    // Dispatch the createAnnouncement action
+    const res = await createAnnouncement(values).unwrap();
+    console.log("Response:", res);
+    // Dispatch the setAnnouncement action
+    dispatch(setAnnouncements(res));
+    // Reset the form
+    formik.resetForm();
+    // Show a success toast
+    toast.success("Announcement created!");
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error);
+      console.log("Error:", err?.data?.message || err?.error);
+    }
   };
   
   // Handler for "Edit" button
@@ -52,22 +83,40 @@ const AdminAnnouncements = () => {
           <div className="flex-1">
             <AdminAnnouncementCard 
             title="General Announcements"
-            onClick={() => formik.setFieldValue("level", "Non-Student")}
+            onClick={() => {
+              setSelectedLevel('Non-Student');
+              console.log("Selected level: Non-Student");
+            }}
            />
             <AdminAnnouncementCard title="100L Announcements"
-            onClick={() => formik.setFieldValue("level", "100")}
+           onClick={() => {
+            setSelectedLevel('100');
+            console.log("Selected level: 100L");
+          }}
             />
             <AdminAnnouncementCard title="200L Announcements" 
-            onClick={() => formik.setFieldValue("level", "200")}
+            onClick={() => {
+              setSelectedLevel('200');
+              console.log("Selected level: 200L");
+            }}
             />
             <AdminAnnouncementCard title="300L Announcements" 
-            onClick={() => formik.setFieldValue("level", "300")}
+            onClick={() => {
+              setSelectedLevel('300');
+              console.log("Selected level: 300L");
+            }}
             />
             <AdminAnnouncementCard title="400L Announcements" 
-            onClick={() => formik.setFieldValue("level", "400")}
+            onClick={() => {
+              setSelectedLevel('400');
+              console.log("Selected level: 400L");
+            }}
             />
             <AdminAnnouncementCard title="500L Announcements"
-            onClick={() => formik.setFieldValue("level", "500")}
+            onClick={() => {
+              setSelectedLevel('500');
+              console.log("Selected level: 500L");
+            }}
             />
           </div>
 
@@ -127,6 +176,7 @@ const AdminAnnouncements = () => {
                 </div>
               ))}
             </form>
+                {isLoading && <Loader />}
           </div>
         </div>
       </div>

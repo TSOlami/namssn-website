@@ -57,7 +57,7 @@ router
  * @access Private/Admin
  */
 router
-  .route('/announcements')
+  .route('/announcement')
   .post(protect, isAdmin, createAnnouncement) // Create a new announcement
   .put(protect, isAdmin, updateAnnouncement) // Update an announcement
   .delete(protect, isAdmin, deleteAnnouncement); // Delete an announcement

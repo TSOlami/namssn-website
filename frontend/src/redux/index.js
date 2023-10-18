@@ -1,4 +1,4 @@
-import { setCredentials, setPosts } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -43,7 +43,23 @@ import {
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
 	useVerifyPaymentsMutation,
-	} from './slices/paymentSlice'
+	} from './slices/paymentSlice';
+
+import {
+	useCreateAnnouncementMutation,
+	useAllAnnouncementsQuery,
+	useUserAnnouncementsQuery,
+	useUpdateAnnouncementMutation,
+	useDeleteAnnouncementMutation,
+} from './slices/announcementSlice';
+
+import {
+	useCreateEventMutation,
+	useAllEventsQuery,
+	useUserEventsQuery,
+	useUpdateEventMutation,
+	useDeleteEventMutation,
+} from './slices/eventSlice';
 
 export { 
 		useLoginMutation,
@@ -82,5 +98,16 @@ export {
 	useVerifyPaymentsMutation,
 	useMakeUserAdminMutation,
 	useRemoveAdminMutation,
+	useCreateAnnouncementMutation,
+	useAllAnnouncementsQuery,
+	useUserAnnouncementsQuery,
+	useUpdateAnnouncementMutation,
+	useDeleteAnnouncementMutation,
+	useCreateEventMutation,
+	useAllEventsQuery,
+	useUserEventsQuery,
+	useUpdateEventMutation,
+	useDeleteEventMutation,
 	setCredentials,
-	setPosts, }
+	setPosts,
+	setAnnouncements, }

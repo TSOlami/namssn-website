@@ -97,7 +97,6 @@ const Comments = () => {
         </div>
         {comments && comments?.length > 0 ? (
         comments?.map((comment) => {
-          console.log(comment)
           return (
             <PostComments
               key={comment?._id}

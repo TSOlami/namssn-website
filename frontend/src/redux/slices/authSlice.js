@@ -35,9 +35,13 @@ const authSlice = createSlice({
       state.posts = action.payload;
       localStorage.setItem('userPosts', JSON.stringify(action.payload));
     },
+    setAnnouncements(state, action) {
+      state.announcements = action.payload;
+      localStorage.setItem('userAnnouncements', JSON.stringify(action.payload));
+    },
 	},
 });
 
-export const { setCredentials, setPosts, logout } = authSlice.actions;
+export const { setCredentials, setPosts, setAnnouncements, logout } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -58,7 +58,7 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          values = await Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
+          values = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
           navigate('/home');
