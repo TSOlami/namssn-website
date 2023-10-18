@@ -27,6 +27,7 @@ import {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
+  getPaymentOptions
 } from "../controllers/userController.js";
 
 import { 
@@ -207,7 +208,8 @@ router
  */
 router
   .route('/payments')
-  .get(protect, getUserPayment)
+  .get(protect, getPaymentOptions)
+  // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
 
 router
