@@ -44,7 +44,7 @@ const initiatePayment = async (req, res) => {
 
       res.json({
         success: true,
-        message: 'Payments details saved',
+        message: 'Payment Details saved. You will be redirected to Payment window',
         payment_url: authorization_url,
         reference: reference,
       });

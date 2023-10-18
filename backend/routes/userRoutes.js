@@ -23,7 +23,7 @@ import {
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
+
   getPaymentOptions
 } from "../controllers/userController.js";
 

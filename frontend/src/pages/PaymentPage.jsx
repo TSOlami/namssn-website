@@ -1,11 +1,17 @@
 // import PaymentForm from "../components/Payment";
-import { PaymentList } from "../components";
-
+import { PaymentList, AnnouncementContainer,Sidebar } from "../components"
 const PaymentPage = () => {
     return (
-        <div>
-            <PaymentList />
-            {/* <PaymentForm /> */}
+        <div className="flex flex-row">
+            <Sidebar />
+
+            <div className="flex flex-row w-full h-full ">
+                    <PaymentList />
+                </div>
+                <div className="flex flex-col">
+                    <AnnouncementContainer />
+                </div>
+           
         </div>
     );
     }
