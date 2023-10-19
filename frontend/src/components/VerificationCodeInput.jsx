@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const VerificationCodeInput = ({ codeLength }) => {
   const navigate = useNavigate()
-	const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
-	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+	const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
+	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
 	const handleInputChange = (e, index) => {
 		const value = e.target.value;
@@ -34,7 +34,7 @@ const VerificationCodeInput = ({ codeLength }) => {
 
 	const code = verificationCode.join("");
 	const handleSubmit = () => {
-		console.log("Verification Code:", code);
+		console.log("Verification Code: ", code);
     navigate('/home')
 	};
 
@@ -56,7 +56,7 @@ const VerificationCodeInput = ({ codeLength }) => {
 
 			<button
 				className={
-					code.length < 4
+					code.length < 6
 						? "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5 opacity-50 cursor-not-allowed"
 						: "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5"
 				}
