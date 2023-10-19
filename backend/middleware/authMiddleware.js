@@ -63,9 +63,9 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  */
 const verifyUser = asyncHandler(async (req, res, next) => {
   try {
-    const { email } = req.method == "GET" ? req.query : req.body;
+    const { username } = req.method == "GET" ? req.query : req.body;
     // check if user exists
-    let userExists = await User.findOne({ email });
+    let userExists = await User.findOne({ username });
     if(!userExists) return res.status(404).json({ message: "User not found" });
     next();
   } catch (error) {

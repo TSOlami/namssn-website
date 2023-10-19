@@ -134,15 +134,15 @@ const resetPassword = asyncHandler(async (req, res) => {
     if (!req.locals.resetSession)
     return res.status(440).send({ error: 'Session expired' });
 
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     
     try {
       
-      User.findOne({ email })
+      User.findOne({ username })
       .then(user => {
         bcrypt.hash(password, 10)
         .then(hashedPassword => {
-          User.updateOne({ email : user.email }, { password: hashedPassword }, function(err, result) {
+          User.updateOne({ email : user.username }, { password: hashedPassword }, function(err, result) {
             if (err) throw err;
             req.locals.resetSession = false;
             return res.status(200).send({ message: 'Password updated successfully' });
