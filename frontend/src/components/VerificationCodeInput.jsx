@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const VerificationCodeInput = ({ codeLength }) => {
   const navigate = useNavigate()
@@ -31,6 +32,10 @@ const VerificationCodeInput = ({ codeLength }) => {
 			setVerificationCode(updatedCode);
 		}
 	};
+
+	useEffect(() => {
+
+	}, []);
 
 	const code = verificationCode.join("");
 	const handleSubmit = () => {
