@@ -26,6 +26,7 @@ export default {
         "secondary": "#00000",
         "tertiary": "#B3D5F7",
         "greyish" : "#F3F3F3",
+        "cardbg": "rgba(23, 161, 250, 0.4)"
       },
       boxShadow: {
         '3xl': '0 10px 40px rgba(0, 0, 0, 0.1)'
