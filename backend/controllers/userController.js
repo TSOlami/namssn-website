@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler';
+import otpGenerator from 'otp-generator';
 import generateToken from '../utils/generateToken.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
@@ -89,6 +90,74 @@ const registerUser = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw new Error('Invalid user data')
+  }
+});
+
+// @desc  Generate an OTP for user verification
+// Route GET /api/v1/users/generateOTP
+// Access Public
+const generateOTP = asyncHandler(async (req, res) => {
+  req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+  res.status(201).json({ code: req.app.locals.OTP })
+});
+
+// @desc  Verify OTP
+// Route GET /api/v1/users/verifyOTP
+// Access Public
+const verifyOTP = asyncHandler(async (req, res) => {
+  const { code } = req.query;
+  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+    req.app.locals.OTP = null; // Reset the OTP
+    req.locals.resetSession = true; // Set the reset password session to true
+    return res.status(201).json({ message: 'OTP verified successfully' });
+  } else {
+    res.status(400).json({ error: 'Invalid OTP' });
+  }
+});
+
+// @desc  Create a password reset session
+// Route GET /api/v1/users/createResetSession
+// Access Public
+const createResetSession = asyncHandler(async (req, res) => {
+  if (req.locals.resetSession) {
+    req.locals.resetSession = false; // Allow access to the route only once
+    return res.status(201).json({ message: 'Create a password reset session' });
+  }
+  res.status(440).send({error: 'Session expired'});
+});
+
+// @desc  Reset user password
+// Route PUT /api/v1/users/resetPassword
+// Access Public
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    if (!req.locals.resetSession)
+    return res.status(440).send({ error: 'Session expired' });
+
+    const { email, password } = req.body;
+    
+    try {
+      
+      User.findOne({ email })
+      .then(user => {
+        bcrypt.hash(password, 10)
+        .then(hashedPassword => {
+          User.updateOne({ email : user.email }, { password: hashedPassword }, function(err, result) {
+            if (err) throw err;
+            req.locals.resetSession = false;
+            return res.status(200).send({ message: 'Password updated successfully' });
+          })
+          .then(() => res.status(200).send({ message: 'Password reset successfully' }))
+          .catch(err => res.status(500).send({ error: 'Failed to reset password' }));
+        })
+      })
+      .catch(err => res.status(404).send({ error: 'User not found' }));
+
+    } catch (error) {
+      return res.status(500).send({ error });
+    }
+  } catch (error) {
+    return res.status(401).send({ error });
   }
 });
 
@@ -409,6 +478,10 @@ const postUserPayment = asyncHandler(async (req, res) => {
 export {
   authUser,
   registerUser,
+  generateOTP,
+  verifyOTP,
+  createResetSession,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,

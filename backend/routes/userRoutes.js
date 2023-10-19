@@ -11,6 +11,9 @@ const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import {
   authUser,
   registerUser,
+  generateOTP,
+  createResetSession,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,
@@ -27,7 +30,8 @@ import {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
-  getPaymentOptions
+  getPaymentOptions,
+  verifyOTP
 } from "../controllers/userController.js";
 
 import { 
@@ -45,9 +49,12 @@ import {
   upvoteComment,
   downvoteComment,
 } from "../controllers/postController.js";
+import { registerMail } from "../controllers/mailer.js";
+import { protect, verifyUser, localVariables } from "../middleware/authMiddleware.js";
 
-import { protect } from "../middleware/authMiddleware.js";
 
+// Route for sending a welcome email
+router.route('/register-mail').post(registerMail);
 /**
  * Register a new user.
  *
@@ -63,6 +70,38 @@ router.post('/', registerUser);
  * @access Public
  */
 router.post('/auth', authUser);
+
+/**
+ * Generate OTP
+ * 
+ * @route GET /api/v1/users/otp
+ * @access Public
+ */
+router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
+
+/**
+ * Verify  generated OTP
+ * 
+ * @route  GET /api/v1/users/otp
+ * @access Public
+ */
+router.route('/verify-otp').get(verifyOTP);
+
+/**
+ * Create Reset Session
+ * 
+ * @route POST /api/v1/users/create-reset-session
+ * @access Public
+*/
+router.route('/create-reset-session').get(createResetSession);
+
+/**
+ * Reset Password
+ * 
+ * PUT /api/v1/users/reset-password
+ * @access Public
+ */
+router.route('/reset-password').put(verifyUser, resetPassword);
 
 /**
  * Logout a user.

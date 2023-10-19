@@ -54,5 +54,39 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  }
 });
 
+/**
+ * Middleware to verify a user
+ * 
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next function.
+ */
+const verifyUser = asyncHandler(async (req, res, next) => {
+  try {
+    const { email } = req.method == "GET" ? req.query : req.body;
+    // check if user exists
+    let userExists = await User.findOne({ email });
+    if(!userExists) return res.status(404).json({ message: "User not found" });
+    next();
+  } catch (error) {
+    res.status(500).json({ message: 'Server error: Unable to verify user.' });
+  }
+});
 
-export { protect, isAdmin }; // Export the middleware functions.
+/**
+ * Middleware to set local variables.
+ * 
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next function.
+ */
+const localVariables = asyncHandler(async (req, res, next) => {
+  req.app.locals = {
+    OTP: null,
+    resetSession: false,
+  }
+  next()
+});
+
+
+export { protect, isAdmin, verifyUser, localVariables }; // Export the middleware functions.

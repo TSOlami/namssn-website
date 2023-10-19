@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-dotenv.config();
+
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errormiddleware.js';
