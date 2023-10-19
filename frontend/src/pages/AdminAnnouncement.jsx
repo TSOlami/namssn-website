@@ -14,6 +14,9 @@ const AdminAnnouncements = () => {
   // Create the createAnnouncement mutation
   const [createAnnouncement, { isLoading: isCreating }] = useCreateAnnouncementMutation();
 
+  // Create the deleteAnnouncement mutation
+  const [deleteAnnouncement, { isLoading: isDeleting }] = useDeleteAnnouncementMutation();
+
   // Create a dispatch function
   const dispatch = useDispatch();
 
@@ -36,7 +39,7 @@ const AdminAnnouncements = () => {
     e.preventDefault();
     try {
       // Append the selectedLevel to the formik.values
-    const values = Object.assign( formik.values, { level: selectedLevel });
+    const values = await Object.assign( formik.values, { level: selectedLevel });
 
     console.log("Submitted values:", values);
     // Dispatch the createAnnouncement action
@@ -74,8 +77,12 @@ const AdminAnnouncements = () => {
 
   // Handler for "Delete" button
   const handleDeleteClick = (announcement) => {
+
     // Handle the delete logic for the announcement
     console.log("Delete announcement:", announcement);
+
+    // Dispatch the deleteAnnouncement action
+    dispatch(deleteAnnouncement(announcement._id));
   };
 
   
@@ -168,7 +175,6 @@ const AdminAnnouncements = () => {
                     id={`announcement${index}`}
                     className="resize-none border-2 border-gray-300 p-3 rounded-lg"
                     value={announcement.text}  // Set the value to the announcement's text
-                    onBlur={formik.handleBlur(`announcement${index}`)}
                     onChange={(e) => handleAnnouncementChange(e, index)}
                   />
                   <div className="flex flex-row gap-5 ml-auto">
@@ -188,7 +194,7 @@ const AdminAnnouncements = () => {
                 </div>
               ))}
             </form>
-                {isFetching || isCreating && <Loader />}
+                {isFetching || isCreating || isDeleting && <Loader />}
           </div>
         </div>
       </div>
