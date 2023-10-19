@@ -170,7 +170,25 @@
   background: #E3FFE8;
 }
 
+.verification-code-input {
+  display: flex;
+  justify-content: center;
+}
 
+.verification-code-input input {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.verification-code-input input:focus {
+  outline: none;
+  border-color: #007bff;
+}
 
 @media (max-width: 1024px) {
   .hamburger {

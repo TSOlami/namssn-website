@@ -77,7 +77,7 @@ const SignUpForm = () => {
 			try {
         const res = await register(values).unwrap();
         dispatch(setCredentials({...res}));
-        navigate('/home');
+        navigate('/verify-email');
         toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
       } catch (err) {
         toast.error(err?.data?.message || err?.error)

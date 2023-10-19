@@ -35,5 +35,6 @@ import Image7 from './images/image7.svg';
 import MembersImg from './images/MembersImg.png';
 import ProfileImg from './ProfileImg.png';
 import Upload from './Upload.png';
+import VerifyEmailSVG from './images/VerifyEmailSVG.svg'
 
-export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg };
+export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG };
