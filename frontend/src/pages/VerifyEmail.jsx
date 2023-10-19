@@ -11,7 +11,7 @@ const VerifyEmail = () => {
         <h1 className="text-3xl font-bold">Verify your email</h1>
         <p className="p-2">Check your email for the six digit code sent to the email entered</p>
 
-        <VerificationCodeInput codeLength={4}/>
+        <VerificationCodeInput codeLength={6}/>
       </div>
     </div>
   )
