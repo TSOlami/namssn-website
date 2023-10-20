@@ -7,9 +7,9 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 		return {	
       // Make a user admin
       makeUserAdmin: builder.mutation({
-        query(_id) {
+        query(userId) {
           return {
-            url: `${ADMIN_URL}/make-admin/${_id}`,
+            url: `${ADMIN_URL}/make-admin/${userId}`,
             method: 'PUT',
           };
         },
