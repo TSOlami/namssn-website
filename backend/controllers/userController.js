@@ -93,6 +93,54 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc  Verify a user's account
+// Route GET /api/v1/users/verifyAccount
+// Access Private
+const verifyAccount = asyncHandler(async (req, res) => {
+  const { username, matricNumber, studentEmail } = req.body;
+
+  // Find the user by username
+  const user = await User.findOne({ username });
+
+  if (user) {
+    // Check if the user has already been verified
+    if (user.isVerified) {
+      res.status(400);
+      throw new Error('User already verified');
+    }
+    // Append the user's matric number and student email to the user's data
+    user.matricNumber = matricNumber;
+    user.studentEmail = studentEmail;
+    user.isVerified = true;
+
+    // Save the updated user data
+    const updatedUser = await user.save();
+
+    // Return the updated user data
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      studentEmail: updatedUser.studentEmail,
+      matricNumber: updatedUser.matricNumber,
+      bio: updatedUser.bio,
+      role: updatedUser.role,
+      level: updatedUser.level,
+      isVerified: updatedUser.isVerified,
+      points: updatedUser.points,
+      profilePicture: updatedUser.profilePicture,
+      posts: updatedUser.posts,
+      blogs: updatedUser.blogs,
+      payments: updatedUser.payments,
+      resources: updatedUser.resources,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 // @desc  Generate an OTP for user verification
 // Route GET /api/v1/users/generateOTP
 // Access Public
@@ -513,6 +561,7 @@ const postUserPayment = asyncHandler(async (req, res) => {
 export {
   authUser,
   registerUser,
+  verifyAccount,
   generateOTP,
   verifyOTP,
   createResetSession,

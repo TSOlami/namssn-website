@@ -11,6 +11,7 @@ const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import {
   authUser,
   registerUser,
+  verifyAccount,
   generateOTP,
   createResetSession,
   resetPassword,
@@ -71,6 +72,14 @@ router.post('/', registerUser);
  * @access Public
  */
 router.post('/auth', authUser);
+
+/**
+ * Verify a user account.
+ * 
+ * @route PUT /api/v1/users/verify-account
+ * @access Private
+ */
+router.route('/verify-account').put(verifyAccount);
 
 /**
  * Generate OTP
