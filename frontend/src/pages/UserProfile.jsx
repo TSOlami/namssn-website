@@ -18,6 +18,9 @@ const UserProfile = () => {
   // Fetch user profile details from the server
   const { data: user, isLoading: userLoading  } = useGetUserQuery({ _id: userId });
 
+  // Get user name from the user object
+  const name = user?.name;
+
   // Fetch user posts from the server
   const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
 
@@ -31,7 +34,7 @@ const UserProfile = () => {
   const handleMakeUserAdmin = async () => {
     try {
       await makeUserAdmin(userId).unwrap();
-      toast.success('User is now an admin');
+      toast.success(`${name} is now an admin`);
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -41,7 +44,7 @@ const UserProfile = () => {
   const handleRemoveAdmin = async () => {
     try {
       await removeAdmin(userId).unwrap();
-      toast.success('User is no longer an admin');
+      toast.success(`${name} is no longer an admin`);
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -57,7 +60,7 @@ const UserProfile = () => {
     return <ErrorPage/>;
   }
   // Get user profile details that was fetched from the server
-  const name = user?.name;
+  
   const username = user?.username;
   const bio = user?.bio;
   const isVerified = user?.isVerified;
