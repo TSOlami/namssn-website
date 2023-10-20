@@ -200,21 +200,21 @@ const AdminAnnouncements = () => {
                 >
                   <textarea
                     name={`announcement${index}`}
-                    id={`announcement${index}`}
+                    id={`announcement${announcement._id}`}
                     className="resize-none border-2 border-gray-300 p-3 rounded-lg"
                     value={announcement.text}  // Set the value to the announcement's text
-                    onChange={(e) => handleAnnouncementChange(e, index)}
+                    onChange={(e) => handleAnnouncementChange(e, announcement._id)}
                   />
                   <div className="flex flex-row gap-5 ml-auto">
                     <button
                       className="p-2 px-3 rounded-lg bg-black text-white"
-                      onClick={() => handleEditClick(announcement, index)}
+                      onClick={() => handleEditClick(announcement, announcement._id)}
                     >
                       Edit
                     </button>
                     <button
                       className="p-2 px-3 rounded-lg bg-red-500 text-white"
-                      onClick={() => handleDeleteClick(announcement, index)}
+                      onClick={() => handleDeleteClick(announcement, announcement._id)}
                     >
                       Delete
                     </button>
