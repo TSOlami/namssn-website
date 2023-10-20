@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Payment } from "./components";
+import { Payment,PaymentHistory } from "./components";
 import {
 	Landing,
 	SignIn,
@@ -43,6 +43,7 @@ export default function App() {
 					<Route path="/home" element={<Home />} />
 					<Route path="/payments" element={<PaymentPage />} />
 					<Route path="/payments/pay/:id" element={<Payment />} />
+					<Route path="/payments/:userId" element={<PaymentHistory />} />
 					<Route path="/resources" element={<Resources />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/profile/:userId" element={<UserProfile />} />

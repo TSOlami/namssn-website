@@ -1,4 +1,4 @@
-const Report = ({ avatar, name, username, matric, amount, details }) => {
+const RecentPayments = ({ avatar, name, username, matric, amount, reference }) => {
 	return (
 		<div className="flex flex-row items-center justify-between w-full p-1 px-5 pr-10 rounded-xl border-2 border-gray-200 m-2 my-4">
 			<div className="flex flex-row gap-4 items-center">
@@ -11,7 +11,7 @@ const Report = ({ avatar, name, username, matric, amount, details }) => {
 			<div>@{username}</div>
 			<div>{matric}</div>
 			<div className="">
-				{details}
+				{reference}
 			</div>
 
 			<div className="rounded-md font-semibold px-3 text-xl">
@@ -21,4 +21,4 @@ const Report = ({ avatar, name, username, matric, amount, details }) => {
 	);
 };
 
-export default Report;
+export default RecentPayments;

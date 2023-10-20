@@ -536,14 +536,26 @@ const getPaymentOptions = async (req, res) => {
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
 // access	Private
-const getUserPayment = asyncHandler(async (req, res) => {
-  try {
-    await getAllPayments(req, res);
-  } catch (error) {
-    console.log(error)
-  }
-  res.status(200).json({ message: 'User payments history' });
+const getUserPayments = asyncHandler(async (req, res) => {
+	try {
+	  const userId = req.params.userId; // Get the user ID from the query parameters
+  
+	  // Fetch the user's posts from the database
+    console.log("Fetching payments for user: ", userId);
+	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
+  
+	  if (!userPosts) {
+		res.status(404).json({ message: "No payments found for this user." });
+	  } else {
+		res.status(200).json(userPayments);
+		console.log("Got user payments successfully: ", userPayments.length);
+	  }
+	} catch (error) {
+	  console.error("Error fetching user payments:", error);
+	  res.status(500).json({ message: "Server error while fetching user payments." });
+	}
 });
+
 
 // @desc	Send a user payments
 // Route	POST  /api/v1/users/payments
@@ -582,6 +594,6 @@ export {
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
+  getUserPayments,
   getPaymentOptions
 };
