@@ -107,7 +107,7 @@ const Profile = () => {
 					) : (
 						userPosts?.map(
 							(
-								post // Use post._id as the key
+								post
 							) => (
 								<Post
 									key={post._id}
@@ -117,8 +117,9 @@ const Profile = () => {
 									text={post.text}
 									name={name}
 									username={username}
+									avatar={profileImage}
 									createdAt={post.createdAt}
-									image={Wrapper}
+									image={post.image}
 									postId={post._id}
 									u_id={userInfo._id}
 								/>

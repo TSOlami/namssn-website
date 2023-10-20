@@ -50,12 +50,12 @@ const AnnouncementContainer = () => {
             {level} {level !== "General" && "Level"} Announcements
           </h2>
           {groupedAnnouncements[level].map((announcement) => (
-            console.log(announcement),
             <Announcement
               key={announcement._id}
               name={announcement.user.name}
               text={announcement.text}
               isVerified={announcement.user.isVerified}
+              createdAt={announcement.createdAt}
             />
           ))}
         </div>

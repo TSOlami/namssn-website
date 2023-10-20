@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Avatar } from "../../assets";
+import { useSelector } from "react-redux";
+import { ProfileImg } from "../../assets";
 import { useDispatch } from "react-redux";
 import { setNavOpen } from "../../redux/slices/navSlice";
 
@@ -17,6 +18,12 @@ const HeaderComponent = ({ title, url }) => {
 		setSearch("");
 	};
 
+	// get user from redux
+	const { userInfo } = useSelector((state) => state.auth);
+
+	// get avatar from redux
+	const Avatar = userInfo?.profilePicture || ProfileImg;
+
 	// handle nav open with redux
 	const handleNavOpen = () => {
 		dispatch(setNavOpen());
@@ -28,7 +35,7 @@ const HeaderComponent = ({ title, url }) => {
 			<img
 				src={Avatar}
 				alt="avatar"
-				className="lg:hidden cursor-pointer"
+				className="lg:hidden profile-image-small"
 				onClick={handleNavOpen}
 			/>
 			{url && (
