@@ -10,6 +10,7 @@ import { Upload } from "../assets";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import store from "../redux/store/store";
+import { motion } from "framer-motion";
 
 const base_url = "http://localhost:5000/api/v1/users/resources/";
 
@@ -45,7 +46,12 @@ const Resources = () => {
 		const fileList = data.map((obj) => Object.keys(obj)[0]);
 		console.log(data);
 		return (
-			<div className="relative">
+			<motion.div
+				initial={{ opacity: 0, x: 100 }}
+				animate={{ opacity: 1, x: 0 }}
+				exit={{ opacity: 0, x: -100 }}
+				className="relative"
+			>
 				<div className="flex relative z-2">
 					<Sidebar />
 					<div
@@ -119,7 +125,7 @@ const Resources = () => {
 						onClose={handlePopUpClose}
 					/>
 				</div>
-			</div>
+			</motion.div>
 		);
 	} else {
 		return (

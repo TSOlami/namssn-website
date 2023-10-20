@@ -5,10 +5,16 @@ import { mockAccounts, mockRecentPayments } from "../data";
 import { MembersImg } from "../assets";
 import { Avatar } from "../assets";
 import { FaPerson } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 const AdminDashboard = () => {
 	return (
-		<div className="flex flex-row w-full">
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex flex-row w-full"
+		>
 			<Sidebar />
 			<div className="w-full">
 				<HeaderComponent title="Dashboard" />
@@ -168,7 +174,7 @@ const AdminDashboard = () => {
 					))}
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

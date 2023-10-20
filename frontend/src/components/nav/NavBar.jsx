@@ -26,7 +26,7 @@ const NavBar = () => {
 
 			{/* Namssn logo, absolute code, avoid abeg */}
 			<div>
-				<div className="flex flex-row items-center absolute lg:hidden">
+				<div className="flex flex-row items-center absolute lg:hidden bg-white w-full">
 					<Link to="/">
 						<img src={NamssnLogo} alt="Logo" className="logo pt-3"/>
 					</Link>
