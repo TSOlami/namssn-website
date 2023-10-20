@@ -3,13 +3,25 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
-import { AdminAnnouncementCard, HeaderComponent, Sidebar, Loader } from "../components";
-import { useCreateAnnouncementMutation, useAllAnnouncementsQuery, useUpdateAnnouncementMutation, useDeleteAnnouncementMutation, setAnnouncements } from "../redux";
+import {
+	AdminAnnouncementCard,
+	HeaderComponent,
+	Sidebar,
+	Loader,
+} from "../components";
+import {
+	useCreateAnnouncementMutation,
+	useAllAnnouncementsQuery,
+	useDeleteAnnouncementMutation,
+	setAnnouncements,
+} from "../redux";
 
 const AdminAnnouncements = () => {
-  // Fetch all announcements
-  const { data: announcements, isLoading: isFetching } = useAllAnnouncementsQuery();
+	// Fetch all announcements
+	const { data: announcements, isLoading: isFetching } =
+		useAllAnnouncementsQuery();
 
   // Create the createAnnouncement mutation
   const [createAnnouncement, { isLoading: isCreating }] = useCreateAnnouncementMutation();
@@ -17,13 +29,13 @@ const AdminAnnouncements = () => {
   // Create the deleteAnnouncement mutation
   const [deleteAnnouncement, { isLoading: isDeleting }] = useDeleteAnnouncementMutation();
 
-  // Create a dispatch function
-  const dispatch = useDispatch();
+	// Create a dispatch function
+	const dispatch = useDispatch();
 
-  // Define the initial values for the form fields
-  const initialValues = {
-    text: "",
-  };
+	// Define the initial values for the form fields
+	const initialValues = {
+		text: "",
+	};
 
   // Define a state variable to track the selected "level"
   const [selectedLevel, setSelectedLevel] = useState('Non-Student');
@@ -93,73 +105,89 @@ const AdminAnnouncements = () => {
     onSubmit: handleFormSubmit,
   });
 
-  return (
-    <div className="flex flex-row w-full">
-      <Sidebar />
+	return (
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex flex-row w-full"
+		>
+			<Sidebar />
 
-      <div className="w-full">
-        <HeaderComponent title="Announcements" />
-        <div className="flex flex-row gap-2 w-full">
-          <div className="flex-1">
-            <AdminAnnouncementCard 
-            title="General Announcements"
-            onClick={() => {
-              setSelectedLevel('Non-Student');
-              console.log("Selected level: Non-Student");
-            }}
-           />
-            <AdminAnnouncementCard title="100L Announcements"
-            onClick={() => {
-            setSelectedLevel('100');
-            console.log("Selected level: 100L");
-            }}
-            />
-            <AdminAnnouncementCard title="200L Announcements" 
-            onClick={() => {
-              setSelectedLevel('200');
-              console.log("Selected level: 200L");
-            }}
-            />
-            <AdminAnnouncementCard title="300L Announcements" 
-            onClick={() => {
-              setSelectedLevel('300');
-              console.log("Selected level: 300L");
-            }}
-            />
-            <AdminAnnouncementCard title="400L Announcements" 
-            onClick={() => {
-              setSelectedLevel('400');
-              console.log("Selected level: 400L");
-            }}
-            />
-            <AdminAnnouncementCard title="500L Announcements"
-            onClick={() => {
-              setSelectedLevel('500');
-              console.log("Selected level: 500L");
-            }}
-            />
-          </div>
+			<div className="w-full">
+				<HeaderComponent title="Announcements" />
+				<div className="flex flex-row gap-2 w-full">
+					<div className="flex-1">
+						<AdminAnnouncementCard
+							title="General Announcements"
+							onClick={() => {
+								setSelectedLevel("Non-Student");
+								console.log("Selected level: Non-Student");
+							}}
+						/>
+						<AdminAnnouncementCard
+							title="100L Announcements"
+							onClick={() => {
+								setSelectedLevel("100");
+								console.log("Selected level: 100L");
+							}}
+						/>
+						<AdminAnnouncementCard
+							title="200L Announcements"
+							onClick={() => {
+								setSelectedLevel("200");
+								console.log("Selected level: 200L");
+							}}
+						/>
+						<AdminAnnouncementCard
+							title="300L Announcements"
+							onClick={() => {
+								setSelectedLevel("300");
+								console.log("Selected level: 300L");
+							}}
+						/>
+						<AdminAnnouncementCard
+							title="400L Announcements"
+							onClick={() => {
+								setSelectedLevel("400");
+								console.log("Selected level: 400L");
+							}}
+						/>
+						<AdminAnnouncementCard
+							title="500L Announcements"
+							onClick={() => {
+								setSelectedLevel("500");
+								console.log("Selected level: 500L");
+							}}
+						/>
+					</div>
 
-          <div className="flex-1 border-l-2 border-l-gray-300">
-          <form action="" className="flex flex-col gap-3 p-5" onSubmit={handleFormSubmit}>
-              <textarea
-                name="text"
-                placeholder="Type in a new announcement"
-                id="text"
-                className="resize-none border-2 border-gray-300 p-3 rounded-lg"
-                value={formik.values.text}
-                onBlur={formik.handleBlur("text")}
-                onChange={formik.handleChange("text")}
-              />
-              {formik.touched.text && formik.errors.text && (
-                <div className="text-red-500">{formik.errors.text}</div>
-              )}
-              <button
-                className="p-2 px-3 rounded-lg bg-black text-white"
-                type="submit"
-              >
-                Make Announcement
-              </button>
+					<div className="flex-1 border-l-2 border-l-gray-300">
+						<form
+							action=""
+							className="flex flex-col gap-3 p-5"
+							onSubmit={handleFormSubmit}
+						>
+							<textarea
+								name="text"
+								placeholder="Type in a new announcement"
+								id="text"
+								className="resize-none border-2 border-gray-300 p-3 rounded-lg"
+								value={formik.values.text}
+								onBlur={formik.handleBlur("text")}
+								onChange={formik.handleChange("text")}
+							/>
+							{formik.touched.text && formik.errors.text && (
+								<div className="text-red-500">
+									{formik.errors.text}
+								</div>
+							)}
+							<button
+								className="p-2 px-3 rounded-lg bg-black text-white"
+								type="submit"
+							>
+								Make Announcement
+							</button>
 
               {/* The other annoucements map inside input fields where they can be edited and deleted directly */}
               <h3 className="text-xl font-semibold pt-8">
@@ -198,7 +226,7 @@ const AdminAnnouncements = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

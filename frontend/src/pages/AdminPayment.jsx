@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails } from "../components";
 import { mockPaidUsers } from "../data";
 import { useAllPaymentsQuery, useVerifyPaymentsMutation} from '../redux'; // 
-
+import { motion } from "framer-motion";
 
 const AdminPayment = () => {
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
@@ -31,7 +31,11 @@ const AdminPayment = () => {
     
   
 	return (
-		<div className="flex flex-row">
+		<motion.div 			
+    initial={{ opacity: 0, x: 100 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -100 }}
+     className="flex flex-row">
 			<Sidebar />
 
 			<div className="w-full h-full">
@@ -147,7 +151,7 @@ const AdminPayment = () => {
         <AddCategoryForm handleModalOpen={openAddCategoryForm} onClose={closeAddCategoryForm} />
       )}
         {showDeleteCategoryForm && <DeleteCategoryForm handleModalOpen={openDeleteCategoryForm} />}
-		</div>
+		</motion.div>
       
 		
 	);

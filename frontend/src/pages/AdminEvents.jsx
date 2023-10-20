@@ -5,10 +5,16 @@ import {
 	Sidebar,
 } from "../components";
 import { mockEvents } from "../data";
+import { motion } from "framer-motion";
 
 const AdminEvents = () => {
 	return (
-		<div className="flex flex-row w-full">
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex flex-row w-full"
+		>
 			<Sidebar />
 			<div className="w-full flex flex-col">
 				<HeaderComponent title="Events" />
@@ -23,12 +29,9 @@ const AdminEvents = () => {
 							/>
 						))}
 
-
 						{/* Add new event button */}
 						{/* This should load an empty event form */}
-						<button
-							className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80"
-						>
+						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
 							Add New Event
 						</button>
 					</div>
@@ -39,7 +42,7 @@ const AdminEvents = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 
