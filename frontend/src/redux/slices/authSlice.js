@@ -15,6 +15,8 @@ const getLocalStorageItem = (key) => {
 export const initialState = {
 	userInfo: getLocalStorageItem('userInfo') || null,
   posts: getLocalStorageItem('userPosts') || null,
+  announcements: getLocalStorageItem('userAnnouncements') || null,
+  payments: getLocalStorageItem('userPayments') || null,
 }
 
 const authSlice = createSlice({
@@ -30,7 +32,8 @@ const authSlice = createSlice({
       state.posts = null;
       localStorage.removeItem('userInfo');
       localStorage.removeItem('userPosts');
-      localStorage.removeItem('userPayments')
+      localStorage.removeItem('userAnnouncements');
+      localStorage.removeItem('userPayments');
     },
     setPosts(state, action) {
       state.posts = action.payload;
