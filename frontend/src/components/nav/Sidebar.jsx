@@ -138,7 +138,7 @@ const Sidebar = () => {
 						</li>
 						<li>
 							<Link
-								to="/payment"
+								to="/payments"
 								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
 							>
 								<FaMoneyBill />

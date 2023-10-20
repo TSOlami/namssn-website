@@ -57,6 +57,7 @@ const Home = () => {
 									comments={post?.comments?.length}
 									isVerified={post?.user?.isVerified}
 									text={post?.text}
+									image={post?.image}
 									name={post?.user?.name}
 									username={post?.user?.username}
 									avatar={post?.user?.profilePicture}

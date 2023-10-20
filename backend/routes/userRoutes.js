@@ -31,7 +31,7 @@ import {
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
+  getUserPayments,
   getPaymentOptions,
   verifyOTP
 } from "../controllers/userController.js";
@@ -258,6 +258,7 @@ router
  * @route POST /api/v1/users/payments
  * @access Private (Requires authentication)
  */
+router.get('/payments/:userId', protect, getUserPayments);
 router
   .route('/payments')
   .get(protect, getPaymentOptions)

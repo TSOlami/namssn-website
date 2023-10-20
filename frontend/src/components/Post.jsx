@@ -10,7 +10,7 @@ import { formatDateToTime } from "../utils";
 import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
 import { ProfileImg } from "../assets";
 
-const Post = ({ isVerified, upvotes, downvotes,	text,	name, username, avatar, createdAt, u_id, postId }) => {
+const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, avatar, createdAt, u_id, postId }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
@@ -35,6 +35,7 @@ const Post = ({ isVerified, upvotes, downvotes,	text,	name, username, avatar, cr
         console.error("Post deletion failed", response);
       }
     }
+
     catch (error) {
       console.error("Post deletion failed", error);
     }
@@ -139,7 +140,14 @@ const Post = ({ isVerified, upvotes, downvotes,	text,	name, username, avatar, cr
 				</div>
 
 				{/* Post content goes here */}
-				<div className="body-text" onClick={routeToComments}>{text}</div>
+				<div className="body-text " onClick={routeToComments}>
+					{text}
+					{image && (
+						<div className="post-image-container pt-2">
+							<img src={image} alt="Post Image" className="post-image" />
+						</div>
+					)}
+				</div>
 
 				{/* Post actions */}
 

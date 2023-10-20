@@ -47,7 +47,6 @@ const EditProfileForm = ({ handleModal }) => {
     level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    studentEmail: Yup.string().email('Invalid email format'),
     matricNumber: Yup.string(),
     bio: Yup.string(),
 	});
@@ -164,24 +163,6 @@ const EditProfileForm = ({ handleModal }) => {
           {formik.touched.email &&
           formik.errors.email ? (
             <FormErrors error={formik.errors.email} />
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="studentEmail">Student Email</label>
-          <input
-            type="email"
-            name="studentEmail"
-            id="studentEmail"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.studentEmail}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
-            placeholder="New student email"
-            autoComplete="email"
-          />
-          {formik.touched.studentEmail &&
-          formik.errors.studentEmail ? (
-            <FormErrors error={formik.errors.studentEmail} />
           ) : null}
         </div>
         <div>
