@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Payment,PaymentHistory } from "./components";
+import { Payment, PaymentHistory } from "./components";
 import {
 	Landing,
 	SignIn,
@@ -25,6 +25,7 @@ import {
 	AdminAnnouncement,
 	VerifyUsers,
 	VerifyEmail,
+	AdminBlogs,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
@@ -43,7 +44,10 @@ export default function App() {
 					<Route path="/home" element={<Home />} />
 					<Route path="/payments" element={<PaymentPage />} />
 					<Route path="/payments/pay/:id" element={<Payment />} />
-					<Route path="/payments/:userId" element={<PaymentHistory />} />
+					<Route
+						path="/payments/:userId"
+						element={<PaymentHistory />}
+					/>
 					<Route path="/resources" element={<Resources />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/profile/:userId" element={<UserProfile />} />
@@ -63,7 +67,11 @@ export default function App() {
 					/>
 					<Route path="/events" element={<EventsPage />} />
 					<Route path="*" element={<ErrorPage />} />
-					<Route key={13} path="/about-us" element={<AboutUsPage />} />
+					<Route
+						key={13}
+						path="/about-us"
+						element={<AboutUsPage />}
+					/>
 					<Route path="/blog" element={<BlogPage />} />
 					<Route path="/admin" element={<AdminDashboard />} />
 					<Route path="/admin/payment" element={<AdminPayment />} />
@@ -75,6 +83,7 @@ export default function App() {
 					/>
 					<Route path="/admin/users" element={<VerifyUsers />} />
 					<Route path="/verify-email" element={<VerifyEmail />} />
+					<Route path="/admin/blogs" element={<AdminBlogs/>} />
 				</Routes>
 			</BrowserRouter>
 		</AnimatePresence>
