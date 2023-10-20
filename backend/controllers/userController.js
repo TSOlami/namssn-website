@@ -262,11 +262,26 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 
 const postUserResources = asyncHandler(async (req, res) => {
   try {
-    await postResource(req, res);
+    const response = await postResource(req, res);
+    // 
+    if (response) {
+      if (response === null) {
+        res.status(500).send("Unable to upload")
+      } else {
+        console.log("File has been saved successfully");
+        console.log(response)
+        res.json(response)
+      }
+    }
   } catch (err) {
     console.log(err)
   }
-  res.status(200).send('')
+  // await postResource(req, res)
+  // .then((response) => {
+  //   console.log(`I'm here too=========${response}===========`)
+  //   return (response)
+  // })
+  //   // 
 });
 
 // @desc Get all blogs and sort by timestamp

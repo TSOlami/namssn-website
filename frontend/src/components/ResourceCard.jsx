@@ -9,7 +9,7 @@ import { useState } from "react";
 const state = store.getState();
 const userInfo = state.auth.userInfo;
 
-const cardClass = "font-crimson cursor-pointer md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-15 sm:w-15 md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
+const cardClass = "font-crimson cursor-pointer md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-[15] md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
 
 const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, semester, date}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, se
     }
 
     const smStyle = "text-xs text-gray-400";
-    const lgStyle = "font-crimson text-sm text-blue-600"
+    const lgStyle = "font-crimson truncate text-sm text-blue-600"
 
     return (
         <div className="w-[10em] flex flex-col items-center">
@@ -55,10 +55,10 @@ const ResourceCard = ({uploaderUsername, title, course, fileUrl, description, se
             </div>
             <div className="flex flex-col items-center border border-b-blue-800">
                 <span className={lgStyle}>{description}</span>
-                <div><span className={smStyle}>category: </span><span className={lgStyle}>{semester}</span></div>
-                <div><span className={smStyle}>course: </span><span className={lgStyle}>{course}</span></div>
+                <div><span className={smStyle}>Level: </span><span className={lgStyle}>{semester}</span></div>
+                <div><span className={smStyle}>Course: </span><span className={lgStyle}>{course}</span></div>
                 <div><span className={smStyle}>By: </span> <span className={lgStyle}>{uploaderUsername}</span></div>
-                <div><span className={smStyle}>Date Uploaded: </span><span className={lgStyle}>{date}</span></div>
+                <div><span className={smStyle}>Uploaded: </span><span className={lgStyle}>{date}</span></div>
             </div>
             {isLoading && <Loader />}
         </div>
