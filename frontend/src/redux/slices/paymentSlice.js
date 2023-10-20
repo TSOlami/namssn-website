@@ -68,6 +68,17 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
           };
         },
       }),
+
+      // user payments
+      userPayments: builder.query({
+        query({ _id }) {
+          return {
+            url: `${USER_PAYMENT_URL}/payments/${_id}`,
+            method: 'GET',
+          };
+        },
+        invalidatesTags: ['Payments'],
+      }),
     };
 
 
@@ -81,5 +92,6 @@ export const {
   useVerifyPaymentsMutation,
   useDeleteCategoryMutation,
   useCreatePaymentMutation,
-  useAllPaymentsQuery
+  useAllPaymentsQuery,
+  useUserPaymentsQuery,
 } = CategoryApiSlice;

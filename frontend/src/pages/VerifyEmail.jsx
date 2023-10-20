@@ -21,7 +21,7 @@ const VerifyEmail = () => {
 					entered
 				</p>
 
-				<VerificationCodeInput codeLength={4} />
+				<VerificationCodeInput codeLength={6} />
 			</div>
 		</motion.div>
 	);

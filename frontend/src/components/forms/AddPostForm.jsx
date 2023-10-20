@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaXmark } from "react-icons/fa6";
@@ -6,9 +7,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { FormErrors, Loader } from "../../components";
-// import { Wrapper } from "../../assets";
-// import { Loader } from "../Loader";
 import { useCreatePostMutation, setPosts } from "../../redux";
+import { convertToBase64 } from "../../utils";
 
 
 const AddPostForm = ({handleModalOpen}) => {
@@ -24,27 +24,12 @@ const AddPostForm = ({handleModalOpen}) => {
   // Formik and yup validation schema
   const initialValues = {
       text: "",
-      image: null,
     };
   
-  const MAX_FILE_SIZE = 508000; //500KB
-
-  const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
-
-  function isValidFileType(fileName, fileType) {
-    return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
-  }
+  const [file, setFile] = useState();
 
   const validationSchema = Yup.object({
-    text: Yup.string().required("").min(2, "Too short"),
-    image: Yup.mixed()
-    .test("is-valid-type", "Not a valid image type", (value) =>
-      !value || isValidFileType(value.name.toLowerCase(), "image")
-    ) // Validate file type
-    .test("is-valid-size", "Max allowed size is 500KB", (value) =>
-      !value || value.size <= MAX_FILE_SIZE
-    ) // Validate file size
-    .notRequired() // Make the image field optional
+    text: Yup.string().required("").min(2, "Too short").max(500, "Too long"),
   });
   
   const formik = useFormik({
@@ -52,7 +37,8 @@ const AddPostForm = ({handleModalOpen}) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
+        values = Object.assign(values, { image: file || ""});
+        
         const res = await createPost(values).unwrap();
         console.log(res);
         dispatch(setPosts({ ...res }));
@@ -66,6 +52,12 @@ const AddPostForm = ({handleModalOpen}) => {
       }
     },
   });
+
+  // File upload handler
+  const onUpload = async e => {
+    const base64 = await convertToBase64(e.target.files[0]);
+    setFile(base64);
+  };
 
   return (
     <div>
@@ -95,18 +87,15 @@ const AddPostForm = ({handleModalOpen}) => {
             {formik.touched.text && formik.errors.text ? (
               <FormErrors error={formik.errors.text} />
               ) : null}
+            <label htmlFor="image">
             <input
               type="file"
               id="image"
               name="image"
               accept="image/*"
-              onChange={(event) => {
-                formik.setFieldValue("image", event.currentTarget.files[0]);
-              }}
+              onChange={onUpload}
             />
-            {formik.touched.image && formik.errors.image && (
-              <div className="text-red-500">{formik.errors.image}</div>
-            )}
+            </label>
           </div>
           <div className="flex justify-between items-center p-5 border-t border-gray-200">
             <div className="flex items-center gap-2">

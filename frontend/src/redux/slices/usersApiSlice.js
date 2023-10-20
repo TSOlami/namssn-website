@@ -27,6 +27,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Send Register Email Query
+      registerMail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/register-mail`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Logout Query
       logout: builder.mutation({
         query() {
@@ -72,31 +83,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['User'],
       }),
 
-      // Make a user admin
-      makeUserAdmin: builder.mutation({
-        query(data) {
+      // Get All Blogs Query
+      allBlogs: builder.query({
+        query() {
           return {
-            url: `${USERS_URL}/make-admin/${data.userId}`,
-            method: 'PUT',
-            body: data,
+            url: `${USERS_URL}/blogs`,
+            method: 'GET',
           };
         },
-        invalidatesTags: ['User'],
       }),
-
-      // Remove admin privileges from a user
-      removeAdmin: builder.mutation({
-        query(data) {
-          return {
-            url: `${USERS_URL}/remove-admin/${data.userId}`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-        invalidatesTags: ['User'],
-      }),
+      
     };
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useMakeUserAdminMutation, useRemoveAdminMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useRegisterMailMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery } = usersApiSlice;

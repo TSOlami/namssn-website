@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler';
+import otpGenerator from 'otp-generator';
 import generateToken from '../utils/generateToken.js';
 import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
@@ -92,6 +93,122 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc  Verify a user's account
+// Route GET /api/v1/users/verifyAccount
+// Access Private
+const verifyAccount = asyncHandler(async (req, res) => {
+  const { username, matricNumber, studentEmail } = req.body;
+
+  // Find the user by username
+  const user = await User.findOne({ username });
+
+  if (user) {
+    // Check if the user has already been verified
+    if (user.isVerified) {
+      res.status(400);
+      throw new Error('User already verified');
+    }
+    // Append the user's matric number and student email to the user's data
+    user.matricNumber = matricNumber;
+    user.studentEmail = studentEmail;
+    user.isVerified = true;
+
+    // Save the updated user data
+    const updatedUser = await user.save();
+
+    // Return the updated user data
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      studentEmail: updatedUser.studentEmail,
+      matricNumber: updatedUser.matricNumber,
+      bio: updatedUser.bio,
+      role: updatedUser.role,
+      level: updatedUser.level,
+      isVerified: updatedUser.isVerified,
+      points: updatedUser.points,
+      profilePicture: updatedUser.profilePicture,
+      posts: updatedUser.posts,
+      blogs: updatedUser.blogs,
+      payments: updatedUser.payments,
+      resources: updatedUser.resources,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc  Generate an OTP for user verification
+// Route GET /api/v1/users/generateOTP
+// Access Public
+const generateOTP = asyncHandler(async (req, res) => {
+  req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+  res.status(201).json({ code: req.app.locals.OTP })
+});
+
+// @desc  Verify OTP
+// Route GET /api/v1/users/verifyOTP
+// Access Public
+const verifyOTP = asyncHandler(async (req, res) => {
+  const { code } = req.query;
+  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+    req.app.locals.OTP = null; // Reset the OTP
+    req.locals.resetSession = true; // Set the reset password session to true
+    return res.status(201).json({ message: 'OTP verified successfully' });
+  } else {
+    res.status(400).json({ error: 'Invalid OTP' });
+  }
+});
+
+// @desc  Create a password reset session
+// Route GET /api/v1/users/createResetSession
+// Access Public
+const createResetSession = asyncHandler(async (req, res) => {
+  if (req.locals.resetSession) {
+    req.locals.resetSession = false; // Allow access to the route only once
+    return res.status(201).json({ message: 'Create a password reset session' });
+  }
+  res.status(440).send({error: 'Session expired'});
+});
+
+// @desc  Reset user password
+// Route PUT /api/v1/users/resetPassword
+// Access Public
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    if (!req.locals.resetSession)
+    return res.status(440).send({ error: 'Session expired' });
+
+    const { username, password } = req.body;
+    
+    try {
+      
+      User.findOne({ username })
+      .then(user => {
+        bcrypt.hash(password, 10)
+        .then(hashedPassword => {
+          User.updateOne({ email : user.username }, { password: hashedPassword }, function(err, result) {
+            if (err) throw err;
+            req.locals.resetSession = false;
+            return res.status(200).send({ message: 'Password updated successfully' });
+          })
+          .then(() => res.status(200).send({ message: 'Password reset successfully' }))
+          .catch(err => res.status(500).send({ error: 'Failed to reset password' }));
+        })
+      })
+      .catch(err => res.status(404).send({ error: 'User not found' }));
+
+    } catch (error) {
+      return res.status(500).send({ error });
+    }
+  } catch (error) {
+    return res.status(401).send({ error });
+  }
+});
+
 // @desc	Logout user
 // Route	post  /api/v1/users/logout
 // access	Private
@@ -135,6 +252,41 @@ const getUserById = asyncHandler(async (req, res) => {
 
   // Find the user by ID
   const user = await User.findById(userId);
+
+  if (user) {
+    // Return the user data
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      studentEmail: user.studentEmail,
+      matricNumber: user.matricNumber,
+      bio: user.bio,
+      role: user.role,
+      level: user.level,
+      isVerified: user.isVerified,
+      points: user.points,
+      profilePicture: user.profilePicture,
+      posts: user.posts,
+      blogs: user.blogs,
+      payments: user.payments,
+      resources: user.resources,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc  Get user by username
+// Route GET /api/v1/users/:username
+// Access Public
+const getUserByUsername = asyncHandler(async (req, res) => {
+  const username = req.params.username;
+
+  // Find the user by username
+  const user = await User.findOne({ username });
 
   if (user) {
     // Return the user data
@@ -384,14 +536,26 @@ const getPaymentOptions = async (req, res) => {
 // @desc	Get user payments history
 // Route	GET  /api/v1/users/payments
 // access	Private
-const getUserPayment = asyncHandler(async (req, res) => {
-  try {
-    await getAllPayments(req, res);
-  } catch (error) {
-    console.log(error)
-  }
-  res.status(200).json({ message: 'User payments history' });
+const getUserPayments = asyncHandler(async (req, res) => {
+	try {
+	  const userId = req.params.userId; // Get the user ID from the query parameters
+  
+	  // Fetch the user's posts from the database
+    console.log("Fetching payments for user: ", userId);
+	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
+  
+	  if (!userPosts) {
+		res.status(404).json({ message: "No payments found for this user." });
+	  } else {
+		res.status(200).json(userPayments);
+		console.log("Got user payments successfully: ", userPayments.length);
+	  }
+	} catch (error) {
+	  console.error("Error fetching user payments:", error);
+	  res.status(500).json({ message: "Server error while fetching user payments." });
+	}
 });
+
 
 // @desc	Send a user payments
 // Route	POST  /api/v1/users/payments
@@ -409,9 +573,15 @@ const postUserPayment = asyncHandler(async (req, res) => {
 export {
   authUser,
   registerUser,
+  verifyAccount,
+  generateOTP,
+  verifyOTP,
+  createResetSession,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
   getAllEvents,
@@ -424,6 +594,6 @@ export {
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
+  getUserPayments,
   getPaymentOptions
 };

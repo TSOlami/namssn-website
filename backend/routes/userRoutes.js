@@ -11,9 +11,14 @@ const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import {
   authUser,
   registerUser,
+  verifyAccount,
+  generateOTP,
+  createResetSession,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
   getAllEvents,
@@ -26,8 +31,9 @@ import {
   updateUserResources,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
-  getPaymentOptions
+  getUserPayments,
+  getPaymentOptions,
+  verifyOTP
 } from "../controllers/userController.js";
 
 import { 
@@ -45,9 +51,12 @@ import {
   upvoteComment,
   downvoteComment,
 } from "../controllers/postController.js";
+import { registerMail } from "../controllers/mailer.js";
+import { protect, verifyUser, localVariables } from "../middleware/authMiddleware.js";
 
-import { protect } from "../middleware/authMiddleware.js";
 
+// Route for sending a welcome email
+router.route('/register-mail').post(registerMail);
 /**
  * Register a new user.
  *
@@ -63,6 +72,46 @@ router.post('/', registerUser);
  * @access Public
  */
 router.post('/auth', authUser);
+
+/**
+ * Verify a user account.
+ * 
+ * @route PUT /api/v1/users/verify-account
+ * @access Private
+ */
+router.route('/verify-account').put(verifyAccount);
+
+/**
+ * Generate OTP
+ * 
+ * @route GET /api/v1/users/generate-otp
+ * @access Public
+ */
+router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
+
+/**
+ * Verify  generated OTP
+ * 
+ * @route  GET /api/v1/users/otp
+ * @access Public
+ */
+router.route('/verify-otp').get(verifyUser, verifyOTP);
+
+/**
+ * Create Reset Session
+ * 
+ * @route POST /api/v1/users/create-reset-session
+ * @access Public
+*/
+router.route('/create-reset-session').get(createResetSession);
+
+/**
+ * Reset Password
+ * 
+ * PUT /api/v1/users/reset-password
+ * @access Public
+ */
+router.route('/reset-password').put(verifyUser, resetPassword);
 
 /**
  * Logout a user.
@@ -88,6 +137,9 @@ router
 
 // Route for getting a user by id
 router.route('/profile/:userId').get(protect, getUserById);
+
+// Route for getting a user by username
+router.route('/profile/:username').get(getUserByUsername);
 
 /**
  * Get Events
@@ -206,6 +258,7 @@ router
  * @route POST /api/v1/users/payments
  * @access Private (Requires authentication)
  */
+router.get('/payments/:userId', protect, getUserPayments);
 router
   .route('/payments')
   .get(protect, getPaymentOptions)

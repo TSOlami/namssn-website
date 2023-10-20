@@ -1,44 +1,39 @@
-import { FaCircleCheck } from "react-icons/fa6";
+import { useUserPaymentsQuery, setPayments } from "../redux";
+import { RecentPayments } from ".";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import {
-	EditProfileForm,
-	Post,
 	Sidebar,
 	AnnouncementContainer,
 	Loader,
-} from "../components";
+} from ".";
 import { ProfileImg, Wrapper } from "../assets";
-import { useUserPostsQuery, setPosts } from "../redux";
 import { motion } from "framer-motion";
 
-const Profile = () => {
+const PaymentHistory = () => {
 	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
 	const name = userInfo?.name;
 	const username = userInfo?.username;
-	const bio = userInfo?.bio;
-	const isVerified = userInfo?.isVerified;
-	const points = userInfo?.points;
 	const profileImage = userInfo?.profilePicture;
 
-	// Fetch number of posts from redux store
-	const noOfPosts = userInfo?.posts?.length;
+	// Fetch number of payments from redux store
+	const noOfpayments = userInfo?.payments?.length;
 
 	const dispatch = useDispatch();
 
-	// Fetch user posts from redux store
-	const { data: userPosts, isLoading } = useUserPostsQuery({
+	// Fetch user payments from redux store
+	const { data: userPayments, isLoading } = useUserPaymentsQuery({
 		_id: userInfo?._id,
 	});
 
-	// Use useEffect to set posts after component mounts
+	// Use useEffect to set payments after component mounts
 	useEffect(() => {
-		if (userPosts) {
-			dispatch(setPosts(userPosts));
+		if (userPayments) {
+			dispatch(setPayments(userPayments));
 		}
-	}, [dispatch, userPosts]);
+	}, [dispatch, userPayments]);
+
 
 	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +60,7 @@ const Profile = () => {
 						{name}
 					</span>
 					<span>
-						{noOfPosts} {noOfPosts === 1 ? "post" : "posts"}
+						{noOfpayments} {noOfpayments === 1 ? "payment" : "payments"}
 					</span>
 				</div>
 				{/* profile image and cover image */}
@@ -83,44 +78,28 @@ const Profile = () => {
 						Edit Profile
 					</button>
 				</div>
-				<div className="flex flex-col text-sm p-3 pl-6">
-					<span className="font-semibold flex flex-row items-center gap-2 text-lg">
-						{name}
-						{isVerified && <FaCircleCheck color="#17A1FA" />}
-					</span>
-					<span>@{username}</span>
-					<span className="mt-2">{bio}</span>
-				</div>
-				<div className="font-semibold px-3 pl-6">
-					<span className="font-semibold text-xl">{points}</span>{" "}
-					points
-				</div>
-
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
-					<span className="border-b-4 border-primary">Posts</span>
+					<span className="border-b-4 border-primary">payments</span>
 				</div>
 				<div>
-					{userPosts && userPosts?.length === 0 ? ( // Check if userPosts is defined and has no posts
+					{userPayments && userPayments?.length === 0 ? ( // Check if userPayments is defined and has no payments
 						<div className="text-center mt-28 p-4 text-gray-500">
-							No posts to display.
+							No payments to display.
 						</div>
 					) : (
-						userPosts?.map(
+						userPayments?.map(
 							(
-								post
+								payment // Use payment._id as the key
 							) => (
-								<Post
-									key={post._id}
-									upvotes={post.upvotes.length}
-									downvotes={post.downvotes.length}
-									isVerified={isVerified}
-									text={post.text}
+								<RecentPayments
+									key={payment._id}
 									name={name}
 									username={username}
-									avatar={profileImage}
-									createdAt={post.createdAt}
-									image={post.image}
-									postId={post._id}
+									createdAt={payment.createdAt}
+									image={Wrapper}
+									paymentId={payment._id}
+                                    amount={payment.amount}
+                                    reference={payment.reference}
 									u_id={userInfo._id}
 								/>
 							)
@@ -129,15 +108,7 @@ const Profile = () => {
 				</div>
 			</div>
 			<AnnouncementContainer />
-
-			{/* modal */}
-			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-					<EditProfileForm handleModal={handleModal} />
-				</div>
-			)}
 		</motion.div>
 	);
 };
-
-export default Profile;
+export default PaymentHistory;

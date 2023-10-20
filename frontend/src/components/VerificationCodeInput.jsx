@@ -1,10 +1,16 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const VerificationCodeInput = ({ codeLength }) => {
+  // Use the useSelector hook to access the userInfo object from the state
+	const { userInfo } = useSelector((state) => state.auth);
+
+  const username = userInfo?.username || "";
+
   const navigate = useNavigate()
-	const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
-	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+	const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
+	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
 	const handleInputChange = (e, index) => {
 		const value = e.target.value;
@@ -32,9 +38,13 @@ const VerificationCodeInput = ({ codeLength }) => {
 		}
 	};
 
+	useEffect(() => {
+    
+	}, [username]);
+
 	const code = verificationCode.join("");
 	const handleSubmit = () => {
-		console.log("Verification Code:", code);
+		console.log("Verification Code: ", code);
     navigate('/home')
 	};
 
@@ -56,7 +66,7 @@ const VerificationCodeInput = ({ codeLength }) => {
 
 			<button
 				className={
-					code.length < 4
+					code.length < 6
 						? "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5 opacity-50 cursor-not-allowed"
 						: "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5"
 				}
