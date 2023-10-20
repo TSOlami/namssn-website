@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;
-const isAdmin = userInfo.role;
+const isAdmin = userInfo?.role;
 
 const cardClass =
 	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px]";
