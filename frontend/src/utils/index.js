@@ -4,5 +4,6 @@ import { getUser } from "./getUser";
 import { generateOTP } from "./generateOTP";
 import { verifyOTP } from "./verifyOTP";
 import { resetPassword } from "./resetPassword";
+import { accountVerificationOTP } from "./accountVerificationOTP";
 
-export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, resetPassword };
+export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resetPassword };

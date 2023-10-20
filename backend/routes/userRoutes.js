@@ -76,10 +76,10 @@ router.post('/auth', authUser);
 /**
  * Verify a user account.
  * 
- * @route PUT /api/v1/users/verify-account
+ * @route POST /api/v1/users/verify-account
  * @access Private
  */
-router.route('/verify-account').put(verifyAccount);
+router.route('/verify-account').post(verifyAccount);
 
 /**
  * Generate OTP
@@ -139,7 +139,7 @@ router
 router.route('/profile/:userId').get(protect, getUserById);
 
 // Route for getting a user by username
-router.route('/profile/:username').get(getUserByUsername);
+router.route('/user').get(getUserByUsername);
 
 /**
  * Get Events

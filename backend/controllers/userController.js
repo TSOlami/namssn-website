@@ -97,7 +97,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // Route GET /api/v1/users/verifyAccount
 // Access Private
 const verifyAccount = asyncHandler(async (req, res) => {
-  const { username, matricNumber, studentEmail } = req.body;
+  const { username, studentEmail } = req.body;
 
   // Find the user by username
   const user = await User.findOne({ username });
@@ -267,7 +267,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Get user by ID
-// Route GET /api/v1/users/:userId
+// Route GET /api/v1/users/profile/:userId
 // Access Private
 const getUserById = asyncHandler(async (req, res) => {
   const userId = req.params.userId;
@@ -302,12 +302,14 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 // @desc  Get user by username
-// Route GET /api/v1/users/:username
+// Route GET /api/v1/users/profile/:username
 // Access Public
 const getUserByUsername = asyncHandler(async (req, res) => {
-  const username = req.params.username;
+  console.log("Query: ", req.query);
+  const { username } = req.query;
 
   // Find the user by username
+  console.log("Fetching user by username: ", username);
   const user = await User.findOne({ username });
 
   if (user) {

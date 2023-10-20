@@ -38,6 +38,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Verify Account Query
+      verifyAccount: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/verify-account`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Logout Query
       logout: builder.mutation({
         query() {
@@ -97,4 +108,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useRegisterMailMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useRegisterMailMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation } = usersApiSlice;
