@@ -63,7 +63,7 @@ const UserProfile = () => {
   const isAdmin = user?.role === 'admin';
   const points = user?.points;
   const noOfPosts = userPosts?.length;
-  const image = user?.profilePicture;
+  const avatar = user?.profilePicture;
 
   const currentUserIsAdmin = currentUser?.role === 'admin';
   
@@ -79,7 +79,7 @@ const UserProfile = () => {
                 {/* profile image and cover image */}
                 <div className="w-full h-32 bg-primary z-[-1]"></div>
                 <div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-                    <img src={image || ProfileImg} alt="" className="profile-image"/>
+                    <img src={avatar || ProfileImg} alt="" className="profile-image"/>
                     {currentUserIsAdmin && (
                         isAdmin ? (
                         <button onClick={handleMakeUserAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
@@ -120,6 +120,8 @@ const UserProfile = () => {
                 isVerified={isVerified}
                 text={post.text}
                 name={name}
+                avatar={avatar}
+                image={post.image}
                 username={username}
                 createdAt={post.createdAt}
                 postId={post._id}

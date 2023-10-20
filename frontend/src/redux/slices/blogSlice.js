@@ -5,15 +5,6 @@ const BLOG_URL = "/api/v1/users";
 export const blogApiSlice = apiSlice.injectEndpoints({
 	endpoints(builder) {
 		return {
-      // Get All Blogs Query
-      allBlogs: builder.query({
-        query() {
-          return {
-            url: `${BLOG_URL}/blogs`,
-            method: 'GET',
-          };
-        },
-      }),
 
       // Get User Blogs Query
       userBlogs: builder.query({

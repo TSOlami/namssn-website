@@ -6,9 +6,13 @@ import {
 	useRegisterMailMutation,
 	useUpdateUserMutation,
 	useGetUserQuery,
-	useMakeUserAdminMutation,
-	useRemoveAdminMutation
+	useAllBlogsQuery,
 } from './slices/usersApiSlice';
+import { 
+	useMakeUserAdminMutation,
+	useRemoveAdminMutation,
+	useGetAllPaymentsQuery,
+} from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
 	useUserPostsQuery,
@@ -24,7 +28,6 @@ import {
 	useDeleteCommentMutation,
 } from './slices/postSlice';
 import {
-  useAllBlogsQuery,
   useUserBlogsQuery,
   useCreateBlogMutation,
   useUpdateBlogMutation,
@@ -95,6 +98,7 @@ export {
 	useAllCategorysQuery,
 	useAllPaymentsQuery,
 	useCreateCategoryMutation,
+	useGetAllPaymentsQuery,
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
 	useVerifyPaymentsMutation,
