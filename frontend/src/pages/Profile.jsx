@@ -8,8 +8,9 @@ import {
 	Sidebar,
 	AnnouncementContainer,
 	Loader,
+	VerifyAccountForm,
 } from "../components";
-import { ProfileImg, Wrapper } from "../assets";
+import { ProfileImg } from "../assets";
 import { useUserPostsQuery, setPosts } from "../redux";
 import { motion } from "framer-motion";
 
@@ -44,6 +45,12 @@ const Profile = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
+	};
+
+	// Manage verify modal state
+	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+	const handleVerifyModal = () => {
+		setIsVerifyModalOpen(!isVerifyModalOpen);
 	};
 
 	// Display loading indicator while data is being fetched
@@ -82,6 +89,14 @@ const Profile = () => {
 					>
 						Edit Profile
 					</button>
+					{!isVerified && (
+						<button
+						onClick={handleVerifyModal}
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
+					>
+						Verify Account
+					</button>	
+					)}
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
 					<span className="font-semibold flex flex-row items-center gap-2 text-lg">
@@ -134,6 +149,13 @@ const Profile = () => {
 			{isModalOpen && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
 					<EditProfileForm handleModal={handleModal} />
+				</div>
+			)}
+
+			{/* verify modal */}
+			{isVerifyModalOpen && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+					<VerifyAccountForm handleVerifyModal={handleVerifyModal} />
 				</div>
 			)}
 		</motion.div>

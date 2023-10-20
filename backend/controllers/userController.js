@@ -220,6 +220,28 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'User Logged Out' });
 });
 
+// @desc  Search for a user
+// Route GET /api/v1/users/search
+// Access Private
+const searchUser = asyncHandler(async (req, res) => {
+  const { query } = req.query;
+
+  // Find users whose name or username matches the query
+  const users = await User.find({
+    $or: [
+      { name: { $regex: query, $options: 'i' } },
+      { username: { $regex: query, $options: 'i' } }
+    ]
+  });
+
+  if (users) {
+    res.status(200).json(users);
+  } else {
+    res.status(404);
+    throw new Error('No users found');
+  }
+});
+
 // @desc	Get user profile
 // Route	GET  /api/v1/users/profile
 // access	Private
@@ -344,14 +366,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.username = req.body.username || user.username;
     user.level = req.body.level || user.level;
-
-    // Check for studentEmail and matricNumber changes
-    if (req.body.studentEmail !== user.studentEmail || req.body.matricNumber !== user.matricNumber) {
-      // If either studentEmail or matricNumber has changed, set isVerified to true.
-      user.isVerified = true;
-      user.role = 'admin';
-    }
-    
+    user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.studentEmail = req.body.studentEmail || user.studentEmail;
     user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.bio = req.body.bio || user.bio;
