@@ -12,7 +12,10 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
 
     const validationSchema = Yup.object({
       studentEmail: Yup.string()
-        .email("Invalid email format")
+        .matches(
+          /^[a-zA-Z0-9._%+-]+@st\.futminna\.edu\.ng$/,
+          "Invalid email format. Your student email in the format name+studentID@st.futminna.edu.ng"
+        )
         .required("Student Email is required"),
     });
 
