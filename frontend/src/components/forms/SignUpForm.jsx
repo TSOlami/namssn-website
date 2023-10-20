@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 import {FormErrors, InputField } from "../../components";
 import Loader from "../Loader";
-import { useRegisterMutation, setCredentials } from "../../redux";
+import { useRegisterMutation, useRegisterMailMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
   // Get user info from redux store
@@ -42,6 +42,10 @@ const SignUpForm = () => {
   }, [navigate, userInfo]);
 
   const [ register, { isLoading }] = useRegisterMutation();
+
+  const [ registerMail ] = useRegisterMailMutation();
+
+  const msg = "Welcome to NAMSSN, FUTMINNA chapter! We're very excited to have you on board.";
 
 	// Formik and yup validation schema
 	const initialvalues = {
@@ -77,7 +81,13 @@ const SignUpForm = () => {
 			try {
         const res = await register(values).unwrap();
         dispatch(setCredentials({...res}));
-        navigate('/verify-email');
+        // Registration successful, now send the registration email
+        let { username, email } = res;
+        if (username && email) {
+          await registerMail({ username, userEmail: email, text: msg }).unwrap();
+          return Promise.resolve(msg);
+        }
+        navigate('/home');
         toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
       } catch (err) {
         toast.error(err?.data?.message || err?.error)

@@ -15,8 +15,7 @@ let nodeconfig = {
 	  pass: process.env.EMAIL_PASSWORD,
 	},
 };
-console.log(process.env.EMAIL_PASSWORD);
-console.log(process.env.EMAIL);
+
 let transporter = nodemailer.createTransport(nodeconfig); // create reusable transporter object using the default SMTP transport
 
 let MailGenerator = new Mailgen({
@@ -64,7 +63,8 @@ export const registerMail = async (req,res) => {
     subject: subject || 'Welcome to NAMSSN, FUTMINNA chapter!',
     html: emailBody
   };
-
+  
+  console.log("Sending Mail to: ", message.to)
   // Send the email
   transporter.sendMail(message)
   .then(() => {

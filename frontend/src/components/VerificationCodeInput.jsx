@@ -1,8 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const VerificationCodeInput = ({ codeLength }) => {
+  // Use the useSelector hook to access the userInfo object from the state
+	const { userInfo } = useSelector((state) => state.auth);
+
+  const username = userInfo?.username || "";
+
   const navigate = useNavigate()
 	const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
 	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -34,8 +39,8 @@ const VerificationCodeInput = ({ codeLength }) => {
 	};
 
 	useEffect(() => {
-
-	}, []);
+    
+	}, [username]);
 
 	const code = verificationCode.join("");
 	const handleSubmit = () => {

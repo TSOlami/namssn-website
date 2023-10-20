@@ -27,6 +27,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Send Register Email Query
+      registerMail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/register-mail`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Logout Query
       logout: builder.mutation({
         query() {
@@ -99,4 +110,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useMakeUserAdminMutation, useRemoveAdminMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useRegisterMailMutation, useUpdateUserMutation, useGetUserQuery, useMakeUserAdminMutation, useRemoveAdminMutation } = usersApiSlice;

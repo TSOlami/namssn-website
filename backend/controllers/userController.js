@@ -231,6 +231,41 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc  Get user by username
+// Route GET /api/v1/users/:username
+// Access Public
+const getUserByUsername = asyncHandler(async (req, res) => {
+  const username = req.params.username;
+
+  // Find the user by username
+  const user = await User.findOne({ username });
+
+  if (user) {
+    // Return the user data
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      studentEmail: user.studentEmail,
+      matricNumber: user.matricNumber,
+      bio: user.bio,
+      role: user.role,
+      level: user.level,
+      isVerified: user.isVerified,
+      points: user.points,
+      profilePicture: user.profilePicture,
+      posts: user.posts,
+      blogs: user.blogs,
+      payments: user.payments,
+      resources: user.resources,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 // @desc	Update user profile
 // Route	PUT  /api/v1/users/profile
 // access	Private
@@ -485,6 +520,7 @@ export {
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
   getAllEvents,

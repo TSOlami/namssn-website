@@ -17,6 +17,7 @@ import {
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
   getAllEvents,
@@ -74,7 +75,7 @@ router.post('/auth', authUser);
 /**
  * Generate OTP
  * 
- * @route GET /api/v1/users/otp
+ * @route GET /api/v1/users/generate-otp
  * @access Public
  */
 router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
@@ -85,7 +86,7 @@ router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
  * @route  GET /api/v1/users/otp
  * @access Public
  */
-router.route('/verify-otp').get(verifyOTP);
+router.route('/verify-otp').get(verifyUser, verifyOTP);
 
 /**
  * Create Reset Session
@@ -127,6 +128,9 @@ router
 
 // Route for getting a user by id
 router.route('/profile/:userId').get(protect, getUserById);
+
+// Route for getting a user by username
+router.route('/profile/:username').get(getUserByUsername);
 
 /**
  * Get Events
