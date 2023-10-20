@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
-import { AdminCard, Sidebar } from "../components";
-import HeaderComponent from "../components/HeaderComponent";
-import { mockAccounts, mockReportedAccounts } from "../data";
-import Report from "../components/Report";
+import { AdminCard, RecentPayments, Sidebar } from "../components";
+import { HeaderComponent } from "../components";
+import { mockAccounts, mockRecentPayments } from "../data";
 import { MembersImg } from "../assets";
+import { Avatar } from "../assets";
+import { FaPerson } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 const AdminDashboard = () => {
 	return (
-		<div className="flex flex-row w-full">
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex flex-row w-full"
+		>
 			<Sidebar />
 			<div className="w-full">
 				<HeaderComponent title="Dashboard" />
@@ -33,6 +40,7 @@ const AdminDashboard = () => {
 							amount="21"
 							card="events"
 							bg="reddish"
+							route="/admin/events"
 						/>
 
 						<AdminCard
@@ -40,12 +48,28 @@ const AdminDashboard = () => {
 							amount="12"
 							card="announcements"
 							bg="greenish"
+							route="/admin/announcements"
+						/>
+
+						<AdminCard
+							title={<FaPerson />}
+							amount="Verify users"
+							card="users"
+							bg="bg-purple-100"
+							route="/admin/users"
 						/>
 					</div>
 				</div>
 				<div className="p-5 flex flex-row flex-wrap gap-4 items-center justify-center lg:justify-normal">
 					<div className="bg-yellow-100 w-fit  p-4 rounded-xl">
-						<h2 className="text-xl font-semibold">Team Members <img src={MembersImg} alt="" className="inline pl-5" /> </h2>
+						<h2 className="text-xl font-semibold">
+							Team Members{" "}
+							<img
+								src={MembersImg}
+								alt=""
+								className="inline pl-5"
+							/>{" "}
+						</h2>
 						<div className="flex flex-row justify-between m-2 rounded-md border-gray-500 border-2 p-1">
 							1. Principal Offices of the department <span></span>
 							<Link className="ml-5 bg-black px-2 rounded-md text-white">
@@ -116,7 +140,7 @@ const AdminDashboard = () => {
 				</div>
 
 				{/* Reported section */}
-				<h3 className="font-bold text-2xl p-4">Reported Accounts</h3>
+				{/*<h3 className="font-bold text-2xl p-4">Reported Accounts</h3>
 				<div className="w-full px-4">
 					{mockReportedAccounts.map((account, index) => (
 						<Report
@@ -129,9 +153,28 @@ const AdminDashboard = () => {
 							suspend={account.suspend}
 						/>
 					))}
+				</div> */}
+
+				{/* Recent payments */}
+				<div className="flex flex-row justify-between pr-10">
+					<h3 className="font-bold text-2xl p-4">Recent Payments</h3>
+					<button className="text-primary">See more</button>
+				</div>
+				<div className="w-full px-4">
+					{mockRecentPayments.map((payment, index) => (
+						<RecentPayments
+							key={index}
+							name={payment.name}
+							username={payment.username}
+							matric={payment.matric}
+							amount={payment.amount}
+							details={payment.details}
+							avatar={Avatar}
+						/>
+					))}
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

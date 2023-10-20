@@ -1,9 +1,14 @@
 import { NavBar, Footer, Actions } from "../components";
 import { blogPosts } from "../constants";
+import { motion } from "framer-motion";
 
 const BlogPage = () => {
 	return (
-		<main>
+		<motion.main
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+		>
 			<NavBar />
 			<section className="padding w-full">
 				<h1 className="font-crimson text-primary text-2xl items-start mt-8">
@@ -37,11 +42,11 @@ const BlogPage = () => {
 									</p>
 								</div>
 							</div>
-							<div className="flex flex-col md:flex-row rounded-lg mt-5 bg-tertiary opacity-[50px]">
+							<div className="flex flex-col lg:flex-row rounded-lg mt-5 bg-tertiary opacity-[50px]">
 								<img
 									src={post.image}
 									alt="Blog Image"
-									className="rounded-lg"
+									className="rounded-lg lg:w-5/6"
 								/>
 								<div className="p-6">
 									<Actions
@@ -60,7 +65,7 @@ const BlogPage = () => {
 				</div>
 			</section>
 			<Footer />
-		</main>
+		</motion.main>
 	);
 };
 

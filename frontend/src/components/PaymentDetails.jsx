@@ -10,4 +10,4 @@ const PaymentDetails = ( { title, amount}) => {
   )
 }
 
-export default PaymentDetails
+export default PaymentDetails;

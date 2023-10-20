@@ -11,11 +11,19 @@ const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import {
   authUser,
   registerUser,
+  verifyAccount,
+  generateOTP,
+  createResetSession,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
+  getAllEvents,
+  getAllAnnouncements,
+  getUserAnnouncements,
   getAllBlogs,
   getUserBlogs,
   postUserResources,
@@ -24,6 +32,8 @@ import {
   deleteUserResources,
   postUserPayment,
   getUserPayment,
+  getPaymentOptions,
+  verifyOTP
 } from "../controllers/userController.js";
 
 import { 
@@ -38,10 +48,15 @@ import {
   createPostComment,
   updatePostComment,
   deletePostComment,
+  upvoteComment,
+  downvoteComment,
 } from "../controllers/postController.js";
+import { registerMail } from "../controllers/mailer.js";
+import { protect, verifyUser, localVariables } from "../middleware/authMiddleware.js";
 
-import { protect } from "../middleware/authMiddleware.js";
 
+// Route for sending a welcome email
+router.route('/register-mail').post(registerMail);
 /**
  * Register a new user.
  *
@@ -57,6 +72,46 @@ router.post('/', registerUser);
  * @access Public
  */
 router.post('/auth', authUser);
+
+/**
+ * Verify a user account.
+ * 
+ * @route PUT /api/v1/users/verify-account
+ * @access Private
+ */
+router.route('/verify-account').put(verifyAccount);
+
+/**
+ * Generate OTP
+ * 
+ * @route GET /api/v1/users/generate-otp
+ * @access Public
+ */
+router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
+
+/**
+ * Verify  generated OTP
+ * 
+ * @route  GET /api/v1/users/otp
+ * @access Public
+ */
+router.route('/verify-otp').get(verifyUser, verifyOTP);
+
+/**
+ * Create Reset Session
+ * 
+ * @route POST /api/v1/users/create-reset-session
+ * @access Public
+*/
+router.route('/create-reset-session').get(createResetSession);
+
+/**
+ * Reset Password
+ * 
+ * PUT /api/v1/users/reset-password
+ * @access Public
+ */
+router.route('/reset-password').put(verifyUser, resetPassword);
 
 /**
  * Logout a user.
@@ -81,7 +136,30 @@ router
   .delete(protect, deleteUserProfile);
 
 // Route for getting a user by id
-router.get('/profile/:userId', getUserById);
+router.route('/profile/:userId').get(protect, getUserById);
+
+// Route for getting a user by username
+router.route('/profile/:username').get(getUserByUsername);
+
+/**
+ * Get Events
+ * @route GET /api/v1/users/events
+ * @access Public (Does not require authentication)
+ */
+router.get('/events', getAllEvents);
+
+/**
+ * Get Announcements
+ * @route GET /api/v1/users/announcements
+ * @access Private 
+ */
+router.route('/announcements')
+.get(protect, getAllAnnouncements);
+
+// Route for getting all announcements by user
+router
+.route('/announcement')
+.get(protect, getUserAnnouncements);
 
 /**
  * Get, create, update, and delete user posts.
@@ -134,6 +212,12 @@ router
   .put(protect, updatePostComment)
   .delete(protect, deletePostComment);
 
+// Route for upvoting a post comment
+router.put('/posts/:postId/comments/:commentId/upvote', protect, upvoteComment);
+
+// Route for downvoting a post comment
+router.put('/posts/:postId/comments/:commentId/downvote', protect, downvoteComment);
+
 /**
  * GET, POST, PUT, and DELETE user resources.
  * @route GET /api/v1/users/resources
@@ -176,7 +260,8 @@ router
  */
 router
   .route('/payments')
-  .get(protect, getUserPayment)
+  .get(protect, getPaymentOptions)
+  // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
 
 router

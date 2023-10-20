@@ -36,10 +36,10 @@ const EditProfileForm = ({ handleModal }) => {
     studentEmail: userInfo?.studentEmail || '',
     matricNumber: userInfo?.matricNumber || '',
     bio: userInfo?.bio || '',
-    level: userInfo?.level || '100',
+    level: userInfo?.level || 'Non-Student',
 	};
 
-  const levelOptions = ['100', '200', '300', '400', '500', 'Non-student'];
+  const levelOptions = ['100', '200', '300', '400', '500', 'Non-Student'];
   
 	// Define the validation schema using Yup
 	const validationSchema = Yup.object({
@@ -58,7 +58,7 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          values = await Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
+          values = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
           navigate('/home');

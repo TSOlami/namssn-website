@@ -54,7 +54,7 @@
     color: #000;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
-  
+
   .button-2 {
     display: inline-flex;
     padding: 0.4375rem 1.25rem;
@@ -66,7 +66,7 @@
     color: #FFF;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
-  
+
 }
 
 
@@ -110,23 +110,25 @@
   .nav-text {
     @apply font-crimson font-normal text-xl leading-normal;
   }
-  
+
   .profile-image {
     @apply rounded-full border-2 border-white bg-white w-[10rem] h-[10rem] object-cover shadow-lg cursor-pointer;
     @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
   }
 
   .profile-image-small {
-    @apply rounded-full border-2 border-white bg-white w-[2.5rem] h-[2.5rem] object-cover shadow-lg cursor-pointer;
+    @apply rounded-full border-2 border-white bg-white w-[2.5rem] h-[2.5rem] object-cover shadow-sm cursor-pointer;
     @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
   }
 
   .header-text {
     @apply font-merriweather font-bold md:text-3xl leading-normal py-6 text-2xl;
   }
+
   .text-container {
     @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson;
   }
+
   input[type='file'] {
     @apply block;
   }
@@ -170,6 +172,40 @@
   background: #E3FFE8;
 }
 
+.verification-code-input {
+  display: flex;
+  justify-content: center;
+}
+
+.verification-code-input input {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.verification-code-input input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Resources page loading spinner  */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
 
 
 @media (max-width: 1024px) {
@@ -180,7 +216,7 @@
     color: white;
     position: fixed;
     right: 1rem;
-    top: 5vh;
+    top: 2vh;
     z-index: 10;
     background: white;
     border-radius: 5px;
