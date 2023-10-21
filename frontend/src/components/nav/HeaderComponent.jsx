@@ -38,8 +38,7 @@ const HeaderComponent = ({ title, url }) => {
 				className="lg:hidden profile-image-small"
 				onClick={handleNavOpen}
 			/>
-			{url && (
-				<form
+			<form
 					action=""
 					onSubmit={handleSubmit}
 					className="hidden md:flex  relative"
@@ -53,8 +52,7 @@ const HeaderComponent = ({ title, url }) => {
 						onChange={handleSearchChange}
 					/>
 					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-				</form>
-			)}
+			</form>
 		</div>
 	);
 };

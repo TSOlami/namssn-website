@@ -6,7 +6,7 @@ import { setNavOpen } from "../redux/slices/navSlice";
 import Resources from '../pages/Resources';
 import { Link } from 'react-router-dom';
 
-const HeaderComponent = () => {
+const HeaderComponent = ({title}) => {
 	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
@@ -38,6 +38,7 @@ const HeaderComponent = () => {
 	return (
 		<div className="flex flex-row-reverse md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 " >
 			<img src={Avatar} alt="avatar" className='lg:hidden' onClick={handleNavOpen}/>
+			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
 
 			{/* <form action="" onSubmit={handleSubmit} className="md:flex sm:block hidden relative"> */}
 				<input

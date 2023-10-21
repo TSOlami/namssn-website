@@ -95,7 +95,7 @@ const Resources = ({query}) => {
                 <div className="flex relative z-2">
                     <Sidebar/>
                     <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
-                        <HeaderComponent/>
+                        <HeaderComponent title="Resources"/>
                         <div className="lg:pt-5 gap:4 w-[100%]">
     
                             <div className="mb-4 flex justify-between">
@@ -156,7 +156,7 @@ const Resources = ({query}) => {
                     <div className="flex relative z-2">
                         <Sidebar/>
                         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
-                            <HeaderComponent/>
+                            <HeaderComponent title="RESOURCES"/>
                             <div className="lg:pt-5 gap:4 w-[100%]">
         
                                 <div className="mb-4 flex justify-between">
