@@ -7,6 +7,7 @@ import {
 	useUpdateUserMutation,
 	useGetUserQuery,
 	useAllBlogsQuery,
+	useVerifyAccountMutation,
 } from './slices/usersApiSlice';
 import { 
 	useMakeUserAdminMutation,
@@ -116,6 +117,7 @@ export {
 	useUserEventsQuery,
 	useUpdateEventMutation,
 	useDeleteEventMutation,
+	useVerifyAccountMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,
