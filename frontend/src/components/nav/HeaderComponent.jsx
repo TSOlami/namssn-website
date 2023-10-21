@@ -4,8 +4,10 @@ import { useSelector } from "react-redux";
 import { ProfileImg } from "../../assets";
 import { useDispatch } from "react-redux";
 import { setNavOpen } from "../../redux/slices/navSlice";
+import { IoChevronBackSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
-const HeaderComponent = ({ title, url }) => {
+const HeaderComponent = ({ title, url, back }) => {
 	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
@@ -17,6 +19,12 @@ const HeaderComponent = ({ title, url }) => {
 		console.log(search);
 		setSearch("");
 	};
+
+	// navigate back to previous page
+	const navigate = useNavigate()
+	const handleBack = () => {
+		navigate(-1)
+	}
 
 	// get user from redux
 	const { userInfo } = useSelector((state) => state.auth);
@@ -31,6 +39,12 @@ const HeaderComponent = ({ title, url }) => {
 
 	return (
 		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
+			{back && (
+				<div onClick={handleBack} className="text-2xl p-2 pr-5">
+					<IoChevronBackSharp />
+				</div>
+			)}
+
 			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
 			<img
 				src={Avatar}
