@@ -118,9 +118,9 @@ const SignInForm = () => {
 
     { isLoading && <Loader />}
 
-    <a href="/verify-email" className="text-gray-500 text-right text-md">
+    <Link to="/forgot-password" className="text-gray-500 text-right text-md">
       Forgot Password?
-    </a>
+    </Link>
     <button
       type="submit"
       className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
