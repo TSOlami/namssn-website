@@ -103,7 +103,7 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
   };
   
 	return (
-		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+		<div className="border-b-2 border-gray-300 p-2 pr-1 flex flex-row gap-1 sm:gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 			<div>
 				<Link to={`/profile/${u_id}`}>
 					<img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
@@ -111,11 +111,11 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
 			</div>
 
 			<div className="flex flex-col gap-2 w-full">
-				<div className="flex flex-row gap-2 lg:gap-2 items-center w-full relative">
+				<div className="flex flex-row gap-1 lg:gap-2 items-center w-full relative">
 					<Link to={`/profile/${u_id}`}>
 						{" "}
 						{/* Wrap the user's name in a Link */}
-						<span className="font-medium flex flex-row items-center gap-2">
+						<span className="font-medium flex flex-row items-center gap-1">
 							<span className="font-semibold">{name}</span>
 							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
