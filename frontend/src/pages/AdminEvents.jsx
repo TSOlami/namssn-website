@@ -18,9 +18,9 @@ const AdminEvents = () => {
 			<Sidebar />
 			<div className="w-full flex flex-col">
 				<HeaderComponent title="Events" />
-				<div className="w-full flex flex-row">
+				<div className="w-full flex md:flex-row flex-col">
 					{/* Events section */}
-					<div className="flex-1">
+					<div className="flex-1 md:block hidden">
 						{mockEvents.map((event, index) => (
 							<AdminEventsCard
 								key={index}
@@ -34,6 +34,20 @@ const AdminEvents = () => {
 						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
 							Add New Event
 						</button>
+					</div>
+
+					<div className="flex flex-col m-auto w-full items-center md:hidden">
+						<select
+							name=""
+							id=""
+							className="bg-black text-white w-[50%] p-2 rounded-lg"
+						>
+							{mockEvents.map((event, index) => (
+								<option value={event.title} key={index}>
+									{event.title}
+								</option>
+							))}
+						</select>
 					</div>
 
 					{/*Event form */}

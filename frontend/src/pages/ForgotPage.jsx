@@ -16,7 +16,7 @@ const ForgotPage = () => {
 			</div>
 
 			<div className="flex items-center flex-col">
-				<h1 className="text-3xl font-bold">Forgot your password</h1>
+				<h1 className="text-3xl font-bold">Forgot your password ?</h1>
 				<p className="p-2">
           Enter your username and we&apos;ll send you a
           verification code to reset your password

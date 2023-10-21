@@ -147,7 +147,7 @@ const ResourceCard = ({
 	const lgStyle = "text-sm text-blue-600";
 
 	return (
-		<div className="w-[10em] flex flex-col items-center my-2">
+		<div className="w-[10em] flex flex-col justify-start items-center my-2">
 			<div
 				className={cardClass + " relative"}
 				onClick={() => viewFile(fileUrl)}
@@ -163,50 +163,52 @@ const ResourceCard = ({
 				>
 					<HiDotsVertical />
 				</span>
-				{openOptions && (
-					<div>
-						{isAdmin === "admin" && (
-							<button
-								ref={buttonRef}
-								onClick={handleNewDelete}
-								className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
-							>
-								<MdDelete /> <span>Delete Post</span>
-							</button>
-						)}
 
-						<div
-							ref={buttonRef}
-							onClick={handleSetShowDetails}
-							className="bg-white p-2 absolute right-3 top-[50px] flex items-center shadow-lg w-[120px] hover:border border-black z-[201]"
-						>
-							Details
+				<div ref={buttonRef}>
+					{openOptions && (
+						<div>
+							{isAdmin === "admin" && (
+								<button
+									onClick={handleNewDelete}
+									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
+								>
+									<MdDelete /> <span>Delete Post</span>
+								</button>
+							)}
+
+							<div
+								onClick={handleSetShowDetails}
+								className="bg-white p-2 absolute right-3 top-[50px] flex items-center shadow-lg w-[120px] hover:border border-black z-[201]"
+							>
+								Details
+							</div>
+						</div>
+					)}
+				</div>
+
+				
+			</div>
+			{showDetails && (
+					<div className="flex flex-col pl-2 border border-b-blue-800 bg-white">
+						<span className={lgStyle}>{description}</span>
+						<div>
+							<span className={smStyle}>category: </span>
+							<span className={lgStyle}>{semester}</span>
+						</div>
+						<div>
+							<span className={smStyle}>course: </span>
+							<span className={lgStyle}>{course}</span>
+						</div>
+						<div>
+							<span className={smStyle}>By: </span>{" "}
+							<span className={lgStyle}>{uploaderUsername}</span>
+						</div>
+						<div>
+							<span className={smStyle}>Date Uploaded: </span>
+							<span className={lgStyle}>{date}</span>
 						</div>
 					</div>
 				)}
-			</div>
-
-			{showDetails && (
-				<div className="flex flex-col pl-2 border border-b-blue-800">
-					<span className={lgStyle}>{description}</span>
-					<div>
-						<span className={smStyle}>category: </span>
-						<span className={lgStyle}>{semester}</span>
-					</div>
-					<div>
-						<span className={smStyle}>course: </span>
-						<span className={lgStyle}>{course}</span>
-					</div>
-					<div>
-						<span className={smStyle}>By: </span>{" "}
-						<span className={lgStyle}>{uploaderUsername}</span>
-					</div>
-					<div>
-						<span className={smStyle}>Date Uploaded: </span>
-						<span className={lgStyle}>{date}</span>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };
