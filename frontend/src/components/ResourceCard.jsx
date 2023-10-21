@@ -77,7 +77,7 @@ const ResourceCard = ({
 					toast.error("You are not priviledged to delete this file");
 				}
 			})
-			.catch((err) => {
+			.catch(() => {
 				toast.error("An error occurred. Unable to delete resource");
 			});
 	};
