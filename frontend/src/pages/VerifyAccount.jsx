@@ -55,7 +55,7 @@ const VerifyAccount = () => {
 
 				<VerificationAccountInput codeLength={6} />
         <p >
-          Didn't receive an OTP? Click <button onClick={handleResendOTP} className="text-primary">here</button> to resend.
+          Didn&apos;t receive an OTP? Click <button onClick={handleResendOTP} className="text-primary">here</button> to resend.
         </p>
 			</div>
 		</motion.div>
