@@ -6,6 +6,7 @@ import { useGetUserQuery, useUserPostsQuery, useMakeUserAdminMutation, useRemove
 import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
 import { ErrorPage } from '../pages';
 import { ProfileImg } from "../assets";
+import { toast } from 'react-toastify';
 
 const UserProfile = () => {
   // Get the userId from the URL
@@ -16,6 +17,9 @@ const UserProfile = () => {
 
   // Fetch user profile details from the server
   const { data: user, isLoading: userLoading  } = useGetUserQuery({ _id: userId });
+
+  // Get user name from the user object
+  const name = user?.name;
 
   // Fetch user posts from the server
   const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
@@ -30,9 +34,9 @@ const UserProfile = () => {
   const handleMakeUserAdmin = async () => {
     try {
       await makeUserAdmin(userId).unwrap();
-      console.log('User is now an admin');
+      toast.success(`${name} is now an admin`);
     } catch (error) {
-      console.log(error);
+      toast.error('Something went wrong');
     }
   };
 
@@ -40,9 +44,9 @@ const UserProfile = () => {
   const handleRemoveAdmin = async () => {
     try {
       await removeAdmin(userId).unwrap();
-      console.log('User is no longer an admin');
+      toast.success(`${name} is no longer an admin`);
     } catch (error) {
-      console.log(error);
+      toast.error('Something went wrong');
     }
   };
 
@@ -56,7 +60,7 @@ const UserProfile = () => {
     return <ErrorPage/>;
   }
   // Get user profile details that was fetched from the server
-  const name = user?.name;
+  
   const username = user?.username;
   const bio = user?.bio;
   const isVerified = user?.isVerified;
@@ -82,11 +86,11 @@ const UserProfile = () => {
                     <img src={avatar || ProfileImg} alt="" className="profile-image"/>
                     {currentUserIsAdmin && (
                         isAdmin ? (
-                        <button onClick={handleMakeUserAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
+                        <button onClick={handleRemoveAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
                             Remove Admin
                         </button>
                         ) : (
-                        <button onClick={handleRemoveAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+                        <button onClick={handleMakeUserAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
                             Make Admin
                         </button>
                         )

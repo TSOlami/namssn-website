@@ -10,7 +10,6 @@ import User from '../models/userModel.js';
 const initiatePayment = async (req, res) => {
   try {
         const { email, amount, category } = req.body;
-        const apiURL = process.env.PAYSTACK_URL;
         const categoryResult = await Category.findOne({ name: category });
         const userResult = await User.findOne({ email: email });
         const categoryId = categoryResult._id;
@@ -58,51 +57,46 @@ const initiatePayment = async (req, res) => {
 };
 
 const verifyPayments = async (req, res) => {
+  const { transactionReference } = req.body; // Assuming the reference number is sent in the request body
+
   try {
-    const last10Payments = await Payment.find()
-      .sort({ createdAt: -1 }) // Sort by createdAt in descending order to get the latest
-      .limit(10); // Limit to the last 10 payments
-      console.log(last10Payments)
-    const verificationResults = [];
-
-    for (const payment of last10Payments) {
-      const transactionReference = payment.transactionReference;
-      try {
-        // Make a request to Paystack's verify endpoint
-        const verifyResponse = await axios.get(`${process.env.PAYSTACK_VERIFY_URL}/${transactionReference}`, {
-          headers: {
-            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          },
-        });
-
-        const paymentData = verifyResponse.data;
-
-        // Check the transaction status within the data object
-        const transactionStatus = paymentData.data.status;
-
-        verificationResults.push({
-          user: payment.user,
-          category: payment.category,
-          reference: payment.transactionReference,
-          status: transactionStatus === 'success' ? 'success' : 'failed',
-        });
-      } catch (error) {
-        console.error('Error verifying payment:', error);
-        verificationResults.push({
-          user: payment.user,
-          category: payment.category,
-          reference: payment.transactionReference,
-          status: 'error',
-        });
+    // Make a request to Paystack's verify endpoint
+    const verifyResponse = await axios.get(
+      `${process.env.PAYSTACK_VERIFY_URL}/${transactionReference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        },
       }
-    }
+    );
 
-    res.status(200).json(verificationResults);
+    const paymentData = verifyResponse.data;
+
+    // Extract the required information from the response
+    const transactionStatus = paymentData.data.status;
+    const paymentAmount = paymentData.data.amount;
+    const paymentMethod = paymentData.data.channel || '';
+
+    const verificationResult = {
+      reference: transactionReference,
+      status: transactionStatus === 'success' ? 'success' : 'failed',
+      amount: paymentAmount,
+      method: paymentMethod,
+    };
+    // console.log(verificationResult)
+
+    res.status(200).json(verificationResult);
   } catch (error) {
-    console.error('Error retrieving payments:', error);
-    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    console.error('Error verifying payment:', error);
+    res.status(500).json({
+      reference: transactionReference,
+      status: 'error',
+      message: 'Internal Server Error',
+    });
   }
 };
+
+
 
 const getAllPayments = async (req, res) => {
   try {

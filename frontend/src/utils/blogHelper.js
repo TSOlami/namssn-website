@@ -4,9 +4,10 @@ axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
 
 export async function getAllBlog() {
 	try {
-		await axios.get('/api/v1/users/blogs');
+		const { data } = await axios.get('/api/v1/users/blogs');
+		return { data }
 	} catch (error) {
-		return Promise.reject(error);
+		return {error};
 		
 	}
 }

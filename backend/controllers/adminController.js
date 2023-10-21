@@ -12,7 +12,7 @@ import Event from '../models/eventModel.js';
 // Route PUT /api/v1/admin/users/makeadmin/:userId
 // Access Private (only accessible to admin users)
 const makeUserAdmin = asyncHandler(async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
 
   // Find the user by ID
   const user = await User.findById(userId);
@@ -42,7 +42,7 @@ const makeUserAdmin = asyncHandler(async (req, res) => {
 // Route PUT /api/v1/admin/users/removeadmin/:userId
 // Access Private (only accessible to admin users)
 const removeAdmin = asyncHandler(async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
 
   // Find the user by ID
   const user = await User.findById(userId);

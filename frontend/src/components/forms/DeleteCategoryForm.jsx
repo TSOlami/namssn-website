@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FaTrash } from "react-icons/fa6";
+import { FaTrash, FaXmark} from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
 import { FormErrors, Loader } from "..";
 import { useDeleteCategoryMutation } from "../../redux";
 
-const DeleteCategoryForm = ({ handleModalOpen }) => {
+const DeleteCategoryForm = ({handleVerifyModal}) => {
  
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
 
@@ -55,16 +55,18 @@ const formik = useFormik({
   
   });
 
-  const closeForm = () => {
-    handleModalOpen();
-  };
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col justify-center items-center">
       <div className="bg-white p-5 w-[400px] rounded-3xl">
-        <div className="rounded w-fit p-2 hover:text-white hover:bg-black place-self-end" onClick={closeForm}>
+      <div className="flex flex-row justify-between items-center">
+        <div className="rounded w-fit p-2 hover:text-white hover:bg-black place-self-end">
+        <span className="font-semibold text-lg">Add Payment Category</span>
           <FaTrash />
         </div>
+        <button onClick={handleVerifyModal} className="text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
+          <FaXmark />
+        </button>
+      </div>
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
           <label htmlFor="category" className="pt-2 font-bold text-xl">Delete Payment Category</label>
           <div className="pt-3">
@@ -119,13 +121,6 @@ const formik = useFormik({
             className="bg-black text-white rounded-lg p-2 mt-5 hover:bg-slate-700"
           >
             Delete Payment Category
-          </button>
-          <button
-            type="button"
-            onClick={closeForm}
-            className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 mt-3"
-          >
-            Close
           </button>
         </form>
       </div>

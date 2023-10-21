@@ -1,24 +1,41 @@
-const RecentPayments = ({ avatar, name, username, matric, amount, reference }) => {
+import { formatDateToTime } from "../utils";
+
+const RecentPayments = ({
+	email,
+	matricNo,
+	amount,
+	reference,
+	createdAt,
+	category, // Add category to props
+  }) => {
+
+	// Format the date
+	const date = new Date(createdAt);
 	return (
-		<div className="flex flex-row items-center justify-between w-full p-1 px-5 pr-10 rounded-xl border-2 border-gray-200 m-2 my-4">
-			<div className="flex flex-row gap-4 items-center">
-				<div>
-					<img src={avatar} alt="" />
-				</div>
-				<div>{name}</div>
-			</div>
-
-			<div>@{username}</div>
-			<div>{matric}</div>
-			<div className="">
-				{reference}
-			</div>
-
-			<div className="rounded-md font-semibold px-3 text-xl">
-				{amount}
-			</div>
+		<div className="flex flex-row items-center justify-between w-full p-4 rounded-xl border border-gray-200 m-4"style={{ width: '600px' }}>
+		<div className="flex flex-col text-left">
+			<div className="mb-2">
+			<strong>Email:</strong> {email}
 		</div>
+		<div className="mb-2">
+			<strong>Matric No:</strong> {matricNo}
+		</div>
+		<div className="mb-2">
+			<strong>Reference:</strong> {reference}
+		</div>
+		<div className="mb-2">
+			<strong>Category:</strong> {category}
+		</div>
+		<div className="mb-2">
+			<strong>Date:</strong> {formatDateToTime(date)} ago
+		</div>
+		<div className="rounded-full bg-primary text-white px-4 py-1 text-lg mt-4">
+			Amount: #{amount}
+		</div>
+		</div>
+	</div>
 	);
-};
-
-export default RecentPayments;
+  };
+  
+  export default RecentPayments;
+  

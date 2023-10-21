@@ -1,11 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import otpGenerator from 'otp-generator';
 import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
+import { initiatePayment, verifyPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
+import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
 import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
 
@@ -220,6 +221,28 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'User Logged Out' });
 });
 
+// @desc  Search for a user
+// Route GET /api/v1/users/search
+// Access Private
+const searchUser = asyncHandler(async (req, res) => {
+  const { query } = req.query;
+
+  // Find users whose name or username matches the query
+  const users = await User.find({
+    $or: [
+      { name: { $regex: query, $options: 'i' } },
+      { username: { $regex: query, $options: 'i' } }
+    ]
+  });
+
+  if (users) {
+    res.status(200).json(users);
+  } else {
+    res.status(404);
+    throw new Error('No users found');
+  }
+});
+
 // @desc	Get user profile
 // Route	GET  /api/v1/users/profile
 // access	Private
@@ -344,14 +367,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.username = req.body.username || user.username;
     user.level = req.body.level || user.level;
-
-    // Check for studentEmail and matricNumber changes
-    if (req.body.studentEmail !== user.studentEmail || req.body.matricNumber !== user.matricNumber) {
-      // If either studentEmail or matricNumber has changed, set isVerified to true.
-      user.isVerified = true;
-      user.role = 'admin';
-    }
-    
+    user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.studentEmail = req.body.studentEmail || user.studentEmail;
     user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.bio = req.body.bio || user.bio;
@@ -544,7 +560,7 @@ const getUserPayments = asyncHandler(async (req, res) => {
     console.log("Fetching payments for user: ", userId);
 	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
   
-	  if (!userPosts) {
+	  if (!userPayments) {
 		res.status(404).json({ message: "No payments found for this user." });
 	  } else {
 		res.status(200).json(userPayments);
@@ -563,6 +579,14 @@ const getUserPayments = asyncHandler(async (req, res) => {
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
     await initiatePayment(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const verifyUserPayment = asyncHandler(async (req, res) => {
+  try {
+    await verifyPayments(req, res);
   } catch (error) {
     console.log(error);
   }
@@ -595,5 +619,6 @@ export {
   deleteUserResources,
   postUserPayment,
   getUserPayments,
-  getPaymentOptions
+  getPaymentOptions,
+  verifyUserPayment
 };
