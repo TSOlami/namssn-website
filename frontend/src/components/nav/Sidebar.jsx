@@ -82,7 +82,7 @@ const Sidebar = () => {
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300"></span>
 			</div> */}
 
-			{location.pathname === "/profile" ? (
+			{location.pathname === "/profile" || location.pathname === `/payments/${userInfo._id}` ? (
 				<div className={isNavOpen ? "hamburger active" : "hamburger"} onClick={handleCloseNav}>
 					<span className="bar side"></span>
 					<span className="bar side"></span>
@@ -90,11 +90,6 @@ const Sidebar = () => {
 				</div>
 			) : null}
 
-			{/* <div className={isNavOpen ? "hamburger active" : "hamburger"}>
-				<span className="bar side"></span>
-				<span className="bar side"></span>
-				<span className="bar side"></span>
-			</div> */}
 
 			<div
 				className={
