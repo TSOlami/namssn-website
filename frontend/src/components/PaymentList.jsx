@@ -37,7 +37,7 @@ const PaymentList = () => {
 								{payments.map((payment) => (
 									<li
 										key={payment._id}
-										className="shadow-3xl flex flex-row  justify-between items-center rounded-2xl m-8 p-4 gap-5 md:gap-20 pr-5 md:pr-14"
+										className="shadow-xl flex flex-row  justify-between items-center rounded-2xl m-8 p-4 gap-5 md:gap-20 pr-5 md:pr-14"
 									>
 										<div className="flex flex-col">
 											<p>Category: {payment.name}</p>
