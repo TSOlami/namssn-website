@@ -36,6 +36,7 @@
     "nodemailer": "^6.9.6",
     "otp-generator": "^4.0.1",
     "paystack": "^2.0.1",
+    "punycode": "^2.3.0",
     "react-toastify": "^9.1.3",
     "request": "^2.88.2",
     "universal-cookie": "^6.1.1",

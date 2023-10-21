@@ -207,28 +207,7 @@ const Resources = ({query}) => {
                     </div>
                 </div>  
             );
-        // } else if (data === "error") {
-        //     return (
-        //         <div className="flex">
-        //         <Sidebar/>
-        //         <div className="text-xl font-crimson text-gray-300 w-[80%] flex flex-col fixed left-[7%] top-[40%] items-center ">
-        //             <span className="text-red-600">No Resource was fetched.</span>
-        //             <span >Kindly <span className="text-green-600 hover:text-green-400 cursor-pointer" onClick={handleReload}> reload </span> the page or try again later</span>
-        //         </div>
-        //         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
-        //             {/* <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
-        //                 <img className="lg:w-[30px]" src={Upload} alt="Upload" />
-        //             </button> */}
-        //         </div>
-        //         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block": "w-[35%] sm:hidden md:block hidden lg:block"}>
-        //             <AnnouncementContainer />
-        //         </div>
-        //         <div className="fixed z-1 bottom-[10em] left-[20em] w-[60%]">
-        //                 <FileForm show={isPopUpVisible} onClose={handlePopUpClose} />
-        //         </div>
-        //     </div>
-        //     )
-        }  else {
+        } else {
             console.log("here")
             return (
             <div className="flex">
