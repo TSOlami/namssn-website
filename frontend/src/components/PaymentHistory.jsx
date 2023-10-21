@@ -1,6 +1,7 @@
-import { useUserPaymentsQuery, setPayments } from "../redux";
-import { RecentPayments } from ".";
-import { useState, useEffect } from "react";
+import { useUserPaymentsQuery,useVerifyUserPaymentsMutation, setPayments } from "../redux";
+import { RecentPayments, PaymentVerificationForm } from ".";
+import { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	Sidebar,
@@ -13,19 +14,59 @@ import { motion } from "framer-motion";
 const PaymentHistory = () => {
 	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
-	const name = userInfo?.name;
-	const username = userInfo?.username;
+	const name  = userInfo?.name ;
+	const mail = userInfo?.email;
+	const matric = userInfo?.matricNumber;
 	const profileImage = userInfo?.profilePicture;
+	const [verificationResult, setVerificationResult] = useState(null);
 
-	// Fetch number of payments from redux store
-	const noOfpayments = userInfo?.payments?.length;
+	// Use your verification mutation
+	const [verifyUserPayments] = useVerifyUserPaymentsMutation();
+	//payment verication response handler
+	
 
+  const handlePaymentVerification = async (transactionReference) => {
+    try {
+      const response = await verifyUserPayments({ transactionReference });
+
+	if (response.data) {
+		if (response.data.status === 'success') {
+		// Payment verification was successful
+		const { amount, method } = response.data;
+		setVerificationResult({ success: true, amount, method });
+		} else if (response.data.status === 'failed') {
+	// Payment verification failed
+		setVerificationResult({ success: false, error: 'Payment not yet made Transaction verification failed.' });
+		}
+	} else {
+		// Handle verification failure
+		setVerificationResult({ success: false, error: 'Failed to verify payment.' });
+	}
+	} catch (error) {
+	console.error('Error verifying payment:', error);
+	setVerificationResult({ success: false, error: 'Failed to verify payment.' });
+	}
+  };
+
+	
+	
+		// Fetch number of payments from redux store
 	const dispatch = useDispatch();
 
 	// Fetch user payments from redux store
-	const { data: userPayments, isLoading } = useUserPaymentsQuery({
+	const { data: userPayments, isLoading } = useUserPaymentsQuery(
+		{
 		_id: userInfo?._id,
-	});
+		},
+		{
+		select: {
+			category: 1, // Only select the category field for population
+			transactionReference: 1,
+			// Add other fields you need
+		},
+		populate: 'category', // Populate the category field
+		}
+	);
 
 	// Use useEffect to set payments after component mounts
 	useEffect(() => {
@@ -33,18 +74,17 @@ const PaymentHistory = () => {
 			dispatch(setPayments(userPayments));
 		}
 	}, [dispatch, userPayments]);
+	// console.log(userPayments)
 
 
 	// Manage modal state
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const handleModal = () => {
-		setIsModalOpen(!isModalOpen);
-	};
-
 	// Display loading indicator while data is being fetched
 	if (isLoading) {
 		return <Loader />;
 	}
+	
+	// Function to handle payment verification
+	
 
 	return (
 		<motion.div
@@ -59,9 +99,6 @@ const PaymentHistory = () => {
 					<span className="font-semibold text-black text-lg">
 						{name}
 					</span>
-					<span>
-						{noOfpayments} {noOfpayments === 1 ? "payment" : "payments"}
-					</span>
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
@@ -71,41 +108,51 @@ const PaymentHistory = () => {
 						alt="avatar"
 						className="profile-image"
 					/>{" "}
-					<button
-						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
-					>
-						Edit Profile
-					</button>
 				</div>
 				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
 					<span className="border-b-4 border-primary">payments</span>
 				</div>
 				<div>
-					{userPayments && userPayments?.length === 0 ? ( // Check if userPayments is defined and has no payments
+				{userPayments &&
+					userPayments?.length === 0 ? (
 						<div className="text-center mt-28 p-4 text-gray-500">
-							No payments to display.
+						No payments to display.
 						</div>
 					) : (
-						userPayments?.map(
-							(
-								payment // Use payment._id as the key
-							) => (
-								<RecentPayments
-									key={payment._id}
-									name={name}
-									username={username}
-									createdAt={payment.createdAt}
-									image={Wrapper}
-									paymentId={payment._id}
-                                    amount={payment.amount}
-                                    reference={payment.reference}
-									u_id={userInfo._id}
-								/>
-							)
-						)
+						userPayments?.map((payment) => (
+						<RecentPayments
+							key={payment._id}
+							email={mail}
+							matricNo={matric}
+							createdAt={payment.createdAt}
+							image={Wrapper}
+							amount={payment.category.amount} // Access category.amount
+							reference={payment.transactionReference} // Access transactionReference
+							u_id={userInfo._id}
+							category={payment.category.name} // Access category.name
+						/>
+						))
 					)}
+
 				</div>
+				<div>
+					<PaymentVerificationForm onVerify={handlePaymentVerification} />
+					{/* Display the verification result, if available */}
+					{verificationResult !== null ? (
+						<div className="verification-result">
+						{verificationResult.success ? (
+							<>
+							<p><strong>PAID <FaCheck/></strong> Payment successfully verified.</p>
+							<p>Amount: {verificationResult.amount}</p>
+							<p>Channel: {verificationResult.method}</p>
+							</>
+						) : (
+							<p><strong>NOT PAID !</strong> {verificationResult.error}</p>
+						)}
+						</div>
+					) : null}
+					</div>
+
 			</div>
 			<AnnouncementContainer />
 		</motion.div>
