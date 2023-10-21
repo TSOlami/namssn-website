@@ -113,30 +113,7 @@ const PaymentHistory = () => {
 						className="profile-image"
 					/>{" "}
 				</div>
-				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
-					<span className="border-b-4 border-primary">payments</span>
-				</div>
-				<div>
-					{userPayments && userPayments?.length === 0 ? (
-						<div className="text-center mt-28 p-4 text-gray-500">
-							No payments to display.
-						</div>
-					) : (
-						userPayments?.map((payment) => (
-							<RecentPayments
-								key={payment._id}
-								email={mail}
-								matricNo={matric}
-								createdAt={payment.createdAt}
-								image={Wrapper}
-								amount={payment.category.amount} // Access category.amount
-								reference={payment.transactionReference} // Access transactionReference
-								u_id={userInfo._id}
-								category={payment.category.name} // Access category.name
-							/>
-						))
-					)}
-				</div>
+
 				<div className="p-5">
 					<PaymentVerificationForm
 						onVerify={handlePaymentVerification}
@@ -163,6 +140,32 @@ const PaymentHistory = () => {
 							)}
 						</div>
 					) : null}
+				</div>
+
+				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
+					<span className="border-b-4 border-primary">payments</span>
+				</div>
+
+				<div>
+					{userPayments && userPayments?.length === 0 ? (
+						<div className="text-center mt-28 p-4 text-gray-500">
+							No payments to display.
+						</div>
+					) : (
+						userPayments?.map((payment) => (
+							<RecentPayments
+								key={payment._id}
+								email={mail}
+								matricNo={matric}
+								createdAt={payment.createdAt}
+								image={Wrapper}
+								amount={payment.category.amount} // Access category.amount
+								reference={payment.transactionReference} // Access transactionReference
+								u_id={userInfo._id}
+								category={payment.category.name} // Access category.name
+							/>
+						))
+					)}
 				</div>
 			</div>
 			<AnnouncementContainer />
