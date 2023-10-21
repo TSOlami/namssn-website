@@ -130,7 +130,9 @@ const ResourceCard = ({
 					)}
 				</div>
 
-				{showDetails && (
+				
+			</div>
+			{showDetails && (
 					<div className="flex flex-col pl-2 border border-b-blue-800 bg-white">
 						<span className={lgStyle}>{description}</span>
 						<div>
@@ -151,7 +153,6 @@ const ResourceCard = ({
 						</div>
 					</div>
 				)}
-			</div>
 		</div>
 	);
 };
