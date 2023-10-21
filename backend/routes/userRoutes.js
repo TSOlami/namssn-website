@@ -88,15 +88,15 @@ router.route('/verify-account').post(verifyAccount);
  * @route GET /api/v1/users/generate-otp
  * @access Public
  */
-router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
+router.route('/generate-otp/:username').get(verifyUser, generateOTP);
 
 /**
  * Verify  generated OTP
  * 
- * @route  GET /api/v1/users/otp
+ * @route  POST /api/v1/users/otp
  * @access Public
  */
-router.route('/verify-otp').get(verifyUser, verifyOTP);
+router.route('/verify-otp').post(verifyUser, verifyOTP);
 
 /**
  * Create Reset Session

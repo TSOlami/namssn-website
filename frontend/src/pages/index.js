@@ -23,5 +23,6 @@ import VerifyEmail from './VerifyEmail';
 import Search from './Search';
 import AdminBlogs from './AdminBlogs';
 import ForgotPage from './ForgotPage';
+import VerifyAccount from './VerifyAccount';
 
-export { Search, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement, VerifyUsers, VerifyEmail, AdminBlogs, ForgotPage };
+export { Search, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement, VerifyUsers, VerifyEmail, AdminBlogs, ForgotPage, VerifyAccount };
