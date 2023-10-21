@@ -1,8 +1,11 @@
 import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { verifyAccount, verifyOTP } from "../../utils";
 import { toast } from "react-toastify";
+
+import { verifyOTP } from "../../utils";
+import { useVerifyAccountMutation, useSendMailMutation } from "../../redux";
+import { Loader } from "../../components";
 
 const VerificationAccountInput = ({ codeLength }) => {
   // Use the useSelector hook to access the userInfo object from the state
@@ -43,6 +46,12 @@ const VerificationAccountInput = ({ codeLength }) => {
     }
   };
 
+  // Use the useVerifyAccountMutation hook to verify the user's account
+  const [verifyAccount, { isLoading }] = useVerifyAccountMutation();
+
+  // Use the useSendMailMutation hook send a congratulatory email to the user
+  const [sendMail] = useSendMailMutation();
+
   const code = verificationCode.join("");
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,16 +60,26 @@ const VerificationAccountInput = ({ codeLength }) => {
 
       if (status === 200) {
         // Call verifyAccount to verify the user's account
-        const verifyAccountResponse = await verifyAccount(username, studentEmail);
+        const verifyAccountResponse = await verifyAccount({ username, studentEmail }).unwrap();
 
         if (verifyAccountResponse.error) {
           // Handle any error from account verification
           console.error("Failed to verify account");
           toast.error("Failed to verify the account. Please try again.");
         } else {
+          // Send a congratulatory email to the user
+          const text = `Congratulations ${username}! Your account has been verified. You are now an official member of our community. Enjoy the benefits and stay connected!`;
+          const subject = "Account Verification Successful";
+          const sendMailResponse = await sendMail({ username, userEmail: studentEmail, text, subject }).unwrap();
+
+          if (sendMailResponse.error) {
+            // Handle any error from sending the congratulatory email
+            console.error("Failed to send congratulatory email");
+            toast.error("Account verification successful but failed to send congratulatory email.");
+          }
           // Account verification and OTP verification were both successful
           navigate("/profile");
-          toast.success("Account and OTP verification successful.");
+          toast.success("Account verification successful.");
         }
       } else {
         // Handle any error or failed OTP verification here
@@ -107,6 +126,7 @@ const VerificationAccountInput = ({ codeLength }) => {
       >
         Enter and Continue
       </button>
+      {isLoading && <Loader />}
     </div>
   );
 };

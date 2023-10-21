@@ -1,8 +1,40 @@
-import { VerifyEmailSVG } from "../assets";
-import { VerificationAccountInput } from "../components";
 import { motion } from "framer-motion";
+import { VerifyEmailSVG } from "../assets";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+import { VerificationAccountInput } from "../components";
+import { resendAccountVerificationOTP } from "../utils";
 
 const VerifyAccount = () => {
+	const { studentEmail } = useParams(); // Get the studentEmail parameter from the URL
+
+  // Select the username from the state
+  const { userInfo } = useSelector((state) => state.auth);
+  const username = userInfo?.username;
+
+  const handleResendOTP = async () => {
+    // Use the resendAccountVerificationOTP function to resend OTP
+    try {
+      const { code, error } = await resendAccountVerificationOTP(username, studentEmail);
+
+      if (code) {
+        // OTP sent successfully
+        console.log("Resent OTP successfully");
+        toast.success("OTP has been resent to your email.");
+      } else if (error) {
+        // Handle any error from the resend operation
+        console.error("Failed to resend OTP");
+        toast.error("Failed to resend OTP. Please try again.");
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error("An error occurred during OTP resend:", error);
+      toast.error("An error occurred while resending OTP. Please try again.");
+    }
+  };
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -22,6 +54,9 @@ const VerifyAccount = () => {
 				</p>
 
 				<VerificationAccountInput codeLength={6} />
+        <p >
+          Didn't receive an OTP? Click <button onClick={handleResendOTP} className="text-primary">here</button> to resend.
+        </p>
 			</div>
 		</motion.div>
 	);

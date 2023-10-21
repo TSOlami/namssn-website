@@ -34,6 +34,7 @@ import {
   getUserPayments,
   getPaymentOptions,
   verifyOTP,
+  resendOTP,
   verifyUserPayment
 } from "../controllers/userController.js";
 
@@ -89,6 +90,15 @@ router.route('/verify-account').post(verifyAccount);
  * @access Public
  */
 router.route('/generate-otp/:username').get(verifyUser, generateOTP);
+
+/**
+ * Resend OTP
+ * 
+ * @route GET /api/v1/users/resend-otp
+ * @access Public
+ * @param {string} username - The username of the user to resend OTP to
+ */
+router.route('/resend-otp/:username').get(verifyUser, resendOTP);
 
 /**
  * Verify  generated OTP

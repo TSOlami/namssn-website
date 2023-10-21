@@ -195,6 +195,8 @@ const verifyOTP = asyncHandler(async (req, res) => {
 
     // Check if the OTP has expired
     if (otpRecord.expiresAt < new Date()) {
+      // Delete the expired OTP record
+      await UserOTPVerification.deleteMany({ username });
       return res.status(400).json({ message: 'OTP has expired' });
     }
 
@@ -202,7 +204,9 @@ const verifyOTP = asyncHandler(async (req, res) => {
     const isOTPValid = await otpRecord.matchOtp(code);
 
     if (isOTPValid) {
+      console.log("OTP is valid")
       // Delete the matched OTP record
+      console.log("Deleting OTP record")
       await UserOTPVerification.deleteMany({ username });
 
       // OTP is valid, you can implement further actions here
@@ -213,6 +217,47 @@ const verifyOTP = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'An unexpected error occurred' });
+  }
+});
+
+// @desc  Resend OTP
+// @route POST /api/v1/users/resend-otp
+// @access Public
+const resendOTP = asyncHandler(async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // Input validation
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
+    }
+
+    // Check for existing OTPs
+    const otpRecord = await UserOTPVerification.findOne({ username }).sort({ createdAt: -1 });
+
+    if (otpRecord) {
+      // Delete the existing OTP record
+      await UserOTPVerification.deleteMany({ username });
+    }
+
+    // Generate a new OTP
+    const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+
+    // Save the OTP to the database
+    await UserOTPVerification.create({
+      username,
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
+    });
+
+    // Return the OTP to the frontend as a response code
+     console.log("success")
+
+    let code = otp;
+
+    res.status(201).json({ code });
+  } catch (error) {
+    res.status(500).json({ error });
   }
 });
 
@@ -690,5 +735,6 @@ export {
   postUserPayment,
   getUserPayments,
   getPaymentOptions,
-  verifyUserPayment
+  verifyUserPayment,
+  resendOTP
 };

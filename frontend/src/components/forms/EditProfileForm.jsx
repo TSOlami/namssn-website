@@ -85,7 +85,7 @@ const EditProfileForm = ({ handleModal }) => {
       </div>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
         <div className="scale-75 flex-row">
-          <label htmlFor="profile">
+        <label htmlFor="profile">
           <img src={file || ProfileImg} alt="" className='profile-image'/>
           </label>
 
