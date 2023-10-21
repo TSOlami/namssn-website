@@ -26,6 +26,7 @@ import {
 	VerifyUsers,
 	VerifyEmail,
 	AdminBlogs,
+	ForgotPage,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
@@ -83,6 +84,7 @@ export default function App() {
 					/>
 					<Route path="/admin/users" element={<VerifyUsers />} />
 					<Route path="/verify-email" element={<VerifyEmail />} />
+					<Route path="/forgot-password" element={<ForgotPage />} />
 					<Route path="/admin/blogs" element={<AdminBlogs/>} />
 				</Routes>
 			</BrowserRouter>
