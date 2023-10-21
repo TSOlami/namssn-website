@@ -72,7 +72,7 @@ const VerificationCodeInput = ({ codeLength }) => {
 				}
 				onClick={handleSubmit}
 			>
-				Verify and Continue
+				Enter and Continue
 			</button>
 		</div>
 	);
