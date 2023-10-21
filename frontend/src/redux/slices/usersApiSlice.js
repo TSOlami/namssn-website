@@ -59,6 +59,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             body:data,
           };
         },
+        invalidatesTags: ['User'],
       }),
 
       // Logout Query
