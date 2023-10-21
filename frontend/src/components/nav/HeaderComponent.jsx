@@ -40,7 +40,7 @@ const HeaderComponent = ({ title, url, back }) => {
 	return (
 		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
 			{back && (
-				<div onClick={handleBack} className="text-2xl p-2 pr-5">
+				<div onClick={handleBack} className="text-2xl p-2 pr-5 cursor-pointer">
 					<IoChevronBackSharp />
 				</div>
 			)}

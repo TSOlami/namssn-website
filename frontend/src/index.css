@@ -69,16 +69,23 @@
 
   /* Define a class for the post images */
   .post-image-container {
-    max-width: 100%;
+    width: 100%;
+    height: auto;
     margin-top: 10px;
+    margin-left: auto;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px gray;
+    border-radius: 10px;
   }
 
   .post-image {
-    width: 100%;
+    width: auto;
     height: auto;
-    border-radius: 10px;
     object-fit: contain;
+    border-radius: 10px;
   }
 }
 
