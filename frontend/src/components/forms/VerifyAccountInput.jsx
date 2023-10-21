@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import { verifyOTP } from "../../utils";
-import { useVerifyAccountMutation, useSendMailMutation } from "../../redux";
+import { useVerifyAccountMutation, useSendMailMutation, setCredentials } from "../../redux";
 import { Loader } from "../../components";
 
 const VerificationAccountInput = ({ codeLength }) => {
@@ -15,6 +15,9 @@ const VerificationAccountInput = ({ codeLength }) => {
 
   // Get the student email from the URL params
   const { studentEmail } = useParams();
+
+  // Dispatch actions using the useDispatch hook
+  const dispatch = useDispatch();
 
   const navigate = useNavigate()
   const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
@@ -67,6 +70,8 @@ const VerificationAccountInput = ({ codeLength }) => {
           console.error("Failed to verify account");
           toast.error("Failed to verify the account. Please try again.");
         } else {
+          // Update the user's credentials in the state
+          dispatch(setCredentials({ ...verifyAccountResponse }));
           // Send a congratulatory email to the user
           const text = `Congratulations ${username}! Your account has been verified. You are now an official member of our community. Enjoy the benefits and stay connected!`;
           const subject = "Account Verification Successful";
