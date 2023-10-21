@@ -67,7 +67,7 @@ const Comments = () => {
 			<Sidebar />
 
 			<div className="flex flex-col flex-1 relative">
-				<HeaderComponent title="Post" />
+				<HeaderComponent title="Post" back/>
 				<div className="w-full">
 					<Post
 						key={post?._id}

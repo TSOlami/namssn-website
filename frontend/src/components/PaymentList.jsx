@@ -1,11 +1,18 @@
-import { useAllPaymentsQuery } from '../redux'; // Import Redux Toolkit Query hook and action creator
+import { useAllPaymentsQuery,setCategories } from '../redux'; // Import Redux Toolkit Query hook and action creator
 import { Link } from 'react-router-dom'
-
+import { useDispatch } from 'react-redux';
 import {HeaderComponent} from '../components';
 
+
 const PaymentList = () => {
+  const dispatch = useDispatch();
   // Use the useAllPaymentsQuery hook to fetch payments
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
+
+  if (!isLoading && !isError && Array.isArray(payments)) {
+    // Set categories in the Redux store
+    dispatch(setCategories(payments));
+  }
 
   return (
     <div className="flex flex-row">
@@ -42,7 +49,7 @@ const PaymentList = () => {
               </div>
               <div className="border-gray-500 border-2 rounded-xl flex flex-row p-2 text-xl font-semibold">
                 <Link
-                  to={`/payments/pay/${payment._id}?name=${payment.name}&amount=${payment.amount}&session=${payment.session}`}
+                  to={`/payments/pay/${payment._id}`}
                 >
                   Pay Now
                 </Link>

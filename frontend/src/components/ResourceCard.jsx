@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;
-const isAdmin = userInfo.role;
+const isAdmin = userInfo?.role;
 
 // const cardClass = "font-crimson cursor-pointer md:hover:w-[6.2em] md:hover:h-[6.2em] lg:hover:w-[7em] lg:hover:h-[7em] hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-blue-300 p-2 sm:w-[15] md:w-[6em] md:h-[6em] lg:h-20 lg:w-20 text-xs center"
 
@@ -133,7 +133,7 @@ const ResourceCard = ({
 					toast.error("You are not priviledged to delete this file");
 				}
 			})
-			.catch((err) => {
+			.catch(() => {
 				toast.error("An error occurred. Unable to delete resource");
 			});
 	};

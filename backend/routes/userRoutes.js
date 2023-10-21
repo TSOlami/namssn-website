@@ -33,7 +33,8 @@ import {
   postUserPayment,
   getUserPayments,
   getPaymentOptions,
-  verifyOTP
+  verifyOTP,
+  verifyUserPayment
 } from "../controllers/userController.js";
 
 import { 
@@ -259,11 +260,13 @@ router
  * @access Private (Requires authentication)
  */
 router.get('/payments/:userId', protect, getUserPayments);
+router.post('/payments/verify', protect, verifyUserPayment);
 router
   .route('/payments')
   .get(protect, getPaymentOptions)
   // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
+
 
 router
   .route('/resources/:filename')

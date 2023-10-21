@@ -79,6 +79,16 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
         },
         invalidatesTags: ['Payments'],
       }),
+
+      verifyUserPayments: builder.mutation({
+        query(data) {
+          return {
+            url: `${USER_PAYMENT_URL}/payments/verify`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
     };
 
 
@@ -94,4 +104,5 @@ export const {
   useCreatePaymentMutation,
   useAllPaymentsQuery,
   useUserPaymentsQuery,
+  useVerifyUserPaymentsMutation
 } = CategoryApiSlice;

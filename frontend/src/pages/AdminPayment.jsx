@@ -9,26 +9,17 @@ const AdminPayment = () => {
   const { data: verifiedPayments } = useVerifyPaymentsMutation();
   console.log(verifiedPayments)
   
-    const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
-    const [showDeleteCategoryForm, setShowDeleteCategoryForm] = useState(false);
-  
-    const openAddCategoryForm = () => {
-      setShowAddCategoryForm(true);
-      setShowDeleteCategoryForm(false);
-    };
-  
-  
-    const openDeleteCategoryForm = () => {
-      setShowAddCategoryForm(false);
-      setShowDeleteCategoryForm(true);
-    };
-
-    const closeAddCategoryForm = () => {
-    setShowAddCategoryForm(false);
-    setShowDeleteCategoryForm(false);
-  };
-
-    
+     // Manage modal state
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const handleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
+  // Manage verify modal state
+	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+	const handleVerifyModal = () => {
+		setIsVerifyModalOpen(!isVerifyModalOpen);
+	};
+ 
   
 	return (
 		<motion.div 			
@@ -61,7 +52,7 @@ const AdminPayment = () => {
 
               <button
                 className="m-5 my-10 p-3 bg-primary text-white rounded-sm"
-                onClick={openAddCategoryForm}
+                onClick={handleModal}
               >
                 Add New Payment
               </button>
@@ -97,7 +88,7 @@ const AdminPayment = () => {
 
             {/* Delete and Edit payment button */}
             <div className="p-5 py-10 ">
-              <button className="bg-red-600 text-white p-2 rounded-md" onClick={openDeleteCategoryForm} >Delete Payment</button>
+              <button className="bg-red-600 text-white p-2 rounded-md" onClick={handleVerifyModal} >Delete Payment</button>
             </div>
 
 
@@ -147,10 +138,19 @@ const AdminPayment = () => {
             </div>
 					</div>
 				</div>
-        {showAddCategoryForm && (
-        <AddCategoryForm handleModalOpen={openAddCategoryForm} onClose={closeAddCategoryForm} />
-      )}
-        {showDeleteCategoryForm && <DeleteCategoryForm handleModalOpen={openDeleteCategoryForm} />}
+        {/* modal */}
+			{isModalOpen && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+					<AddCategoryForm handleModal={handleModal} />
+				</div>
+			)}
+
+      {/* verify modal */}
+			{isVerifyModalOpen && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+					<DeleteCategoryForm handleVerifyModal={handleVerifyModal} />
+				</div>
+			)}
 		</motion.div>
       
 		

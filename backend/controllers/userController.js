@@ -1,11 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import otpGenerator from 'otp-generator';
 import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
+import { initiatePayment, verifyPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
+import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
 import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
 
@@ -576,7 +577,7 @@ const getUserPayments = asyncHandler(async (req, res) => {
     console.log("Fetching payments for user: ", userId);
 	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
   
-	  if (!userPosts) {
+	  if (!userPayments) {
 		res.status(404).json({ message: "No payments found for this user." });
 	  } else {
 		res.status(200).json(userPayments);
@@ -595,6 +596,14 @@ const getUserPayments = asyncHandler(async (req, res) => {
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
     await initiatePayment(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const verifyUserPayment = asyncHandler(async (req, res) => {
+  try {
+    await verifyPayments(req, res);
   } catch (error) {
     console.log(error);
   }
@@ -627,5 +636,6 @@ export {
   deleteUserResources,
   postUserPayment,
   getUserPayments,
-  getPaymentOptions
+  getPaymentOptions,
+  verifyUserPayment
 };

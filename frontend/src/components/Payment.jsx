@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useLocation } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { FaEnvelope, FaMoneyBillWave } from "react-icons/fa6";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -12,18 +12,21 @@ import { useSelector} from 'react-redux';
 const PaymentForm = () => {
   // const [amount, setAmount] = useState(""); // State to store the payment amount
   const { userInfo } = useSelector((state) => state.auth);
-	const email = userInfo?.email;
-	const matricNumber = userInfo?.matricNumber;
-	const location = useLocation("") ; // for current Location
-  const searchParams = new URLSearchParams(location.search); // seacrh Params
-
-  
+  console.log(userInfo)
+  const { id } = useParams(); 
+  console.log (id)
+  const { category  } = useSelector((state) => state.auth); // Access category from the Redux store
+  // console.log(category)
+    // Find the specific category in the Redux store based on id
+  const selectedCategory = category?.find((cat) => cat._id === id);
+  // console.log(selectedCategory)
   // // for initial values 
-  const initialMatricNumber = matricNumber || "";
-  const initialEmail = email || "";
-  const initialCategory = searchParams.get('name') || "";
-  const initialSession = searchParams.get('session') || "";
-  const initialAmount = searchParams.get('amount') || ""
+  const initialMatricNumber = userInfo?.matricNumber || "";
+  const initialEmail = userInfo?.email || "";
+  const initialCategory = selectedCategory?.name || "";
+  const initialSession =  selectedCategory?.session || "";
+  const initialAmount = selectedCategory?.amount || "";
+  console.log(initialCategory)
 
   const validationSchema = Yup.object({
     matricNumber: Yup.string()
