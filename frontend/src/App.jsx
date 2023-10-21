@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Payment,PaymentHistory } from "./components";
 import {
+	Search,
 	Landing,
 	SignIn,
 	SignUp,
@@ -69,6 +70,7 @@ export default function App() {
 					<Route path="/admin/payment" element={<AdminPayment />} />
 					<Route path="/comments/:postId" element={<Comments />} />
 					<Route path="/admin/events" element={<AdminEvents />} />
+					<Route path="/search" element={<Search/>} />
 					<Route
 						path="/admin/announcements"
 						element={<AdminAnnouncement />}

@@ -52,6 +52,7 @@ const HeaderComponent = ({ title, url }) => {
 						onChange={handleSearchChange}
 					/>
 					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
+					<button className="border bg-gray-400 rounded-md"> <a href={`http://localhost:3000/search?key=${search}`}>Go</a></button>
 			</form>
 		</div>
 	);

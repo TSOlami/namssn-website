@@ -1,4 +1,4 @@
-import { ResourceCard } from "../components";
+import { ResourceCard } from ".";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 const base_url = 'http://localhost:5000/api/v1/users/resources/'
@@ -20,7 +20,7 @@ const ResourceSearch = ({query}) => {
     const fileList = newData.map(obj => Object.keys(obj)[0])
     return (
         <div>
-            <div  className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-12 flex z-0 flex-wrap gap-4 justify-around">
+            <div  className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex z-0 flex-wrap gap-4 justify-around">
                 {fileList.map((file, index) => ( 
                     <ResourceCard key={index} fileUrl={base_url + file} description={newData[index][file]['description']}
                     uploaderUsername = {newData[index][file]['uploaderUsername']}
