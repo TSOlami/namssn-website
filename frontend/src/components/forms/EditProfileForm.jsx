@@ -50,7 +50,7 @@ const EditProfileForm = ({ handleModal }) => {
     matricNumber: Yup.string()
     .matches(
       /^20\d{2}\/1\/\d{5}PM$/,
-      'Invalid matric number format (e.g., 20xx/1/xxxxxPM)'
+      'Invalid matric number format (e.g., 20XX/1/XXXXXPM)'
     ),
     bio: Yup.string(),
 	});
