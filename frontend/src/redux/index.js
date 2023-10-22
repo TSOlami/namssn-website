@@ -1,9 +1,9 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments,setCategories } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
-	useRegisterMailMutation,
+	useSendMailMutation,
 	useUpdateUserMutation,
 	useGetUserQuery,
 	useAllBlogsQuery,
@@ -49,6 +49,7 @@ import {
 	useDeleteCategoryMutation,
 	useVerifyPaymentsMutation,
 	useUserPaymentsQuery,
+	useVerifyUserPaymentsMutation,
 	} from './slices/paymentSlice';
 
 import {
@@ -71,7 +72,7 @@ export {
 		useLoginMutation,
 		useLogoutMutation, 
 		useRegisterMutation,
-		useRegisterMailMutation,
+		useSendMailMutation,
 		useUpdateUserMutation,
 		useGetUserQuery,
 		useAllPostsQuery,
@@ -104,6 +105,7 @@ export {
 	useCreatePaymentMutation,
 	useDeleteCategoryMutation,
 	useVerifyPaymentsMutation,
+	useVerifyUserPaymentsMutation,
 	useUserPaymentsQuery,
 	useMakeUserAdminMutation,
 	useRemoveAdminMutation,
@@ -122,4 +124,5 @@ export {
 	setPosts,
 	setAnnouncements,
 	setPayments,
+	setCategories,
  }

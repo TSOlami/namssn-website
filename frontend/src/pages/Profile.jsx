@@ -66,7 +66,7 @@ const Profile = () => {
 			className="flex flex-row"
 		>
 			<Sidebar />
-			<div>
+			<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 				<div className="p-3 pl-6 flex flex-col">
 					<span className="font-semibold text-black text-lg">
 						{name}

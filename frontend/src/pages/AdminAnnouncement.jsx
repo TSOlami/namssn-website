@@ -23,11 +23,13 @@ const AdminAnnouncements = () => {
 	const { data: announcements, isLoading: isFetching } =
 		useAllAnnouncementsQuery();
 
-  // Create the createAnnouncement mutation
-  const [createAnnouncement, { isLoading: isCreating }] = useCreateAnnouncementMutation();
+	// Create the createAnnouncement mutation
+	const [createAnnouncement, { isLoading: isCreating }] =
+		useCreateAnnouncementMutation();
 
-  // Create the deleteAnnouncement mutation
-  const [deleteAnnouncement, { isLoading: isDeleting }] = useDeleteAnnouncementMutation();
+	// Create the deleteAnnouncement mutation
+	const [deleteAnnouncement, { isLoading: isDeleting }] =
+		useDeleteAnnouncementMutation();
 
 	// Create a dispatch function
 	const dispatch = useDispatch();
@@ -37,73 +39,82 @@ const AdminAnnouncements = () => {
 		text: "",
 	};
 
-  // Define a state variable to track the selected "level"
-  const [selectedLevel, setSelectedLevel] = useState('Non-Student');
+	// Define a state variable to track the selected "level"
+	const [selectedLevel, setSelectedLevel] = useState("Non-Student");
 
-  
-  // Define a Yup validation schema for the form fields
-  const validationSchema = Yup.object({
-    text: Yup.string().required("Text is required"),
-  });
-  
-  // Create a function to handle form submission
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Append the selectedLevel to the formik.values
-    const values = await Object.assign( formik.values, { level: selectedLevel });
+	// manage selected state in the select dropdown
+	const handleSelectChange = (event) => {
+		const selectedValue = event.target.value;
+		setSelectedLevel(selectedValue);
+    console.log(selectedLevel)
+	};
 
-    console.log("Submitted values:", values);
-    // Dispatch the createAnnouncement action
-    const res = await createAnnouncement(values).unwrap();
-    console.log("Response:", res);
-    // Dispatch the setAnnouncement action
-    dispatch(setAnnouncements(res));
-    // Reset the form
-    formik.resetForm();
-    // Show a success toast
-    toast.success("Announcement created!");
-    } catch (err) {
-      toast.error(err?.data?.message || err?.error);
-      console.log("Error:", err?.data?.message || err?.error);
-    }
-  };
+	// Define a Yup validation schema for the form fields
+	const validationSchema = Yup.object({
+		text: Yup.string().required("Text is required"),
+	});
 
-  // Define a function to handle announcement text changes
-  const handleAnnouncementChange = (e, index) => {
-    const { name, value } = e.target;
-    // Clone the announcements array and update the text of the edited announcement
-    const updatedAnnouncements = [...announcements];
-    updatedAnnouncements[index] = { ...updatedAnnouncements[index], text: value };
-    // Update the state with the new announcements
-    // This may vary depending on how you've set up your state management
-    // For example, if using Redux, you'd dispatch an action to update the state
-    // dispatch(updateAnnouncement(updatedAnnouncements));
-  };
-  
-  // Handler for "Edit" button
-  const handleEditClick = (announcement) => {
-    // Handle the edit logic for the announcement
-    console.log("Edit announcement:", announcement);
-  };
+	// Create a function to handle form submission
+	const handleFormSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			// Append the selectedLevel to the formik.values
+			const values = await Object.assign(formik.values, {
+				level: selectedLevel,
+			});
 
-  // Handler for "Delete" button
-  const handleDeleteClick = (announcement) => {
+			console.log("Submitted values:", values);
+			// Dispatch the createAnnouncement action
+			const res = await createAnnouncement(values).unwrap();
+			console.log("Response:", res);
+			// Dispatch the setAnnouncement action
+			dispatch(setAnnouncements(res));
+			// Reset the form
+			formik.resetForm();
+			// Show a success toast
+			toast.success("Announcement created!");
+		} catch (err) {
+			toast.error(err?.data?.message || err?.error);
+			console.log("Error:", err?.data?.message || err?.error);
+		}
+	};
 
-    // Handle the delete logic for the announcement
-    console.log("Delete announcement:", announcement);
+	// Define a function to handle announcement text changes
+	const handleAnnouncementChange = (e, index) => {
+		const { name, value } = e.target;
+		// Clone the announcements array and update the text of the edited announcement
+		const updatedAnnouncements = [...announcements];
+		updatedAnnouncements[index] = {
+			...updatedAnnouncements[index],
+			text: value,
+		};
+		// Update the state with the new announcements
+		// This may vary depending on how you've set up your state management
+		// For example, if using Redux, you'd dispatch an action to update the state
+		// dispatch(updateAnnouncement(updatedAnnouncements));
+	};
 
-    // Dispatch the deleteAnnouncement action
-    dispatch(deleteAnnouncement(announcement._id));
-  };
+	// Handler for "Edit" button
+	const handleEditClick = (announcement) => {
+		// Handle the edit logic for the announcement
+		console.log("Edit announcement:", announcement);
+	};
 
-  
-  // Use the useFormik hook to manage the form state
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: handleFormSubmit,
-  });
+	// Handler for "Delete" button
+	const handleDeleteClick = (announcement) => {
+		// Handle the delete logic for the announcement
+		console.log("Delete announcement:", announcement);
+
+		// Dispatch the deleteAnnouncement action
+		dispatch(deleteAnnouncement(announcement._id));
+	};
+
+	// Use the useFormik hook to manage the form state
+	const formik = useFormik({
+		initialValues,
+		validationSchema,
+		onSubmit: handleFormSubmit,
+	});
 
 	return (
 		<motion.div
@@ -116,8 +127,8 @@ const AdminAnnouncements = () => {
 
 			<div className="w-full">
 				<HeaderComponent title="Announcements" />
-				<div className="flex flex-row gap-2 w-full">
-					<div className="flex-1">
+				<div className="flex md:flex-row gap-2 flex-col w-full">
+					<div className="flex-1 hidden md:block">
 						<AdminAnnouncementCard
 							title="General Announcements"
 							onClick={() => {
@@ -162,6 +173,24 @@ const AdminAnnouncements = () => {
 						/>
 					</div>
 
+					<div className="flex flex-col m-auto w-full items-center md:hidden">
+						<select
+							name=""
+							id=""
+							className="bg-black text-white w-[50%] p-2 rounded-lg"
+							onChange={handleSelectChange}
+						>
+							<option value="Non-Student">
+								General Announcements
+							</option>
+							<option value="100">100L Announcements</option>
+							<option value="200">200L Announcements</option>
+							<option value="300">300L Announcements</option>
+							<option value="400">400L Announcements</option>
+							<option value="500">500L Announcements</option>
+						</select>
+					</div>
+
 					<div className="flex-1 border-l-2 border-l-gray-300">
 						<form
 							action=""
@@ -189,45 +218,60 @@ const AdminAnnouncements = () => {
 								Make Announcement
 							</button>
 
-              {/* The other annoucements map inside input fields where they can be edited and deleted directly */}
-              <h3 className="text-xl font-semibold pt-8">
-                Announcements
-              </h3>
-              {announcements?.map((announcement, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-3 mb-4"
-                >
-                  <textarea
-                    name={`announcement${index}`}
-                    id={`announcement${announcement._id}`}
-                    className="resize-none border-2 border-gray-300 p-3 rounded-lg"
-                    value={announcement.text}  // Set the value to the announcement's text
-                    onChange={(e) => handleAnnouncementChange(e, announcement._id)}
-                  />
-                  <div className="flex flex-row gap-5 ml-auto">
-                    <button
-                      className="p-2 px-3 rounded-lg bg-black text-white"
-                      onClick={() => handleEditClick(announcement, announcement._id)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="p-2 px-3 rounded-lg bg-red-500 text-white"
-                      onClick={() => handleDeleteClick(announcement, announcement._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </form>
-                {isFetching || isCreating || isDeleting && <Loader />}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+							{/* The other annoucements map inside input fields where they can be edited and deleted directly */}
+							<h3 className="text-xl font-semibold pt-8">
+								Announcements
+							</h3>
+							{announcements?.map((announcement, index) => (
+								<div
+									key={index}
+									className="flex flex-col gap-3 mb-4"
+								>
+									<textarea
+										name={`announcement${index}`}
+										id={`announcement${announcement._id}`}
+										className="resize-none border-2 border-gray-300 p-3 rounded-lg"
+										value={announcement.text} // Set the value to the announcement's text
+										onChange={(e) =>
+											handleAnnouncementChange(
+												e,
+												announcement._id
+											)
+										}
+									/>
+									<div className="flex flex-row gap-5 ml-auto">
+										<button
+											className="p-2 px-3 rounded-lg bg-black text-white"
+											onClick={() =>
+												handleEditClick(
+													announcement,
+													announcement._id
+												)
+											}
+										>
+											Edit
+										</button>
+										<button
+											className="p-2 px-3 rounded-lg bg-red-500 text-white"
+											onClick={() =>
+												handleDeleteClick(
+													announcement,
+													announcement._id
+												)
+											}
+										>
+											Delete
+										</button>
+									</div>
+								</div>
+							))}
+						</form>
+						{isFetching || isCreating || (isDeleting && <Loader />)}
+					</div>
+				</div>
+			</div>
+		</motion.div>
+	);
 };
 
 export default AdminAnnouncements;

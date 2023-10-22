@@ -33,6 +33,7 @@ const AdminDashboard = () => {
 							amount="12"
 							card="blog"
 							bg="blueish"
+							route="/admin/blogs"
 						/>
 
 						<AdminCard

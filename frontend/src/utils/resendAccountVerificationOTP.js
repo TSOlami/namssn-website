@@ -2,12 +2,12 @@ import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
 
-export async function accountVerificationOTP(username, studentEmail) {
+export async function resendAccountVerificationOTP(username, studentEmail) {
 	try {
-		console.log(`Sending an api request to /api/v1/users/generate-otp/${username}`)
-		const {data: {code}, status} = await axios.get(`/api/v1/users/generate-otp/${username}`);
+		console.log(`Sending an api request to /api/v1/users/resend-otp/${username}`)
+		const {data: {code}, status} = await axios.get(`/api/v1/users/resend-otp/${username}`);
 
-		console.log("Data from generate OTP api call: ", code, status);
+		console.log("Data from resend OTP api call: ", code, status);
 
 		// If the request was successful, send mail with OTP
 		if (status === 201) {

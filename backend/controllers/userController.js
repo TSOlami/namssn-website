@@ -1,12 +1,14 @@
 import asyncHandler from 'express-async-handler';
 import otpGenerator from 'otp-generator';
 import generateToken from '../utils/generateToken.js';
-import { initiatePayment, getAllPayments } from '../utils/paymentLogic.js'
+import { initiatePayment, verifyPayments } from '../utils/paymentLogic.js'
 import User from '../models/userModel.js';
 import Event from '../models/eventModel.js';
 import Announcement from '../models/announcementModel.js';
 import Blog from '../models/blogModel.js';
+import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
+import UserOTPVerification from '../models/userOTPVerification.js';
 import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
 
 // @desc	Authenticate user/set token
@@ -94,26 +96,27 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 // @desc  Verify a user's account
-// Route GET /api/v1/users/verifyAccount
+// Route GET /api/v1/users/verify-account
 // Access Private
 const verifyAccount = asyncHandler(async (req, res) => {
   const { username, studentEmail } = req.body;
-
+  console.log("Verifying user account: ", username, studentEmail);
   // Find the user by username
   const user = await User.findOne({ username });
 
   if (user) {
     // Check if the user has already been verified
+    console.log("User found");
     if (user.isVerified) {
       res.status(400);
       throw new Error('User already verified');
     }
     // Append the user's matric number and student email to the user's data
-    user.matricNumber = matricNumber;
     user.studentEmail = studentEmail;
     user.isVerified = true;
 
     // Save the updated user data
+    console.log("Saving user data");
     const updatedUser = await user.save();
 
     // Return the updated user data
@@ -145,23 +148,119 @@ const verifyAccount = asyncHandler(async (req, res) => {
 // Route GET /api/v1/users/generateOTP
 // Access Public
 const generateOTP = asyncHandler(async (req, res) => {
-  req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
-  res.status(201).json({ code: req.app.locals.OTP })
+try {
+  const { username } = req.params;
+  console.log(req.params)
+  console.log("Generating OTP for user: ", username);
+  const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+
+  console.log(otp)
+  // Save the OTP to the database
+  await UserOTPVerification.create({
+    username,
+    otp,
+    expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
+  });
+
+  console.log("success")
+
+  let code = otp;
+
+  res.status(201).json({ code });
+} catch (error) {
+  res.status(400).json({ error });
+}
 });
 
+
 // @desc  Verify OTP
-// Route GET /api/v1/users/verifyOTP
-// Access Public
+// @route POST /api/v1/users/verify-otp
+// @access Public
 const verifyOTP = asyncHandler(async (req, res) => {
-  const { code } = req.query;
-  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
-    req.app.locals.OTP = null; // Reset the OTP
-    req.locals.resetSession = true; // Set the reset password session to true
-    return res.status(201).json({ message: 'OTP verified successfully' });
-  } else {
-    res.status(400).json({ error: 'Invalid OTP' });
+  try {
+    const { username, code } = req.body;
+
+    console.log(username, code)
+    // Input validation
+    if (!username || !code) {
+      return res.status(400).json({ message: 'Both username and code are required' });
+    }
+
+    // Check if the OTP exists in the database and is not expired
+    const otpRecord = await UserOTPVerification.findOne({ username }).sort({ createdAt: -1 });
+
+    if (!otpRecord) {
+      return res.status(400).json({ message: 'Invalid username or OTP not found' });
+    }
+
+    // Check if the OTP has expired
+    if (otpRecord.expiresAt < new Date()) {
+      // Delete the expired OTP record
+      await UserOTPVerification.deleteMany({ username });
+      return res.status(400).json({ message: 'OTP has expired' });
+    }
+
+    // Verify the OTP
+    const isOTPValid = await otpRecord.matchOtp(code);
+
+    if (isOTPValid) {
+      console.log("OTP is valid")
+      // Delete the matched OTP record
+      console.log("Deleting OTP record")
+      await UserOTPVerification.deleteMany({ username });
+
+      // OTP is valid, you can implement further actions here
+      return res.status(200).json({ message: 'OTP Verification successful' });
+    } else {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An unexpected error occurred' });
   }
 });
+
+// @desc  Resend OTP
+// @route POST /api/v1/users/resend-otp
+// @access Public
+const resendOTP = asyncHandler(async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // Input validation
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
+    }
+
+    // Check for existing OTPs
+    const otpRecord = await UserOTPVerification.findOne({ username }).sort({ createdAt: -1 });
+
+    if (otpRecord) {
+      // Delete the existing OTP record
+      await UserOTPVerification.deleteMany({ username });
+    }
+
+    // Generate a new OTP
+    const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+
+    // Save the OTP to the database
+    await UserOTPVerification.create({
+      username,
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
+    });
+
+    // Return the OTP to the frontend as a response code
+     console.log("success")
+
+    let code = otp;
+
+    res.status(201).json({ code });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 
 // @desc  Create a password reset session
 // Route GET /api/v1/users/createResetSession
@@ -576,7 +675,7 @@ const getUserPayments = asyncHandler(async (req, res) => {
     console.log("Fetching payments for user: ", userId);
 	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
   
-	  if (!userPosts) {
+	  if (!userPayments) {
 		res.status(404).json({ message: "No payments found for this user." });
 	  } else {
 		res.status(200).json(userPayments);
@@ -595,6 +694,14 @@ const getUserPayments = asyncHandler(async (req, res) => {
 const postUserPayment = asyncHandler(async (req, res) => {
   try {
     await initiatePayment(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const verifyUserPayment = asyncHandler(async (req, res) => {
+  try {
+    await verifyPayments(req, res);
   } catch (error) {
     console.log(error);
   }
@@ -627,5 +734,7 @@ export {
   deleteUserResources,
   postUserPayment,
   getUserPayments,
-  getPaymentOptions
+  getPaymentOptions,
+  verifyUserPayment,
+  resendOTP
 };

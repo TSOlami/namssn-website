@@ -6,9 +6,7 @@ dotenv.config();
 
 // https://ethereal.email/create
 let nodeconfig = {
-	host: "smtp.forwardemail.net",
-	port: 465,
-	secure: true,
+  service: 'gmail',
 	auth: {
 	  // TODO: replace `user` and `pass` values from <https://forwardemail.net>
 	  user: process.env.EMAIL,
@@ -21,8 +19,8 @@ let transporter = nodemailer.createTransport(nodeconfig); // create reusable tra
 let MailGenerator = new Mailgen({
   theme: 'default',
   product: {
-    name: 'Mailgen',
-    link: 'https://mailgen.js/',
+    name: 'NAMSSN FUTMINNA',
+    link: 'https://namssnfutminna.edu.ng/',
   },
 });
 
@@ -54,7 +52,7 @@ export const registerMail = async (req,res) => {
   };
 
   // Generate an HTML email with the provided contents
-  var emailBody = MailGenerator.generate(email);
+  var emailBody = await MailGenerator.generate(email);
 
   // Message object
   let message = {
@@ -66,8 +64,9 @@ export const registerMail = async (req,res) => {
   
   console.log("Sending Mail to: ", message.to)
   // Send the email
-  transporter.sendMail(message)
+  await transporter.sendMail(message)
   .then(() => {
+    console.log("Email sent successfully!")
     return res.status(200).send({msg: 'You should receive an email from us shortly!'})
   })
   .catch(error => res.status(500).send({error}))

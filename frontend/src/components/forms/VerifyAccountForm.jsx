@@ -25,7 +25,7 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
     studentEmail: Yup.string()
       .matches(
         /^[a-zA-Z0-9._%+-]+@st\.futminna\.edu\.ng$/,
-        "Invalid email format. Your student email in the format name+studentID@st.futminna.edu.ng"
+        "Invalid email format. Your student email in the format: name+studentID@st.futminna.edu.ng"
       )
       .required("Student Email is required"),
   });
@@ -45,7 +45,7 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
           console.log(`OTP generated successfully: ${OTPResponse.code}`);
           toast.success("OTP has been sent to your email.");
           // Navigate to the /verify-email page
-          navigate("/verify-email");
+          navigate(`/verify-account/${studentEmail}`);
         } else {
           // Handle any error or failed OTP generation here
           console.error("Failed to generate OTP");

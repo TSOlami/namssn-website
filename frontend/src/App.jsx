@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Payment,PaymentHistory } from "./components";
+import { Payment, PaymentHistory } from "./components";
 import {
 	LevelResources,
 	Search,
@@ -27,6 +27,9 @@ import {
 	AdminAnnouncement,
 	VerifyUsers,
 	VerifyEmail,
+	AdminBlogs,
+	ForgotPage,
+	VerifyAccount,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
@@ -45,7 +48,10 @@ export default function App() {
 					<Route path="/home" element={<Home />} />
 					<Route path="/payments" element={<PaymentPage />} />
 					<Route path="/payments/pay/:id" element={<Payment />} />
-					<Route path="/payments/:userId" element={<PaymentHistory />} />
+					<Route
+						path="/payments/:userId"
+						element={<PaymentHistory />}
+					/>
 					<Route path="/resources" element={<Resources />} />
 					<Route path="/resources/:level" element={<LevelResources/>} />
 					<Route path="/profile" element={<Profile />} />
@@ -66,7 +72,11 @@ export default function App() {
 					/>
 					<Route path="/events" element={<EventsPage />} />
 					<Route path="*" element={<ErrorPage />} />
-					<Route key={13} path="/about-us" element={<AboutUsPage />} />
+					<Route
+						key={13}
+						path="/about-us"
+						element={<AboutUsPage />}
+					/>
 					<Route path="/blog" element={<BlogPage />} />
 					<Route path="/admin" element={<AdminDashboard />} />
 					<Route path="/admin/payment" element={<AdminPayment />} />
@@ -78,7 +88,10 @@ export default function App() {
 						element={<AdminAnnouncement />}
 					/>
 					<Route path="/admin/users" element={<VerifyUsers />} />
+					<Route path="/verify-account/:studentEmail" element={<VerifyAccount />} />
 					<Route path="/verify-email" element={<VerifyEmail />} />
+					<Route path="/forgot-password" element={<ForgotPage />} />
+					<Route path="/admin/blogs" element={<AdminBlogs/>} />
 				</Routes>
 			</BrowserRouter>
 		</AnimatePresence>

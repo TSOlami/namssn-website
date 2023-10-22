@@ -67,7 +67,7 @@ const Comments = () => {
 			<Sidebar />
 
 			<div className="flex flex-col flex-1 relative">
-				<HeaderComponent title="Post" />
+				<HeaderComponent title="Post" back/>
 				<div className="w-full">
 					<Post
 						key={post?._id}
@@ -76,6 +76,7 @@ const Comments = () => {
 						comments={post?.comments?.length}
 						isVerified={post?.user?.isVerified}
 						text={post?.text}
+						image={post?.image}
 						name={post?.user?.name}
 						username={post?.user?.username}
 						avatar={post?.user?.profilePicture}
@@ -126,7 +127,7 @@ const Comments = () => {
 						);
 					})
 				) : (
-					<div className="text-center mt-4 p-4 text-gray-500">
+					<div className="text-center mt-4 p-4 pb-40 text-gray-500">
 						No comments to display.
 					</div>
 				)}

@@ -3,10 +3,14 @@ import axios from "axios";
 axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
 
 export async function verifyOTP(username, code) {
-	try {
-		const { data, status } = await axios.get('/api/v1/users/verify-otp', { params: { username, code } });
-		return { data, status };
-	} catch (error) {
-		return Promise.reject({ error });
-	}
+    try {
+        const requestData = {
+            username,
+            code,
+          };
+        const { data, status } = await axios.post('/api/v1/users/verify-otp', requestData);
+        return { data, status };
+    } catch (error) {
+        return Promise.reject({ error });
+    }
 }
