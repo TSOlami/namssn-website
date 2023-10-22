@@ -589,6 +589,7 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 
   res.status(200).json(allBlogs);
 });
+
 // Route GET /api/v1/users/blog
 // Access Public
 const getUserBlogs = asyncHandler(async (req, res) => {

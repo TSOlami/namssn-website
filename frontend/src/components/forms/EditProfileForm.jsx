@@ -64,7 +64,7 @@ const EditProfileForm = ({ handleModal }) => {
           values = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
-          navigate('/home');
+          navigate('/profile');
           console.log(values);
           toast.success('Profile updated!');
         } catch (err) {

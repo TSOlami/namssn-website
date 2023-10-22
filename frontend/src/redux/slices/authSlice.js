@@ -18,6 +18,7 @@ export const initialState = {
   announcements: getLocalStorageItem('userAnnouncements') || null,
   payments: getLocalStorageItem('userPayments') || null,
   category: getLocalStorageItem('userCategories') || null,
+  blog: getLocalStorageItem('userBlogs') || null,
 }
 
 const authSlice = createSlice({
@@ -52,10 +53,14 @@ const authSlice = createSlice({
     setCategories(state, action){
       state.category =action.payload;
       localStorage.setItem('userCategories', JSON.stringify(action.payload));
-    }
+    },
+    setBlogs(state, action){
+      state.blog =action.payload;
+      localStorage.setItem('userBlogs', JSON.stringify(action.payload));
+    },
 	},
 });
 
-export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, logout } = authSlice.actions;
+export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, logout } = authSlice.actions;
 
 export default authSlice.reducer;
