@@ -10,12 +10,16 @@ const HeaderComponent = ({ title, url }) => {
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
-		setSearch(e.target.value);
+		if (e.target.value.trim() !== '') {
+			setSearch(e.target.value);
+		} else if(e.target.value.trim() === '' && search.trim() !== '') {
+			setSearch(e.target.value);
+		}
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(search);
-		setSearch("");
+		// console.log(e.target.value);
+		// setSearch(e.target.value);
 	};
 
 	// get user from redux
@@ -52,7 +56,7 @@ const HeaderComponent = ({ title, url }) => {
 						onChange={handleSearchChange}
 					/>
 					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-					<button className="border bg-gray-400 rounded-md"> <a href={`http://localhost:3000/search?key=${search}`}>Go</a></button>
+					<button className="border bg-blue-900 rounded-md text-white"> <a href={`http://localhost:3000/search?key=${search}`}>Go</a></button>
 			</form>
 		</div>
 	);

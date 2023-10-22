@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Payment,PaymentHistory } from "./components";
 import {
+	LevelResources,
 	Search,
 	Landing,
 	SignIn,
@@ -46,6 +47,7 @@ export default function App() {
 					<Route path="/payments/pay/:id" element={<Payment />} />
 					<Route path="/payments/:userId" element={<PaymentHistory />} />
 					<Route path="/resources" element={<Resources />} />
+					<Route path="/resources/:level" element={<LevelResources/>} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/profile/:userId" element={<UserProfile />} />
 					<Route

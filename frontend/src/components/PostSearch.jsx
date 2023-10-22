@@ -107,65 +107,71 @@ const PostSearch = ({key, upvotes, downvotes, comment, isVerified, image,
   };
   
 	return (
-		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
-			<div>
-				<Link to={`/profile/${u_id}`}>
-					<img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
-				</Link>
-			</div>
+        <div>
+            <div className="pt-4 pl-6 text-gray-400">
+                <span className="text-lg font-serif">Post</span>
+            </div>
+        
+            <div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+                <div>
+                    <Link to={`/profile/${u_id}`}>
+                        <img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
+                    </Link>
+                </div>
 
-			<div className="flex flex-col gap-2 w-full">
-				<div className="flex flex-row gap-2 lg:gap-2 items-center w-full relative">
-					<Link to={`/profile/${u_id}`}>
-						{" "}
-						{/* Wrap the user's name in a Link */}
-						<span className="font-medium flex flex-row items-center gap-2">
-							<span className="font-semibold">{name}</span>
-							{isVerified && <FaCircleCheck color="#17A1FA" />}
-						</span>
-					</Link>
-					<span>@{username}</span>
-					<span className="text-gray-500">
-                    {formatDateToTime(date)}
-					</span>
+                <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-row gap-2 lg:gap-2 items-center w-full relative">
+                        <Link to={`/profile/${u_id}`}>
+                            {" "}
+                            {/* Wrap the user's name in a Link */}
+                            <span className="font-medium flex flex-row items-center gap-2">
+                                <span className="font-semibold">{name}</span>
+                                {isVerified && <FaCircleCheck color="#17A1FA" />}
+                            </span>
+                        </Link>
+                        <span>@{username}</span>
+                        <span className="text-gray-500">
+                        {formatDateToTime(date)}
+                        </span>
 
-					<span
-						className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
-						onClick={handleOpenOptions}
-					>
-						<div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
-						</div>
-					</span>
-					{openOptions && (
-						<button onClick={handleDeletePost} className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2">
-							<MdDelete /> <span>Delete Post</span>
-						</button>
-					)}
-				</div>
+                        <span
+                            className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
+                            onClick={handleOpenOptions}
+                        >
+                            <div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
+                            </div>
+                        </span>
+                        {openOptions && (
+                            <button onClick={handleDeletePost} className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2">
+                                <MdDelete /> <span>Delete Post</span>
+                            </button>
+                        )}
+                    </div>
 
-				{/* Post content goes here */}
-				<div className="body-text " onClick={routeToComments}>
-					{text}
-					{image && (
-						<div className="post-image-container pt-2">
-							<img src={image} alt="Post Image" className="post-image" />
-						</div>
-					)}
-				</div>
+                    {/* Post content goes here */}
+                    <div className="body-text " onClick={routeToComments}>
+                        {text}
+                        {image && (
+                            <div className="post-image-container pt-2">
+                                <img src={image} alt="Post Image" className="post-image" />
+                            </div>
+                        )}
+                    </div>
 
-				{/* Post actions */}
+                    {/* Post actions */}
 
-				<Actions
-					upvotes={upvotes}
-					downvotes={downvotes}
-					isUpvoted={isUpvoted}
-					onUpvote={handleUpvote}
-					isDownvoted={isDownvoted}
-					onDownvote={handleDownvote}
-          postId={postId}
-				/>
-			</div>
-		</div>
+                    <Actions
+                        upvotes={upvotes}
+                        downvotes={downvotes}
+                        isUpvoted={isUpvoted}
+                        onUpvote={handleUpvote}
+                        isDownvoted={isDownvoted}
+                        onDownvote={handleDownvote}
+            postId={postId}
+                    />
+                </div>
+            </div>
+        </div>
 	);
     
 }
