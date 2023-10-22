@@ -47,7 +47,11 @@ const EditProfileForm = ({ handleModal }) => {
     level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    matricNumber: Yup.string(),
+    matricNumber: Yup.string()
+    .matches(
+      /^20\d{2}\/1\/\d{5}PM$/,
+      'Invalid matric number format (e.g., 20xx/1/xxxxxPM)'
+    ),
     bio: Yup.string(),
 	});
   

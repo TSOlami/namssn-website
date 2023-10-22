@@ -16,6 +16,7 @@ import {
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
+	usePaginatedPostsQuery,
 	useUserPostsQuery,
 	useCreatePostMutation,
 	useUpdatePostMutation,
@@ -76,6 +77,7 @@ export {
 		useUpdateUserMutation,
 		useGetUserQuery,
 		useAllPostsQuery,
+		usePaginatedPostsQuery,
 		useUserPostsQuery,
 		useCreatePostMutation,
 		useUpdatePostMutation,

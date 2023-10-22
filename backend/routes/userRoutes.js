@@ -186,7 +186,7 @@ router
 // Route for getting all posts
 router
 .route("/posts")
-.get(protect, getAllPosts);
+.get(getAllPosts);
 
 // Route for getting a user post by id
 router.get('/post/:userId', protect, getUserPosts);

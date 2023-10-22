@@ -7,5 +7,6 @@ import { resetPassword } from "./resetPassword";
 import { accountVerificationOTP } from "./accountVerificationOTP";
 import { resendAccountVerificationOTP } from "./resendAccountVerificationOTP";
 import { verifyAccount } from "./verifyAccount";
+import { getPosts } from "./getPosts";
 
-export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount };
+export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, getPosts };
