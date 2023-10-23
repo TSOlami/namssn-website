@@ -1,4 +1,4 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, logout } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, logout } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -16,6 +16,9 @@ import {
 	useCreateBlogMutation,
 	useUpdateBlogMutation,
 	useDeleteBlogMutation,
+	useCreateEventMutation,
+	useUpdateEventMutation,
+	useDeleteEventMutation,
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
@@ -62,11 +65,7 @@ import {
 } from './slices/announcementSlice';
 
 import {
-	useCreateEventMutation,
 	useAllEventsQuery,
-	useUserEventsQuery,
-	useUpdateEventMutation,
-	useDeleteEventMutation,
 } from './slices/eventSlice';
 
 export { 
@@ -118,7 +117,6 @@ export {
 	useDeleteAnnouncementMutation,
 	useCreateEventMutation,
 	useAllEventsQuery,
-	useUserEventsQuery,
 	useUpdateEventMutation,
 	useDeleteEventMutation,
 	useVerifyAccountMutation,
@@ -129,5 +127,6 @@ export {
 	setCategories,
 	setBlogs,
 	setCurrentPage,
+	setEvents,
 	logout,
  }

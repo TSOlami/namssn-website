@@ -309,11 +309,15 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
 
 // Create Event
 const createEvent = asyncHandler(async (req, res) => {
-  const { image } = req.body; // You can add more event properties as needed
+  const { title, image } = req.body; // You can add more event properties as needed
   const userId = req.user._id;
 
+  console.log("Creating event");
+
+ try {
   // Create a new event
   const newEvent = new Event({
+    title,
     image,
     user: userId, // Associate the event with the user who created it
   });
@@ -322,6 +326,10 @@ const createEvent = asyncHandler(async (req, res) => {
   const createdEvent = await newEvent.save();
 
   res.status(201).json(createdEvent);
+ } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+ }
 });
 
 // Get User's Events (My Events)
@@ -337,7 +345,7 @@ const getUserEvents = asyncHandler(async (req, res) => {
 // Update Event
 const updateEvent = asyncHandler(async (req, res) => {
   const eventId = req.params.eventId; // Get the event ID from the request parameters
-  const { image } = req.body;
+  const { title, image } = req.body;
 
   try {
     // Find the event by ID
@@ -354,7 +362,8 @@ const updateEvent = asyncHandler(async (req, res) => {
     }
 
     // Update the event's image
-    event.image = image;
+    event.title = title || event.title;
+    event.image = image || event.image;
 
     // Save the updated event
     const updatedEvent = await event.save();
@@ -385,7 +394,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
   }
 
   // Delete the event
-  await event.remove();
+  await Event.deleteOne({ _id: eventId });
 
   res.status(200).json({ message: 'Event deleted' });
 });

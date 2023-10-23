@@ -104,9 +104,6 @@ const AdminAnnouncements = () => {
 	const handleDeleteClick = (announcement) => {
 		// Handle the delete logic for the announcement
 		console.log("Delete announcement:", announcement);
-
-		// Dispatch the deleteAnnouncement action
-		dispatch(deleteAnnouncement(announcement._id));
 	};
 
 	// Use the useFormik hook to manage the form state

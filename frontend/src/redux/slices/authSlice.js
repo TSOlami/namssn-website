@@ -19,6 +19,7 @@ export const initialState = {
   payments: getLocalStorageItem('userPayments') || null,
   category: getLocalStorageItem('userCategories') || null,
   blog: getLocalStorageItem('userBlogs') || null,
+  events: getLocalStorageItem('userEvents') || null,
   currentPage: 1,
   pageSize: 10,
 }
@@ -63,9 +64,13 @@ const authSlice = createSlice({
     setCurrentPage(state, action){
       state.currentPage = action.payload;
     },
+    setEvents(state, action){
+      state.events = action.payload;
+      localStorage.setItem('userEvents', JSON.stringify(action.payload));
+    },
 	},
 });
 
-export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, logout } = authSlice.actions;
+export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, setEvents, logout } = authSlice.actions;
 
 export default authSlice.reducer;

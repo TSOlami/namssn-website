@@ -64,6 +64,52 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['Blog'],
       }),
 
+      // Create Event Mutation
+      createEvent: builder.mutation({
+        query(data) {
+          return {
+            url: `${ADMIN_URL}/events`,
+            method: 'POST',
+            body: data,
+          };
+        },
+        invalidatesTags: ['Event'],
+      }),
+
+      // Update Event Mutation
+      updateEvent: builder.mutation({
+        query(data) {
+          return {
+            url: `${ADMIN_URL}/events`,
+            method: 'PUT',
+            body: data,
+          };
+        },
+        invalidatesTags: ['Event'],
+      }),
+
+      // Delete Event Mutation
+      deleteEvent: builder.mutation({
+        query(eventId) {
+          return {
+            url: `${ADMIN_URL}/events/${eventId}`,
+            method: 'DELETE',
+          };
+        },
+        invalidatesTags: ['Event'],
+      }),
+
+      // Get user Events Query
+      getUserEvents: builder.query({
+        query() {
+          return {
+            url: `${ADMIN_URL}/events`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Event'],
+      }),
+
       // Get all payments
       getAllPayments: builder.query({
         query() {
@@ -78,4 +124,4 @@ export const adminApiSlice = apiSlice.injectEndpoints({
   }
 });
 
-export const { useMakeUserAdminMutation, useRemoveAdminMutation, useGetAllPaymentsQuery, useCreateBlogMutation, useDeleteBlogMutation, useUpdateBlogMutation } = adminApiSlice;
+export const { useMakeUserAdminMutation, useRemoveAdminMutation, useGetAllPaymentsQuery, useCreateBlogMutation, useDeleteBlogMutation, useUpdateBlogMutation, useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation } = adminApiSlice;
