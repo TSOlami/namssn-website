@@ -1,4 +1,4 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, logout } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, logout } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -128,5 +128,6 @@ export {
 	setPayments,
 	setCategories,
 	setBlogs,
+	setCurrentPage,
 	logout,
  }

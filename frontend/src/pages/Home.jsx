@@ -1,7 +1,7 @@
-import InfiniteScroll from "react-infinite-scroll-component";
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
 	Sidebar,
@@ -12,49 +12,140 @@ import {
 	Loader,
 	AddPostForm,
 } from "../components";
-import { getPosts } from "../utils";
+// import { getPosts } from "../utils";
+import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
 
 const Home = () => {
+  // Use the useSelector hook to access redux store state
+  const page = useSelector((state) => state.auth.currentPage);
+
+  // Get posts from the redux store
+  const { posts: postData } = useSelector((state) => state.auth);
+
+  console.log(postData);
+
 	// States for managing posts and pagination
-  const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  // const [postData, setPostData] = useState([]);
+  // const [page, setPage] = useState(1);
+  // const [hasMore, setHasMore] = useState(true);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // console.log("Page: ", page);
+
+  // Use the useDispatch hook to dispatch actions
+  const dispatch = useDispatch();
+
+  // const [ allposts, { isLoading } ] = useAllPostsQuery();
+
+  // Use the useAllPostsQuery hook to get all posts
+  const { data: posts, isLoading } = useAllPostsQuery(Number(page));
+  // console.log("Data from api call: ", posts);
+
+  // Dispatch the setPosts action to set the posts in the redux store
+  useEffect(() => {
+    if (posts) {
+      console.log("Posts from api call: ", posts);
+      dispatch(setPosts(posts.posts));
+    }
+  }, [posts, dispatch]);
+
+  // Get the total number of pages from the API response
+  const totalPages = posts?.totalPages;
+
+  // Use the custom hook to fetch more posts
+  // const nextPage = page + 1;
+
+  // Function to fetch more posts
+  const getNextPosts = async (pageCurrent) => {
+    if (Number(pageCurrent) < Number(totalPages)) {
+      dispatch(setCurrentPage(pageCurrent + 1));
+    }
+  }
+
+  // Function to load more posts manually
+  // const loadMorePosts = async () => {
+  //   if (!isLoadingMore) {
+  //     setIsLoadingMore(true);
+  //     try {
+  //       if (nextPage <= totalPages) {  // Check if there are more pages to load
+  //         const {data: posts} = await getNextPosts(); // Use the custom hook to fetch more posts
+  //         console.log("Response from api call: ", posts);
+  //         if (posts.posts && Array.isArray(posts.posts)) {
+  //           dispatch(setPosts([...posts, ...posts.posts])); // Append new posts to the existing ones
+  //           setPage(nextPage);
+  //         }
+  //       } else {
+  //         // You've reached the last page, handle this scenario (e.g., display a message)
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching more posts", error);
+  //     } finally {
+  //       setIsLoadingMore(false);
+  //     }
+  //   }
+  // };  
+
+  // const posts = data?.posts;
+
+  // Use the useEffect hook to set the posts in the state
+  // useEffect(() => {
+  //   if (data) {
+  //     dispatch(setPosts(data));
+  //   }
+  // }, [data, dispatch]);
 
   // Function to load more posts
-  const loadMore = async () => {
-    try {
-      const response = await getPosts(page + 1, 10); // Use the getPosts function with the next page
-      if (response.noMorePosts) {
-        setHasMore(false);
-      } else if (response.posts) {
-        setPosts([...posts, ...response.posts]);
-        setPage(page + 1);
-      }
-    } catch (error) {
-      console.error("Error fetching more posts", error);
-      setHasMore(false);
-    }
-  };
+  // const loadMore = async () => {
+  //   try {
+  //     const response = await allposts(page + 1, 10); // Use the getPosts function with the next page
+  //     if (response.pageSize === 0){
+  //       setHasMore(false);
+  //     } else if (response.posts) {
+  //       dispatch(setPosts(data.concat(response.posts)));
+  //       setPage(page + 1);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching more posts", error);
+  //     setHasMore(false);
+  //   }
+  // }
+
+  // Function to load more posts
+  // const loadMore = async () => {
+  //   try {
+  //     const response = await getPosts(page + 1, 10); // Use the getPosts function with the next page
+  //     if (response.noMorePosts) {
+  //       setHasMore(false);
+  //     } else if (response.posts) {
+  //       dispatch(setPosts([...postData, ...response.posts]));
+  //       setPostData([...postData, ...response.posts]);
+  //       setPage(page + 1);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching more posts", error);
+  //     setHasMore(false);
+  //   }
+  // };
 
   // Use useEffect to fetch initial posts
-  useEffect(() => {
-    // Function to fetch initial posts
-    const fetchInitialPosts = async () => {
-      try {
-        const response = await getPosts(page, 10); // Use the getPosts function with the initial page
-        if (response.posts) {
-          setPosts(response.posts);
-        }
-      } catch (error) {
-        console.error("Error fetching posts", error);
-      }
-    };
+  // useEffect(() => {
+  //   // Function to fetch initial posts
+  //   const fetchInitialPosts = async () => {
+  //     try {
+  //       const response = await getPosts(page, 10); // Use the getPosts function with the initial page
+  //       if (response.posts) {
+  //         dispatch(setPosts(response.posts));
+  //         setPostData(response.posts);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching posts", error);
+  //     }
+  //   };
 
     // Fetch initial posts only when the component mounts
-    if (page === 1) {
-      fetchInitialPosts();
-    }
-  }, [page]);
+  //   if (page === 1) {
+  //     fetchInitialPosts();
+  //   }
+  // }, [page, dispatch]);
 
   // State for managing modal
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,16 +164,11 @@ const Home = () => {
 			<Sidebar />
 			<div className="flex flex-col relative w-full">
 				<HeaderComponent title="Home" url={"Placeholder"} />
-				<InfiniteScroll
-          dataLength={posts.length}
-          next={loadMore}
-          hasMore={hasMore}
-          loader={<Loader />}
-          endMessage={<p className="text-center text-gray-500 p-20">No more posts to show</p>}
-        >
-          {posts.map((post) => (
+				
+        {/* Posts container */}
+        {postData?.map((post, index) => (
             <Post
-              key={post._id}
+              key={index}
               upvotes={post.upvotes.length}
               downvotes={post.downvotes.length}
               comments={post.comments.length}
@@ -97,7 +183,12 @@ const Home = () => {
               postId={post._id}
             />
           ))}
-        </InfiniteScroll>
+
+        {/* Loader */}
+        {isLoading ? (<Loader />) : (<button onClick={() => getNextPosts(page)} className="text-primary">
+            Load More Posts
+          </button>)}
+
 				{/* Add post button */}
 
 				<div
@@ -114,6 +205,7 @@ const Home = () => {
 						<AddPostForm handleModalOpen={handleModalOpen} />
 					)}
 				</div>
+        
 			</div>
 			<AnnouncementContainer />
 			<BottomNav />

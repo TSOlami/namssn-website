@@ -7,9 +7,9 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 		return {
       // Get All Posts Query
       allPosts: builder.query({
-        query() {
+        query(page, pageSize) {
           return {
-            url: `${POSTS_URL}/posts`,
+            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
             method: 'GET',
           };
         },

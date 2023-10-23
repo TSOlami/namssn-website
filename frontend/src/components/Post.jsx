@@ -4,11 +4,12 @@ import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { formatDateToTime } from "../utils";
-import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation } from "../redux";
+import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation, setPosts } from "../redux";
 import { ProfileImg } from "../assets";
+import { toast } from "react-toastify";
 
 const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, avatar, createdAt, u_id, postId }) => {
 	const [openOptions, setopenOptions] = useState(false);
@@ -22,6 +23,9 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
   };
 
   const date = new Date(createdAt);
+	
+	// Use the useDispatch hook to dispatch actions
+	const dispatch = useDispatch();
 
   // Post deletion
   const [deletePost] = useDeletePostMutation();
@@ -29,6 +33,7 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
     try {
       const response = await deletePost({postId: postId}).unwrap();
       console.log(response);
+			dispatch(setPosts({...response}));
       if (response.message === "success") {
         console.log("Post deleted successfully", response);
       } else {
@@ -71,12 +76,14 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
       if (response.message === "success") {
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
+				toast.success("Upvoted!");
+				dispatch(setPosts({...response}));
         console.log('Upvote successful:', response);
       } else {
-        // console.error('Upvote failed:', response);
+        console.error('Upvote failed:', response);
       }
     } catch (error) {
-      // console.error('Upvote failed:', error);
+      console.error('Upvote failed:', error);
     }
   };
 
@@ -94,6 +101,8 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
       if (response.message === "success") {
         // Toggle the downvote state
         setIsDownvoted(!isDownvoted);
+				dispatch(setPosts({...response}));
+				toast.success("Downvoted!");
       } else {
         console.error('Downvote failed:', response);
       }

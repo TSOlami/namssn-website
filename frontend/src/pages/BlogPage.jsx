@@ -22,7 +22,7 @@ const BlogPage = () => {
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
 					{blogs?.map((blog) => (
-						console.log(blog),
+
 						<div key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
