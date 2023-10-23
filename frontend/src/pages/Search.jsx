@@ -29,35 +29,25 @@ const Search = () => {
             <Sidebar />
             <div className="flex flex-col relative">
                 <HeaderComponent title="SEARCH" />
-                <div>
-                    <div className="pt-4 pl-6 text-gray-400">
-                        <span className="text-lg font-serif">Resources</span>
-                    </div>
-                    <ResourceSearch query={value} />
-                </div>
-                <div>
-                    <div className="pt-4 pl-6 text-gray-400">
-                        <span className="text-lg font-serif">Posts</span>
-                    </div>
-                    {newPosts.map((post) => (
-                        <PostSearch
-                            key={post?._id}
-                            upvotes={post?.upvotes?.length}
-                            downvotes={post?.downvotes?.length}
-                            comments={post?.comments?.length}
-                            isVerified={post?.user?.isVerified}
-                            text={post?.text}
-                            name={post?.user?.name}
-                            username={post?.user?.username}
-                            avatar={post?.user?.profilePicture}
-                            createdAt={post?.createdAt}
-                            updatedAt={post?.updatedAt}
-                            u_id={post?.user?._id}
-                            postId={post?._id}
-                            image={post?.image}
-                        />
-                    ))}
-                </div>
+                <ResourceSearch query={value} />
+                {newPosts.map((post) => (
+                    <PostSearch
+                        key={post?._id}
+                        upvotes={post?.upvotes?.length}
+                        downvotes={post?.downvotes?.length}
+                        comments={post?.comments?.length}
+                        isVerified={post?.user?.isVerified}
+                        text={post?.text}
+                        name={post?.user?.name}
+                        username={post?.user?.username}
+                        avatar={post?.user?.profilePicture}
+                        createdAt={post?.createdAt}
+                        updatedAt={post?.updatedAt}
+                        u_id={post?.user?._id}
+                        postId={post?._id}
+                        image={post?.image}
+                    />
+                ))}
             </div>
         </div>
     )

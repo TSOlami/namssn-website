@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "./Loader";
+import { formatDateToTime } from "../utils";
 // import { FileContext } from "./FileProvider";
 
 const FileForm = (props) => {
@@ -58,15 +59,25 @@ const FileForm = (props) => {
 
             try {
                 const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData); 
-                console.log(res.data)
-                const existingFilesDetails = JSON.parse(localStorage.getItem("filesDetails"))
-                if (existingFilesDetails) {
-                    existingFilesDetails.push(res.data)
-                    localStorage.setItem("filesDetails", JSON.stringify(existingFilesDetails));
-                } else {
-                    localStorage.setItem("filesDetails", JSON.stringify([res.data]))
-                }
+                // console.log(res.data)
+                const level = selectedOption1
+                let filesDetails = JSON.parse(localStorage.getItem("filesDetails"))
+                const existingLevels = Object.keys(filesDetails)
 
+                if (filesDetails && existingLevels.includes(level)) {
+                    console.log("here")
+                    console.log(filesDetails)
+                    const existingLevelDetails = filesDetails[level];
+                    console.log(existingLevelDetails)
+                    existingLevelDetails.push(res.data)
+                    filesDetails[{level}] = existingLevelDetails;
+                    localStorage.setItem("filesDetails", JSON.stringify(filesDetails))
+                } else {
+                    console.log("not available")
+                    const mergedDict = Object.assign({}, filesDetails, {[level]: [res.data]})
+                    localStorage.setItem("filesDetails", JSON.stringify(mergedDict))
+                }
+                console.log(filesDetails)
                 
                 toast.success("File Uploaded Successfully");
                 // window.location.reload();

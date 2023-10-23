@@ -7,6 +7,7 @@ import { useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
+import ShareButton from "./ShareButton";
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;
@@ -67,9 +68,6 @@ const isAdmin = userInfo?.role;
 //         </div>
 //     )
 
-const cardClass =
-	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px]";
-
 const ResourceCard = ({
 	uploaderUsername,
 	title,
@@ -79,6 +77,11 @@ const ResourceCard = ({
 	semester,
 	date,
 }) => {
+	// console.log(date)
+
+	const cardClass =
+	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
+
 	// manage state for the delete options button
 	const [openOptions, setOpenOptions] = useState(false);
 	const handleSetOpenOptions = () => {
@@ -119,6 +122,7 @@ const ResourceCard = ({
 	};
 
 	const handleFileDelete = async (fileUrl) => {
+		console.log("here")
 		handleSetOpenOptions();
 		await axios
 			.delete(fileUrl, { data: { _id: userInfo._id } })
@@ -140,20 +144,23 @@ const ResourceCard = ({
 
 	const handleNewDelete = (e) => {
 		e.stopPropagation();
-		handleFileDelete(fileUrl);
+		console.log("here")
+		// handleFileDelete(fileUrl);
 	};
 
 	const smStyle = "text-sm text-gray-400";
 	const lgStyle = "text-sm text-blue-600";
 
 	return (
-		<div className="w-[10em] flex flex-col justify-start items-center my-2">
+		<div className="w-[10em] flex flex-col items-center my-2">
+			<ShareButton title={title} fileUrl={fileUrl}/>
+
 			<div
 				className={cardClass + " relative"}
 				onClick={() => viewFile(fileUrl)}
 			>
 				<img src={CerHat} />
-				<span className="pb-2 texhth">{title}</span>
+				<span className="pb-2 ">{title}</span>
 				<span
 					onClick={(event) => {
 						event.stopPropagation();
@@ -209,7 +216,7 @@ const ResourceCard = ({
 						</div>
 					</div>
 				)}
-		</div>
+ 			</div>
 	);
 };
 

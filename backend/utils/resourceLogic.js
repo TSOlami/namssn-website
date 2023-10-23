@@ -47,7 +47,7 @@ const postResource = async (req, res) => {
       if (response) {
         const formattedResponse = {[fileUrl]: {
         uploaderUsername: response[2], title: filename,
-        description: description, data: response[1], 
+        description: description, date: date, 
         semester: semester, course: course
         }}
         console.log(formattedResponse)
