@@ -171,8 +171,8 @@ const AdminBlogs = () => {
                 value={formik.values.content}
 							></textarea>
               {formik.touched.content && formik.errors.content ? (
-            <div>{formik.errors.content}</div>
-          ) : null}
+                <FormErrors error={formik.errors.content} />
+              ) : null}
               <input
                 type="text"
                 name="tags"
