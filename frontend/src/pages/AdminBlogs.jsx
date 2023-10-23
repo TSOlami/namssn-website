@@ -26,6 +26,8 @@ const AdminBlogs = () => {
 	// Use the useAllBlogsQuery hook to fetch all blogs
 	const { data, isLoading: isFetching } = useAllBlogsQuery();
 
+  console.log(data);
+
 	const [showAddBlogForm, setShowBlogForm] = useState(false);
 	const handleShowBlogForm = () => {
 		setShowBlogForm(!showAddBlogForm);
@@ -136,7 +138,7 @@ const AdminBlogs = () => {
 								placeholder="Add title"
 							/>
               {formik.touched.title && formik.errors.title ? (
-                <div>{formik.errors.title}</div>
+                <FormErrors error={formik.errors.title} />
               ) : null}
 
                 <button
@@ -185,8 +187,8 @@ const AdminBlogs = () => {
                 placeholder="Add tags"
               />
               {formik.touched.tags && formik.errors.tags ? (
-            <div>{formik.errors.tags}</div>
-          ) : null}
+                <FormErrors error={formik.errors.tags} />
+              ) : null}
 						</form>
                 {isCreating || isFetching ? <Loader /> : null}
 						<button

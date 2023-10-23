@@ -108,7 +108,7 @@ const EditProfileForm = ({ handleModal }) => {
             value={formik.values.name}
           />
           {formik.touched.name && formik.errors.name ? (
-            <div>{formik.errors.name}</div>
+            <FormErrors error={formik.errors.name} />
           ) : null}
         </div>
         <label className="mt-2" htmlFor="level">
