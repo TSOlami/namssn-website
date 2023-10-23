@@ -14,6 +14,8 @@ import {
 	useRemoveAdminMutation,
 	useGetAllPaymentsQuery,
 	useCreateBlogMutation,
+	useUpdateBlogMutation,
+	useDeleteBlogMutation,
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
@@ -32,8 +34,6 @@ import {
 } from './slices/postSlice';
 import {
   useUserBlogsQuery,
-  useUpdateBlogMutation,
-  useDeleteBlogMutation,
   useUpvoteBlogMutation,
   useDownvoteBlogMutation,
   useCommentBlogMutation,

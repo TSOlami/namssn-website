@@ -25,6 +25,8 @@ const EditProfileForm = ({ handleModal }) => {
   // Use the useSelector hook to access the userInfo object from the state
   const { userInfo } = useSelector((state) => state.auth);
 
+  let profilePicture = userInfo?.profilePicture || ProfileImg;
+
   // Use the useUpdateUserMutation hook to update the user's profile
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
@@ -61,12 +63,13 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          values = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
-          const res = await updateUser(values).unwrap();
+          let updatedValues = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
+          const res = await updateUser(updatedValues).unwrap();
           dispatch(setCredentials({...res}));
           navigate('/profile');
           console.log(values);
           toast.success('Profile updated!');
+          handleModal();
         } catch (err) {
           toast.error(err?.data?.message || err?.error)
         }
@@ -90,7 +93,7 @@ const EditProfileForm = ({ handleModal }) => {
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
         <div className="scale-75 flex-row">
         <label htmlFor="profile">
-          <img src={file || ProfileImg} alt="" className='profile-image'/>
+          <img src={file || profilePicture || ProfileImg} alt="" className='profile-image'/>
           </label>
 
           <input onChange={onUpload} type="file" name="profile" id="profile" className="" />

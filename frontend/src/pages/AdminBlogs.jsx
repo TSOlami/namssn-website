@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 import { FormErrors, Loader } from "../components";
 import { convertToBase64 } from "../utils";
-import { useCreateBlogMutation, useAllBlogsQuery, setBlogs } from "../redux";
+import { useCreateBlogMutation, useAllBlogsQuery, useUpdateBlogMutation, useDeleteBlogMutation, setBlogs } from "../redux";
 
 const AdminBlogs = () => {
   // Use the useSelector hook to access the userInfo object from the state
@@ -25,7 +25,11 @@ const AdminBlogs = () => {
 	// Use the useAllBlogsQuery hook to fetch all blogs
 	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
 
-  console.log(blogs);
+  // Use the useUpdateBlogMutation hook to update a blog post
+  const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
+
+  // Use the useDeleteBlogMutation hook to delete a blog post
+  const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
 
 	const [showAddBlogForm, setShowBlogForm] = useState(false);
 	const handleShowBlogForm = () => {
@@ -58,8 +62,8 @@ const AdminBlogs = () => {
 		validationSchema,
 		onSubmit: async (values) => {
 			try {
-				values = Object.assign(values, { coverImage: file });
-        const res = await createBlog(values).unwrap();
+				let updatedValues = Object.assign(values, { coverImage: file });
+        const res = await createBlog(updatedValues).unwrap();
         dispatch(setBlogs({...res}));
         formik.resetForm();
         toast.success("Blog post created successfully");
@@ -69,6 +73,23 @@ const AdminBlogs = () => {
 			}
 		},
 	});
+
+  // Edit and delete blog handlers
+  const handleEditBlog = (blog) => {
+    console.log("Edit blog ", blog._id);
+  };
+
+  const handleDeleteBlog = async (blog) => {
+    // Delete the blog post
+    try {
+      const blogId = blog._id;
+      await deleteBlog(blogId).unwrap();
+      toast.success("Blog post deleted successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.message || error?.error);
+    }
+  };
 
 	// File upload handler
 	const onUpload = async e => {
@@ -106,7 +127,11 @@ const AdminBlogs = () => {
 
 						<div className="p-2 md:p-5">
 							{blogs?.map((blog) => (
-								<BlogCard key={blog._id} title={blog.title} />
+								<BlogCard 
+                key={blog._id} 
+                blog={blog}
+                editBlog={() => handleEditBlog(blog)}
+                deleteBlog={() => handleDeleteBlog(blog)} />
 							))}
 						</div>
 					</div>
@@ -158,6 +183,7 @@ const AdminBlogs = () => {
 								id="cover-image"
 								className="hidden"
                 onChange={onUpload}
+                required={true}
 							/>
 							<textarea
                 type="text"
@@ -189,7 +215,7 @@ const AdminBlogs = () => {
                 <FormErrors error={formik.errors.tags} />
               ) : null}
 						</form>
-                {isCreating || isFetching ? <Loader /> : null}
+                {isCreating || isFetching || isDeleting ? <Loader /> : null}
 						<button
 							onClick={handleShowBlogForm}
 							className="bg-black text-white p-2 rounded-lg px-4 flex ml-auto mr-[10vw]"

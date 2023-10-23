@@ -110,14 +110,64 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	PUT  /api/v1/admin/blogs
 // access	Private (only accessible to admin users)
 const updateBlog = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Update a Blog' });
+  // Get the blog ID and updated blog data from the request body
+  const { blogId, title, coverImage, content, tags, author } = req.body;
+
+  // Find the blog by ID
+  const blog = await Blog.findById(blogId);
+
+  if (!blog) {
+    res.status(404);
+    throw new Error('Blog not found');
+  }
+
+  // Check if the user has permission to update this blog (e.g., they are the owner or an admin)
+  if (blog.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    res.status(401);
+    throw new Error('Unauthorized to update this blog');
+  }
+
+  // Update the blog
+  blog.title = title;
+  blog.coverImage = coverImage;
+  blog.content = content;
+  blog.tags = tags;
+  blog.author = author;
+
+  // Save the updated blog
+  const updatedBlog = await blog.save();
+
+  res.status(200).json(updatedBlog);
 });
 
 // @desc	Delete user blog
-// Route	DELETE  /api/v1/admin/blogs
+// Route	DELETE  /api/v1/admin/blog/:blogId
 // access	Private (only accessible to admin users)
 const deleteBlog = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Delete Blog' });
+  // Get the blog ID from the request body
+  const { blogId } = req.params;
+
+  console.log(blogId);
+
+  // Find the blog by ID
+  const blog = await Blog.findById(blogId);
+
+  if (!blog) {
+    res.status(404);
+    throw new Error('Blog not found');
+  }
+
+  // Check if the user has permission to delete this blog (e.g., they are the owner or an admin)
+  if (blog.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    res.status(401);
+    throw new Error('Unauthorized to delete this blog');
+  }
+
+  // Delete the blog
+  console.log("Deleting blog");
+  await Blog.deleteOne({ _id: blogId });
+
+  res.status(200).json({ message: 'Blog deleted' });
 });
 
 

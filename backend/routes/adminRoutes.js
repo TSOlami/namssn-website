@@ -48,7 +48,10 @@ router
 .route('/blog')
 .get(protect, isAdmin, getUserBlogs)
 .post(protect, isAdmin, createBlog)
-.put(protect,isAdmin, updateBlog)
+.put(protect, isAdmin, updateBlog)
+
+router
+.route('/blog/:blogId')
 .delete(protect, isAdmin, deleteBlog);
 
 /**

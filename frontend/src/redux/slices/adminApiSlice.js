@@ -39,6 +39,31 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['Blog'],
       }),
 
+      // Update Blog Query
+      updateBlog: builder.mutation({
+        query(data) {
+          return {
+            url: `${ADMIN_URL}/blog`,
+            method: 'PUT',
+            body: data,
+          };
+        },
+        invalidatesTags: ['Blog'],
+      }),
+
+      // Delete Blog Query
+      deleteBlog: builder.mutation({
+        query(blogId) {
+          console.log(blogId);
+
+          return {
+            url: `${ADMIN_URL}/blog/${blogId}`,
+            method: 'DELETE',
+          };
+        },
+        invalidatesTags: ['Blog'],
+      }),
+
       // Get all payments
       getAllPayments: builder.query({
         query() {
@@ -53,4 +78,4 @@ export const adminApiSlice = apiSlice.injectEndpoints({
   }
 });
 
-export const { useMakeUserAdminMutation, useRemoveAdminMutation, useGetAllPaymentsQuery, useCreateBlogMutation } = adminApiSlice;
+export const { useMakeUserAdminMutation, useRemoveAdminMutation, useGetAllPaymentsQuery, useCreateBlogMutation, useDeleteBlogMutation, useUpdateBlogMutation } = adminApiSlice;
