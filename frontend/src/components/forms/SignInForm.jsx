@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useLoginMutation, setCredentials } from '../../redux';
+import { useLoginMutation, useSendMailMutation, setCredentials } from '../../redux';
 import FormErrors from './FormErrors';
 import InputField from "../InputField";
 import { toast } from "react-toastify";
@@ -19,13 +19,29 @@ const SignInForm = () => {
 
   const [ login, { isLoading }]= useLoginMutation();
 
+  const [sendMail] = useSendMailMutation();
+
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
+      // Trigger sending the email after a successful login
+      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
+      const { email } = userInfo;
+
+      if (email) {
+        sendMail({ userEmail: email, text: msg }).then((response) => {
+          if (response.error) {
+            console.error("Failed to send email after login.");
+            toast.error("Failed to send a welcome email. Please try again.");
+          } else {
+            console.log("Email sent successfully after login.");
+          }
+        });
+      }
       navigate('/home');
     }
-  }, [navigate, userInfo]);
+  }, [navigate, sendMail, userInfo]);
 
 	// Schema and configuration for form validation
 	const initialvalues = {
@@ -49,6 +65,21 @@ const SignInForm = () => {
 			try {
         const res = await login(values).unwrap();
         dispatch(setCredentials({...res}));
+        // Trigger sending the email after a successful login
+      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
+      const { email } = userInfo;
+      const subject = "You logged in!"
+
+      if (email) {
+        sendMail({ userEmail: email, text: msg, subject }).then((response) => {
+          if (response.error) {
+            console.error("Failed to send email after login.");
+            toast.error("Failed to send a welcome email. Please try again.");
+          } else {
+            console.log("Email sent successfully after login.");
+          }
+        });
+      }
         navigate('/home');
         toast.success('Login successful, Welcome back!');
       } catch (err) {

@@ -34,6 +34,7 @@ import {
   getUserPayments,
   getPaymentOptions,
   verifyOTP,
+  resendOTP,
   verifyUserPayment
 } from "../controllers/userController.js";
 
@@ -77,10 +78,10 @@ router.post('/auth', authUser);
 /**
  * Verify a user account.
  * 
- * @route PUT /api/v1/users/verify-account
+ * @route POST /api/v1/users/verify-account
  * @access Private
  */
-router.route('/verify-account').put(verifyAccount);
+router.route('/verify-account').post(verifyAccount);
 
 /**
  * Generate OTP
@@ -88,15 +89,24 @@ router.route('/verify-account').put(verifyAccount);
  * @route GET /api/v1/users/generate-otp
  * @access Public
  */
-router.route('/generate-otp').get(verifyUser, localVariables, generateOTP);
+router.route('/generate-otp/:username').get(verifyUser, generateOTP);
+
+/**
+ * Resend OTP
+ * 
+ * @route GET /api/v1/users/resend-otp
+ * @access Public
+ * @param {string} username - The username of the user to resend OTP to
+ */
+router.route('/resend-otp/:username').get(verifyUser, resendOTP);
 
 /**
  * Verify  generated OTP
  * 
- * @route  GET /api/v1/users/otp
+ * @route  POST /api/v1/users/otp
  * @access Public
  */
-router.route('/verify-otp').get(verifyUser, verifyOTP);
+router.route('/verify-otp').post(verifyUser, verifyOTP);
 
 /**
  * Create Reset Session
@@ -140,7 +150,7 @@ router
 router.route('/profile/:userId').get(protect, getUserById);
 
 // Route for getting a user by username
-router.route('/profile/:username').get(getUserByUsername);
+router.route('/user').get(getUserByUsername);
 
 /**
  * Get Events
@@ -176,7 +186,7 @@ router
 // Route for getting all posts
 router
 .route("/posts")
-.get(protect, getAllPosts);
+.get(getAllPosts);
 
 // Route for getting a user post by id
 router.get('/post/:userId', protect, getUserPosts);

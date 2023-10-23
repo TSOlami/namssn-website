@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 import {FormErrors, InputField } from "../../components";
 import Loader from "../Loader";
-import { useRegisterMutation, useRegisterMailMutation, setCredentials } from "../../redux";
+import { useRegisterMutation, useSendMailMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
   // Get user info from redux store
@@ -43,9 +43,9 @@ const SignUpForm = () => {
 
   const [ register, { isLoading }] = useRegisterMutation();
 
-  const [ registerMail ] = useRegisterMailMutation();
+  const [ sendMail ] = useSendMailMutation();
 
-  const msg = "Welcome to NAMSSN, FUTMINNA chapter! We're very excited to have you on board.";
+  const msg = "We're thrilled to have you as a part of the NAMSSN family at FUTMINNA! With your registration, you've unlocked a world of opportunities and resources. Get ready to connect with fellow students, access exclusive events, and explore exciting initiatives. Your journey with us begins now, and we're here to support your personal and professional growth. Stay updated with the latest news, activities, and opportunities within the NAMSSN community. Discover a platform where you can share your insights, experiences, and talents. Feel free to explore our website to learn more about our mission and the benefits of your membership. Remember, your voice matters, and we're here to amplify it within our community.Your commitment to NAMSSN will contribute to making a positive impact on our campus and beyond.";
 
 	// Formik and yup validation schema
 	const initialvalues = {
@@ -84,7 +84,7 @@ const SignUpForm = () => {
         // Registration successful, now send the registration email
         let { username, email } = res;
         if (username && email) {
-          await registerMail({ username, userEmail: email, text: msg }).unwrap();
+          await sendMail({ username, userEmail: email, text: msg }).unwrap();
           return Promise.resolve(msg);
         }
         navigate('/home');

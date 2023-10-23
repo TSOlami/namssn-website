@@ -6,6 +6,7 @@ import createFileList from "./resourcesUtils/createFileList.js";
 import checkUploader from "./resourcesUtils/checkUploader.js";
 import removeResource from "./resourcesUtils/removeResource.js";
 import path from "path";
+import getUser from "./resourcesUtils/getUser.js";
 
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
@@ -26,33 +27,38 @@ const getResources = async (req, res) => {
       }
 }
 
-
 const postResource = async (req, res) => {
-    const {file} = req.files;
-    const {userId, date, description, semester, course} = req.body;
-    if (!file) {
-        return res.status(400).send('No file uploaded.');
-    }
-    // Define the directory where you want to save the uploaded file
-    const filename = file.name;
+  const { file } = req.files;
+  const { userId, date, description, semester, course } = req.body;
+  if (!file) {
+      return res.status(400).send('No file uploaded.');
+  }
+  const filename = file.name;
+  const uploadDirectory = 'uploads';
 
-    const uploadDirectory = 'uploads';
-    checkUploadDirectory(uploadDirectory)
-    .then(() => {
-        const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-        const fileUrl = uniquefileName + '_' + filename;
-        fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data)
-        .then(() => {
-        uploadResource(filename, description, userId, fileUrl, semester, course)
-        console.log(fileUrl)
-        console.log("File has been saved successfully");
-        }) .catch((err) => {
-        console.log(err)
-        })
-        }) .catch((err) => {
-        console.log(err);
-        })
-}
+  try {
+      await checkUploadDirectory(uploadDirectory);
+      const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
+      const fileUrl = uniquefileName + '_' + filename;
+
+      await fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data);
+      // const uploaderUsername = await getUser(userId).name;
+      const response = await uploadResource(filename, description, userId, fileUrl, semester, course);
+      if (response) {
+        const formattedResponse = {[fileUrl]: {
+        uploaderUsername: response[2], title: filename,
+        description: description, data: response[1], 
+        semester: semester, course: course
+        }}
+        console.log(formattedResponse)
+        return formattedResponse;
+      }
+    } catch (err) {
+      console.log(err);
+      return [];
+  }
+};
+
 
 const deleteResource = async (req, res) => {
     const fileUrl = req.params.filename;

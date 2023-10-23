@@ -63,15 +63,36 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  */
 const verifyUser = asyncHandler(async (req, res, next) => {
   try {
-    const { username } = req.method == "GET" ? req.query : req.body;
-    // check if user exists
+    let username;
+    
+    if (req.method === "GET") {
+      // For GET requests, check the req.params
+      username = req.params.username || req.query.username;
+    } else if (req.method === "POST") {
+      // For POST requests, check the req.body
+      username = req.body.username;
+    } else {
+      // Handle other request methods if needed
+      return res.status(400).json({ message: "Unsupported request method" });
+    }
+    
+    if (!username) {
+      return res.status(400).json({ message: "Missing username in the request" });
+    }
+
+    // Check if the user exists
     let userExists = await User.findOne({ username });
-    if(!userExists) return res.status(404).json({ message: "User not found" });
+
+    if (!userExists) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     next();
   } catch (error) {
     res.status(500).json({ message: 'Server error: Unable to verify user.' });
   }
 });
+
 
 /**
  * Middleware to set local variables.

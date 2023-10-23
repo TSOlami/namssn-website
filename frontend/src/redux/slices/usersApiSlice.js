@@ -27,15 +27,28 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
-      // Send Register Email Query
-      registerMail: builder.mutation({
+      // Verify Account Query
+      verifyAccount: builder.mutation({
         query(data) {
           return {
-            url: `${USERS_URL}/register-mail`,
+            url: `${USERS_URL}/verify-account`,
             method: 'POST',
             body: data,
           };
         },
+        invalidatesTags: ['User'],
+      }),
+
+      // Send mail
+      sendMail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/register-mail`,
+            method: 'POST',
+            body:data,
+          };
+        },
+        invalidatesTags: ['User'],
       }),
 
       // Logout Query
@@ -97,4 +110,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useRegisterMailMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation } = usersApiSlice;

@@ -1,7 +1,8 @@
 import { useAllPaymentsQuery, setCategories } from "../redux"; // Import Redux Toolkit Query hook and action creator
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { HeaderComponent } from "../components";
+import { HeaderComponent, Loader } from "../components";
+import { ErrorPage } from "../pages";
 
 const PaymentList = () => {
 	const { userInfo } = useSelector((state) => state.auth);
@@ -25,9 +26,9 @@ const PaymentList = () => {
 							Payments to be Made
 						</h1>
 						{isLoading ? (
-							<p>Loading...</p>
+							<Loader />
 						) : isError ? (
-							<p>Error loading payments</p>
+							<ErrorPage />
 						) : !payments ||
 				!Array.isArray(payments) || payments.length === 0 ? (
 							<p>No payments to be made at the moment.</p>
@@ -36,7 +37,7 @@ const PaymentList = () => {
 								{payments.map((payment) => (
 									<li
 										key={payment._id}
-										className="shadow-3xl flex flex-row  justify-between items-center rounded-2xl m-8 p-4 gap-5 md:gap-20 pr-5 md:pr-14"
+										className="shadow-xl flex flex-row  justify-between items-center rounded-2xl m-8 p-4 gap-5 md:gap-20 pr-5 md:pr-14"
 									>
 										<div className="flex flex-col">
 											<p>Category: {payment.name}</p>

@@ -38,24 +38,56 @@ const createPost = asyncHandler(async (req, res) => {
 // Route GET /api/v1/user/posts
 // Access Public
 const getAllPosts = asyncHandler(async (req, res) => {
-	// Fetch all posts from the database and sort by timestamp in descending order
-	const allPosts = await Post.find()
-    .populate({
-      path: 'comments',
-      model: 'PostComment',
-      populate: {
+
+  console.log("Fetching all posts");
+	// Extract pagination parameters from the request query, with default values if not provided
+	const page = parseInt(req.query.page) || 1;
+	const pageSize = parseInt(req.query.pageSize) || 10; // Set a default page size
+
+	// Calculate the number of documents to skip to get the next page
+	const skip = (page - 1) * pageSize;
+
+	try {
+    // Fetch posts with pagination and sort by timestamp in descending order
+    const posts = await Post.find()
+      .populate({
+        path: 'comments',
+        model: 'PostComment',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: '-password',
+        },
+      })
+      .populate({
         path: 'user',
-        model: 'User',
-        select: '-password', // Exclude the 'password' field
-      }, // 'comments' is the field referencing the comments associated with the post
-    })
-    .populate({
-      path: 'user',
-      select: '-password', // Exclude the 'password' field
-    }) // 'user' is the field referencing the user who posted the post
-	  .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest posts first)
-  	res.status(200).json(allPosts);
-  });
+        select: '-password',
+      })
+      .sort({ createdAt: -1 }) // Sort by timestamp in descending order (latest posts first)
+      .skip(skip)
+      .limit(pageSize);
+
+    // Count all posts (to determine if there are more pages)
+    const totalCount = await Post.countDocuments();
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    console.log("Total posts: ", totalCount);
+    // Response object
+    const response = {
+      page,
+      pageSize,
+      totalPages,
+      totalCount,
+      posts,
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ message: 'Server error while fetching posts.' });
+  }
+});
 
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts

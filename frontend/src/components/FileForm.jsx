@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+import Loader from "./Loader";
+// import { FileContext } from "./FileProvider";
 
 const FileForm = (props) => {
+    // const [fileDetails, setFileDetails] = useContext(FileContext)
     const textStyle = "font-bold font-crimson text-lg"
     const errorStyle = "text-red-500 text-sm";
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [inputValue, setInputValue] = useState("");
     useEffect(() => {
@@ -23,9 +28,11 @@ const FileForm = (props) => {
     const handleSelectChange2 = (e) => {
         setSelectedOption2(e.target.value);
     }
-    useEffect(() => {
-        console.log(selectedOption2);
-    }, [selectedOption2]);
+
+    // useEffect(() => {
+    //     console.log(fileDetails)
+    //     setFileDetails()
+    // }, [fileData])
 
     const validationSchema = Yup.object().shape({
         file: Yup.mixed()
@@ -39,6 +46,7 @@ const FileForm = (props) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
+            setIsLoading(true);
             const date = new Date();
             const formData = new FormData();
             formData.append('file', values.file);
@@ -49,12 +57,25 @@ const FileForm = (props) => {
             formData.append('course', selectedOption2)
 
             try {
-                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
-                // window.location.reload(); 
+                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData); 
+                console.log(res.data)
+                const existingFilesDetails = JSON.parse(localStorage.getItem("filesDetails"))
+                if (existingFilesDetails) {
+                    existingFilesDetails.push(res.data)
+                    localStorage.setItem("filesDetails", JSON.stringify(existingFilesDetails));
+                } else {
+                    localStorage.setItem("filesDetails", JSON.stringify([res.data]))
+                }
+
+                
                 toast.success("File Uploaded Successfully");
+                // window.location.reload();
+                setIsLoading(false);
+                
             } catch (err) {
                 console.log(err);
                 toast.error("File not uploaded, an error occurred");
+                setIsLoading(false);
             }
         },
     });
@@ -106,6 +127,7 @@ const FileForm = (props) => {
                     </div>
                 </form>
                 <ToastContainer/>
+                {isLoading && <Loader />}
             </div>
         )
     }

@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Payment, PaymentHistory } from "./components";
 import {
+	Search,
 	Landing,
 	SignIn,
 	SignUp,
@@ -27,12 +28,13 @@ import {
 	VerifyEmail,
 	AdminBlogs,
 	ForgotPage,
+	VerifyAccount,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
 
 export default function App() {
-	return (
+  return (
 		<AnimatePresence mode="wait">
 			<BrowserRouter>
 				<ToastContainer />
@@ -78,11 +80,13 @@ export default function App() {
 					<Route path="/admin/payment" element={<AdminPayment />} />
 					<Route path="/comments/:postId" element={<Comments />} />
 					<Route path="/admin/events" element={<AdminEvents />} />
+					<Route path="/search" element={<Search/>} />
 					<Route
 						path="/admin/announcements"
 						element={<AdminAnnouncement />}
 					/>
 					<Route path="/admin/users" element={<VerifyUsers />} />
+					<Route path="/verify-account/:studentEmail" element={<VerifyAccount />} />
 					<Route path="/verify-email" element={<VerifyEmail />} />
 					<Route path="/forgot-password" element={<ForgotPage />} />
 					<Route path="/admin/blogs" element={<AdminBlogs/>} />

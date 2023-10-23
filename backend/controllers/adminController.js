@@ -69,10 +69,10 @@ const removeAdmin = asyncHandler(async (req, res) => {
 
 
 // @desc Create a new blog
-// Route POST /api/v1/users/blogs
-// Access Private
+// Route POST /api/v1/admin/blogs
+// Access Private (only accessible to admin users)
 const createBlog = asyncHandler(async (req, res) => {
-  const { title, content } = req.body;
+  const { title, coverImage, content, tags, author  } = req.body;
 
   // You can access the currently logged-in user's information from req.user
   const userId = req.user._id;
@@ -80,7 +80,10 @@ const createBlog = asyncHandler(async (req, res) => {
   // Create a new blog
   const newBlog = new Blog({
     title,
+    coverImage,
     content,
+    tags,
+    author,
     user: userId, // Associate the blog with the user who created it
   });
 
@@ -91,8 +94,8 @@ const createBlog = asyncHandler(async (req, res) => {
 });
 
 // @desc Get user's blogs (My Blogs)
-// Route GET /api/v1/users/blogs
-// Access Private
+// Route GET /api/v1/admin/blogs
+// Access Private (only accessible to admin users)
 const getUserBlogs = asyncHandler(async (req, res) => {
   const userId = req.user._id; // Get the user ID from the authenticated user
 
@@ -104,15 +107,15 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 });
 
 // @desc	Update user blog
-// Route	PUT  /api/v1/users/blogs
-// access	Private
+// Route	PUT  /api/v1/admin/blogs
+// access	Private (only accessible to admin users)
 const updateBlog = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Update a Blog' });
 });
 
 // @desc	Delete user blog
-// Route	DELETE  /api/v1/users/blogs
-// access	Private
+// Route	DELETE  /api/v1/admin/blogs
+// access	Private (only accessible to admin users)
 const deleteBlog = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Delete Blog' });
 });

@@ -47,7 +47,11 @@ const EditProfileForm = ({ handleModal }) => {
     level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    matricNumber: Yup.string(),
+    matricNumber: Yup.string()
+    .matches(
+      /^20\d{2}\/1\/\d{5}PM$/,
+      'Invalid matric number format (e.g., 20XX/1/XXXXXPM)'
+    ),
     bio: Yup.string(),
 	});
   
@@ -60,7 +64,7 @@ const EditProfileForm = ({ handleModal }) => {
           values = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
           const res = await updateUser(values).unwrap();
           dispatch(setCredentials({...res}));
-          navigate('/home');
+          navigate('/profile');
           console.log(values);
           toast.success('Profile updated!');
         } catch (err) {
@@ -85,7 +89,7 @@ const EditProfileForm = ({ handleModal }) => {
       </div>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
         <div className="scale-75 flex-row">
-          <label htmlFor="profile">
+        <label htmlFor="profile">
           <img src={file || ProfileImg} alt="" className='profile-image'/>
           </label>
 
