@@ -19,7 +19,7 @@ const PaymentList = () => {
 		<div className="flex flex-row w-full">
 			{/* <Sidebar /> */}
 			<div className="w-full h-full flex flex-col">
-				<HeaderComponent title="Payments" />
+				<HeaderComponent title="Payments" back='true' />
 				<div className="flex md:flex-row flex-col-reverse w-full h-full">
 					<div className="h-full">
 						<h1 className="px-4 py-2 text-2xl font-semibold text-gray-700">

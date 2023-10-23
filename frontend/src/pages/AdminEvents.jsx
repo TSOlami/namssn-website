@@ -17,7 +17,7 @@ const AdminEvents = () => {
 		>
 			<Sidebar />
 			<div className="w-full flex flex-col">
-				<HeaderComponent title="Events" />
+				<HeaderComponent title="Events" back/>
 				<div className="w-full flex md:flex-row flex-col">
 					{/* Events section */}
 					<div className="flex-1 md:block hidden">

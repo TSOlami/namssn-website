@@ -25,10 +25,10 @@ const HeaderComponent = ({ title, url, back }) => {
 	};
 
 	// navigate back to previous page
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const handleBack = () => {
-		navigate(-1)
-	}
+		navigate(-1);
+	};
 
 	// get user from redux
 	const { userInfo } = useSelector((state) => state.auth);
@@ -44,19 +44,22 @@ const HeaderComponent = ({ title, url, back }) => {
 	return (
 		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
 			{back && (
-				<div onClick={handleBack} className="text-2xl p-2 pr-5 cursor-pointer">
+				<div
+					onClick={handleBack}
+					className="text-2xl p-2 pr-5 cursor-pointer"
+				>
 					<IoChevronBackSharp />
 				</div>
 			)}
-
-			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
 			<img
 				src={Avatar}
 				alt="avatar"
 				className="lg:hidden profile-image-small"
 				onClick={handleNavOpen}
 			/>
-			<form
+			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
+			{url && (
+				<form
 					action=""
 					onSubmit={handleSubmit}
 					className="hidden md:flex  relative"
@@ -70,8 +73,14 @@ const HeaderComponent = ({ title, url, back }) => {
 						onChange={handleSearchChange}
 					/>
 					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-					<button className="border bg-blue-900 rounded-md text-white"> <a href={`http://localhost:3000/search?key=${search}`}>Go</a></button>
-			</form>
+					<button className="border bg-gray-400 rounded-md">
+						{" "}
+						<a href={`http://localhost:3000/search?key=${search}`}>
+							Go
+						</a>
+					</button>
+				</form>
+			)}
 		</div>
 	);
 };

@@ -89,8 +89,6 @@ const AdminAnnouncements = () => {
 			text: value,
 		};
 		// Update the state with the new announcements
-		// This may vary depending on how you've set up your state management
-		// For example, if using Redux, you'd dispatch an action to update the state
 		// dispatch(updateAnnouncement(updatedAnnouncements));
 	};
 

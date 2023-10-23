@@ -107,7 +107,7 @@ const AdminBlogs = () => {
 			<Sidebar />
 
 			<div className="w-full">
-				<HeaderComponent title="Blogs" url={"missing"} />
+				<HeaderComponent title="Blogs" url back />
 
 				{showAddBlogForm ? null : (
 					<div>

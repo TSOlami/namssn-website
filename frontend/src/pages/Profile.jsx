@@ -26,6 +26,7 @@ const Profile = () => {
 
 	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
+	console.log(noOfPosts)
 
 	const dispatch = useDispatch();
 
