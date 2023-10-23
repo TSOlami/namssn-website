@@ -30,12 +30,12 @@ const AdminPayment = () => {
 			<Sidebar />
 
 			<div className="w-full h-full">
-				<HeaderComponent title="Payments" />
+				<HeaderComponent title="Payments" back/>
 
 				<div className="flex flex-row w-full h-full ">
           <div className="h-full w-[500px] ">
               {isLoading ? (
-                <p>Loading payments...</p>
+                <p className="p-2">Loading payments... <span className="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-500 mx-2" /></p>
               ) : isError ? (
                 <p>Error loading payments</p>
               ) : !payments || !Array.isArray(payments) || payments.length === 0 ? (

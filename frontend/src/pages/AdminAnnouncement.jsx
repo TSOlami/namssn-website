@@ -46,7 +46,7 @@ const AdminAnnouncements = () => {
 	const handleSelectChange = (event) => {
 		const selectedValue = event.target.value;
 		setSelectedLevel(selectedValue);
-    console.log(selectedLevel)
+		console.log(selectedLevel);
 	};
 
 	// Define a Yup validation schema for the form fields
@@ -126,49 +126,43 @@ const AdminAnnouncements = () => {
 			<Sidebar />
 
 			<div className="w-full">
-				<HeaderComponent title="Announcements" />
+				<HeaderComponent title="Announcements" back/>
 				<div className="flex md:flex-row gap-2 flex-col w-full">
 					<div className="flex-1 hidden md:block">
 						<AdminAnnouncementCard
 							title="General Announcements"
 							onClick={() => {
 								setSelectedLevel("Non-Student");
-								console.log("Selected level: Non-Student");
 							}}
 						/>
 						<AdminAnnouncementCard
 							title="100L Announcements"
 							onClick={() => {
 								setSelectedLevel("100");
-								console.log("Selected level: 100L");
 							}}
 						/>
 						<AdminAnnouncementCard
 							title="200L Announcements"
 							onClick={() => {
 								setSelectedLevel("200");
-								console.log("Selected level: 200L");
 							}}
 						/>
 						<AdminAnnouncementCard
 							title="300L Announcements"
 							onClick={() => {
 								setSelectedLevel("300");
-								console.log("Selected level: 300L");
 							}}
 						/>
 						<AdminAnnouncementCard
 							title="400L Announcements"
 							onClick={() => {
 								setSelectedLevel("400");
-								console.log("Selected level: 400L");
 							}}
 						/>
 						<AdminAnnouncementCard
 							title="500L Announcements"
 							onClick={() => {
 								setSelectedLevel("500");
-								console.log("Selected level: 500L");
 							}}
 						/>
 					</div>

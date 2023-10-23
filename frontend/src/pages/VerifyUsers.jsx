@@ -8,7 +8,7 @@ const VerifyUsers = () => {
 		<div className="flex flex-row">
 			<Sidebar />
 			<div className="w-full">
-				<HeaderComponent title="Verify Users" />
+				<HeaderComponent title="Verify Users" back/>
 				<div>
 					{/* Search out the user */}
 					<div className="flex flex-row items-center">
