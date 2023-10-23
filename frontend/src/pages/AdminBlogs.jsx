@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BlogCard, HeaderComponent, Sidebar } from "../components";
-import { blogPosts } from "../constants";
 import { motion } from "framer-motion";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -24,9 +23,9 @@ const AdminBlogs = () => {
 	const [createBlog, { isLoading: isCreating }] = useCreateBlogMutation();
 
 	// Use the useAllBlogsQuery hook to fetch all blogs
-	const { data, isLoading: isFetching } = useAllBlogsQuery();
+	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
 
-  console.log(data);
+  console.log(blogs);
 
 	const [showAddBlogForm, setShowBlogForm] = useState(false);
 	const handleShowBlogForm = () => {
@@ -106,8 +105,8 @@ const AdminBlogs = () => {
 						</div>
 
 						<div className="p-2 md:p-5">
-							{blogPosts.map((blog, index) => (
-								<BlogCard key={index} title={blog.title} />
+							{blogs?.map((blog) => (
+								<BlogCard key={blog._id} title={blog.title} />
 							))}
 						</div>
 					</div>
