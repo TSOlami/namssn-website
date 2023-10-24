@@ -74,7 +74,7 @@ const verifyPayments = async (req, res) => {
 
     // Extract the required information from the response
     const transactionStatus = paymentData.data.status;
-    const paymentAmount = paymentData.data.amount;
+    const paymentAmount = paymentData.data.amount / 100;
     const paymentMethod = paymentData.data.channel || '';
 
     const verificationResult = {

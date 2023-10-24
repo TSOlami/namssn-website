@@ -14,11 +14,12 @@ import { motion } from "framer-motion";
 const PaymentHistory = () => {
 	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
-	const name = userInfo?.name;
+		const name = userInfo?.name;
 	const mail = userInfo?.email;
 	const matric = userInfo?.matricNumber;
 	const profileImage = userInfo?.profilePicture;
 	const [verificationResult, setVerificationResult] = useState(null);
+		
 
 	// Use your verification mutation
 	const [verifyUserPayments] = useVerifyUserPaymentsMutation();
@@ -80,7 +81,6 @@ const PaymentHistory = () => {
 			dispatch(setPayments(userPayments));
 		}
 	}, [dispatch, userPayments]);
-	// console.log(userPayments)
 
 	// Manage modal state
 	// Display loading indicator while data is being fetched
@@ -129,7 +129,7 @@ const PaymentHistory = () => {
 										</strong>{" "}
 										Payment successfully verified.
 									</p>
-									<p>Amount: {verificationResult.amount}</p>
+									<p>Amount: #{verificationResult.amount}</p>
 									<p>Channel: {verificationResult.method}</p>
 								</>
 							) : (
@@ -153,6 +153,7 @@ const PaymentHistory = () => {
 						</div>
 					) : (
 						userPayments?.map((payment) => (
+							
 							<RecentPayments
 								key={payment._id}
 								email={mail}
