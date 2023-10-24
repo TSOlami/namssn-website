@@ -21,7 +21,7 @@ export const initialState = {
   blog: getLocalStorageItem('userBlogs') || null,
   events: getLocalStorageItem('userEvents') || null,
   currentPage: 1,
-  pageSize: 10,
+  pageSize: 2,
 }
 
 const authSlice = createSlice({
@@ -35,14 +35,17 @@ const authSlice = createSlice({
     logout: (state, action) => {
       state.userInfo = null;
       state.posts = null;
+      state.announcements = null;
+      state.payments = null;
+      state.category = null;
       localStorage.removeItem('userInfo');
       localStorage.removeItem('userPosts');
       localStorage.removeItem('userAnnouncements');
       localStorage.removeItem('userPayments');
-      localStorage.removeItem('userCategories')
+      localStorage.removeItem('userCategories');
     },
     setPosts(state, action) {
-      state.posts = [...state.posts, ...action.payload];
+      state.posts = action.payload;
       localStorage.setItem('userPosts', JSON.stringify(action.payload));
     },
     setAnnouncements(state, action) {

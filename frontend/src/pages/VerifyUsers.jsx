@@ -1,9 +1,16 @@
 import { FaSearch } from "react-icons/fa";
-import { HeaderComponent, Sidebar, UsersCard } from "../components";
+import { HeaderComponent, Sidebar, UsersCard, Loader } from "../components";
 import { Avatar } from "../assets";
-import { mockUsers } from "../data";
+
+import { useGetAllUsersQuery } from "../redux";
 
 const VerifyUsers = () => {
+	// Use the useGetAllUsersQuery hook to get all users
+	const { data: users, isLoading } = useGetAllUsersQuery();
+  
+	// Sort users by points in descending order
+  const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
+
 	return (
 		<div className="flex flex-row">
 			<Sidebar />
@@ -51,12 +58,13 @@ const VerifyUsers = () => {
 				</h2>
 
 				<div>
-					{mockUsers.map((user, index) => (
-						<UsersCard index={index} key={index} name={user.name} username={user.username} points={user.points} />
-					))}
+				{sortedUsers && sortedUsers.slice(0, 10).map((user, index) => (
+					<UsersCard key={index} index={index} name={user.name} username={user.username} points={user.points} />
+				))}
 				</div>
 			</div>
-			<div></div>
+			{/* Loader */}
+			{isLoading && <Loader />}
 		</div>
 	);
 };

@@ -14,15 +14,11 @@ import {
 } from "../components";
 // import { getPosts } from "../utils";
 import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
+import { toast } from "react-toastify";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
   const page = useSelector((state) => state.auth.currentPage);
-
-  // Get posts from the redux store
-  const { posts: postData } = useSelector((state) => state.auth);
-
-  console.log(postData);
 
 	// States for managing posts and pagination
   // const [postData, setPostData] = useState([]);
@@ -61,6 +57,15 @@ const Home = () => {
     }
   }
 
+  // Function to fetch previous posts
+  const getPreviousPosts = async (pageCurrent) => {
+    if (Number(pageCurrent) === 1) {
+      toast.error("You are currently seeing the latest posts");
+    } else {
+      dispatch(setCurrentPage(pageCurrent - 1));
+    }
+  }
+  
   // Function to load more posts manually
   // const loadMorePosts = async () => {
   //   if (!isLoadingMore) {
@@ -166,7 +171,7 @@ const Home = () => {
 				<HeaderComponent title="Home" url={"Placeholder"} />
 				
         {/* Posts container */}
-        {postData?.map((post, index) => (
+        {posts?.posts?.map((post, index) => (
             <Post
               key={index}
               upvotes={post.upvotes.length}
@@ -185,9 +190,15 @@ const Home = () => {
           ))}
 
         {/* Loader */}
-        {isLoading ? (<Loader />) : (<button onClick={() => getNextPosts(page)} className="text-primary">
-            Load More Posts
-          </button>)}
+        {isLoading && <Loader />}
+        {/* Paginate posts buttons */}
+        <button onClick={() => getPreviousPosts(page)} className="text-primary">
+          Previous
+        </button>
+        <button onClick={() => getNextPosts(page)} className="text-primary">
+          Next
+        </button>
+
 
 				{/* Add post button */}
 

@@ -36,7 +36,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 						body: data,
 					};
 				},
-				invalidatesTags: ["Announcement"],
+			invalidatesTags: ["Announcement"],
 			}),
 
 			// Update Announcement Query
@@ -53,11 +53,10 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 
 			// Delete Announcement Query
 			deleteAnnouncement: builder.mutation({
-				query(data) {
+				query(announcementId) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/admin/announcement`,
+						url: `${ANNOUCEMENTS_URL}/admin/announcement/${announcementId}`,
 						method: "DELETE",
-						body: data,
 					};
 				},
 				invalidatesTags: ["Announcement"],

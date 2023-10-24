@@ -1,31 +1,41 @@
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useAllAnnouncementsQuery } from "../redux";
 import Announcement from "./Announcement";
 import { Loader } from "../components";
 
 const AnnouncementContainer = () => {
 	const location = useLocation();
+	// Use the useAllAnnouncementsQuery hook to get all announcements
 	const { data: announcements, isLoading: isFetching } =
 		useAllAnnouncementsQuery();
+
+	// Use the useSelector hook to access redux store state
+	const { userInfo } = useSelector((state) => state.auth);
+
+	// Create a variable to store the user's level
+	const userLevel = userInfo?.level;
 
 	// Create an object to group announcements by level
 	const groupedAnnouncements = {
 		"General": [],
+		// [userLevel]: [],
 	};
 
 	if (announcements) {
-		announcements.forEach((announcement) => {
-			const level = announcement.level;
-			if (level === "Non-Student") {
-				groupedAnnouncements["General"].push(announcement);
-			} else {
-				if (!groupedAnnouncements[level]) {
-					groupedAnnouncements[level] = [];
-				}
-				groupedAnnouncements[level].push(announcement);
-			}
-		});
-	}
+    announcements.forEach((announcement) => {
+      const level = announcement.level;
+      if ((userLevel && level === userLevel)) {
+        if (!groupedAnnouncements[level]) {
+          groupedAnnouncements[level] = [];
+        }
+        groupedAnnouncements[level].push(announcement);
+      } else if (level === "Non-Student") {
+        // Add "Non-Student" announcements to the "General" section
+        groupedAnnouncements["General"].push(announcement);
+      }
+    });
+  }
 
   // Get the keys and sort them, with "General" first
   const sortedKeys = Object.keys(groupedAnnouncements).sort((a, b) => {

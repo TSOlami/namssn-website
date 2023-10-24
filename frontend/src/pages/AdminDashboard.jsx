@@ -7,7 +7,23 @@ import { Avatar } from "../assets";
 import { FaPerson } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
+import {
+	useGetTotalPaymentsQuery,
+	useGetTotalUsersQuery,
+	useGetTotalBlogsQuery,
+	useGetTotalEventsQuery,
+	useGetTotalAnnouncementsQuery,
+} from "../redux";
+
 const AdminDashboard = () => {
+	const { data: totalPayments } = useGetTotalPaymentsQuery();
+	const { data: totalUsers } = useGetTotalUsersQuery();
+	const { data: totalBlogs } = useGetTotalBlogsQuery();
+	const { data: totalEvents } = useGetTotalEventsQuery();
+	const { data: totalAnnouncements } = useGetTotalAnnouncementsQuery();
+
+	console.log("Total payments: ", totalPayments, "Total users: ", totalUsers, "Total blogs: ", totalBlogs, "Total events: ", totalEvents, "Total announcements: ", totalAnnouncements);
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -22,7 +38,7 @@ const AdminDashboard = () => {
 					<div className="flex flex-row gap-4 md:justify-between justify-center flex-wrap p-5">
 						<AdminCard
 							title="Total Payments"
-							amount="320"
+							amount={totalPayments}
 							card="payment"
 							bg="orangish"
 							route="/admin/payment"
@@ -30,7 +46,7 @@ const AdminDashboard = () => {
 
 						<AdminCard
 							title="Blogs"
-							amount="12"
+							amount={totalBlogs}
 							card="blog"
 							bg="blueish"
 							route="/admin/blogs"
@@ -38,7 +54,7 @@ const AdminDashboard = () => {
 
 						<AdminCard
 							title="Events"
-							amount="21"
+							amount={totalEvents}
 							card="events"
 							bg="reddish"
 							route="/admin/events"
@@ -46,7 +62,7 @@ const AdminDashboard = () => {
 
 						<AdminCard
 							title="Announcements"
-							amount="12"
+							amount={totalAnnouncements}
 							card="announcements"
 							bg="greenish"
 							route="/admin/announcements"
@@ -54,7 +70,7 @@ const AdminDashboard = () => {
 
 						<AdminCard
 							title={<FaPerson />}
-							amount="Verify users"
+							amount={totalUsers}
 							card="users"
 							bg="bg-purple-100"
 							route="/admin/users"

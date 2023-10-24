@@ -1,11 +1,71 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Post from '../models/postModel.js';
 import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
 import Announcement from '../models/announcementModel.js'
 import { verifyPayments } from '../utils/paymentLogic.js';
 import Event from '../models/eventModel.js';
+
+
+// @desc Get Total Number of Users
+// Route GET /api/v1/admin/users
+// Access Private (only accessible to admin users)
+const getTotalUsers = asyncHandler(async (req, res) => {
+  const totalUsers = await User.countDocuments({});
+  res.status(200).json(totalUsers);
+});
+
+// @desc Get Total Number of Posts
+// Route GET /api/v1/admin/posts
+// Access Private (only accessible to admin users)
+const getTotalPosts = asyncHandler(async (req, res) => {
+  const totalPosts = await Post.countDocuments({});
+  res.status(200).json(totalPosts);
+});
+
+// @desc Get Total Number of Blogs
+// Route GET /api/v1/admin/blogs
+// Access Private (only accessible to admin users)
+const getTotalBlogs = asyncHandler(async (req, res) => {
+  const totalBlogs = await Blog.countDocuments({});
+  res.status(200).json(totalBlogs);
+});
+
+
+// @desc Get Total Number of Payments
+// Route GET /api/v1/admin/payments
+// Access Private (only accessible to admin users)
+const getTotalPayments = asyncHandler(async (req, res) => {
+  const totalPayments = await Payment.countDocuments({});
+  res.status(200).json(totalPayments);
+});
+
+// @desc Get Total Number of Events
+// Route GET /api/v1/admin/events
+// Access Private (only accessible to admin users)
+const getTotalEvents = asyncHandler(async (req, res) => {
+  const totalEvents = await Event.countDocuments({});
+  res.status(200).json(totalEvents);
+});
+
+// @desc Get Total Number of Announcements
+// Route GET /api/v1/admin/announcements
+// Access Private (only accessible to admin users)
+const getTotalAnnouncements = asyncHandler(async (req, res) => {
+  const totalAnnouncements = await Announcement.countDocuments({});
+  res.status(200).json(totalAnnouncements);
+});
+
+
+// @desc Get all users
+// Route GET /api/v1/admin/users
+// Access Private (only accessible to admin users)
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).select('-password'); // Exclude the password field from the returned data
+  res.status(200).json(users);
+});
 
 
 // @desc Make a user an admin
@@ -300,10 +360,16 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
     throw new Error('Unauthorized to delete this announcement');
   }
 
-  // Delete the announcement
-  await announcement.remove();
+  try {
+    // Delete the announcement
+    await Announcement.deleteOne({ _id: announcementId });
 
-  res.status(200).json({ message: 'Announcement deleted' });
+    res.status(200).json({ message: 'Announcement deleted' });
+  } catch (error) {
+    // An error occurred while trying to delete the announcement
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
 
@@ -419,4 +485,11 @@ export {
   deleteEvent,
   makeUserAdmin,
   removeAdmin,
+  getTotalUsers,
+  getTotalPosts,
+  getTotalBlogs,
+  getTotalPayments,
+  getTotalEvents,
+  getTotalAnnouncements,
+  getAllUsers
 };
