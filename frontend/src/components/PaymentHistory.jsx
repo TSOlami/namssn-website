@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 const PaymentHistory = () => {
 	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
-		const name = userInfo?.name;
+	const name = userInfo?.name;
 	const mail = userInfo?.email;
 	const matric = userInfo?.matricNumber;
 	const profileImage = userInfo?.profilePicture;
@@ -153,7 +153,6 @@ const PaymentHistory = () => {
 						</div>
 					) : (
 						userPayments?.map((payment) => (
-							
 							<RecentPayments
 								key={payment._id}
 								email={mail}
