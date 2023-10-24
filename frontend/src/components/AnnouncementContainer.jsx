@@ -37,6 +37,11 @@ const AnnouncementContainer = () => {
     });
   }
 
+  // Sort announcements within each group by createdAt in descending order
+  for (const level in groupedAnnouncements) {
+    groupedAnnouncements[level].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+  
   // Get the keys and sort them, with "General" first
   const sortedKeys = Object.keys(groupedAnnouncements).sort((a, b) => {
     if (a === "General") {
