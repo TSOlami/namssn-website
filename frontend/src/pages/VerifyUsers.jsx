@@ -16,7 +16,7 @@ const VerifyUsers = () => {
 			<Sidebar />
 			<div className="w-full">
 				<HeaderComponent title="Verify Users" back/>
-				<div>
+				<div className="w-full">
 					{/* Search out the user */}
 					<div className="flex flex-row items-center">
 						<input
@@ -33,7 +33,7 @@ const VerifyUsers = () => {
 
 					{/* display results */}
 
-					<div className="flex flex-row gap-5 items-center p-4 bg-greyish">
+					<div className="flex flex-row gap-5 items-center justify-between w-full p-4 bg-greyish">
 						<div>
 							<img src={Avatar} alt="" />
 						</div>
