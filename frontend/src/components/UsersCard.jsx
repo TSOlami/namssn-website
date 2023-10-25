@@ -1,6 +1,6 @@
 const UsersCard = ({ index, name, username, points, verify, unverify, avatar }) => {
 	return (
-		<div className="flex flex-row gap-5 items-center p-3 m-2 bg-greyish w-fit px-5">
+		<div className="flex flex-row gap-5 items-center p-3  px-5 justify-between bg-greyish w-[90%] m-auto my-2">
       <div className="font-bold">No {index + 1}</div>
 			<div>
 				<img src={avatar} alt="" />
