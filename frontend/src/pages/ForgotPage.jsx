@@ -10,9 +10,14 @@ const ForgotPage = () => {
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
-	const handleSubmit = async (e) => {
-		e.preventDef
+	// navigate to enter reset password page
+	const handleNavigate = ()=>{
+		navigate('/reset-password')
 	}
+
+	const handleSubmit = async (e) => {
+		e.preventDef;
+	};
 
 	return (
 		<motion.div
@@ -28,13 +33,20 @@ const ForgotPage = () => {
 			<div className="flex items-center flex-col">
 				<h1 className="text-3xl font-bold">Forgot your password ?</h1>
 				<p className="p-2">
-					Enter your username and we&apos;ll send you a
-					verification code to reset your password.
+					Enter your username and we&apos;ll send you a verification
+					code to reset your password.
 				</p>
 
 				<div className="w-[300px] m-5">
-				<InputField placeholder="Enter your username" onChange={setUsername} pad icon={<FaUser/>}/>
+					<InputField
+						placeholder="Enter your username"
+						onChange={setUsername}
+						pad
+						icon={<FaUser />}
+					/>
 				</div>
+
+				<button onClick={handleNavigate} className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300">Submit</button>
 			</div>
 		</motion.div>
 	);
