@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails } from "../components";
+import { useState, useEffect } from "react";
+import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, Wrapper, Loader} from "../components";
 import { mockPaidUsers } from "../data";
-import { useAllPaymentsQuery, useVerifyPaymentsMutation} from '../redux'; // 
+import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments} from '../redux'; // 
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
 
 const AdminPayment = () => {
+   
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
-  const { data: verifiedPayments } = useVerifyPaymentsMutation();
+   const { data: verifiedPayments } = useVerifyPaymentsMutation();
   console.log(verifiedPayments)
   
      // Manage modal state
@@ -19,7 +21,26 @@ const AdminPayment = () => {
 	const handleVerifyModal = () => {
 		setIsVerifyModalOpen(!isVerifyModalOpen);
 	};
- 
+
+  const dispatch = useDispatch();
+  const { data: allpayments, Loading, Error} = useGetAllPaymentsQuery({
+    select: {
+      category: 1, // Only select the category field for population
+      user: 1,
+      transactionReference: 1,
+      // Add other fields you need
+    },
+    populate: ["category", "user" ]// Populate the category field
+  }
+);
+  useEffect(() => {
+    if (allpayments) {
+      dispatch(setPayments(allpayments));
+    }
+  }, [dispatch, allpayments]);
+  if (Loading) {
+		return <Loader />;
+	}
   
 	return (
 		<motion.div 			
@@ -136,6 +157,26 @@ const AdminPayment = () => {
                 </tbody>
               </table>
             </div>
+            <div>
+					{allpayments && allpayments?.length === 0 ? (
+						<div className="text-center mt-28 p-4 text-gray-500">
+							No payments to display.
+						</div>
+					) : (
+						allpayments?.map((payment) => (
+							<RecentPayments
+								key={payment._id}
+								email={payment.user.mail}
+								matricNo={payment.user.matricNumber}
+								createdAt={payment.createdAt}
+								image={Wrapper}
+								amount={payment.category.amount} // Access category.amount
+								reference={payment.transactionReference} // Access transactionReference
+								category={payment.category.name} // Access category.name
+							/>
+						))
+					)}
+				</div>
 					</div>
 				</div>
         {/* modal */}
