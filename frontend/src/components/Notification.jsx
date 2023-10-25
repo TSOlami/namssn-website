@@ -37,7 +37,7 @@ const Notification = ({
 						{comment && "commented on your post"}
 					</span>
 				</div>
-				<div className="pt-2">{content}</div>
+				{/* <div className="pt-2">{content}</div> */}
 				{comment && <Actions/>}
 			</div>
 		</div>
