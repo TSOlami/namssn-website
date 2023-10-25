@@ -674,7 +674,9 @@ const getUserPayments = asyncHandler(async (req, res) => {
   
 	  // Fetch the user's posts from the database
     console.log("Fetching payments for user: ", userId);
-	  const userPayments = await Payment.find({ user: userId }).sort({ createdAt: -1 });
+	  const userPayments = await Payment.find({ user: userId })
+    .populate('category')
+    .sort({ createdAt: -1 });
   
 	  if (!userPayments) {
 		res.status(404).json({ message: "No payments found for this user." });

@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AdminCard, RecentPayments, Sidebar } from "../components";
+import { AdminCard, RecentPayments, Sidebar, Loader} from "../components";
 import { HeaderComponent } from "../components";
-import { mockAccounts, mockRecentPayments } from "../data";
+import { mockAccounts } from "../data";
 import { MembersImg } from "../assets";
-import { Avatar } from "../assets";
 import { FaPerson } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { useGetAllPaymentsQuery,setPayments } from "../redux";
+
 
 import {
 	useGetTotalPaymentsQuery,
@@ -24,6 +27,27 @@ const AdminDashboard = () => {
 
 	console.log("Total payments: ", totalPayments, "Total users: ", totalUsers, "Total blogs: ", totalBlogs, "Total events: ", totalEvents, "Total announcements: ", totalAnnouncements);
 
+	const dispatch = useDispatch();
+	const { data: allpayments, Loading } = useGetAllPaymentsQuery(
+		{
+		select: {
+			category: 1, // Only select the category field for population
+			user: 1,
+			transactionReference: 1,
+			// Add other fields you need
+		},
+		populate: ["category", "user"],
+		}
+	);
+	
+	useEffect(() => {
+    if (allpayments) {
+      dispatch(setPayments(allpayments));
+    }
+  }, [dispatch, allpayments]);
+  if (Loading) {
+		return <Loader />;
+	}
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -175,9 +199,9 @@ const AdminDashboard = () => {
 				{/* Recent payments */}
 				<div className="flex flex-row justify-between pr-10">
 					<h3 className="font-bold text-2xl p-4">Recent Payments</h3>
-					<button className="text-primary">See more</button>
+					<button className="text-primary" > See more</button>
 				</div>
-				<div className="w-full px-4">
+				{/* <div className="w-full px-4">
 					{mockRecentPayments.map((payment, index) => (
 						<RecentPayments
 							key={index}
@@ -189,6 +213,25 @@ const AdminDashboard = () => {
 							avatar={Avatar}
 						/>
 					))}
+				</div> */}
+				<div>
+					{allpayments && allpayments?.length === 0 ? (
+						<div className="text-center mt-28 p-4 text-gray-500">
+							No payments to display.
+						</div>
+					) : (
+						allpayments?.map((payment) => (
+							<RecentPayments
+								key={payment._id}
+								email={payment.user.email}
+								matricNo={payment.user.matricNumber}
+								createdAt={payment.createdAt}
+								amount={payment.category.amount} // Access category.amount
+								reference={payment.transactionReference} // Access transactionReference
+								category={payment.category.name} // Access category.name
+							/>
+						))
+					)}
 				</div>
 			</div>
 		</motion.div>

@@ -48,12 +48,12 @@ router.route('/all-users').get(protect, isAdmin, getAllUsers);
 
 // Get all users payments
 router.route('/all-payments').get(protect, isAdmin, getAllPayments);
-
+// payment status
+router.post('/payments/verify', protect, getPaymentStatus);
 //create, Edit and Delete payments
 router
 .route('/payment')
 .post(protect, isAdmin, createCategory)
-.get(protect, isAdmin, getPaymentStatus)
 .delete(protect, isAdmin, deleteCategory);
 
 // Get, create, update and delete user blogs
