@@ -30,12 +30,13 @@ import {
 	AdminBlogs,
 	ForgotPage,
 	VerifyAccount,
+	ResetPassword,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
 
 export default function App() {
-  return (
+	return (
 		<AnimatePresence mode="wait">
 			<BrowserRouter>
 				<ToastContainer />
@@ -53,7 +54,10 @@ export default function App() {
 						element={<PaymentHistory />}
 					/>
 					<Route path="/resources" element={<Resources />} />
-					<Route path="/resources/:level" element={<LevelResources/>} />
+					<Route
+						path="/resources/:level"
+						element={<LevelResources />}
+					/>
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/profile/:userId" element={<UserProfile />} />
 					<Route
@@ -82,16 +86,20 @@ export default function App() {
 					<Route path="/admin/payment" element={<AdminPayment />} />
 					<Route path="/comments/:postId" element={<Comments />} />
 					<Route path="/admin/events" element={<AdminEvents />} />
-					<Route path="/search" element={<Search/>} />
+					<Route path="/search" element={<Search />} />
 					<Route
 						path="/admin/announcements"
 						element={<AdminAnnouncement />}
 					/>
 					<Route path="/admin/users" element={<VerifyUsers />} />
-					<Route path="/verify-account/:studentEmail" element={<VerifyAccount />} />
+					<Route
+						path="/verify-account/:studentEmail"
+						element={<VerifyAccount />}
+					/>
 					<Route path="/verify-email" element={<VerifyEmail />} />
 					<Route path="/forgot-password" element={<ForgotPage />} />
-					<Route path="/admin/blogs" element={<AdminBlogs/>} />
+					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/admin/blogs" element={<AdminBlogs />} />
 				</Routes>
 			</BrowserRouter>
 		</AnimatePresence>
