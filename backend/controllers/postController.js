@@ -206,15 +206,16 @@ const upvotePost = asyncHandler(async (req, res) => {
         await user.save();
       }
 
-      // Create a notification for the post owner
-      const notification = new Notification({
-        text: `${req.user.name} upvoted your post.`,
-				upvote: true,
-        user: post.user, // ID of the post owner
-				triggeredBy: req.user._id, // ID of the user who triggered the notification
-      });
-
-      await notification.save();
+			if (post.user.username !== req.user.username) {
+				// Create a notification for the post owner
+				const notification = new Notification({
+					text: `${req.user.username} upvoted your post.`,
+					upvote: true,
+					user: post.user, // ID of the post owner
+					triggeredBy: req.user._id, // ID of the user who triggered the notification
+				});
+				await notification.save();
+			}
     }
 
 		await post.save();
@@ -268,15 +269,16 @@ const downvotePost = asyncHandler(async (req, res) => {
 			  await user.save();
 			}
 
-			// Create a notification for the post owner
-      const notification = new Notification({
-        text: `${req.user.name} downvoted your post.`,
-				downvote: true,
-        user: post.user, // ID of the post owner
-				triggeredBy: req.user._id, // ID of the user who triggered the notification
-      });
-
-      await notification.save();
+			if (post.user.username !== req.user.username) {
+				// Create a notification for the post owner
+				const notification = new Notification({
+					text: `${req.user.username} downvoted your post.`,
+					downvote: true,
+					user: post.user, // ID of the post owner
+					triggeredBy: req.user._id, // ID of the user who triggered the notification
+				});
+				await notification.save();
+			}
 		}
 
 		await post.save();
@@ -310,7 +312,7 @@ const getPostComments = asyncHandler(async (req, res) => {
 	}
   
 	// Retrieve the comments associated with the post
-	const comments = await PostComment.find({ post: postId }).populate('user');
+	const comments = await PostComment.find({ post: postId }).populate({ path: 'user', select: '-password' });
   
 	res.status(200).json(comments);
 });
@@ -350,15 +352,16 @@ const createPostComment = asyncHandler(async (req, res) => {
 	post.comments.push(createdComment._id);
 	await post.save();
 
-	// Create a notification for the post owner
-	const notification = new Notification({
-	  text: `${req.user.name} commented on your post.`,
-		comment: true,
-	  user: post.user, // ID of the post owner
-		triggeredBy: req.user._id, // ID of the user who triggered the notification
-	});
-
-	await notification.save();
+	if (post.user.username !== req.user.username) {
+		// Create a notification for the post owner
+		const notification = new Notification({
+			text: `${req.user.username} commented on your post.`,
+			comment: true,
+			user: post.user, // ID of the post owner
+			triggeredBy: req.user._id, // ID of the user who triggered the notification
+		});
+		await notification.save();
+  }
   
 	res.status(201).json({
     message: "success",
@@ -406,7 +409,7 @@ const updatePostComment = asyncHandler(async (req, res) => {
 	comment.text = text;
   
 	// Save the updated comment to the database
-	const updatedComment = await comment.save();
+	const updatedComment = await PostComment.save();
   
 	res.status(200).json({
     message: "success",
@@ -455,20 +458,21 @@ const deletePostComment = asyncHandler(async (req, res) => {
 	}
   
 	// Remove the comment from the database
-	await Comment.deleteOne({ _id: commentId });
+	await PostComment.deleteOne({ _id: commentId });
   
 	// Save the updated post
 	await post.save();
 
-	// Create a notification for the post owner
-	const notification = new Notification({
-	  text: `${req.user.name} deleted their comment on your post.`,
-		comment: true,
-	  user: post.user, // ID of the post owner
-		triggeredBy: req.user._id, // ID of the user who triggered the notification
-	});
-
-	await notification.save();
+	if (post.user.username !== req.user.username) {
+		// Create a notification for the post owner
+		const notification = new Notification({
+			text: `${req.user.name} deleted their comment on your post.`,
+			comment: true,
+			user: post.user, // ID of the post owner
+			triggeredBy: req.user._id, // ID of the user who triggered the notification
+		});
+		await notification.save();
+	}
   
 	res.status(200).json({ message: "success" });
   console.log("Deleted comment successfully");
@@ -522,16 +526,17 @@ const upvoteComment = asyncHandler(async (req, res) => {
 			await user.save();
 		  }
 
-			// Create a notification for the comment owner
-			const notification = new Notification({
-				text: `${req.user.name} upvoted your comment.`,
-				upvote: true,
-				user: comment.user, // ID of the comment owner
-				triggeredBy: req.user._id, // ID of the user who triggered the notification
-			});
-
-			await notification.save();
-
+			if (post.user.username !== req.user.username) {
+				// Create a notification for the comment owner
+				const notification = new Notification({
+					text: `${req.user.username} upvoted your comment.`,
+					upvote: true,
+					user: comment.user, // ID of the comment owner
+					triggeredBy: req.user._id, // ID of the user who triggered the notification
+				});
+				await notification.save();
+			}
+			
 		}
   
 		await comment.save();
@@ -593,16 +598,17 @@ const downvoteComment = asyncHandler(async (req, res) => {
 			await user.save();
 		  }
 
-			// Create a notification for the comment owner
-			const notification = new Notification({
-				text: `${req.user.name} downvoted your comment.`,
-				downvote: true,
-				user: comment.user, // ID of the comment owner
-				triggeredBy: req.user._id, // ID of the user who triggered the notification
-			});
+			if (post.user.username !== req.user.username) {
+				// Create a notification for the comment owner
+				const notification = new Notification({
+					text: `${req.user.username} downvoted your comment.`,
+					downvote: true,
+					user: comment.user, // ID of the comment owner
+					triggeredBy: req.user._id, // ID of the user who triggered the notification
+				});
+				await notification.save();
+			}
 
-			await notification.save();
-			
 		}
   
 		await comment.save();
