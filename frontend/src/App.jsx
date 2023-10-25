@@ -31,6 +31,7 @@ import {
 	ForgotPage,
 	VerifyAccount,
 	ResetPassword,
+	VerifyUserPass,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import { AnimatePresence } from "framer-motion";
@@ -96,9 +97,10 @@ export default function App() {
 						path="/verify-account/:studentEmail"
 						element={<VerifyAccount />}
 					/>
+					<Route path="/verify-user/:username" element={<VerifyUserPass />} />
 					<Route path="/verify-email" element={<VerifyEmail />} />
 					<Route path="/forgot-password" element={<ForgotPage />} />
-					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/reset-password/:username" element={<ResetPassword />} />
 					<Route path="/admin/blogs" element={<AdminBlogs />} />
 				</Routes>
 			</BrowserRouter>

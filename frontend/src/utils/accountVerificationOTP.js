@@ -7,8 +7,6 @@ export async function accountVerificationOTP(username, studentEmail) {
 		console.log(`Sending an api request to /api/v1/users/generate-otp/${username}`)
 		const {data: {code}, status} = await axios.get(`/api/v1/users/generate-otp/${username}`);
 
-		console.log("Data from generate OTP api call: ", code, status);
-
 		// If the request was successful, send mail with OTP
 		if (status === 201) {
 			let text = `Your 6-digit OTP is ${code} and is valid for 5 minutes.`;

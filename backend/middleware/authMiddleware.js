@@ -63,14 +63,17 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  */
 const verifyUser = asyncHandler(async (req, res, next) => {
   try {
+    console.log("Verifying user...", req.body, req.params, req.query);
     let username;
     
     if (req.method === "GET") {
       // For GET requests, check the req.params
       username = req.params.username || req.query.username;
-    } else if (req.method === "POST") {
+    } else if (req.method === "POST" || req.method === "PUT") {
       // For POST requests, check the req.body
+      console.log(req.body);
       username = req.body.username;
+
     } else {
       // Handle other request methods if needed
       return res.status(400).json({ message: "Unsupported request method" });

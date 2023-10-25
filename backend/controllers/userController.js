@@ -274,37 +274,40 @@ const createResetSession = asyncHandler(async (req, res) => {
 });
 
 // @desc  Reset user password
-// Route PUT /api/v1/users/resetPassword
+// Route PUT /api/v1/users/reset-password
 // Access Public
 const resetPassword = asyncHandler(async (req, res) => {
+  const { username, password } = req.body;
+
+  // Input validation
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Both username and password are required' });
+  }
+
+  // Check if the user exists
+  const user = await User.findOne({ username });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
   try {
-    if (!req.locals.resetSession)
-    return res.status(440).send({ error: 'Session expired' });
-
-    const { username, password } = req.body;
-    
-    try {
-      
-      User.findOne({ username })
-      .then(user => {
-        bcrypt.hash(password, 10)
-        .then(hashedPassword => {
-          User.updateOne({ email : user.username }, { password: hashedPassword }, function(err, result) {
-            if (err) throw err;
-            req.locals.resetSession = false;
-            return res.status(200).send({ message: 'Password updated successfully' });
-          })
-          .then(() => res.status(200).send({ message: 'Password reset successfully' }))
-          .catch(err => res.status(500).send({ error: 'Failed to reset password' }));
-        })
-      })
-      .catch(err => res.status(404).send({ error: 'User not found' }));
-
-    } catch (error) {
-      return res.status(500).send({ error });
+    // Check if the new password is the same as the old password
+    if (await user.matchPassword(password)) {
+      return res.status(400).json({ message: 'New password cannot be the same as the old password' });
     }
+
+    // Update the user's password
+    console.log("Updating user password")
+    user.password = password;
+    await user.save();
+
+    // Return a success message
+    res.status(200).json({ message: 'Password reset successful', email: user.email });
   } catch (error) {
-    return res.status(401).send({ error });
+    // Handle any errors that occur while updating the user's password
+    console.error(error);
+    return res.status(500).json({ message: 'An unexpected error occurred' });
   }
 });
 

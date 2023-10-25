@@ -26,5 +26,6 @@ import AdminBlogs from './AdminBlogs';
 import ForgotPage from './ForgotPage';
 import VerifyAccount from './VerifyAccount';
 import ResetPassword from './ResetPassword';
+import VerifyUserPass from './VerifyUserPass';
 
-export {LevelResources, Search, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement, VerifyUsers, VerifyEmail, AdminBlogs, ForgotPage, VerifyAccount, ResetPassword };
+export {LevelResources, Search, Landing, SignUp, SignIn, PaymentPage, Home, Resources, Profile, AnnouncementMobile, NotificationPage, ErrorPage, DepartmentalFees, EventsPage, AboutUsPage, BlogPage, AdminDashboard, AdminPayment, UserProfile, Comments, AdminEvents, AdminAnnouncement, VerifyUsers, VerifyEmail, AdminBlogs, ForgotPage, VerifyAccount, ResetPassword, VerifyUserPass };

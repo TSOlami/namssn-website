@@ -61,6 +61,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Reset Password Query
+      resetPassword: builder.mutation({
+        query(data) {
+          console.log(data);
+          return {
+            url: `${USERS_URL}/reset-password`,
+            method: 'PUT',
+            body: data,
+          };
+        },
+      }),
+
       // Get User Query
       getUser: builder.query({
         query({ _id }) {
@@ -111,4 +123,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation } = usersApiSlice;

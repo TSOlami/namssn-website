@@ -6,18 +6,41 @@ import { InputField } from "../components";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 
+import { getUser, generateOTP } from "../utils";
+
 const ForgotPage = () => {
 	const [username, setUsername] = useState("");
+	console.log("Username: ", username);
 	const navigate = useNavigate();
 
-	// navigate to enter reset password page
-	const handleNavigate = ()=>{
-		navigate('/reset-password')
-	}
-
 	const handleSubmit = async (e) => {
-		e.preventDef;
-	};
+    e.preventDefault();
+
+    // Check if the username is empty
+    if (!username) {
+      toast.error("Please enter a username.");
+      return; // Stop the function execution
+    }
+
+    // Get the user details from the database
+		const user = await getUser({username});
+
+		// Check if the user exists
+		if (!user) {
+			toast.error("User does not exist.");
+			return; // Stop the function execution
+		}
+
+		// Generate the OTP and send it to the user's email
+		await toast.promise(generateOTP(username), {
+			pending: "Generating OTP...",
+			success: "OTP generated successfully.",
+			error: "Failed to generate OTP. Please try again.",
+		});
+		
+		// Navigate to the /verify-email page
+		navigate(`/verify-user/${username}`);
+  };
 
 	return (
 		<motion.div
@@ -37,16 +60,21 @@ const ForgotPage = () => {
 					code to reset your password.
 				</p>
 
+				<form action="">
 				<div className="w-[300px] m-5">
 					<InputField
+						name="username"
+						type="text"
+						id="username"
 						placeholder="Enter your username"
-						onChange={setUsername}
+						onChange={(e) => setUsername(e.target.value)}
 						pad
 						icon={<FaUser />}
 					/>
 				</div>
 
-				<button onClick={handleNavigate} className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300">Submit</button>
+				<button onClick={handleSubmit} className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300">Submit</button>
+				</form>
 			</div>
 		</motion.div>
 	);
