@@ -87,7 +87,7 @@ const verifyPayments = async (req, res) => {
 
     res.status(200).json(verificationResult);
   } catch (error) {
-    console.error('Error verifying payment:', error);
+    // console.error('Error verifying payment:', error);
     res.status(500).json({
       reference: transactionReference,
       status: 'error',
@@ -97,16 +97,4 @@ const verifyPayments = async (req, res) => {
 };
 
 
-
-const getAllPayments = async (req, res) => {
-  try {
-    const userId = req.user._id
-    const allPayments = await Payment.find({ user: userId});
-    res.json({ allPayments });
-  } catch (error) {
-    console.error('Error fetching payment records:', error);
-    res.status(500).json({ error: 'Failed to fetch payment records' });
-  }
-};
-
-export { initiatePayment,verifyPayments, getAllPayments };
+export { initiatePayment,verifyPayments };

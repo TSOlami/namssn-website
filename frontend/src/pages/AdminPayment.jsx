@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, Wrapper, Loader} from "../components";
+import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, Loader, PaymentVerificationForm} from "../components";
 import { mockPaidUsers } from "../data";
+import { FaCheck } from "react-icons/fa6";
 import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments} from '../redux'; // 
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
@@ -8,10 +9,9 @@ import { useDispatch } from "react-redux";
 const AdminPayment = () => {
    
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
-   const { data: verifiedPayments } = useVerifyPaymentsMutation();
-  console.log(verifiedPayments)
-  
-     // Manage modal state
+  const [verificationResult, setVerificationResult] = useState(null);
+   
+  // Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
@@ -23,16 +23,51 @@ const AdminPayment = () => {
 	};
 
   const dispatch = useDispatch();
-  const { data: allpayments, Loading, Error} = useGetAllPaymentsQuery({
-    select: {
-      category: 1, // Only select the category field for population
-      user: 1,
-      transactionReference: 1,
-      // Add other fields you need
-    },
-    populate: ["category", "user" ]// Populate the category field
-  }
-);
+  const { data: allpayments, Loading } = useGetAllPaymentsQuery(
+    {
+      select: {
+        category: 1, // Only select the category field for population
+        user: 1,
+        transactionReference: 1,
+        // Add other fields you need
+      },
+      populate: ["category", "user"],
+    }
+  );
+
+  const [verifyUserPayments] = useVerifyPaymentsMutation();
+  const handlePaymentVerification = async (transactionReference) => {
+		try {
+			const response = await verifyUserPayments({ transactionReference });
+
+			if (response.data) {
+				if (response.data.status === "success") {
+					// Payment verification was successful
+					const { amount, method } = response.data;
+					setVerificationResult({ success: true, amount, method });
+				} else if (response.data.status === "failed") {
+					// Payment verification failed
+					setVerificationResult({
+						success: false,
+						error: "Payment not yet made Transaction verification failed.",
+					});
+				}
+			} else {
+				// Handle verification failure
+				setVerificationResult({
+					success: false,
+					error: "Failed to verify payment.",
+				});
+			}
+		} catch (error) {
+			console.error("Error verifying payment:", error);
+			setVerificationResult({
+				success: false,
+				error: "Failed to verify payment.",
+			});
+		}
+	};
+  
   useEffect(() => {
     if (allpayments) {
       dispatch(setPayments(allpayments));
@@ -111,7 +146,33 @@ const AdminPayment = () => {
             <div className="p-5 py-10 ">
               <button className="bg-red-600 text-white p-2 rounded-md" onClick={handleVerifyModal} >Delete Payment</button>
             </div>
-
+            <div className="p-5">
+					<PaymentVerificationForm
+						onVerify={handlePaymentVerification}
+					/>
+					{/* Display the verification result, if available */}
+					{verificationResult !== null ? (
+						<div className="verification-result">
+							{verificationResult.success ? (
+								<>
+									<p>
+										<strong>
+											PAID <FaCheck />
+										</strong>{" "}
+										Payment successfully verified.
+									</p>
+									<p>Amount: #{verificationResult.amount}</p>
+									<p>Channel: {verificationResult.method}</p>
+								</>
+							) : (
+								<p>
+									<strong>NOT PAID !</strong>{" "}
+									{verificationResult.error}
+								</p>
+							)}
+						</div>
+					) : null}
+				</div>
 
             {/* Payment details table */}
 
@@ -166,10 +227,9 @@ const AdminPayment = () => {
 						allpayments?.map((payment) => (
 							<RecentPayments
 								key={payment._id}
-								email={payment.user.mail}
+								email={payment.user.email}
 								matricNo={payment.user.matricNumber}
 								createdAt={payment.createdAt}
-								image={Wrapper}
 								amount={payment.category.amount} // Access category.amount
 								reference={payment.transactionReference} // Access transactionReference
 								category={payment.category.name} // Access category.name
