@@ -31,8 +31,8 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
       verifyPayments: builder.mutation({
         query(data) {
           return {
-            url: `${ADMIN_PAYMENTS_URL}/payment`,
-            method: 'GET',
+            url: `${ADMIN_PAYMENTS_URL}/payments/verify`,
+            method: 'POST',
             body: data,
           };
         },

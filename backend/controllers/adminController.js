@@ -291,10 +291,22 @@ const getPaymentStatus = asyncHandler(async (req, res) => {
 // Route GET /api/v1/admin/payments
 // Access Private (only accessible to admin users)
 const getAllPayments = asyncHandler(async (req, res) => {
-  // Fetch all payment records from the payment model
-  const allPayments = await Payment.find().populate('user');
-  res.status(200).json(allPayments);
-  });
+  try {
+    // Fetch all payment records from the payment model, populate 'user' and 'category', and sort by createdAt in descending order
+    const allPayments = await Payment.find()
+      .populate('user')
+      .populate('category')
+      .sort({ createdAt: -1 });
+      
+
+    res.status(200).json(allPayments);
+    // console.log(allPayments)
+  } catch (error) {
+    // Handle any errors that occur during the process
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 // Create Announcement
