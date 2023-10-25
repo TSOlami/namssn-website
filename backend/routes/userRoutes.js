@@ -52,6 +52,10 @@ import {
   deletePostComment,
   upvoteComment,
   downvoteComment,
+  getNotifications,
+  markNotificationsAsSeen,
+  deleteNotification,
+  clearNotifications,
 } from "../controllers/postController.js";
 import { registerMail } from "../controllers/mailer.js";
 import { protect, verifyUser, localVariables } from "../middleware/authMiddleware.js";
@@ -203,6 +207,23 @@ router
 .post(protect, createPost)
 .put(protect, updatePost)
 .delete(protect, deletePost);
+
+// Route for getting and deleting all notifications
+router
+.route('/notifications')
+.get(protect, getNotifications)
+.delete(protect, clearNotifications);
+
+// Route for marking notifications as seen
+router
+.route('/notifications/seen')
+.put(protect, markNotificationsAsSeen);
+
+// Route for deleting a notification
+router
+.route('/notifications/:notificationId')
+.delete(protect, deleteNotification);
+
 
 /**
  * Get, create, update and delete user post comments.

@@ -1,16 +1,18 @@
+import { motion, useAnimation } from "framer-motion"
 import { Link } from "react-router-dom"
 import { polygon, heroImage } from "../assets"
 
 const Hero = () => {
+  
   return (
 	<section
   id="hero"
   className="w-full flex lg:flex-row flex-col justify-center min-h-screen items-center gap-2 max-container"
   >
     <div className="relative lg:w-3/5 flex flex-col justify-center items-start w-full padding-x pt-28">
-    <div className="text-container border-black">
+    <motion.div className="text-container border-black">
     Your Hub for Academic Excellence and Campus Updates<span><img src={polygon} alt="polygon" /></span>
-    </div>
+    </motion.div>
     <div className="header-text">
     NAMSSN <br />
     FUTMINNA Chapter
@@ -33,4 +35,4 @@ const Hero = () => {
   )
 }
 
-export default Hero
+export default Hero;

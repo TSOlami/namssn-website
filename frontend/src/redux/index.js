@@ -1,4 +1,4 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, logout } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -75,6 +75,13 @@ import {
 	useAllEventsQuery,
 } from './slices/eventSlice';
 
+import {
+	useGetNotificationsQuery,
+	useDeleteNotificationMutation,
+	useMarkNotificationsAsSeenMutation,
+	useClearNotificationsMutation,
+} from './slices/notificationApiSlice';
+
 export { 
 		useLoginMutation,
 		useLogoutMutation, 
@@ -134,6 +141,10 @@ export {
 	useGetTotalPaymentsQuery,
 	useGetTotalEventsQuery,
   useGetAllUsersQuery,
+	useGetNotificationsQuery,
+	useDeleteNotificationMutation,
+	useMarkNotificationsAsSeenMutation,
+	useClearNotificationsMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,
@@ -142,5 +153,6 @@ export {
 	setBlogs,
 	setCurrentPage,
 	setEvents,
+  setNotifications,
 	logout,
  }

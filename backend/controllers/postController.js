@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
 import PostComment from '../models/postCommentModel.js';
+import Notification from '../models/notificationModel.js';
 
 // @desc Create a new post
 // Route POST /api/v1/users/posts
@@ -171,54 +172,63 @@ const deletePost = asyncHandler(async (req, res) => {
 // Route PUT /api/v1/posts/:postId/upvote
 // Access Private
 const upvotePost = asyncHandler(async (req, res) => {
-	const postId = req.params.postId;
-	const userId = req.user._id;
+  const postId = req.params.postId;
+  const userId = req.user._id;
 
-  console.log("Upvoting post: ", postId);
-	// Find the post by ID
-	const post = await Post.findById(postId);
+  // Find the post by ID
+  const post = await Post.findById(postId);
 
-	if (post) {
-    console.log("Found post: ", post);
-		// Check if the user has already upvoted the post
-		const upvotedIndex = post.upvotes.indexOf(userId);
-		const downvotedIndex = post.downvotes.indexOf(userId);
+  if (post) {
+    // Check if the user has already upvoted the post
+    const upvotedIndex = post.upvotes.indexOf(userId);
+    const downvotedIndex = post.downvotes.indexOf(userId);
 
-		if (downvotedIndex !== -1) {
-			// The user has already downvoted the post, so remove their ID from the downvotes array.
-			post.downvotes.splice(downvotedIndex, 1);
+    if (downvotedIndex !== -1) {
+      // The user has already downvoted the post, so remove their ID from the downvotes array.
+      post.downvotes.splice(downvotedIndex, 1);
 
-			// Deduct 2 points for removing a downvote
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points -= 2;
-			  await user.save();
-			}
-		}
+      // Deduct 2 points for removing a downvote
+      const user = await User.findById(post.user);
+      if (user) {
+        user.points -= 2;
+        await user.save();
+      }
+    }
 
-		if (upvotedIndex === -1) {
-			// The user hasn't upvoted the post, so add their ID to the upvotes array.
-			post.upvotes.push(userId);
+    if (upvotedIndex === -1) {
+      // The user hasn't upvoted the post, so add their ID to the upvotes array.
+      post.upvotes.push(userId);
 
-			// Add 5 points for upvoting
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points += 5;
-			  await user.save();
-			}
-		}
+      // Add 5 points for upvoting
+      const user = await User.findById(post.user);
+      if (user) {
+        user.points += 5;
+        await user.save();
+      }
+
+      // Create a notification for the post owner
+      const notification = new Notification({
+        text: `${req.user.name} upvoted your post.`,
+				upvote: true,
+        user: post.user, // ID of the post owner
+				triggeredBy: req.user._id, // ID of the user who triggered the notification
+      });
+
+      await notification.save();
+    }
 
 		await post.save();
-    console.log("Upvoted post successfully");
-		res.status(200).json({
+
+    res.status(200).json({
       message: "success",
-      post
+      post,
     });
-	} else {
-		res.status(404);
-		throw new Error('Post not found');
-	}
+  } else {
+    res.status(404);
+    throw new Error('Post not found');
+  }
 });
+
 
 // @desc Toggle downvote on a post
 // Route PUT /api/v1/posts/:postId/downvote
@@ -257,6 +267,16 @@ const downvotePost = asyncHandler(async (req, res) => {
 			  user.points -= 2;
 			  await user.save();
 			}
+
+			// Create a notification for the post owner
+      const notification = new Notification({
+        text: `${req.user.name} downvoted your post.`,
+				downvote: true,
+        user: post.user, // ID of the post owner
+				triggeredBy: req.user._id, // ID of the user who triggered the notification
+      });
+
+      await notification.save();
 		}
 
 		await post.save();
@@ -325,6 +345,20 @@ const createPostComment = asyncHandler(async (req, res) => {
   
 	// Save the new comment to the database
 	const createdComment = await newComment.save();
+
+	// Update the post's comments array
+	post.comments.push(createdComment._id);
+	await post.save();
+
+	// Create a notification for the post owner
+	const notification = new Notification({
+	  text: `${req.user.name} commented on your post.`,
+		comment: true,
+	  user: post.user, // ID of the post owner
+		triggeredBy: req.user._id, // ID of the user who triggered the notification
+	});
+
+	await notification.save();
   
 	res.status(201).json({
     message: "success",
@@ -425,6 +459,16 @@ const deletePostComment = asyncHandler(async (req, res) => {
   
 	// Save the updated post
 	await post.save();
+
+	// Create a notification for the post owner
+	const notification = new Notification({
+	  text: `${req.user.name} deleted their comment on your post.`,
+		comment: true,
+	  user: post.user, // ID of the post owner
+		triggeredBy: req.user._id, // ID of the user who triggered the notification
+	});
+
+	await notification.save();
   
 	res.status(200).json({ message: "success" });
   console.log("Deleted comment successfully");
@@ -477,6 +521,17 @@ const upvoteComment = asyncHandler(async (req, res) => {
 		    console.log("Adding 5 points to user: ", user);
 			await user.save();
 		  }
+
+			// Create a notification for the comment owner
+			const notification = new Notification({
+				text: `${req.user.name} upvoted your comment.`,
+				upvote: true,
+				user: comment.user, // ID of the comment owner
+				triggeredBy: req.user._id, // ID of the user who triggered the notification
+			});
+
+			await notification.save();
+
 		}
   
 		await comment.save();
@@ -537,6 +592,17 @@ const downvoteComment = asyncHandler(async (req, res) => {
 			user.points -= 2;
 			await user.save();
 		  }
+
+			// Create a notification for the comment owner
+			const notification = new Notification({
+				text: `${req.user.name} downvoted your comment.`,
+				downvote: true,
+				user: comment.user, // ID of the comment owner
+				triggeredBy: req.user._id, // ID of the user who triggered the notification
+			});
+
+			await notification.save();
+			
 		}
   
 		await comment.save();
@@ -552,4 +618,85 @@ const downvoteComment = asyncHandler(async (req, res) => {
 	}
 });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment };
+/**
+ * @desc Get all notifications for the currently logged-in user.
+ * @route GET /api/v1/users/notifications
+ * @access Private (Requires authentication)
+ */
+const getNotifications = asyncHandler(async (req, res) => {
+  try {
+    // Fetch notifications from the database and populate the "user" field
+    const notifications = await Notification.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "triggeredBy",
+        select: "-password", // Exclude the password field
+      });
+			
+    res.status(200).json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/**
+ * @desc Mark all notifications as seen.
+ * @route PUT /api/v1/users/notifications
+ * @access Private (Requires authentication)
+ */
+const markNotificationsAsSeen = asyncHandler(async (req, res) => {
+	// Update all notifications for the currently logged-in user
+	await Notification.updateMany({ user: req.user._id }, { seen: true });
+	
+	res.status(200).json({ message: "success" });
+});
+
+/**
+ * @desc Delete a notification.
+ * @route DELETE /api/v1/users/notifications/:notificationId
+ * @access Private (Requires authentication)
+ */
+const deleteNotification = asyncHandler(async (req, res) => {
+	// Extract the notification ID from the request parameters
+	const notificationId = req.params.notificationId;
+	
+	// Find the notification by its ID
+	const notification = await Notification.findById(notificationId);
+	
+	if (!notification) {
+	  res.status(404);
+	  throw new Error('Notification not found');
+	}
+	
+	// Check if the user who made the request is the owner of the notification (or has the required privileges)
+	if (notification.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+	
+	// Remove the notification from the database
+	await Notification.deleteOne({ _id: notificationId });
+	
+	res.status(200).json({ message: "success" });
+	}
+);
+
+/**
+ * @desc Clear all notifications.
+ * @route DELETE /api/v1/users/notifications
+ * @access Private (Requires authentication)
+ */
+const clearNotifications = asyncHandler(async (req, res) => {
+  try {
+    // Remove all notifications for the currently logged-in user
+    console.log("Clearing notifications for user: ", req.user._id);
+    await Notification.deleteMany({ user: req.user._id });
+
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    console.error("Failed to clear notifications:", error);
+    res.status(500).json({ error: "Failed to clear notifications" });
+  }
+});
+
+export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
