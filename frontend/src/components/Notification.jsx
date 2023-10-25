@@ -1,6 +1,5 @@
 import { BiDownvote, BiUpvote } from "react-icons/bi";
 import { FaCircleCheck, FaRegComment } from "react-icons/fa6";
-import { useSelector } from "react-redux";
 import Actions from "./Actions";
 
 import { ProfileImg } from "../assets";
@@ -15,11 +14,6 @@ const Notification = ({
 	isVerified,
 	username,
 }) => {
-	// Use the hook to get the current user
-	const { userInfo } = useSelector((state) => state.auth);
-
-	const currentUsername = userInfo?.username;
-
 	return (
 		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
 			<div className="text-xl">
