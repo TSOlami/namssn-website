@@ -162,6 +162,13 @@ try {
     expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
   });
 
+  // Create a session for the user
+  const user = await User.findOne({ username });
+
+  // Set otpGenerated to true
+  user.otpGenerated = true;
+  await user.save();
+
   console.log("success")
 
   let code = otp;
@@ -208,6 +215,12 @@ const verifyOTP = asyncHandler(async (req, res) => {
       // Delete the matched OTP record
       console.log("Deleting OTP record")
       await UserOTPVerification.deleteMany({ username });
+
+      const user = await User.findOne({ username });
+
+      // Set otpVerified to true
+      user.otpVerified = true;
+      await user.save();
 
       // OTP is valid, you can implement further actions here
       return res.status(200).json({ message: 'OTP Verification successful' });
@@ -266,11 +279,7 @@ const resendOTP = asyncHandler(async (req, res) => {
 // Route GET /api/v1/users/createResetSession
 // Access Public
 const createResetSession = asyncHandler(async (req, res) => {
-  if (req.locals.resetSession) {
-    req.locals.resetSession = false; // Allow access to the route only once
-    return res.status(201).json({ message: 'Create a password reset session' });
-  }
-  res.status(440).send({error: 'Session expired'});
+
 });
 
 // @desc  Reset user password
@@ -291,6 +300,11 @@ const resetPassword = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'User not found' });
   }
 
+  // Check if user has generated and verified an OTP
+  if (!user.otpGenerated && !user.otpVerified) {
+    return res.status(400).json({ message: 'Please generate an OTP and verify to confirm your identity' });
+  }
+
   try {
     // Check if the new password is the same as the old password
     if (await user.matchPassword(password)) {
@@ -298,8 +312,15 @@ const resetPassword = asyncHandler(async (req, res) => {
     }
 
     // Update the user's password
-    console.log("Updating user password")
+    console.log("Updating user password");
     user.password = password;
+
+    // Reset the user's OTP status
+    user.otpGenerated = false;
+    user.otpVerified = false;
+
+    // Save the updated user data
+    console.log("Saving user data");
     await user.save();
 
     // Return a success message

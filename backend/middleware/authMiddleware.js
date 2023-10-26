@@ -63,7 +63,6 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  */
 const verifyUser = asyncHandler(async (req, res, next) => {
   try {
-    console.log("Verifying user...", req.body, req.params, req.query);
     let username;
     
     if (req.method === "GET") {
@@ -71,7 +70,6 @@ const verifyUser = asyncHandler(async (req, res, next) => {
       username = req.params.username || req.query.username;
     } else if (req.method === "POST" || req.method === "PUT") {
       // For POST requests, check the req.body
-      console.log(req.body);
       username = req.body.username;
 
     } else {
@@ -98,19 +96,25 @@ const verifyUser = asyncHandler(async (req, res, next) => {
 
 
 /**
- * Middleware to set local variables.
+ *  Middleware to check otp status
  * 
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @param {Function} next - Express next function.
  */
-const localVariables = asyncHandler(async (req, res, next) => {
-  req.app.locals = {
-    OTP: null,
-    resetSession: false,
+const otpStatusCheck = asyncHandler(async (req, res, next) => {
+  // Get the username from the request body
+  const { username } = req.body;
+
+  // Fetch the user
+  const user = await User.findOne({ username });
+
+  // Check if the user has generated an OTP
+  if (user.otpGenerated && user.otpVerified) {
+    next();
   }
-  next()
+
+  return res.status(400).json({ message: "OTP not generated or verified" });
 });
 
-
-export { protect, isAdmin, verifyUser, localVariables }; // Export the middleware functions.
+export { protect, isAdmin, verifyUser, otpStatusCheck }; // Export the middleware functions.

@@ -58,7 +58,7 @@ import {
   clearNotifications,
 } from "../controllers/postController.js";
 import { registerMail } from "../controllers/mailer.js";
-import { protect, verifyUser, localVariables } from "../middleware/authMiddleware.js";
+import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
 
 
 // Route for sending a welcome email
@@ -126,7 +126,7 @@ router.route('/create-reset-session').get(createResetSession);
  * PUT /api/v1/users/reset-password
  * @access Public
  */
-router.route('/reset-password').put(verifyUser, resetPassword);
+router.route('/reset-password').put(verifyUser, otpStatusCheck, resetPassword);
 
 /**
  * Logout a user.
