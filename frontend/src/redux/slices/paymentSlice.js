@@ -60,11 +60,11 @@ export const CategoryApiSlice = apiSlice.injectEndpoints({
       }),
       // Create Payment
       createPayment: builder.mutation({
-        query(data) {
+        query(paymentData) {
           return {
             url: `${USER_PAYMENT_URL}/payments`,
             method: 'POST',
-            body: data,
+            body: paymentData,
           };
         },
       }),
