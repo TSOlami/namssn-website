@@ -12,9 +12,9 @@ const HeaderComponent = ({ title, url, back }) => {
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
-		if (e.target.value.trim() !== '') {
+		if (e.target.value.trim() !== "") {
 			setSearch(e.target.value);
-		} else if(e.target.value.trim() === '' && search.trim() !== '') {
+		} else if (e.target.value.trim() === "" && search.trim() !== "") {
 			setSearch(e.target.value);
 		}
 	};
@@ -42,7 +42,7 @@ const HeaderComponent = ({ title, url, back }) => {
 	};
 
 	return (
-		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
+		<div className="flex flex-row md:justify-between items-center gap-2 p-5 md:py-2 border-b-2 border-gray-300 ">
 			{back && (
 				<div
 					onClick={handleBack}
@@ -69,16 +69,20 @@ const HeaderComponent = ({ title, url, back }) => {
 						placeholder="Search"
 						name="search"
 						value={search}
-						className="rounded-2xl border-gray-300 border-2 p-1 w-56 md:w-72 pl-10"
+						className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 w-56 md:w-72 pl-3 pr-10"
 						onChange={handleSearchChange}
 					/>
-					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-					<button className="border bg-gray-400 rounded-md">
+					<a className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg" href={`http://localhost:3000/search?key=${search}`}>
+						<FaMagnifyingGlass  />
+					</a>
+
+
+					{/* <button className="border bg-gray-400 rounded-md">
 						{" "}
 						<a href={`http://localhost:3000/search?key=${search}`}>
 							Go
 						</a>
-					</button>
+					</button> */}
 				</form>
 			)}
 		</div>
