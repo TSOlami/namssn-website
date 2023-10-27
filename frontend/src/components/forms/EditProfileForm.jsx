@@ -90,10 +90,10 @@ const EditProfileForm = ({ handleModal }) => {
           <FaXmark />
         </button>
       </div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
-        <div className="scale-75 flex-row">
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-2">
+        <div className="flex-row">
         <label htmlFor="profile">
-          <img src={file || profilePicture || ProfileImg} alt="" className='profile-image'/>
+          <img src={file || profilePicture || ProfileImg} alt="" className='profile-image m-2'/>
           </label>
 
           <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
@@ -123,7 +123,7 @@ const EditProfileForm = ({ handleModal }) => {
         onChange={formik.handleChange("level")}
         onBlur={formik.handleBlur("level")}
         value={formik.values.level}
-        className="w-full border border-gray-300 rounded p-2"
+        className="w-full border border-gray-300 rounded p-2 m-0"
       >
         <option value="" disabled>
           Select your level
