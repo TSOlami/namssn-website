@@ -1,3 +1,4 @@
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -14,7 +15,7 @@ import {
 } from "../components";
 // import { getPosts } from "../utils";
 import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
@@ -23,7 +24,11 @@ const Home = () => {
 	// States for managing posts and pagination
   // const [postData, setPostData] = useState([]);
   // const [page, setPage] = useState(1);
-  // const [hasMore, setHasMore] = useState(true);
+
+  // State for managing posts and pagination
+  const [postList, setPostList] = useState([]); // Initialize an empty list
+
+  const [hasMore, setHasMore] = useState(true);
   // const [isLoadingMore, setIsLoadingMore] = useState(false);
   // console.log("Page: ", page);
 
@@ -37,12 +42,16 @@ const Home = () => {
   // console.log("Data from api call: ", posts);
 
   // Dispatch the setPosts action to set the posts in the redux store
+  // Dispatch the setPosts action to set the posts in the local state
   useEffect(() => {
     if (posts) {
       console.log("Posts from api call: ", posts);
-      dispatch(setPosts(posts.posts));
+      setPostList((prevPosts) => [...prevPosts, ...posts.posts]); // Append new posts to existing ones
+      dispatch(setPosts(posts.posts)); // Update Redux store if needed
     }
   }, [posts, dispatch]);
+
+  console.log("Post list: ", postList);
 
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
@@ -51,20 +60,29 @@ const Home = () => {
   // const nextPage = page + 1;
 
   // Function to fetch more posts
-  const getNextPosts = async (pageCurrent) => {
-    if (Number(pageCurrent) < Number(totalPages)) {
-      dispatch(setCurrentPage(pageCurrent + 1));
-    }
-  }
-
-  // Function to fetch previous posts
-  const getPreviousPosts = async (pageCurrent) => {
-    if (Number(pageCurrent) === 1) {
-      toast.error("You are currently seeing the latest posts");
+  const fetchMorePosts = () => {
+    if (Number(page) < Number(totalPages)) {
+      dispatch(setCurrentPage(page + 1));
     } else {
-      dispatch(setCurrentPage(pageCurrent - 1));
+      setHasMore(false); // No more pages to load
     }
-  }
+  };
+
+  // // Function to fetch more posts
+  // const getNextPosts = async (pageCurrent) => {
+  //   if (Number(pageCurrent) < Number(totalPages)) {
+  //     dispatch(setCurrentPage(pageCurrent + 1));
+  //   }
+  // }
+
+  // // Function to fetch previous posts
+  // const getPreviousPosts = async (pageCurrent) => {
+  //   if (Number(pageCurrent) === 1) {
+  //     toast.error("You are currently seeing the latest posts");
+  //   } else {
+  //     dispatch(setCurrentPage(pageCurrent - 1));
+  //   }
+  // }
   
   // Function to load more posts manually
   // const loadMorePosts = async () => {
@@ -171,33 +189,39 @@ const Home = () => {
 				<HeaderComponent title="Home" url={"Placeholder"} />
 				
         {/* Posts container */}
-        {posts?.posts?.map((post, index) => (
-            <Post
-              key={index}
-              upvotes={post.upvotes.length}
-              downvotes={post.downvotes.length}
-              comments={post.comments.length}
-              isVerified={post.user.isVerified}
-              text={post.text}
-              image={post.image}
-              name={post.user.name}
-              username={post.user.username}
-              avatar={post.user.profilePicture}
-              createdAt={post.createdAt}
-              u_id={post.user._id}
-              postId={post._id}
-            />
-          ))}
-
+        <InfiniteScroll
+          dataLength={posts?.posts?.length || 0}
+          next={fetchMorePosts}
+          hasMore={hasMore}
+          loader={<Loader />} // Display a loader while loading more posts
+        >
+          {postList?.map((post, index) => (
+              <Post
+                key={index}
+                upvotes={post.upvotes.length}
+                downvotes={post.downvotes.length}
+                comments={post.comments.length}
+                isVerified={post.user.isVerified}
+                text={post.text}
+                image={post.image}
+                name={post.user.name}
+                username={post.user.username}
+                avatar={post.user.profilePicture}
+                createdAt={post.createdAt}
+                u_id={post.user._id}
+                postId={post._id}
+              />
+            ))}
+          </InfiniteScroll>
         {/* Loader */}
         {isLoading && <Loader />}
         {/* Paginate posts buttons */}
-        <button onClick={() => getPreviousPosts(page)} className="text-primary">
+        {/* <button onClick={() => getPreviousPosts(page)} className="text-primary">
           Previous
         </button>
         <button onClick={() => getNextPosts(page)} className="text-primary">
           Next
-        </button>
+        </button> */}
 
 
 				{/* Add post button */}
