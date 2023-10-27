@@ -20,6 +20,10 @@ const resourceSchema = mongoose.Schema(
       ref: 'User', // Reference to the user who created the resource
       required: true,
     },
+    uploaderName: {
+      type: String,
+      required: true
+    },
     // The path or URL to the resource file.
     fileUrl: {
       type: String,

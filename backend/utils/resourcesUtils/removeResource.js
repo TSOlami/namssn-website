@@ -11,6 +11,7 @@ const removeResource = async (resourceId, userId) => {
             { $pull: { resources: deletedResource._id } }, // The updated information for the user
             { new: true }
         );
+        
         console.log('Resource deleted successfully:', deletedResource);
     } catch (err) {
         console.log(err);

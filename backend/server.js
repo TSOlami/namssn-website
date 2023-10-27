@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
+import memjs from 'memjs';
 
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -13,6 +14,9 @@ connectDb();
 
 // Define the port number for the server, default to 5000 if not provided in the environment
 const port = process.env.PORT || 5000;
+
+// Create a memjs client
+export const client = memjs.Client.create();
 
 // Import route handlers
 import userRoutes from './routes/userRoutes.js'; // User-related routes
