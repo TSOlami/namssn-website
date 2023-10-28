@@ -36,16 +36,16 @@ afterAll((done) => {
   }
 });
 
-
-// describe('payment', () => {
-//   describe('get payment route', ( ) => {
-//     describe('given the payment does not exist', () => {
-//       it('should return a 404', () => {
-//          expect(true).toBe(true);
-//       })
-//     })
-//   })
-// });
+// initial format of writing tests
+describe('payment', () => {
+  describe('get payment route', ( ) => {
+    describe('given the payment does not exist', () => {
+      it('should return a 404', () => {
+         expect(true).toBe(true);
+      })
+    })
+  })
+});
 
 describe('POST /api/v1/admin/payments', () => {
   it('should create a new payment category', async () => {
