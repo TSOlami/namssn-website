@@ -41,5 +41,6 @@ import ResourceSearch from './ResourceSearch';
 import PostSearch from './PostSearch';
 import ShareButton from './ShareButton';
 import VerificationAccountInput from './forms/VerifyAccountInput';
+import UserCard from './UserCard';
 
-export {ShareButton, PostSearch, ResourceSearch, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm,PaymentVerificationForm, BlogCard, VerificationAccountInput };
+export {UserCard, ShareButton, PostSearch, ResourceSearch, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm,PaymentVerificationForm, BlogCard, VerificationAccountInput };

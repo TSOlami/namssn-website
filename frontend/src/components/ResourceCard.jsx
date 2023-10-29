@@ -77,6 +77,8 @@ const ResourceCard = ({
 	semester,
 	date,
 }) => {
+	console.log("here")
+	console.log(uploaderUsername, title, course, fileUrl, description, semester, date)
 	// console.log(date)
 
 	const cardClass =
@@ -125,7 +127,7 @@ const ResourceCard = ({
 		console.log("here")
 		handleSetOpenOptions();
 		await axios
-			.delete(fileUrl, { data: { _id: userInfo._id } })
+			.delete(fileUrl, { data: { _id: userInfo._id, level: semester } })
 			.then((res) => {
 				console.log(res);
 				if (res.data === "Access Approved") {

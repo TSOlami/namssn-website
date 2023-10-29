@@ -41,8 +41,26 @@ const HeaderComponent = ({ title, url, back }) => {
 		dispatch(setNavOpen());
 	};
 
+	const [selectedOption, setSelectedOption] = useState('all');
+    const handleSelectChange = (e) => {
+        setSelectedOption(e.target.value);
+    };
+
 	return (
+		
 		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
+			<div className="mb-4 flex justify-between">
+				<span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">RESOURCES</span>
+				<div className="flex gap-2 mr-4">
+					<span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
+					<select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+						<option value="all" className="text-black font-crimson text-lg">All</option>
+						<option value="resources" className="text-black font-crimson text-lg">Resources</option>
+						<option value="users" className="text-black font-crimson text-lg">Users</option>
+						<option value="posts" className="text-black font-crimson text-lg">Post</option>
+					</select>
+				</div>
+			</div>
 			{back && (
 				<div onClick={handleBack} className="text-2xl p-2 pr-5 cursor-pointer">
 					<IoChevronBackSharp />
@@ -70,7 +88,7 @@ const HeaderComponent = ({ title, url, back }) => {
 						onChange={handleSearchChange}
 					/>
 					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-					<button className="border bg-blue-900 rounded-md text-white"> <a href={`http://localhost:3000/search?key=${search}`}>Go</a></button>
+					<button className="border bg-blue-900 rounded-md text-white"> <a href={`http://localhost:3000/search?key=${search}&filter=${selectedOption}`}>Go</a></button>
 			</form>
 		</div>
 	);

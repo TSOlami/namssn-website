@@ -1,9 +1,9 @@
 import Resource from "../../models/resourceModel.js";
 
 // Find the latest resource
-const getLatestResource = async () => {
+const getLatestResource = async (level) => {
     try {
-        const fifthLatestResource = await Resource.find().sort({ createdAt: -1 }).skip(4).limit(1);
+        const fifthLatestResource = await Resource.find({level: level}).sort({ createdAt: -1 }).skip(5).limit(1);
         console.log("+++++++++++", fifthLatestResource[0]);
         return fifthLatestResource[0];
         } catch (error) {
