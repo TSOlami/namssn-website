@@ -75,7 +75,7 @@ const Home = () => {
 				
         {/* Posts container */}
         <InfiniteScroll
-          dataLength={posts?.posts?.length || 0}
+          dataLength={postList?.length || 0}
           next={fetchMorePosts}
           hasMore={hasMore}
           loader={<Loader />} // Display a loader while loading more posts
