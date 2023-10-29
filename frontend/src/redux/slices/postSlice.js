@@ -7,13 +7,24 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 		return {
       // Get All Posts Query
       allPosts: builder.query({
-        query() {
+        query(page, pageSize) {
           return {
-            url: `${POSTS_URL}/posts`,
+            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
             method: 'GET',
           };
         },
         providesTags: ['Post'], 
+      }),
+
+      // Get Paginated Posts Query
+      paginatedPosts: builder.query({
+        query({ page, pageSize }) {
+          return {
+            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Post'],
       }),
 
       // Get User Posts Query
@@ -163,6 +174,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useAllPostsQuery,
+  usePaginatedPostsQuery,
   useUserPostsQuery,
   useCreatePostMutation,
   useUpdatePostMutation,

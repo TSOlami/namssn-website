@@ -1,8 +1,8 @@
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
 	Sidebar,
@@ -13,21 +13,49 @@ import {
 	Loader,
 	AddPostForm,
 } from "../components";
-import { useAllPostsQuery, setPosts } from "../redux";
+import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
 
 const Home = () => {
-	// Fetch all posts
-	const { data: posts, isLoading } = useAllPostsQuery();
+  // Use the useSelector hook to access redux store state
+  const page = useSelector((state) => state.auth.currentPage);
 
-	const dispatch = useDispatch();
+  // Create a list for tracking/saving posts from the API response
+  const [postList, setPostList] = useState([]); // Initialize an empty list
 
-	// Use useEffect to set posts after component mounts
-	useEffect(() => {
-		if (posts) {
-			dispatch(setPosts(posts));
-		}
-	}, [dispatch, posts]);
+  // State for tracking if there are more posts to load
+  const [hasMore, setHasMore] = useState(true);
 
+  // Use the useDispatch hook to dispatch actions
+  const dispatch = useDispatch();
+
+  // Use the useAllPostsQuery hook to get all posts
+  const { data: posts, isLoading } = useAllPostsQuery(Number(page));
+  // console.log("Data from api call: ", posts);
+
+  // Dispatch the setPosts action to set the posts in the local state
+  useEffect(() => {
+    if (posts) {
+      console.log("Posts from api call: ", posts);
+      setPostList((prevPosts) => [...prevPosts, ...posts.posts]); // Append new posts to existing ones
+      dispatch(setPosts(posts.posts)); // Update Redux store if needed
+    }
+  }, [posts, dispatch]);
+
+  console.log("Post list: ", postList);
+
+  // Get the total number of pages from the API response
+  const totalPages = posts?.totalPages;
+
+  // Function to fetch more posts
+  const fetchMorePosts = () => {
+    if (Number(page) < Number(totalPages)) {
+      dispatch(setCurrentPage(page + 1));
+    } else {
+      setHasMore(false); // No more pages to load
+    }
+  };
+
+  // State for managing modal
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModalOpen = () => {
 		console.log("Handle modal open");
@@ -44,31 +72,36 @@ const Home = () => {
 			<Sidebar />
 			<div className="flex flex-col relative w-full">
 				<HeaderComponent title="Home" url={"Placeholder"} />
-				{isLoading ? (
-					<Loader />
-				) : (
-					<>
-						{posts?.map((post) => {
-							return (
-								<Post
-									key={post?._id}
-									upvotes={post?.upvotes?.length}
-									downvotes={post?.downvotes?.length}
-									comments={post?.comments?.length}
-									isVerified={post?.user?.isVerified}
-									text={post?.text}
-									image={post?.image}
-									name={post?.user?.name}
-									username={post?.user?.username}
-									avatar={post?.user?.profilePicture}
-									createdAt={post?.createdAt}
-									u_id={post?.user?._id}
-									postId={post?._id}
-								/>
-							);
-						})}
-					</>
-				)}
+				
+        {/* Posts container */}
+        <InfiniteScroll
+          dataLength={posts?.posts?.length || 0}
+          next={fetchMorePosts}
+          hasMore={hasMore}
+          loader={<Loader />} // Display a loader while loading more posts
+        >
+          {postList?.map((post, index) => (
+            <Post
+              key={index}
+              upvotes={post.upvotes.length}
+              downvotes={post.downvotes.length}
+              comments={post.comments.length}
+              isVerified={post.user.isVerified}
+              text={post.text}
+              image={post.image}
+              name={post.user.name}
+              username={post.user.username}
+              avatar={post.user.profilePicture}
+              createdAt={post.createdAt}
+              u_id={post.user._id}
+              postId={post._id}
+            />
+          ))}
+        </InfiniteScroll>
+
+        {/* Loader */}
+        {isLoading && <Loader />}
+
 				{/* Add post button */}
 
 				<div
@@ -85,6 +118,7 @@ const Home = () => {
 						<AddPostForm handleModalOpen={handleModalOpen} />
 					)}
 				</div>
+        
 			</div>
 			<AnnouncementContainer />
 			<BottomNav />

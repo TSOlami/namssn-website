@@ -29,7 +29,7 @@ const PaymentForm = () => {
 
   const validationSchema = Yup.object({
     matricNumber: Yup.string()
-      .matches(/^[0-9]{5}[A-Za-z]{2}$/, "Invalid Matriculation Number")
+      .matches(/^20\d{2}\/1\/\d{5}PM$/, "Invalid Matriculation Number, please use the format 20XX/1/XXXXXPM")
       .required("Matriculation Number is required"),
     email: Yup.string()
       .email("Invalid email address")

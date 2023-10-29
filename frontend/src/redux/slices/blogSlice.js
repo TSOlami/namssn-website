@@ -14,39 +14,7 @@ export const blogApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
-      }),
-
-      // Create Blog Query
-      createBlog: builder.mutation({
-        query(data) {
-          return {
-            url: `${BLOG_URL}/blog`,
-            method: 'POST',
-            body: data,
-          };
-        },
-      }),
-
-      // Update Blog Query
-      updateBlog: builder.mutation({
-        query(data) {
-          return {
-            url: `${BLOG_URL}/blog`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-      }),
-
-      // Delete Blog Query
-      deleteBlog: builder.mutation({
-        query(data) {
-          return {
-            url: `${BLOG_URL}/blog`,
-            method: 'DELETE',
-            body: data,
-          };
-        },
+        providesTags: ['Blog'],
       }),
 
       // Upvote Blog Query
@@ -121,8 +89,6 @@ export const blogApiSlice = apiSlice.injectEndpoints({
 export const {
   useAllBlogsQuery,
   useUserBlogsQuery,
-  useCreateBlogMutation,
-  useUpdateBlogMutation,
   useDeleteBlogMutation,
   useUpvoteBlogMutation,
   useDownvoteBlogMutation,

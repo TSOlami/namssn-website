@@ -18,7 +18,6 @@ import { useLogoutMutation } from "../../redux";
 import { logout } from "../../redux/slices/authSlice";
 import { setNavOpen } from "../../redux/slices/navSlice";
 // import { useEffect } from "react";
-// import { setNavOpen } from "../../redux/slices/navSlice";
 
 const Sidebar = () => {
 	const { userInfo } = useSelector((state) => state.auth);
@@ -82,7 +81,7 @@ const Sidebar = () => {
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300"></span>
 			</div> */}
 
-			{location.pathname === "/profile" || location.pathname === `/payments/${userInfo._id}` ? (
+			{location.pathname !== "/"  ? (
 				<div className={isNavOpen ? "hamburger active" : "hamburger"} onClick={handleCloseNav}>
 					<span className="bar side"></span>
 					<span className="bar side"></span>

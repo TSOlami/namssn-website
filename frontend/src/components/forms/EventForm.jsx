@@ -1,21 +1,22 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import InputField from "../InputField";
-import FormErrors from "./FormErrors";
+import { useDispatch } from "react-redux";
+import { InputField, FormErrors, Loader } from "../../components";
 import { convertToBase64 } from "../../utils";
+import { toast } from "react-toastify";
+import { useCreateEventMutation, setEvents } from "../../redux";
 
 const EventForm = () => {
+	// Use the useCreateEventMutation hook to create an event
+	const [createEvent, { isLoading }] = useCreateEventMutation();
+
+	// Use the useDispatch hook to dispatch actions
+	const dispatch = useDispatch();
+
 	// Set file state
 	const [file, setFile] = useState();
 
-
-	// const SUPPORTED_FORMATS = [
-	// 	"image/jpg",
-	// 	"image/png",
-	// 	"image/jpeg",
-	// 	"image/gif",
-	// ];
 
 	const initialValues = {
 		title: "",
@@ -54,9 +55,13 @@ const EventForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-				values = Object.assign(values, { image: file });
-				console.log(values);
+				let updatedValues = Object.assign(values, { image: file });
+				const res = await createEvent(updatedValues).unwrap();
+				dispatch(setEvents({ ...res }));
+				toast.success("Event created successfully");
+				console.log(updatedValues);
 			} catch (error) {
+				toast.error("Something went wrong");
 				console.log(error);
 			}
 		},
@@ -75,9 +80,11 @@ const EventForm = () => {
 				type="text"
 				name="title"
 				id="title"
-				onChange={formik.handleChange("name")}
+				onBlur={formik.handleBlur("title")}
+				onChange={formik.handleChange("title")}
 				value={formik.values.title}
 				placeholder="Enter event title"
+
 			/>
 			{formik.touched.title && formik.errors.title ? (
 				<FormErrors error={formik.errors.title} />
@@ -128,6 +135,7 @@ const EventForm = () => {
 				<button type="button" className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300">Delete Event</button>
 				<button type="submit" className="bg-primary rounded-lg p-3 text-white hover:opacity-75">Save Event</button>
 			</div>
+			{isLoading && <Loader />}
 		</form>
 	);
 };

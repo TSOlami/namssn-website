@@ -1,21 +1,36 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments,setCategories } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
+	useResetPasswordMutation,
 	useSendMailMutation,
 	useUpdateUserMutation,
 	useGetUserQuery,
 	useAllBlogsQuery,
 	useVerifyAccountMutation,
 } from './slices/usersApiSlice';
-import { 
+import {
+	useGetTotalUsersQuery,
+	useGetTotalPostsQuery,
+	useGetTotalAnnouncementsQuery,
+	useGetTotalBlogsQuery,
+	useGetTotalPaymentsQuery,
+	useGetTotalEventsQuery,
+	useGetAllUsersQuery,
 	useMakeUserAdminMutation,
 	useRemoveAdminMutation,
 	useGetAllPaymentsQuery,
+	useCreateBlogMutation,
+	useUpdateBlogMutation,
+	useDeleteBlogMutation,
+	useCreateEventMutation,
+	useUpdateEventMutation,
+	useDeleteEventMutation,
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
+	usePaginatedPostsQuery,
 	useUserPostsQuery,
 	useCreatePostMutation,
 	useUpdatePostMutation,
@@ -30,9 +45,6 @@ import {
 } from './slices/postSlice';
 import {
   useUserBlogsQuery,
-  useCreateBlogMutation,
-  useUpdateBlogMutation,
-  useDeleteBlogMutation,
   useUpvoteBlogMutation,
   useDownvoteBlogMutation,
   useCommentBlogMutation,
@@ -61,12 +73,15 @@ import {
 } from './slices/announcementSlice';
 
 import {
-	useCreateEventMutation,
 	useAllEventsQuery,
-	useUserEventsQuery,
-	useUpdateEventMutation,
-	useDeleteEventMutation,
 } from './slices/eventSlice';
+
+import {
+	useGetNotificationsQuery,
+	useDeleteNotificationMutation,
+	useMarkNotificationsAsSeenMutation,
+	useClearNotificationsMutation,
+} from './slices/notificationApiSlice';
 
 export { 
 		useLoginMutation,
@@ -74,8 +89,10 @@ export {
 		useRegisterMutation,
 		useSendMailMutation,
 		useUpdateUserMutation,
+		useResetPasswordMutation,
 		useGetUserQuery,
 		useAllPostsQuery,
+		usePaginatedPostsQuery,
 		useUserPostsQuery,
 		useCreatePostMutation,
 		useUpdatePostMutation,
@@ -116,13 +133,28 @@ export {
 	useDeleteAnnouncementMutation,
 	useCreateEventMutation,
 	useAllEventsQuery,
-	useUserEventsQuery,
 	useUpdateEventMutation,
 	useDeleteEventMutation,
 	useVerifyAccountMutation,
+	useGetTotalUsersQuery,
+	useGetTotalPostsQuery,
+	useGetTotalAnnouncementsQuery,
+	useGetTotalBlogsQuery,
+	useGetTotalPaymentsQuery,
+	useGetTotalEventsQuery,
+  useGetAllUsersQuery,
+	useGetNotificationsQuery,
+	useDeleteNotificationMutation,
+	useMarkNotificationsAsSeenMutation,
+	useClearNotificationsMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,
 	setPayments,
 	setCategories,
+	setBlogs,
+	setCurrentPage,
+	setEvents,
+  setNotifications,
+	logout,
  }
