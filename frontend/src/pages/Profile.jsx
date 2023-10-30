@@ -78,7 +78,7 @@ const Profile = () => {
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
-				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
+				<div className="flex flex-row justify-between items-center relative top-[-40px] my-[-30px] p-3 pl-6 z-[0]">
 					<img
 						src={profileImage || ProfileImg}
 						alt="avatar"
@@ -86,14 +86,14 @@ const Profile = () => {
 					/>{" "}
 					<button
 						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
 					>
 						Edit Profile
 					</button>
 					{!isVerified && (
 						<button
 						onClick={handleVerifyModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none"
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
 					>
 						Verify Account
 					</button>	
