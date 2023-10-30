@@ -2,30 +2,24 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaEnvelope, FaMoneyBillWave } from "react-icons/fa6";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { PaymentSVG } from "../assets";
+import { useCreatePaymentMutation } from "../redux";
 
 const PaymentForm = () => {
-  // const [amount, setAmount] = useState(""); // State to store the payment amount
+  
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
   const { id } = useParams();
-  console.log(id);
   const { category } = useSelector((state) => state.auth); // Access category from the Redux store
-  // console.log(category)
-  // Find the specific category in the Redux store based on id
   const selectedCategory = category?.find((cat) => cat._id === id);
-  // console.log(selectedCategory)
-  // // for initial values
   const initialMatricNumber = userInfo?.matricNumber || "";
   const initialEmail = userInfo?.email || "";
   const initialCategory = selectedCategory?.name || "";
   const initialSession = selectedCategory?.session || "";
   const initialAmount = selectedCategory?.amount || "";
-  console.log(initialCategory);
+  
 
   const validationSchema = Yup.object({
     matricNumber: Yup.string()
@@ -37,7 +31,7 @@ const PaymentForm = () => {
     category: Yup.string().required("Category is required"),
     session: Yup.string().required("Session is required"),
   });
-
+  const [createPayment ]= useCreatePaymentMutation(); // Use the mutation hook here
   // Formik configuration
   const formik = useFormik({
     initialValues: {
@@ -59,11 +53,8 @@ const PaymentForm = () => {
         };
 
         // Make a POST request to your Express server to initiate payment
-        const response = await axios.post(
-          "/api/v1/users/payments",
-          paymentData
-        );
-
+        const response = await createPayment(paymentData);   
+       
         // Check if the response contains the payment URL
         if (response.data.success) {
           const { payment_url, reference, message } = response.data;
@@ -109,7 +100,7 @@ const PaymentForm = () => {
 
   // Function to show a toast message with the transaction reference
   const showTransactionReference = (reference) => {
-    console.log("Transaction Reference:", reference); // Add this line for debugging
+    // console.log("Transaction Reference:", reference); // Add this line for debugging
     toast.success(`Transaction Reference: ${reference}.`, {
       position: "top-right",
       autoClose: 20000, // Close after 5 seconds
