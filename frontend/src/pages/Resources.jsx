@@ -112,11 +112,9 @@ const Resources = () => {
                 <div className="relative">
                     <div className="flex relative z-2">
                         <Sidebar/>
-                        <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[55%] sm:w-[100%] block relative left-16"}>
-                            <div className="sticky top-[0.01%] z-[300] bg-white">
-                                <HeaderComponent title="RESOURCES" url={"Placeholder"}/>
-                            </div>
-                            <div className="lg:pt-5 ml-[5em] relative gap:4 w-[100%]">
+                        <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
+                            <HeaderComponent title="RESOURCES" url={"Placeholder"}/>
+                            <div className="lg:pt-5 gap:4 w-[100%]">
                                 {level1FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>
                                     <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-crimson sm:text-xl text-white text-sm">100 Level</span>
@@ -229,7 +227,7 @@ const Resources = () => {
                         <img className="lg:w-[30px]" src={Upload} alt="Upload" />
                     </button>
                 </div>
-                <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block": "w-[30%] sm:hidden md:block hidden lg:block"}>
+                <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block": "w-[35%] sm:hidden md:block hidden lg:block"}>
                     <AnnouncementContainer />
                 </div>
                 <div className="fixed z-1 bottom-[10em] left-[20em] w-[60%]">
@@ -243,8 +241,8 @@ const Resources = () => {
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>
                 <div className="text-xl flex flex-col items-center font-crimson text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
-                    <div><span>Unable to fetch resources</span></div>
-                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload</span></div>
+                    <div><span>Unable to fetch resources.</span></div>
+                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload.</span></div>
                 </div>
                 <div className="w-[27%] sm:hidden md:hidden hidden lg:block">
                     <AnnouncementContainer />
