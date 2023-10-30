@@ -57,25 +57,9 @@ const FileForm = (props) => {
             formData.append('course', selectedOption2)
             try {
                 const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
-                // const level = selectedOption1;
-
-                // console.log(level)
-                // let updatedDetails = { ...filesDetails }; // Create a deep copy of filesDetails
-            
-                // if (Object.keys(filesDetails).length !== 0 && Object.keys(filesDetails).includes(level)) {
-                //   updatedDetails[level] = [...updatedDetails[level], res.data];
-                //   dispatch(addFileDetails(updatedDetails));
-                // } else {
-                //     console.log('here')
-                //   updatedDetails[level] = [res.data];
-                //   dispatch(addFileDetails(updatedDetails));
-                //   console.log(updatedDetails)
-                //   console.log(filesDetails)
-                // }
-            
-                // dispatch(addFileDetails(updatedDetails)); // Dispatch the action with updatedDetails
                 toast.success("File Uploaded Successfully");
                 setIsLoading(false);
+                window.location.reload()
               } catch (err) {
                 console.log(err);
                 toast.error("File not uploaded, an error occurred");
