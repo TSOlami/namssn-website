@@ -19,8 +19,8 @@ const Home = () => {
   // Use the useSelector hook to access redux store state
   const page = useSelector((state) => state.auth.currentPage);
 
-  // Create a list for tracking/saving posts from the API response
-  const [postList, setPostList] = useState([]); // Initialize an empty list
+  // State to store the previous posts
+  const [prevPosts, setPrevPosts] = useState([]);
 
   // State for tracking if there are more posts to load
   const [hasMore, setHasMore] = useState(true);
@@ -35,13 +35,14 @@ const Home = () => {
   // Dispatch the setPosts action to set the posts in the local state
   useEffect(() => {
     if (posts) {
-      console.log("Posts from api call: ", posts);
-      setPostList((prevPosts) => [...prevPosts, ...posts.posts]); // Append new posts to existing ones
-      dispatch(setPosts(posts.posts)); // Update Redux store if needed
+      const updatedPosts = [...posts.posts, ...prevPosts];
+      dispatch(setPosts(updatedPosts));
+      setPrevPosts(updatedPosts); // Update the previous posts
     }
-  }, [posts, dispatch]);
+  }, [posts, dispatch, prevPosts]);
+  
 
-  console.log("Post list: ", postList);
+  // console.log("Post list: ", postList);
 
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
@@ -75,12 +76,12 @@ const Home = () => {
 				
         {/* Posts container */}
         <InfiniteScroll
-          dataLength={postList?.length || 0}
+          dataLength={posts?.posts?.length || 0}
           next={fetchMorePosts}
           hasMore={hasMore}
           loader={<Loader />} // Display a loader while loading more posts
         >
-          {postList?.map((post, index) => (
+          {posts?.posts?.map((post, index) => (
             <Post
               key={index}
               upvotes={post.upvotes.length}

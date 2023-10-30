@@ -103,3 +103,12 @@ export const blogPosts = [
     ],
   }
 ];
+
+export const teamMembers = [
+  [
+
+  ],
+  [
+
+  ],[]
+];

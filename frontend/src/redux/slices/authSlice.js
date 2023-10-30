@@ -50,8 +50,16 @@ const authSlice = createSlice({
       localStorage.removeItem('userNotifications');
     },
     setPosts(state, action) {
-      state.posts = action.payload;
-      localStorage.setItem('userPosts', JSON.stringify(action.payload));
+      const updatedPosts = action.payload;
+
+      // Limit the number of posts stored in local storage (e.g., last 50 posts)
+      const maxStoredPosts = 50;
+      if (updatedPosts.length > maxStoredPosts) {
+        updatedPosts.splice(0, updatedPosts.length - maxStoredPosts);
+      }
+
+      state.posts = updatedPosts;
+      localStorage.setItem('userPosts', JSON.stringify(updatedPosts));
     },
     setAnnouncements(state, action) {
       state.announcements = action.payload;
