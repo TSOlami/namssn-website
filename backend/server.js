@@ -14,9 +14,6 @@ const port = process.env.PORT || 5000;
 // Create a memjs client
 export const client = memjs.Client.create();
 
-// Create a memjs client
-export const client = memjs.Client.create();
-
 const app = createServer();
 
 app.listen(port, async () => {
