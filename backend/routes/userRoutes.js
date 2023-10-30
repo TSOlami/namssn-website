@@ -28,6 +28,7 @@ import {
   getUserBlogs,
   postUserResources,
   getUserResources,
+  getSpecifiedLevelResources,
   updateUserResources,
   deleteUserResources,
   postUserPayment,
@@ -312,4 +313,6 @@ router
   .post(postUserResources)
   .get(getUserResources);
 
+router
+  .get('/:level/resources', getSpecifiedLevelResources)
 export default router;

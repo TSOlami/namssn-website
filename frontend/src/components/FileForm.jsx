@@ -4,14 +4,13 @@ import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "./Loader";
-import { formatDateToTime } from "../utils";
 // import { FileContext } from "./FileProvider";
 
 const FileForm = (props) => {
     // const [fileDetails, setFileDetails] = useContext(FileContext)
     const textStyle = "font-bold font-crimson text-lg"
     const errorStyle = "text-red-500 text-sm";
-
+    // console.log(filesDetails)
     const [isLoading, setIsLoading] = useState(false);
 
     const [inputValue, setInputValue] = useState("");
@@ -23,7 +22,6 @@ const FileForm = (props) => {
         setSelectedOption1(e.target.value);
         };
     useEffect(() => {
-        console.log(selectedOption1);
     }, [selectedOption1]);
 
     const handleSelectChange2 = (e) => {
@@ -52,42 +50,37 @@ const FileForm = (props) => {
             const formData = new FormData();
             formData.append('file', values.file);
             formData.append('userId', props.userId);
+            formData.append('uploaderName', props.name);
             formData.append('description', inputValue);
             formData.append('date', date);
             formData.append('semester', selectedOption1);
             formData.append('course', selectedOption2)
-
             try {
-                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData); 
-                // console.log(res.data)
-                const level = selectedOption1
-                let filesDetails = JSON.parse(localStorage.getItem("filesDetails"))
-                const existingLevels = Object.keys(filesDetails)
+                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
+                // const level = selectedOption1;
 
-                if (filesDetails && existingLevels.includes(level)) {
-                    console.log("here")
-                    console.log(filesDetails)
-                    const existingLevelDetails = filesDetails[level];
-                    console.log(existingLevelDetails)
-                    existingLevelDetails.push(res.data)
-                    filesDetails[{level}] = existingLevelDetails;
-                    localStorage.setItem("filesDetails", JSON.stringify(filesDetails))
-                } else {
-                    console.log("not available")
-                    const mergedDict = Object.assign({}, filesDetails, {[level]: [res.data]})
-                    localStorage.setItem("filesDetails", JSON.stringify(mergedDict))
-                }
-                console.log(filesDetails)
-                
+                // console.log(level)
+                // let updatedDetails = { ...filesDetails }; // Create a deep copy of filesDetails
+            
+                // if (Object.keys(filesDetails).length !== 0 && Object.keys(filesDetails).includes(level)) {
+                //   updatedDetails[level] = [...updatedDetails[level], res.data];
+                //   dispatch(addFileDetails(updatedDetails));
+                // } else {
+                //     console.log('here')
+                //   updatedDetails[level] = [res.data];
+                //   dispatch(addFileDetails(updatedDetails));
+                //   console.log(updatedDetails)
+                //   console.log(filesDetails)
+                // }
+            
+                // dispatch(addFileDetails(updatedDetails)); // Dispatch the action with updatedDetails
                 toast.success("File Uploaded Successfully");
-                // window.location.reload();
                 setIsLoading(false);
-                
-            } catch (err) {
+              } catch (err) {
                 console.log(err);
                 toast.error("File not uploaded, an error occurred");
                 setIsLoading(false);
-            }
+              }
         },
     });
 

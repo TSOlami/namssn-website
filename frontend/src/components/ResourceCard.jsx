@@ -144,8 +144,8 @@ const ResourceCard = ({
 
 	const handleNewDelete = (e) => {
 		e.stopPropagation();
-		console.log("here")
-		// handleFileDelete(fileUrl);
+		// console.log("here")
+		handleFileDelete(fileUrl);
 	};
 
 	const smStyle = "text-sm text-gray-400";
@@ -174,14 +174,14 @@ const ResourceCard = ({
 				<div ref={buttonRef}>
 					{openOptions && (
 						<div>
-							{isAdmin === "admin" && (
+							{/* {isAdmin === "admin" && ( */}
 								<button
 									onClick={handleNewDelete}
 									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
 								>
 									<MdDelete /> <span>Delete Post</span>
 								</button>
-							)}
+							{/* )} */}
 
 							<div
 								onClick={handleSetShowDetails}

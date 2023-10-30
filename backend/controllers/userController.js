@@ -9,7 +9,7 @@ import Blog from '../models/blogModel.js';
 import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
 import UserOTPVerification from '../models/userOTPVerification.js';
-import {postResource, getResources, deleteResource} from '../utils/resourceLogic.js';
+import {postResource, getResources, getSpecifiedResources,deleteResource} from '../utils/resourceLogic.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -560,8 +560,8 @@ const postUserResources = asyncHandler(async (req, res) => {
       if (response === null) {
         res.status(500).send("Unable to upload")
       } else {
-        console.log("File has been saved successfully");
-        console.log(response)
+        // console.log("File has been saved successfully");
+        // console.log(response)
         res.json(response)
       }
     }
@@ -631,13 +631,29 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
   try {
-    const fileList = await getResources(req, res);
-    res.json(fileList);
+    const filesDetails = await getResources(req, res);
+    if (filesDetails) {
+      console.log(filesDetails)
+      res.json(filesDetails);
+    }
   } catch (err) {
     console.log(err);
   }
 });
 
+const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
+  const level =req.params.level
+  console.log(level)
+  try {
+    const allResources = await getSpecifiedResources(level)
+    if (allResources) {
+      // console.log(allResources)
+      res.json(allResources)
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
@@ -757,6 +773,7 @@ export {
   getUserBlogs,
   postUserResources,
   getUserResources,
+  getSpecifiedLevelResources,
   updateUserResources,
   deleteUserResources,
   postUserPayment,

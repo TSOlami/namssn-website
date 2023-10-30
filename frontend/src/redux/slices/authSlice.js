@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import produce from 'immer';
 import { createSlice } from '@reduxjs/toolkit';
 
 // Helper function to get items from local storage
@@ -23,6 +24,7 @@ export const initialState = {
   notification: getLocalStorageItem('userNotifications') || null,
   currentPage: 1,
   pageSize: 2,
+  details: {}
 }
 
 const authSlice = createSlice({
@@ -81,6 +83,6 @@ const authSlice = createSlice({
 	},
 });
 
-export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } = authSlice.actions;
+export const {addFileDetails, setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } = authSlice.actions;
 
 export default authSlice.reducer;
