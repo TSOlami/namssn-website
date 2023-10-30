@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { ResourceCard } from "../components";
+import { HeaderComponent, ResourceCard, Sidebar, AnnouncementContainer } from "../components";
 import { formatDateToTime } from "../utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -52,7 +52,7 @@ const LevelResources = () => {
                     const newData = [];
                     myfileList.map((file, index) => {
                         console.log(data[index][file][selectedOption])
-                        if (data[index][file][selectedOption].toLowerCase().includes(value.toLowerCase())) {
+                        if (data[index][file][selectedOption] && data[index][file][selectedOption].toLowerCase().includes(value.toLowerCase())) {
                            newData.push({[file]: data[index][file]})
                            console.log(newData)
                             // Object.keys(tempData).forEach((key) => {
@@ -81,36 +81,46 @@ const LevelResources = () => {
         const fileList = data.map(obj => Object.keys(obj)[0])
 
         return (
-            <div>
-                <div className="mb-4 flex justify-between">
-                    <span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">RESOURCES</span>
-                    <div className="flex gap-2 mr-4">
-                        <span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
-                        <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                            <option value="title" className="text-black font-crimson text-lg">Title</option>
-                            <option value="uploaderName" className="text-black font-crimson text-lg">Owner</option>
-                        </select>
+            <div className="flex">
+                <Sidebar/>
+                <div className="lg:w-[100%%] sm:w-[100%] block">
+                    <div className="sticky top-[0.01%] z-[300] bg-white">
+                        <HeaderComponent title={`${level} Resources`} url={"Placeholder"}/>
                     </div>
+                    <div>
+                        <div className="mb-4 flex justify-between">
+                            {/* <span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">{level} Resources</span> */}
+                            <div className="flex gap-2 mr-4">
+                                <span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
+                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                                    <option value="title" className="text-black font-crimson text-lg">Title</option>
+                                    <option value="uploaderName" className="text-black font-crimson text-lg">Owner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="sticky bg-white shadow-lg border-2 z-10 pl-4 pr-4 top-[10%] left-[33%] border-gray-300 rounded-xl w-[50%]">
+                            <div className="absolute  h-[100%] flex ">
+                            <FaMagnifyingGlass  className="mt-1"/>
+                            </div>
+                            <input
+                                type='input' placeholder="Search here"
+                                className="bg-opacity-[100%] ml-2 pl-3 outline-none w-[95%]"
+                                onChange={handleSearch}
+                            />
+                        </div>
+                        <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
+                            {fileList.map((file, index) => ( 
+                                <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}
+                                uploaderUsername = {data[index][file]['uploaderUsername']}
+                                title = {data[index][file]['title']}
+                                date = {formatDateToTime(new Date(data[index][file]['date']))}
+                                semester = {data[index][file]['semester']}
+                                course = {data[index][file]['course']}
+                                />
+                            ))}
+                        </div>
                 </div>
-                <div className="sticky bg-white shadow-lg border-2 z-10 pl-4 pr-4 top-[2%] left-[33%] border-gray-300 rounded-xl w-[50%]">
-                    <div className="absolute  h-[100%] flex ">
-                    <FaMagnifyingGlass  className="mt-1"/>
-                    </div>
-                    <input
-                        type='input' placeholder="Search here"
-                        className="bg-opacity-[100%] ml-2 pl-3 outline-none w-[95%]"
-                        onChange={handleSearch}
-                    />
                 </div>
-                {fileList.map((file, index) => ( 
-                    <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}
-                    uploaderUsername = {data[index][file]['uploaderUsername']}
-                    title = {data[index][file]['title']}
-                    date = {formatDateToTime(new Date(data[index][file]['date']))}
-                    semester = {data[index][file]['semester']}
-                    course = {data[index][file]['course']}
-                    />
-                ))}
             </div>
         )
     }

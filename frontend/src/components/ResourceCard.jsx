@@ -77,8 +77,7 @@ const ResourceCard = ({
 	semester,
 	date,
 }) => {
-	console.log("here")
-	console.log(uploaderUsername, title, course, fileUrl, description, semester, date)
+	// console.log(uploaderUsername, title, course, fileUrl, description, semester, date)
 	// console.log(date)
 
 	const cardClass =

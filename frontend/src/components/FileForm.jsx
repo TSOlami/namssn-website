@@ -35,7 +35,7 @@ const FileForm = (props) => {
 
     const validationSchema = Yup.object().shape({
         file: Yup.mixed()
-        .test('fileSize', 'File is too large', (value) => value && value.size <= 5000000)
+        .test('fileSize', 'File is too large', (value) => value && value.size <= 500000000)
         .test('fileType', 'Videos are not allowed', (value) => value && value.type && value.type.indexOf('video') === -1)
     });
 
