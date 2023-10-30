@@ -11,11 +11,37 @@ import getLatestResource from "./resourcesUtils/getLatestResource.js";
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import {client} from '../server.js'
+import getLastFiveResources from "./resourcesUtils/getLastFiveResources.js";
 
 const getResources = async (req, res) => {
   try {
     const result = await client.get("files");
-    return JSON.parse(result.value); // Return the value from the getResources function
+    // console.log("=========". result)
+    if (result.value !== null) {
+      console.log("here")
+      console.log(JSON.parse(result.value))
+      return JSON.parse(result.value); // Return the value from the getResources function
+    } else {
+      const level1Resources = await getLastFiveResources('100 Level');
+      const level2Resources = await getLastFiveResources('200 Level');
+      const level3Resources = await getLastFiveResources('300 Level');
+      const level4Resources = await getLastFiveResources('400 Level');
+      const level5Resources = await getLastFiveResources('500 Level');
+      const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources];
+      const formattedResponse = {}
+      for (let i=0; i<resources.length; i++) {
+        if (resources[i].length !== 0) {
+          const formattedResources = await createFileList(resources[i])
+          const level = ((i+ 1) * 100).toString() + ' Level';
+          console.log(formattedResources)
+          formattedResponse[level] = formattedResources
+          
+        }
+      }
+      client.set("files", JSON.stringify(formattedResponse));
+      return formattedResponse;
+    }
+    
   } catch (err) {
     console.log("An error occurred while retrieving files", err);
     throw err; // Throw the error to be caught by the calling function
@@ -90,6 +116,8 @@ const getSpecifiedResources = async (level) => {
 const deleteResource = async (req, res) => {
   const fileUrl = req.params.filename;
   const senderId = req.body._id;
+  const level = req.body.level
+  // client.delete("files")
   const resourceId = await checkUploader(fileUrl, senderId);
 
   if (resourceId || (req.user && req.user.role === 'admin')) {
@@ -104,25 +132,28 @@ const deleteResource = async (req, res) => {
               const result = await client.get("files"); // Use await here
               if (result.value) {
                   let existingFilesDetiails = JSON.parse(result.value);
-                  for (const level in existingFilesDetiails) {
-                      const filesUrlList = [...existingFilesDetiails[level].map(dict => Object.keys(dict))].flat()
-                      console.log(filesUrlList)
-                      if (filesUrlList.includes(fileUrl)) {
-                          console.log('present')
-                          existingFilesDetiails[level].splice(existingFilesDetiails[level].findIndex(dict => dict.hasOwnProperty(fileUrl)), 1)
-                          const latestResource = await getLatestResource() // Use await here
-                          const formattedResponse = {[fileUrl]: {
-                            uploaderUsername: latestResource.uploaderName, title: latestResource.title,
-                            description: latestResource.description, date: latestResource.updatedAt, 
-                            semester: latestResource.level, course: latestResource.course
-                          }}
-                          existingFilesDetiails[level].unshift(formattedResponse)
-                          client.set("files", JSON.stringify(existingFilesDetiails))
-                          console.log("-------------", formattedResponse)
-                          console.log(existingFilesDetiails[level])
-                          break;
+                  const filesUrlList = [...existingFilesDetiails[level].map(dict => Object.keys(dict))].flat()
+                  console.log(filesUrlList)
+                  console.log(fileUrl)
+                  console.log("urllists above")
+                  if (filesUrlList.includes(fileUrl)) {
+                      console.log('present')
+                      const fileIndex = filesUrlList.indexOf(fileUrl)
+                      existingFilesDetiails[level].splice(fileIndex, 1)
+                      console.log("qqqqqqqqqqqqqqqqqq", existingFilesDetiails[level])
+                      const latestResource = await getLatestResource(level) // Use await here
+                      if (latestResource) {
+                        const formattedResponse = {[latestResource.fileUrl]: {
+                          uploaderUsername: latestResource.uploaderName, title: latestResource.title,
+                          description: latestResource.description, date: latestResource.updatedAt, 
+                          semester: latestResource.level, course: latestResource.course
+                        }}
+                        existingFilesDetiails[level].unshift(formattedResponse)
+                        console.log("-------------", formattedResponse)
+                        console.log("}}}}}]", existingFilesDetiails[level].length)
                       }
-                  }
+                      client.set("files", JSON.stringify(existingFilesDetiails))
+                    }
               }
           } catch (err) {
               console.log(err)

@@ -14,6 +14,7 @@ import { ProfileImg } from "../assets";
 const PostSearch = ({key, upvotes, downvotes, comment, isVerified, image,
                     text, name, username, avatar, createdAt, updatedAt,
                     u_id, postId}) => {
+                      console.log(username, name)
     const [openOptions, setopenOptions] = useState(false);
 	
     const handleOpenOptions = () => {
@@ -107,12 +108,9 @@ const PostSearch = ({key, upvotes, downvotes, comment, isVerified, image,
   };
   
 	return (
-        <div>
-            <div className="pt-4 pl-6 text-gray-400">
-                <span className="text-lg font-serif">Post</span>
-            </div>
+        <div className="w-[100%]">
         
-            <div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+            <div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[100%] md:min-w-[100%] lg:min-w-[100%] xl:w-[100%] wide:w-[100%]">
                 <div>
                     <Link to={`/profile/${u_id}`}>
                         <img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />

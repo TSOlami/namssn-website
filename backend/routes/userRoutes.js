@@ -36,7 +36,8 @@ import {
   getPaymentOptions,
   verifyOTP,
   resendOTP,
-  verifyUserPayment
+  verifyUserPayment,
+  getSearchResults
 } from "../controllers/userController.js";
 
 import { 
@@ -315,4 +316,7 @@ router
 
 router
   .get('/:level/resources', getSpecifiedLevelResources)
+
+router
+  .get('/search', getSearchResults)
 export default router;

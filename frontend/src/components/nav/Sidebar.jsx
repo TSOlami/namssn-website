@@ -69,8 +69,9 @@ const Sidebar = () => {
 
 	return (
 		<>
+		{/* <div className="sm:z-[400] lg:z-[200]"> */}
 			{/* Fixed empty block element to prevent sidebar from collapsing */}
-			<div className="z-0 h-full min-w-[250px] hidden lg:block"></div>
+			<div className="z-[400] h-full min-w-[250px] hidden lg:block"></div>
 
 			{/* hamburger for mobile view */}
 			{/* Tailwind is stressful guyyyy, I wrote it with vanilla css in the index.css file */}
@@ -93,12 +94,12 @@ const Sidebar = () => {
 			<div
 				className={
 					isNavOpen
-						? "bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[0%] lg:left-0 z-30 transition-all duration-300"
-						: "bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[-105%] lg:left-0 transition-all duration-300"
+						? " bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[0%] lg:left-0 z-[400] transition-all duration-300"
+						: "z-[400] bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[-105%] lg:left-0 transition-all duration-300"
 				}
 			>
 				{/* profile info */}
-				<div className="pb-8 flex gap-2">
+				<div className="z-[400] pb-8 flex gap-2">
 					<div>
 						<img
 							src={profileImage || ProfileImg}
@@ -195,6 +196,7 @@ const Sidebar = () => {
 					</Link>
 				</div>
 			</div>
+			{/* </div> */}
 		</>
 	);
 };

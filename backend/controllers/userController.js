@@ -10,6 +10,7 @@ import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
 import UserOTPVerification from '../models/userOTPVerification.js';
 import {postResource, getResources, getSpecifiedResources,deleteResource} from '../utils/resourceLogic.js';
+import getData from '../utils/searchUtils/getData.js';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -633,7 +634,7 @@ const getUserResources = asyncHandler(async (req, res) => {
   try {
     const filesDetails = await getResources(req, res);
     if (filesDetails) {
-      console.log(filesDetails)
+      // console.log(filesDetails)
       res.json(filesDetails);
     }
   } catch (err) {
@@ -750,7 +751,13 @@ const verifyUserPayment = asyncHandler(async (req, res) => {
   }
 });
 
-
+const getSearchResults = asyncHandler(async (req, res) => {
+  const value = req.query.value;
+  const filter = req.query.filter;
+  const data = await getData(value, filter)
+  console.log(data)
+  res.json(data)
+})
 
 export {
   authUser,
@@ -780,5 +787,6 @@ export {
   getUserPayments,
   getPaymentOptions,
   verifyUserPayment,
-  resendOTP
+  resendOTP,
+  getSearchResults
 };
