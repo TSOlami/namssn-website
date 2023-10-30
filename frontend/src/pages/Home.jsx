@@ -1,4 +1,3 @@
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -18,13 +17,10 @@ import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
 const Home = () => {
   // Use the useSelector hook to access redux store state
   const page = useSelector((state) => state.auth.currentPage);
+  const postsFromStore = useSelector((state) => state.auth.posts);
 
-  // State to store the previous posts
-  const [prevPosts, setPrevPosts] = useState([]);
-
-  // State for tracking if there are more posts to load
-  const [hasMore, setHasMore] = useState(true);
-
+  console.log("Posts from store: ", postsFromStore);
+ 
   // Use the useDispatch hook to dispatch actions
   const dispatch = useDispatch();
 
@@ -32,27 +28,10 @@ const Home = () => {
   const { data: posts, isLoading } = useAllPostsQuery(Number(page));
   // console.log("Data from api call: ", posts);
 
-  // Dispatch the setPosts action to set the posts in the local state
-  useEffect(() => {
-    if (posts) {
-      const updatedPosts = [...posts.posts, ...prevPosts];
-      dispatch(setPosts(updatedPosts));
-      setPrevPosts(updatedPosts); // Update the previous posts
-    }
-  }, [posts, dispatch, prevPosts]);
-  
-
-  // console.log("Post list: ", postList);
-
-  // Get the total number of pages from the API response
-  const totalPages = posts?.totalPages;
-
   // Function to fetch more posts
   const fetchMorePosts = () => {
     if (Number(page) < Number(totalPages)) {
       dispatch(setCurrentPage(page + 1));
-    } else {
-      setHasMore(false); // No more pages to load
     }
   };
 
@@ -63,6 +42,41 @@ const Home = () => {
 		setIsModalOpen(!isModalOpen);
 	};
 
+
+  // Dispatch the setPosts action to set the posts in the local state
+  useEffect(() => {
+    if (posts) {
+      console.log("Posts from api call: ", posts);
+      dispatch(setPosts(posts.posts)); // Update Redux store if needed
+    }
+  }, [posts, dispatch]);
+
+  // Get the total number of pages from the API response
+  const totalPages = posts?.totalPages;
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
+        fetchMorePosts();
+      }
+    });
+
+    return () => {
+      window.removeEventListener("scroll", () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop + 1 >=
+          document.documentElement.scrollHeight
+        ) {
+          fetchMorePosts();
+        }
+      });
+    };
+  }, [page, totalPages]);
+
+ 
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -75,30 +89,23 @@ const Home = () => {
 				<HeaderComponent title="Home" url={"Placeholder"} />
 				
         {/* Posts container */}
-        <InfiniteScroll
-          dataLength={posts?.posts?.length || 0}
-          next={fetchMorePosts}
-          hasMore={hasMore}
-          loader={<Loader />} // Display a loader while loading more posts
-        >
-          {posts?.posts?.map((post, index) => (
-            <Post
-              key={index}
-              upvotes={post.upvotes.length}
-              downvotes={post.downvotes.length}
-              comments={post.comments.length}
-              isVerified={post.user.isVerified}
-              text={post.text}
-              image={post.image}
-              name={post.user.name}
-              username={post.user.username}
-              avatar={post.user.profilePicture}
-              createdAt={post.createdAt}
-              u_id={post.user._id}
-              postId={post._id}
-            />
-          ))}
-        </InfiniteScroll>
+        {postsFromStore?.map((post, index) => (
+          <Post
+            key={index}
+            upvotes={post.upvotes.length}
+            downvotes={post.downvotes.length}
+            comments={post.comments.length}
+            isVerified={post.user.isVerified}
+            text={post.text}
+            image={post.image}
+            name={post.user.name}
+            username={post.user.username}
+            avatar={post.user.profilePicture}
+            createdAt={post.createdAt}
+            u_id={post.user._id}
+            postId={post._id}
+          />
+        ))}
 
         {/* Loader */}
         {isLoading && <Loader />}

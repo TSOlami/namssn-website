@@ -15,7 +15,7 @@ const getLocalStorageItem = (key) => {
 
 export const initialState = {
 	userInfo: getLocalStorageItem('userInfo') || null,
-  posts: getLocalStorageItem('userPosts') || null,
+  posts: getLocalStorageItem('userPosts') || [],
   announcements: getLocalStorageItem('userAnnouncements') || null,
   payments: getLocalStorageItem('userPayments') || null,
   category: getLocalStorageItem('userCategories') || null,
@@ -50,16 +50,13 @@ const authSlice = createSlice({
       localStorage.removeItem('userNotifications');
     },
     setPosts(state, action) {
-      const updatedPosts = action.payload;
+      // Check if the posts are not already in the state
+      const uniquePosts = action.payload.filter((newPost) =>
+        !state.posts.some((existingPost) => existingPost._id === newPost._id)
+      );
 
-      // Limit the number of posts stored in local storage (e.g., last 50 posts)
-      const maxStoredPosts = 50;
-      if (updatedPosts.length > maxStoredPosts) {
-        updatedPosts.splice(0, updatedPosts.length - maxStoredPosts);
-      }
-
-      state.posts = updatedPosts;
-      localStorage.setItem('userPosts', JSON.stringify(updatedPosts));
+      state.posts = state.posts.concat(uniquePosts); // Append only the unique new posts
+      localStorage.setItem('userPosts', JSON.stringify(state.posts));
     },
     setAnnouncements(state, action) {
       state.announcements = action.payload;
