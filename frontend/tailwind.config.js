@@ -33,7 +33,7 @@ export default {
       },
       screens: {
         "wide": "1440px",
-        // "xs": "1440px"
+        "xSmall": "770px"
       }
     },
   },

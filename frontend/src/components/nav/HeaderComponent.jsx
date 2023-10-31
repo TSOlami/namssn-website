@@ -50,7 +50,9 @@ const HeaderComponent = ({ title, url, back }) => {
 	return (
 		
 		<div className="flex flex-row md:justify-around lg:pr-[20em] sm:pr-[2em]  md:pl-[2em] items-center md:py-2 border-b-2 border-gray-300 ">
-			
+			<div className="block w-screen-500">
+				<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
+			</div>			
 			{back && (
 				<div
 					onClick={handleBack}
@@ -79,7 +81,7 @@ const HeaderComponent = ({ title, url, back }) => {
 				</div> */}
 			</div>
 			{url && (
-				<div className="flex items-center">
+				<div className="items-center hidden md:hidden lg:flex">
 					<form
 						action=""
 						onSubmit={handleSubmit}
