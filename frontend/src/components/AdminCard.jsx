@@ -1,4 +1,5 @@
 import { BsArrowUpRight } from "react-icons/bs";
+import { FaPerson } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const AdminCard = ({ card, route, title, amount, bg }) => {
@@ -13,6 +14,8 @@ const AdminCard = ({ card, route, title, amount, bg }) => {
           {card === 'events'? <img src="src/assets/images/Award.svg" className="" /> : null}
 
           {card === 'announcements'? <img src="src/assets/images/Mic.svg" className="" /> : null}
+
+					{card === 'users'? <FaPerson className="" /> : null}
           </span>
 				<span className="text-primary">
 					<Link to={route}>

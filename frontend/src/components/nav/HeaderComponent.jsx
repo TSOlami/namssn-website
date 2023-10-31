@@ -12,9 +12,9 @@ const HeaderComponent = ({ title, url, back }) => {
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
-		if (e.target.value.trim() !== '') {
+		if (e.target.value.trim() !== "") {
 			setSearch(e.target.value);
-		} else if(e.target.value.trim() === '' && search.trim() !== '') {
+		} else if (e.target.value.trim() === "" && search.trim() !== "") {
 			setSearch(e.target.value);
 		}
 	};
@@ -48,11 +48,8 @@ const HeaderComponent = ({ title, url, back }) => {
     };
 
 	return (
-		
-		<div className="flex flex-row md:justify-around lg:pr-[20em] sm:pr-[2em]  md:pl-[2em] items-center md:py-2 border-b-2 border-gray-300 ">
-			<div className="block w-screen-500">
-				<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-			</div>			
+		<div className="flex flex-row md:justify-between items-center gap-2 p-5 md:py-2 border-b-2 border-gray-300 ">
+
 			{back && (
 				<div
 					onClick={handleBack}

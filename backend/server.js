@@ -1,13 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
-import cors from 'cors';
-import fileUpload from 'express-fileupload';
 import memjs from 'memjs';
-
-import path from 'path';
-import cookieParser from 'cookie-parser';
-import { notFound, errorHandler } from './middleware/errormiddleware.js';
 import connectDb from './config/db.js';
 
 import createServer from './utils/server.js';
@@ -21,9 +14,6 @@ const port = process.env.PORT || 5000;
 // Create a memjs client
 export const client = memjs.Client.create();
 
-// Import route handlers
-import userRoutes from './routes/userRoutes.js'; // User-related routes
-import adminRoutes from './routes/adminRoutes.js'; // Admin-related routes
 const app = createServer();
 
 app.listen(port, async () => {

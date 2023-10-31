@@ -4,7 +4,6 @@ import { AdminCard, RecentPayments, Sidebar, Loader} from "../components";
 import { HeaderComponent } from "../components";
 import { mockAccounts } from "../data";
 import { MembersImg } from "../assets";
-import { FaPerson } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { useGetAllPaymentsQuery,setPayments } from "../redux";
@@ -93,7 +92,7 @@ const AdminDashboard = () => {
 						/>
 
 						<AdminCard
-							title={<FaPerson />}
+							title={"Users"}
 							amount={totalUsers}
 							card="users"
 							bg="bg-purple-100"

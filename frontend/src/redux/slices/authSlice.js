@@ -15,7 +15,7 @@ const getLocalStorageItem = (key) => {
 
 export const initialState = {
 	userInfo: getLocalStorageItem('userInfo') || null,
-  posts: getLocalStorageItem('userPosts') || null,
+  posts: getLocalStorageItem('userPosts') || [],
   announcements: getLocalStorageItem('userAnnouncements') || null,
   payments: getLocalStorageItem('userPayments') || null,
   category: getLocalStorageItem('userCategories') || null,
@@ -24,6 +24,7 @@ export const initialState = {
   notification: getLocalStorageItem('userNotifications') || null,
   currentPage: 1,
   pageSize: 2,
+  details: {}
 }
 
 const authSlice = createSlice({
@@ -49,8 +50,13 @@ const authSlice = createSlice({
       localStorage.removeItem('userNotifications');
     },
     setPosts(state, action) {
-      state.posts = action.payload;
-      localStorage.setItem('userPosts', JSON.stringify(action.payload));
+      // Check if the posts are not already in the state
+      const uniquePosts = action.payload.filter((newPost) =>
+        !state.posts.some((existingPost) => existingPost._id === newPost._id)
+      );
+
+      state.posts = state.posts.concat(uniquePosts); // Append only the unique new posts
+      localStorage.setItem('userPosts', JSON.stringify(state.posts));
     },
     setAnnouncements(state, action) {
       state.announcements = action.payload;
@@ -82,5 +88,6 @@ const authSlice = createSlice({
 	},
 });
 
-export const { setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } = authSlice.actions;
+export const {addFileDetails, setCredentials, setPosts, setAnnouncements, setPayments,setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } = authSlice.actions;
+
 export default authSlice.reducer;

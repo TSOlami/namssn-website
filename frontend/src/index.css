@@ -132,7 +132,7 @@
   }
 
   .profile-image {
-    @apply rounded-full border-2 border-white bg-white w-[10rem] h-[10rem] object-cover shadow-lg cursor-pointer;
+    @apply rounded-full border-2 border-white bg-white w-[7.5rem] h-[7.5rem] object-cover shadow-lg cursor-pointer;
     @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
   }
 
