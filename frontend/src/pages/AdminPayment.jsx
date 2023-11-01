@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, Loader, PaymentVerificationForm} from "../components";
-import { mockPaidUsers } from "../data";
 import { FaCheck } from "react-icons/fa6";
 import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments} from '../redux'; // 
 import { motion } from "framer-motion";
@@ -176,48 +175,7 @@ const AdminPayment = () => {
 
             {/* Payment details table */}
 
-            <HeaderComponent title="Payment Details" url={"placeholder"}/>
-
-            <div>
-              <table>
-                <thead>
-                  <tr className="">
-                    <th className="px-2 mx-7 md:px-4 py-2 text-left font-semibold text-gray-700">
-                      No
-                    </th>
-                    <th className="px-2 mx-7 md:px-4 py-2 text-left font-semibold text-gray-700">
-                      Full Name
-                    </th>
-                    <th className="px-2 mx-7 md:px-4 py-2 text-left font-semibold text-gray-700">
-                      Matric NO
-                    </th>
-                    <th className="px-2 mx-7 md:px-4 py-2 text-left font-semibold text-gray-700">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockPaidUsers.map((user, index) => (
-                    <tr key={index} className="">
-                      <td className="px-2 mx-7 md:px-4 py-2 whitespace-nowrap">
-                        {index + 1}
-                      </td>
-                      <td className="px-2 mx-7 md:px-4 py-2 whitespace-nowrap">
-                        {user.name}
-                      </td>
-                      <td className="px-2 mx-7 md:px-4 py-2 whitespace-nowrap">
-                        {user.matric}
-                      </td>
-                      <td >
-                        <div className="px-2 md:px-4 py-1 whitespace-nowrap bg-black text-white rounded-md m-1">
-                        {user.status}
-
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                  }
-                </tbody>
-              </table>
-            </div>
+            <HeaderComponent title="Recent Payment Details" url={"placeholder"}/>
             <div>
 					{allpayments && allpayments?.length === 0 ? (
 						<div className="text-center mt-28 p-4 text-gray-500">

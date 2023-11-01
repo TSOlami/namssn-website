@@ -198,7 +198,10 @@ const AdminDashboard = () => {
 				{/* Recent payments */}
 				<div className="flex flex-row justify-between pr-10">
 					<h3 className="font-bold text-2xl p-4">Recent Payments</h3>
-					<button className="text-primary" > See more</button>
+					<Link to="/admin/payment">
+						<button className="text-primary">See more</button>
+					</Link>
+
 				</div>
 				{/* <div className="w-full px-4">
 					{mockRecentPayments.map((payment, index) => (
