@@ -17,7 +17,7 @@ import getData from '../utils/searchUtils/getData.js';
 // access	Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select('-password').populate('posts');
 
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
@@ -103,7 +103,7 @@ const verifyAccount = asyncHandler(async (req, res) => {
   const { username, studentEmail } = req.body;
   console.log("Verifying user account: ", username, studentEmail);
   // Find the user by username
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).select('-password').populate('posts');
 
   if (user) {
     // Check if the user has already been verified
@@ -217,7 +217,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
       console.log("Deleting OTP record")
       await UserOTPVerification.deleteMany({ username });
 
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username }).select('-password').populate('posts');
 
       // Set otpVerified to true
       user.otpVerified = true;
@@ -275,13 +275,6 @@ const resendOTP = asyncHandler(async (req, res) => {
   }
 });
 
-
-// @desc  Create a password reset session
-// Route GET /api/v1/users/createResetSession
-// Access Public
-const createResetSession = asyncHandler(async (req, res) => {
-
-});
 
 // @desc  Reset user password
 // Route PUT /api/v1/users/reset-password
@@ -370,23 +363,15 @@ const searchUser = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/profile
 // access	Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = {
-    _id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-    username: req.user.username,
-    studentEmail: req.user.studentEmail,
-    isVerified: req.user.isverified,
-    points: req.user.points,
-    bio: req.user.bio,
-    role: req.user.role,
-    level: req.user.level,
-    profilePicture: req.user.profilePicture,
-    posts: req.user.posts,
-    blogs: req.user.blogs,
-    payments: req.user.payments,
-    resources: req.user.resources,
+  const user = await User.findById(req.user._id)
+    .select('-password') // Exclude the 'password' field
+    .populate('posts'); // Populate the 'posts' field
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
   }
+
   res.status(200).json(user);
 });
 
@@ -434,7 +419,7 @@ const getUserByUsername = asyncHandler(async (req, res) => {
 
   // Find the user by username
   console.log("Fetching user by username: ", username);
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).select('-password').populate('posts');
 
   if (user) {
     // Return the user data
@@ -471,7 +456,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     // Check if the new email already exists in the database
     if (req.body.email && req.body.email !== user.email) {
-      const emailExists = await User.findOne({ email: req.body.email });
+      const emailExists = await User.findOne({ email: req.body.email }).select('-password').populate('posts');
       if (emailExists) {
         res.status(400);
         throw new Error('Email already exists');
@@ -480,7 +465,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     // Check if the new username already exists in the database
     if (req.body.username && req.body.username !== user.username) {
-      const usernameExists = await User.findOne({ username: req.body.username });
+      const usernameExists = await User.findOne({ username: req.body.username }).select('-password').populate('posts');
       if (usernameExists) {
         res.status(400);
         throw new Error('Username already exists');
@@ -497,11 +482,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.bio = req.body.bio || user.bio;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
-
-    if (req.body.password) {
-      user.password = req.body.password;
-      res.status(200).json({ message: 'Password updated successfully' });
-    }
 
     const updatedUser = await user.save();
 
@@ -765,7 +745,6 @@ export {
   verifyAccount,
   generateOTP,
   verifyOTP,
-  createResetSession,
   resetPassword,
   logoutUser,
   getUserProfile,
