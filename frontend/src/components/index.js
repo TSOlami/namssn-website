@@ -33,7 +33,7 @@ import AddCategoryForm from './forms/AddCategoryForm';
 import DeleteCategoryForm from './forms/DeleteCategoryForm';
 import PaymentList from './PaymentList';
 import VerificationCodeInput from './forms/VerificationCodeInput';
-import PaymentHistory from './paymentHistory';
+import PaymentHistory from './PaymentHistory';
 import VerifyAccountForm from './forms/VerifyAccountForm';
 import PaymentVerificationForm from './forms/PaymentVerificationForm';
 import BlogCard from './BlogCard';
