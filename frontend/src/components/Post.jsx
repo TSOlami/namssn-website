@@ -77,7 +77,8 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
 				toast.success("Upvoted!");
-				dispatch(setPosts({...response}));
+				console.log('Upvote successful:', response);
+				dispatch(setPosts({...response.post}));
         console.log('Upvote successful:', response);
       } else {
         console.error('Upvote failed:', response);
@@ -101,7 +102,8 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
       if (response.message === "success") {
         // Toggle the downvote state
         setIsDownvoted(!isDownvoted);
-				dispatch(setPosts({...response}));
+				console.log('Downvote successful:', response);
+				dispatch(setPosts({...response.post}));
 				toast.success("Downvoted!");
       } else {
         console.error('Downvote failed:', response);

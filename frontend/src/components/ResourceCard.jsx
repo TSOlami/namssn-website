@@ -77,6 +77,7 @@ const ResourceCard = ({
 	semester,
 	date,
 }) => {
+	// console.log(uploaderUsername, title, course, fileUrl, description, semester, date)
 	// console.log(date)
 
 	const cardClass =
@@ -125,7 +126,7 @@ const ResourceCard = ({
 		console.log("here")
 		handleSetOpenOptions();
 		await axios
-			.delete(fileUrl, { data: { _id: userInfo._id } })
+			.delete(fileUrl, { data: { _id: userInfo._id, level: semester } })
 			.then((res) => {
 				console.log(res);
 				if (res.data === "Access Approved") {
@@ -144,8 +145,8 @@ const ResourceCard = ({
 
 	const handleNewDelete = (e) => {
 		e.stopPropagation();
-		console.log("here")
-		// handleFileDelete(fileUrl);
+		// console.log("here")
+		handleFileDelete(fileUrl);
 	};
 
 	const smStyle = "text-sm text-gray-400";
@@ -174,14 +175,14 @@ const ResourceCard = ({
 				<div ref={buttonRef}>
 					{openOptions && (
 						<div>
-							{isAdmin === "admin" && (
+							{/* {isAdmin === "admin" && ( */}
 								<button
 									onClick={handleNewDelete}
 									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
 								>
 									<MdDelete /> <span>Delete Post</span>
 								</button>
-							)}
+							{/* )} */}
 
 							<div
 								onClick={handleSetShowDetails}

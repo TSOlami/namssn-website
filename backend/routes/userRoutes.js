@@ -28,6 +28,7 @@ import {
   getUserBlogs,
   postUserResources,
   getUserResources,
+  getSpecifiedLevelResources,
   updateUserResources,
   deleteUserResources,
   postUserPayment,
@@ -35,7 +36,8 @@ import {
   getPaymentOptions,
   verifyOTP,
   resendOTP,
-  verifyUserPayment
+  verifyUserPayment,
+  getSearchResults
 } from "../controllers/userController.js";
 
 import { 
@@ -312,4 +314,9 @@ router
   .post(postUserResources)
   .get(getUserResources);
 
+router
+  .get('/:level/resources', getSpecifiedLevelResources)
+
+router
+  .get('/search', getSearchResults)
 export default router;

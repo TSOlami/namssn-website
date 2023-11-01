@@ -91,6 +91,7 @@ const ResetPassword = () => {
 				<div className="w-full">
 					<InputField
 						name="newPassword"
+						type="password"
 						placeholder="Enter New Password"
 						pad
 						icon={<FaLock />}
@@ -104,6 +105,7 @@ const ResetPassword = () => {
 				<div className="w-full">
 					<InputField
 						name="ConfirmPassword"
+						type="password"
 						placeholder="Confirm New Password"
 						pad
 						icon={<BiSolidLock />}

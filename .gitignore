@@ -1,6 +1,10 @@
 # Dependencies
 frontend/node_modules
 backend/node_modules
+*lock.json
+package-lock.json
+uploads/*
+uploads
 
 # Env files
 frontend/.env
