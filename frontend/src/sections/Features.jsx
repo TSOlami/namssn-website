@@ -1,12 +1,6 @@
 import { Image4, Image6 } from "../assets";
 import { motion } from "framer-motion";
 
-
-const staggerVariants = {
-	hidden: { opacity: 0, x: 100 },
-	show: { opacity: 1 },
-};
-
 const Features = () => {
 	return (
 		<motion.section
@@ -44,7 +38,10 @@ const Features = () => {
 					</motion.div>
 					<div className="flex flex-row bg-tertiary rounded-2xl max-w-[25rem] mx-auto shadow-xl">
 						<motion.div
-							variants={staggerVariants}
+							initial={{ rotate: 270 }}
+							whileInView={{ rotate: 0 }}
+							exit={{ opacity: 0, x: -100 }}
+							transition={{ duration: 0.5 }}
 							className="flex flex-col justify-center px-8 pt-10 pb-10"
 						>
 							<h3 className="text-3xl font-bold font-crimson">
@@ -61,11 +58,14 @@ const Features = () => {
 				</div>
 
 				<div className="flex flex-col lg:flex-row gap-10 pt-8">
-					<div className="flex flex-row bg-tertiary rounded-2xl mx-auto max-w-[25rem] shadow-xl">
-						<motion.div
-							variants={staggerVariants}
-							className="flex flex-col justify-center px-10 pt-10 pb-5"
-						>
+					<motion.div
+						initial={{ rotateY: 270 }}
+						whileInView={{ rotateY: 0 }}
+						exit={{ opacity: 0, x: -100 }}
+						transition={{ duration: 0.5 }}
+						className="flex flex-row bg-tertiary rounded-2xl mx-auto max-w-[25rem] shadow-xl"
+					>
+						<motion.div className="flex flex-col justify-center px-10 pt-10 pb-5">
 							<h3 className="text-3xl font-bold font-crimson">
 								Effortless Payment
 							</h3>
@@ -74,12 +74,14 @@ const Features = () => {
 								financial transactions a breeze.
 							</p>
 						</motion.div>
-					</div>
-					<div className="flex md:flex-row flex-col bg-zinc-900 mx-auto rounded-2xl shadow-xl">
-						<motion.div
-							variants={staggerVariants}
-							className="flex flex-col justify-center px-10 pt-20 pb-10"
-						>
+					</motion.div>
+					<motion.div
+						initial={{ x: 100 }}
+						whileInView={{ x: 0 }}
+						transition={{ type: "spring", stiffness: 100 }}
+						className="flex md:flex-row flex-col bg-zinc-900 mx-auto rounded-2xl shadow-xl"
+					>
+						<motion.div className="flex flex-col justify-center px-10 pt-20 pb-10">
 							<h3 className="text-3xl text-white font-bold font-crimson">
 								Stay Informed
 							</h3>
@@ -95,7 +97,7 @@ const Features = () => {
 							alt=""
 							className="w-fit self-center"
 						/>
-					</div>
+					</motion.div>
 				</div>
 			</div>
 		</motion.section>

@@ -4,11 +4,17 @@ import { useAllBlogsQuery } from "../redux";
 
 import { Loader } from "../components";
 import { formatDateToTime } from "../utils";
+import { useState } from "react";
 
 const BlogPage = () => {
 	// Use the useAllBlogsQuery hook to fetch all blogs
 	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
 
+	// Read more ability
+	const [readMore, setReadMore] = useState(false);
+	const handleSetReadMore = () => {
+		setReadMore(!readMore);
+	};
 	return (
 		<motion.main
 			initial={{ opacity: 0, x: 100 }}
@@ -22,7 +28,6 @@ const BlogPage = () => {
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
 					{blogs?.map((blog) => (
-
 						<div key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
@@ -50,21 +55,53 @@ const BlogPage = () => {
 								</div>
 							</div>
 							<div className="flex flex-col lg:flex-row rounded-lg mt-5 bg-tertiary opacity-[50px]">
-								<img
-									src={blog.coverImage}
-									alt="Blog Image"
-									className="rounded-lg lg:w-5/6"
-								/>
-								<div className="p-6">
+								<div className="lg:min-w-[500px] max-h-[700px] w-full lg:w-auto ">
+									<img
+										src={blog.coverImage}
+										alt="Blog Image"
+										className="rounded-lg max-h-[500px] lg:max-h-[700px] w-full lg:auto object-cover"
+									/>
+								</div>
+								<div className="p-5">
 									<Actions
 										upvotes={blog.upvotes}
 										downvotes={blog.downvotes}
 										shares="5"
 										comments="10"
 									/>
-									<p className="body-text my-4">
-										{blog.content}
-									</p>
+									{readMore ? (
+										<p className="body-text my-4">
+											{blog.content}
+
+											<div
+												className="text-primary font-bold pt-2 cursor-pointer"
+												onClick={handleSetReadMore}
+											>
+												Hide
+											</div>
+										</p>
+									) : (
+										<p>
+											{blog.content.length > 400 ? (
+												<>
+													{blog.content.slice(0, 400)}
+													<span
+														onClick={
+															handleSetReadMore
+														}
+														className="text-primary font-bold cursor-pointer"
+													>
+														{" "}
+														...Read More
+													</span>
+												</>
+											) : (
+												blog.content
+											)}
+										</p>
+									)}
+
+									{/*  */}
 								</div>
 							</div>
 						</div>

@@ -69,6 +69,9 @@ const AdminBlogs = () => {
         toast.success("Blog post created successfully");
 				console.log(values);
 			} catch (error) {
+				if (error.data.message == 'request entity too large') {
+					toast.error('Image size should be less than 200KB');
+				}
 				console.log(error);
 			}
 		},
