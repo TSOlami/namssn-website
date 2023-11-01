@@ -17,12 +17,15 @@ import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
 const Home = () => {
   // Use the useSelector hook to access redux store state
   const page = useSelector((state) => state.auth.currentPage);
-  
-  // Use the useDispatch hook to dispatch actions
-  const dispatch = useDispatch();
 
   // State for managing posts
   const [postData, setPostData] = useState([]);
+
+  // State for managing loading more posts
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Use the useDispatch hook to dispatch actions
+  const dispatch = useDispatch();
 
   // Use the useAllPostsQuery hook to get all posts
   const { data: posts, isLoading } = useAllPostsQuery(Number(page));

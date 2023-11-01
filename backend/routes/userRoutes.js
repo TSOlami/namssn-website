@@ -13,6 +13,7 @@ import {
   registerUser,
   verifyAccount,
   generateOTP,
+  createResetSession,
   resetPassword,
   logoutUser,
   getUserProfile,
@@ -112,6 +113,14 @@ router.route('/resend-otp/:username').get(verifyUser, resendOTP);
  * @access Public
  */
 router.route('/verify-otp').post(verifyUser, verifyOTP);
+
+/**
+ * Create Reset Session
+ * 
+ * @route POST /api/v1/users/create-reset-session
+ * @access Public
+*/
+router.route('/create-reset-session').get(createResetSession);
 
 /**
  * Reset Password

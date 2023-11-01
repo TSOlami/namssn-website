@@ -127,10 +127,19 @@ const Profile = () => {
 							(
 								post
 							) => (
-								console.log("Profile Posts: ",post),
 								<Post
 									key={post._id}
-									post={post}
+									upvotes={post.upvotes.length}
+									downvotes={post.downvotes.length}
+									isVerified={isVerified}
+									text={post.text}
+									name={name}
+									username={username}
+									avatar={profileImage}
+									createdAt={post.createdAt}
+									image={post.image}
+									postId={post._id}
+									u_id={userInfo._id}
 								/>
 							)
 						)

@@ -22,6 +22,7 @@ const Post = ({ post, updatePostData  }) => {
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
+	console.log("Post: ",post);
 
 	// Get the post details from the props
 	const postId = post?._id;
