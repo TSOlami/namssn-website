@@ -51,7 +51,7 @@ const NavBar = () => {
 				<ul className="flex-1 flex justify-center lg:justify-evenly items-center ml-6 gap-10 lg:gap-3 flex-col lg:flex-row">
 					{navLinks.map((item) => (
 						<li key={item.label}>
-							<Link to={item.href} className="nav-text">
+							<Link to={item.href} className="nav-text hover:underline transition-all">
 								{item.label}
 							</Link>
 						</li>

@@ -50,20 +50,22 @@ const Actions = ({
 				<span>Downvotes</span>
 			</div>
 
-			<div>
-				<span className="flex flex-row items-center gap-1">
-					<button
-						className="flex flex-row items-center gap-1"
-						onClick={routeToComments}
-					>
-						<BiComment />
-					</button>
-				</span>
-				<span>Comments</span>
-			</div>
+			{location.pathname !== "/blog" && (
+				<div>
+					<span className="flex flex-row items-center gap-1">
+						<button
+							className="flex flex-row items-center gap-1"
+							onClick={routeToComments}
+						>
+							<BiComment />
+						</button>
+					</span>
+					<span>Comments</span>
+				</div>
+			)}
 
 			<div>
-				<span className="flex items-center gap-1">
+				<span className="flex items-center gap-1 cursor-pointer">
 					<BiShareAlt /> {shares}
 				</span>
 				<span>Share</span>

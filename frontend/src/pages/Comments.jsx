@@ -15,6 +15,7 @@ import { Loader, PostComments } from "../components";
 
 const Comments = () => {
 	const { postId } = useParams();
+	console.log("Post id: ", postId);
 
 	const { data: comments, isLoading } = usePostCommentsQuery({
 		postId: postId,
@@ -27,12 +28,14 @@ const Comments = () => {
 	// Find the post with a matching _id within the 'auth.posts' array
 	const post = auth.posts.find((p) => p._id === postId);
 
+	console.log("Post from redux: ", post);
+
 	// Use the usePostCommentsQuery hook to fetch comments for the post
 	const [commentText, setCommentText] = useState("");
 
 	// Check if the post was found
 	if (!post) {
-		return <p className="text-center mt-28">This post has been deleted</p>;
+		return <p className="text-center mt-28">This post is unavailable</p>;
 	}
 
 	// Loading indicator while data is being fetched
@@ -44,6 +47,7 @@ const Comments = () => {
 	// Handle comment submission
 	const handleCommentSubmit = async () => {
 		try {
+			setCommentText("");
 			const response = await commentPost({
 				postId: postId,
 				data: {
@@ -51,7 +55,6 @@ const Comments = () => {
 				},
 			});
 			console.log(response);
-			setCommentText("");
 		} catch (error) {
 			console.error("Comment submission failed", error);
 			console.log(error.message);
@@ -71,18 +74,8 @@ const Comments = () => {
 				<div className="w-full">
 					<Post
 						key={post?._id}
-						upvotes={post?.upvotes?.length}
-						downvotes={post?.downvotes?.length}
-						comments={post?.comments?.length}
-						isVerified={post?.user?.isVerified}
-						text={post?.text}
-						image={post?.image}
-						name={post?.user?.name}
-						username={post?.user?.username}
-						avatar={post?.user?.profilePicture}
-						createdAt={post?.createdAt}
-						u_id={post?.user?._id}
-						postId={post?._id}
+						post={post}
+						// updatePostData={(postId, newPostData) => updatePostData(postId, newPostData)}
 					/>
 				</div>
 

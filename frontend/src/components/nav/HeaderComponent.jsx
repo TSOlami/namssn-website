@@ -49,6 +49,7 @@ const HeaderComponent = ({ title, url, back }) => {
 
 	return (
 		<div className="flex flex-row md:justify-between items-center gap-2 p-5 md:py-2 border-b-2 border-gray-300 ">
+
 			{back && (
 				<div
 					onClick={handleBack}
@@ -77,31 +78,29 @@ const HeaderComponent = ({ title, url, back }) => {
 				</div> */}
 			</div>
 			{url && (
-				<form
-					action=""
-					onSubmit={handleSubmit}
-					className="hidden md:flex  relative"
-				>
-					<input
-						type="text"
-						placeholder="Search"
-						name="search"
-						value={search}
-						className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 w-56 md:w-72 pl-3 pr-10"
-						onChange={handleSearchChange}
-					/>
-					<a className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg" href={`http://localhost:3000/search?key=${search}`}>
-						<FaMagnifyingGlass  />
-					</a>
-
-
-					{/* <button className="border bg-gray-400 rounded-md">
-						{" "}
-						<a href={`http://localhost:3000/search?key=${search}`}>
-							Go
-						</a>
-					</button> */}
-				</form>
+				<div className="items-center hidden md:hidden lg:flex">
+					<form
+						action=""
+						onSubmit={handleSubmit}
+						className="hidden bg-white md:flex  relative"
+					>
+						<input
+							type="text"
+							placeholder="Search"
+							name="search"
+							value={search}
+							className="rounded-2xl bg-white border-gray-300 border-2 p-1 w-56 md:w-[25em] pl-10"
+							onChange={handleSearchChange}
+						/>
+						<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
+						
+					</form>
+					<div className="pl-2">
+						<button onClick={handleSubmit} className="border w-[3em] font-serif text-white bg-green-700 hover:bg-green-600 rounded-full">
+							GO
+						</button>
+					</div>
+				</div>
 			)}
 		</div>
 	);
