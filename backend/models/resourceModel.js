@@ -20,24 +20,23 @@ const resourceSchema = mongoose.Schema(
       ref: 'User', // Reference to the user who created the resource
       required: true,
     },
+    uploaderName: {
+      type: String,
+      required: true
+    },
     // The path or URL to the resource file.
     fileUrl: {
       type: String,
     },
-    // An array of user references who upvoted the resource.
-    upvotes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to users who upvoted the resource
-      },
-    ],
-    // An array of user references who downvoted the resource.
-    downvotes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to users who downvoted the resource
-      },
-    ],
+    // The level in which the resource is relevant.
+    level: {
+      type: String,
+      required: true,
+    },
+    course: {
+      type: String,
+      required: true,
+    }
   },
   {
     // Automatically generate createdAt and updatedAt timestamps.

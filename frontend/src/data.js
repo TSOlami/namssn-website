@@ -99,24 +99,24 @@ export const mockAccounts = [
 	{
 		name: "Slimanny",
 		reputation: 40,
-		verify: ""
+		verify: "",
 	},
 	{
 		name: "Ifedimeji",
 		reputation: 300,
-		verify: ""
+		verify: "",
 	},
 	{
 		name: "Ifedimeji Omoniyi",
 		reputation: 400,
-		verify: ""
+		verify: "",
 	},
 	{
 		name: "Henry Ugeida",
 		reputation: 200,
-		verify: ""
+		verify: "",
 	},
-]
+];
 
 export const mockReportedAccounts = [
 	{
@@ -143,4 +143,221 @@ export const mockReportedAccounts = [
 		ignore: "",
 		suspend: "",
 	},
-]
+];
+
+export const mockPayments = [
+	{
+		title: "Departmental dues",
+		amount: 50,
+	},
+	{
+		title: "Sin City Party",
+		amount: 10,
+	},
+	{
+		title: "Departmental Dinner",
+		amount: 22,
+	},
+	{
+		title: "Sport Jersey Dues",
+		amount: 15,
+	},
+	{
+		title: "Departmental dues",
+		amount: 5,
+	},
+	{
+		title: "Departmental dues",
+		amount: 111,
+	},
+];
+
+export const mockPaidUsers = [
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		status: "Paid",
+	},
+];
+
+export const mockComments = [
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "Only broke people think, rich people outsource every thing, including thinking",
+		username: "richkid222",
+		name: "Sulaimon Abubakar",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+	{
+		text: "This is what i think about this post",
+		username: "design_hashira",
+		name: "Ifedimeji Omoniyi",
+	},
+];
+
+export const mockRecentPayments = [
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		amount: 500,
+		details: "Departmental dues",
+		username: "design_hashira",
+	},
+	{
+		name: "Neal Riggers",
+		matric: "2017/123456",
+		amount: 5000,
+		details: "Giveway",
+		username: "nealest_rigger",
+	},
+	{
+		name: "Placeholder Name",
+		matric: "2017/123456",
+		amount: 2000,
+		details: "Whatever this is for",
+		username: "placeholder_name",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		amount: 500,
+		details: "Departmental dues",
+		username: "design_hashira",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		amount: 500,
+		details: "Departmental dues",
+		username: "design_hashira",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		matric: "2017/123456",
+		amount: 500,
+		details: "Departmental dues",
+		username: "design_hashira",
+	},
+];
+
+export const mockEvents = [
+	{
+		title: "Sin City Night",
+		description:
+			"Here lies the best day of every student's life, and the worst of the lecturers",
+		location: "Rotary Club Hall",
+		date: "2021-06-12",
+		flier: "/src/assets/images/Event2.png",
+	},
+
+	{
+		title: "Departmental Dinner",
+		description: "This is a description of the event",
+		location: "Rotary Club Hall",
+		date: "2024-06-12",
+		flier: "/src/assets/images/Event1.png",
+	},
+	{
+		title: "NAMSSN Year 2 vs MCB",
+		description: "This is a description of the event",
+		location: "Rotary Club Hall",
+		date: "2021-06-12",
+		flier: "/src/assets/images/Event3.png",
+	},
+	{
+		title: "Sin City Night",
+		description: "This is a description of the event",
+		location: "Rotary Club Hall",
+		date: "2021-06-12",
+		flier: "/src/assets/images/Event1.png",
+	},
+	{
+		title: "Sin City Night",
+		description: "This is a description of the event",
+		location: "Rotary Club Hall",
+		date: "2021-06-12",
+		flier: "/src/assets/images/Event1.png",
+	},
+];
+
+export const mockUsers = [
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+];

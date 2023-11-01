@@ -18,20 +18,22 @@ export default {
     }, 
     extend: {
       fontFamily: {
-        'crimson': ['Crimson Text', 'sans-serif'],
-        'merriweather': ['Merriweather', 'serif'], 
+        'crimson': ['Roboto', 'sans-serif'],
+        'merriweather': ['Montserrat', 'serif'], 
       },
       colors: {
         "primary": "#17A1FA",
         "secondary": "#00000",
         "tertiary": "#B3D5F7",
         "greyish" : "#F3F3F3",
+        "cardbg": "rgba(23, 161, 250, 0.4)"
       },
       boxShadow: {
         '3xl': '0 10px 40px rgba(0, 0, 0, 0.1)'
       },
       screens: {
-        "wide": "1440px"
+        "wide": "1440px",
+        "xSmall": "770px"
       }
     },
   },

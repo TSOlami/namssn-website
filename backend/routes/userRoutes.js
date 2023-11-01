@@ -1,32 +1,69 @@
+import * as fs from "fs";
+import { fileURLToPath } from 'url';
+import path from 'path'
 import express from "express";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
+const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
 // Import controllers and middleware
 import {
   authUser,
   registerUser,
+  verifyAccount,
+  generateOTP,
+  resetPassword,
   logoutUser,
   getUserProfile,
+  getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
+  getAllEvents,
+  getAllAnnouncements,
+  getUserAnnouncements,
+  getAllBlogs,
+  getUserBlogs,
+  postUserResources,
+  getUserResources,
+  getSpecifiedLevelResources,
+  updateUserResources,
+  deleteUserResources,
+  postUserPayment,
+  getUserPayments,
+  getPaymentOptions,
+  verifyOTP,
+  resendOTP,
+  verifyUserPayment,
+  getSearchResults
+} from "../controllers/userController.js";
+
+import { 
   createPost,
 	getAllPosts,
 	getUserPosts,
   updatePost,
   deletePost,
-  getAllBlogs,
-  postUserResources,
-  getUserResources,
-  updateUserResources,
-  deleteUserResources,
-  postUserPayment,
-  getUserPayment,
-} from "../controllers/userController.js";
+  upvotePost,
+  downvotePost,
+  getPostComments,
+  createPostComment,
+  updatePostComment,
+  deletePostComment,
+  upvoteComment,
+  downvoteComment,
+  getNotifications,
+  markNotificationsAsSeen,
+  deleteNotification,
+  clearNotifications,
+} from "../controllers/postController.js";
+import { registerMail } from "../controllers/mailer.js";
+import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
 
-import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
+// Route for sending a welcome email
+router.route('/register-mail').post(registerMail);
 /**
  * Register a new user.
  *
@@ -42,6 +79,47 @@ router.post('/', registerUser);
  * @access Public
  */
 router.post('/auth', authUser);
+
+/**
+ * Verify a user account.
+ * 
+ * @route POST /api/v1/users/verify-account
+ * @access Private
+ */
+router.route('/verify-account').post(verifyAccount);
+
+/**
+ * Generate OTP
+ * 
+ * @route GET /api/v1/users/generate-otp
+ * @access Public
+ */
+router.route('/generate-otp/:username').get(verifyUser, generateOTP);
+
+/**
+ * Resend OTP
+ * 
+ * @route GET /api/v1/users/resend-otp
+ * @access Public
+ * @param {string} username - The username of the user to resend OTP to
+ */
+router.route('/resend-otp/:username').get(verifyUser, resendOTP);
+
+/**
+ * Verify  generated OTP
+ * 
+ * @route  POST /api/v1/users/otp
+ * @access Public
+ */
+router.route('/verify-otp').post(verifyUser, verifyOTP);
+
+/**
+ * Reset Password
+ * 
+ * PUT /api/v1/users/reset-password
+ * @access Public
+ */
+router.route('/reset-password').put(verifyUser, otpStatusCheck, resetPassword);
 
 /**
  * Logout a user.
@@ -65,23 +143,138 @@ router
   .put(protect, updateUserProfile)
   .delete(protect, deleteUserProfile);
 
-// Route for getting all blogs
+// Route for getting a user by id
+router.route('/profile/:userId').get(protect, getUserById);
+
+// Route for getting a user by username
+router.route('/user').get(getUserByUsername);
+
+/**
+ * Get Events
+ * @route GET /api/v1/users/events
+ * @access Public (Does not require authentication)
+ */
+router.get('/events', getAllEvents);
+
+/**
+ * Get Announcements
+ * @route GET /api/v1/users/announcements
+ * @access Private 
+ */
+router.route('/announcements')
+.get(protect, getAllAnnouncements);
+
+// Route for getting all announcements by user
 router
-.route("/blogs")
-.get(protect, getAllBlogs);
+.route('/announcement')
+.get(protect, getUserAnnouncements);
+
+/**
+ * Get, create, update, and delete user posts.
+ * 
+ * @route GET /api/v1/users/posts
+ * @route GET /api/v1/users/posts/:postId
+ * @route POST /api/v1/users/posts
+ * @route PUT /api/v1/users/posts/:postId
+ * @route DELETE /api/v1/users/posts/:postId
+ * @access Private (Requires authentication)
+ */
 
 // Route for getting all posts
 router
-.route("/blogs")
-.get(protect, getAllPosts);
+.route("/posts")
+.get(getAllPosts);
 
-// Get, create, update and delete user posts
+// Route for getting a user post by id
+router.get('/post/:userId', protect, getUserPosts);
+
+// Route for upvoting a post
+router.put('/posts/:postId/upvote', protect, upvotePost);
+
+// Route for downvoting a post
+router.put('/posts/:postId/downvote', protect, downvotePost);
+
+// Route for creating, updating, and deleting a post
 router
-.route('/blog')
-.get(protect, getUserPosts)
+.route("/post")
 .post(protect, createPost)
 .put(protect, updatePost)
 .delete(protect, deletePost);
+
+// Route for getting and deleting all notifications
+router
+.route('/notifications')
+.get(protect, getNotifications)
+.delete(protect, clearNotifications);
+
+// Route for marking notifications as seen
+router
+.route('/notifications/seen')
+.put(protect, markNotificationsAsSeen);
+
+// Route for deleting a notification
+router
+.route('/notifications/:notificationId')
+.delete(protect, deleteNotification);
+
+
+/**
+ * Get, create, update and delete user post comments.
+ * 
+ * @route GET /api/v1/users/posts/:postId/comments
+ * @route POST /api/v1/users/posts/:postId/comments
+ * @route PUT /api/v1/users/posts/:postId/comments/:commentId
+ * @route DELETE /api/v1/users/posts/:postId/comments/:commentId
+ * @access Private (Requires authentication)
+ */
+ router
+  .route('/posts/:postId/comments')
+  .get(protect, getPostComments)
+  .post(protect, createPostComment);
+
+router
+  .route('/posts/:postId/comments/:commentId')
+  .put(protect, updatePostComment)
+  .delete(protect, deletePostComment);
+
+// Route for upvoting a post comment
+router.put('/posts/:postId/comments/:commentId/upvote', protect, upvoteComment);
+
+// Route for downvoting a post comment
+router.put('/posts/:postId/comments/:commentId/downvote', protect, downvoteComment);
+
+/**
+ * GET, POST, PUT, and DELETE user resources.
+ * @route GET /api/v1/users/resources
+ * @route POST /api/v1/users/resources
+ * @route PUT /api/v1/users/resources/:resourceId
+ * @route DELETE /api/v1/users/resources/:resourceId
+ * @access Private (Requires authentication)
+ */
+
+// router
+//   .route('/resources')
+//   .get(protect, getUserResources)
+//   .post(protect, postUserResources);
+
+// router
+//   .route('/resources/:resourceId')
+//   .put(protect, updateUserResources)
+//   .delete(protect, deleteUserResources);
+
+/**
+ * Get all blogs and blogs by user.
+ * @route GET /api/v1/users/blogs
+ * @access Public (Does not require authentication)
+ * @route GET /api/v1/users/blog 
+ * @access Private (Requires authentication)
+ */
+// Route for getting all blogs
+router.get('/blogs', getAllBlogs);
+// Route for getting all blogs by user
+router
+.route('/blog')
+.get(protect, getUserBlogs)
 
 /**
  * Get and create user payment history.
@@ -90,9 +283,31 @@ router
  * @route POST /api/v1/users/payments
  * @access Private (Requires authentication)
  */
+router.get('/payments/:userId', protect, getUserPayments);
+router.post('/payments/verify', protect, verifyUserPayment);
 router
   .route('/payments')
-  .get(protect, getUserPayment)
-  .post(protect, postUserPayment);
+  .get(protect, getPaymentOptions)
+  // .get(protect, getUserPayment)
+  .post(protect,postUserPayment);
 
+
+router
+  .route('/resources/:filename')
+  .get((req, res) => {
+    const filePath = path.join(fileDir + '/uploads', req.params.filename)
+    res.sendFile(filePath)
+  })
+  .delete(deleteUserResources)
+
+router
+  .route('/resources')
+  .post(postUserResources)
+  .get(getUserResources);
+
+router
+  .get('/:level/resources', getSpecifiedLevelResources)
+
+router
+  .get('/search', getSearchResults)
 export default router;

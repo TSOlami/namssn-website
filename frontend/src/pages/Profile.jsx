@@ -1,132 +1,158 @@
-import ProfileImg from "../assets/profileImg.png";
-import { FaCameraRetro, FaCircleCheck, FaXmark } from "react-icons/fa6";
-import { Post, Sidebar, AnnouncementContainer } from "../components";
-import Wrapper from "../assets/images/wrapper.png";
-import { mockTexts } from "../data";
-import { useState } from "react";
+import { FaCircleCheck } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+	EditProfileForm,
+	Post,
+	Sidebar,
+	AnnouncementContainer,
+	Loader,
+	VerifyAccountForm,
+} from "../components";
+import { ProfileImg } from "../assets";
+import { useUserPostsQuery, setPosts } from "../redux";
+import { motion } from "framer-motion";
 
 const Profile = () => {
+	// Fetch user info from redux store
+	const { userInfo } = useSelector((state) => state.auth);
+	const name = userInfo?.name;
+	const username = userInfo?.username;
+	const bio = userInfo?.bio;
+	const isVerified = userInfo?.isVerified;
+	const points = userInfo?.points;
+	const profileImage = userInfo?.profilePicture;
+
+	// Fetch number of posts from redux store
+	const noOfPosts = userInfo?.posts?.length;
+	console.log(noOfPosts)
+
+	const dispatch = useDispatch();
+
+	// Fetch user posts from redux store
+	const { data: userPosts, isLoading } = useUserPostsQuery({
+		_id: userInfo?._id,
+	});
+
+	console.log("User posts: ", userPosts);
+	
+	// Use useEffect to set posts after component mounts
+	useEffect(() => {
+		if (userPosts) {
+			dispatch(setPosts(userPosts));
+		}
+	}, [dispatch, userPosts]);
+
+	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
+	};
+
+	// Manage verify modal state
+	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+	const handleVerifyModal = () => {
+		setIsVerifyModalOpen(!isVerifyModalOpen);
+	};
+
+	// Display loading indicator while data is being fetched
+	if (isLoading) {
+		return <Loader />;
 	}
-	const isAdmin = true;
-	const noOfPosts = 120;
 
 	return (
-		<div className="flex flex-row">
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex flex-row"
+		>
 			<Sidebar />
-			<div>
+			<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 				<div className="p-3 pl-6 flex flex-col">
-					<span className="font-semibold text-lg">
-						Ifedimeji Omoniyi
+					<span className="font-semibold text-black text-lg">
+						{name}
 					</span>
-					<span>{noOfPosts} posts</span>
+					<span>
+						{noOfPosts} {noOfPosts === 1 ? "post" : "posts"}
+					</span>
 				</div>
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
-				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
-					<img src={ProfileImg} alt="" />
-					<button onClick={handleModal}className="border-2 rounded-2xl border-gray-700 p-1 px-2 hover:text-white hover:bg-primary hover:border-none">
+				<div className="flex flex-row justify-between items-center relative top-[-40px] my-[-30px] p-3 pl-6 z-[0]">
+					<img
+						src={profileImage || ProfileImg}
+						alt="avatar"
+						className="profile-image"
+					/>{" "}
+					<button
+						onClick={handleModal}
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
+					>
 						Edit Profile
 					</button>
+					{!isVerified && (
+						<button
+						onClick={handleVerifyModal}
+						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
+					>
+						Verify Account
+					</button>	
+					)}
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
 					<span className="font-semibold flex flex-row items-center gap-2 text-lg">
-						Ifedimeji Omoniyi
-						{isAdmin && <FaCircleCheck color="#17A1FA" />}
+						{name}
+						{isVerified && <FaCircleCheck color="#17A1FA" />}
 					</span>
-					<span>Design_Hashira</span>
+					<span>@{username}</span>
+					<span className="mt-2">{bio}</span>
 				</div>
 				<div className="font-semibold px-3 pl-6">
-					<span className="font-semibold text-xl">215</span> points
+					<span className="font-semibold text-xl">{points}</span>{" "}
+					points
 				</div>
 
-				<div className="px-3 pt-3 border-b-2 pl-6 text-primary"><span className="border-b-4 border-primary">Posts</span></div>
+				<div className="px-3 pt-3 border-b-2 pl-6 text-primary">
+					<span className="border-b-4 border-primary">Posts</span>
+				</div>
 				<div>
-					<Post
-						upvotes="3224"
-						downvotes="30"
-						shares="5"
-						comments="10"
-						isAdmin={true}
-						text={mockTexts}
-						name="Ifedimeji Omoniyi"
-						username="@design_hashira"
-						avatar={Wrapper}
-					/>
+					{userPosts && userPosts?.length === 0 ? ( // Check if userPosts is defined and has no posts
+						<div className="text-center mt-28 p-4 text-gray-500">
+							No posts to display.
+						</div>
+					) : (
+						userPosts?.map(
+							(
+								post
+							) => (
+								console.log("Profile Posts: ",post),
+								<Post
+									key={post._id}
+									post={post}
+								/>
+							)
+						)
+					)}
 				</div>
 			</div>
 			<AnnouncementContainer />
 
-
-
 			{/* modal */}
 			{isModalOpen && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-					<div className="bg-white rounded-2xl p-4 w-96">
-						<div className="flex flex-row justify-between items-center">
-							<span className="font-semibold text-lg">Edit Profile</span>
-							<button onClick={handleModal} className="text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
-								<FaXmark />
-							</button>
-						</div>
-						<div className="flex flex-col gap-4 mt-4">
-							<div className="scale-75 flex-row">
-								<FaCameraRetro color="white" className="absolute left-[20%] bottom-[48%] scale-[2]"/>
-								<img src={ProfileImg} alt=""/>
-							</div>
-							{/* <div>
-								<label htmlFor="name">Name</label>
-								<input
-									type="text"
-									name="name"
-									id="name"
-									className="border-2 rounded-lg border-gray-700 p-2 w-full"
-									placeholder="New name"
-								/>
-							</div> */}
-							<div>
-								<label htmlFor="username">Username</label>
-								<input
-									type="text"
-									name="username"
-									id="username"
-									className="border-2 rounded-lg border-gray-700 p-2 w-full"
-									placeholder="New username"
-								/>
-							</div>
-							<div>
-								<label htmlFor="email">Email</label>
-								<input
-									type="email"
-									name="email"
-									id="email"
-									className="border-2 rounded-lg border-gray-700 p-2 w-full"
-									placeholder="New email"
-								/>
-							</div>
-							<div>
-								<label htmlFor="password">Password</label>
-								<input
-									type="password"
-									name="password"
-									id="password"
-									className="border-2 rounded-lg border-gray-700 p-2 w-full"
-									placeholder="New password"
-								/>
-							</div>
-							<div>
-								<button className="bg-primary text-white rounded-lg p-2 mt-2 w-full">
-									Save
-								</button>
-							</div>
-						</div>
-					</div>
+					<EditProfileForm handleModal={handleModal} />
 				</div>
-			)
-			}
-		</div>
+			)}
+
+			{/* verify modal */}
+			{isVerifyModalOpen && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+					<VerifyAccountForm handleVerifyModal={handleVerifyModal} />
+				</div>
+			)}
+		</motion.div>
 	);
 };
 

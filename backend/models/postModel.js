@@ -5,13 +5,8 @@ import mongoose from 'mongoose';
  */
 const postSchema = mongoose.Schema(
   {
-    // The title of the post.
-    title: {
-      type: String,
-      required: true,
-    },
     // The content of the post.
-    content: {
+    text: {
       type: String,
       required: true,
     },
@@ -30,7 +25,6 @@ const postSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to users who upvoted the post
-        default: 0
       },
     ],
     // An array of user references who downvoted the post.
@@ -38,7 +32,12 @@ const postSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to users who downvoted the post
-        default: 0
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PostComment', // Reference to comments associated with the post
       },
     ],
   },

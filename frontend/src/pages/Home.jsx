@@ -1,90 +1,119 @@
-import { mockTexts, mockTexts2 } from "../data";
-
-import { Sidebar, Post, AnnouncementContainer } from "../components";
-import { Wrapper, Avatar } from '../assets';
-import HeaderComponent from "../components/HeaderComponent";
-import { BottomNav } from "../components";
 import { BsPlusLg } from "react-icons/bs";
-import { useState } from "react";
-import { FaXmark } from "react-icons/fa6";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+	Sidebar,
+	Post,
+	AnnouncementContainer,
+	HeaderComponent,
+	BottomNav,
+	Loader,
+	AddPostForm,
+} from "../components";
+import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
 
 const Home = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const handleModalOepen = () => {
-		setIsModalOpen(!isModalOpen)
-	}
-	const [ text, setText ] = useState('')
-	const handleTextChange = (e) => {
-		setText(e.target.value)
-	}
+  // Use the useSelector hook to access redux store state
+  const page = useSelector((state) => state.auth.currentPage);
+  
+  // Use the useDispatch hook to dispatch actions
+  const dispatch = useDispatch();
 
-	const handleSubmit = () => {
-		if (text === '') return alert('Please enter a text')
-		console.log(text)
-		setText('')
-		handleModalOepen()
-		toast.success('Post created successfully', {
-			position: "top-center",
-			autoClose: 3000,
-			hideProgressBar: true,
-			closeOnClick: true,
-			pauseOnHover: true,
-			className: 'text-white font-semibold bg-primary'
-		});
-	}
+  // State for managing posts
+  const [postData, setPostData] = useState([]);
+
+  // Use the useAllPostsQuery hook to get all posts
+  const { data: posts, isLoading } = useAllPostsQuery(Number(page));
+ 
+  // Dispatch the setPosts action to set the posts in the redux store
+  useEffect(() => {
+    if (posts) {
+      console.log("Posts from api call: ", posts);
+      // Merge the new data with the existing postData
+      setPostData([...postData, ...posts.posts]);
+
+      // Dispatch the updated posts to your Redux store
+      dispatch(setPosts([...postData, ...posts.posts]));
+    }
+  }, [posts, dispatch]);
+
+  console.log("Posts from state: ", postData);
+
+  // Get the total number of pages from the API response
+  const totalPages = posts?.totalPages;
+
+  // Function to update the post data when a vote is cast
+  const updatePostData = (postId, newPostData) => {
+    // Find the post in postData by postId and update it with newPostData
+    const updatedPosts = postData.map((post) => (post._id === postId ? newPostData : post));
+    setPostData(updatedPosts);
+  };
+
+  // Function to fetch more posts
+  const getNextPosts = async (pageCurrent) => {
+    if (Number(pageCurrent) < Number(totalPages)) {
+      dispatch(setCurrentPage(pageCurrent + 1));
+    }
+  }
+
+  // State for managing modal
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const handleModalOpen = () => {
+		console.log("Handle modal open");
+		setIsModalOpen(!isModalOpen);
+	};
 
 	return (
-		<div className="flex ">
-			<Sidebar/>
-			<div className="flex flex-col relative">
-				<HeaderComponent title="Home"/>
-				<Post upvotes="3224" downvotes="30" shares="5" comments="10" isAdmin={true} text={mockTexts} name="Ifedimeji Omoniyi" username= "@design_hashira" avatar={Wrapper}/>
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex "
+		>
+			<Sidebar />
+			<div className="flex flex-col relative w-full">
+				<HeaderComponent title="Home" url={"Placeholder"} />
+				
+        {/* Posts container */}
+        {postData?.map((post, index) => (
+            <Post
+              key={index}
+              post={post}
+              updatePostData={(postId, newPostData) => updatePostData(postId, newPostData)}
+            />
+          ))}
 
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
-				<Post upvotes="20" downvotes="300" shares="200" comments="150" isAdmin={false} text={mockTexts2} name="Bola Ahmed Tinubu" username= "@bobo chicago" avatar={Avatar}/>
+        {/* Loader */}
+        {isLoading && <Loader />}
+
+        {/* Paginate posts buttons */}
+        <button onClick={() => getNextPosts(page)} className="text-primary">
+          Load more posts
+        </button>
+
 
 				{/* Add post button */}
-
-				<div onClick={handleModalOepen} className="fixed bottom-20 sm:bottom-16 text-3xl right-[7vw] md:right-[10vw] lg:right-[30vw] p-5 rounded-full text-white bg-primary cursor-pointer">
-					<BsPlusLg/>
+				<div
+					onClick={handleModalOpen}
+					className="fixed bottom-20 sm:bottom-16 text-3xl right-[7vw] md:right-[10vw] lg:right-[30vw] p-5 rounded-full text-white bg-primary cursor-pointer"
+				>
+					<BsPlusLg />
 				</div>
-
 
 				{/* Add post modal */}
 
 				<div>
 					{isModalOpen && (
-						<div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
-							<div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[500px]">
-								<div className="flex justify-between items-center p-5 border-b border-gray-200">
-									<div className="text-2xl font-bold">Create Post</div>
-									<div className="text-3xl cursor-pointer p-2" onClick={handleModalOepen}><FaXmark/></div>
-								</div>
-								<div className="p-5">
-									<textarea className="w-full h-[300px] border border-gray-200 rounded-lg p-5" placeholder="What's on your mind?" value={text} onChange={handleTextChange}></textarea>
-								</div>
-								<div className="flex justify-between items-center p-5 border-t border-gray-200">
-									<div className="flex items-center gap-2">
-										<div className="bg-gray-200 w-8 h-8 rounded-full"></div>
-										<div className="bg-gray-200 w-8 h-8 rounded-full"></div>
-										<div className="bg-gray-200 w-8 h-8 rounded-full"></div>
-									</div>
-									<button onClick={handleSubmit} className={text === "" ? "bg-primary text-white px-5 py-2 rounded-lg disabled pointer-events-none opacity-70" : "bg-primary text-white px-5 py-2 rounded-lg"}>Post</button>
-								</div>
-							</div>
-						</div>
+						<AddPostForm handleModalOpen={handleModalOpen} />
 					)}
 				</div>
+        
 			</div>
-			<AnnouncementContainer/>
-			<BottomNav/>
-
-			{/* Allows toast message to be displayed */}
-			<ToastContainer />
-		</div>
+			<AnnouncementContainer />
+			<BottomNav />
+		</motion.div>
 	);
 };
 

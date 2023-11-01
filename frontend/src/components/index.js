@@ -1,5 +1,3 @@
-import FeatureCard from './FeatureCard';
-import ImageCard from './ImageCard';
 import NavBar from './nav/NavBar';
 import Footer from './nav/Footer';
 import SignInForm from './forms/SignInForm';
@@ -14,5 +12,36 @@ import BottomNav from './nav/BottomNav';
 import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
+import FormErrors from '../components/forms/FormErrors'
+import InputField from './InputField'
+import HeaderComponent from './nav/HeaderComponent';
+import ResourceCard from './ResourceCard';
+import FileForm from './FileForm';
+import Loader from './Loader';
+import PrivateRoutes from './PrivateRoutes';
+import EditProfileForm from './forms/EditProfileForm';
+import AddPostForm from './forms/AddPostForm';
+import PostComments from './PostComments';
+import RecentPayments from './RecentPayments';
+import AdminEventsCard from './AdminEventsCard';
+import EventForm from './forms/EventForm';
+import AdminAnnouncementCard from './AdminAnnouncementCard';
+import UsersCard from './UsersCard';
+import CommentActions from './CommentActions';
+import PaymentDetails from './PaymentDetails';
+import AddCategoryForm from './forms/AddCategoryForm';
+import DeleteCategoryForm from './forms/DeleteCategoryForm';
+import PaymentList from './PaymentList';
+import VerificationCodeInput from './forms/VerificationCodeInput';
+import PaymentHistory from './paymentHistory';
+import VerifyAccountForm from './forms/VerifyAccountForm';
+import PaymentVerificationForm from './forms/PaymentVerificationForm';
+import BlogCard from './BlogCard';
+import ResourceSearch from './ResourceSearch';
+import PostSearch from './PostSearch';
+import ShareButton from './ShareButton';
+import VerificationAccountInput from './forms/VerifyAccountInput';
+import VerifyCodeInput from './forms/verifyCodeinput';
+import UserCard from './UserCard';
 
-export {FeatureCard, ImageCard, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard };
+export {UserCard, VerifyCodeInput, ShareButton, PostSearch, ResourceSearch, Loader, PrivateRoutes, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, PageBox, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm,PaymentVerificationForm, BlogCard, VerificationAccountInput };

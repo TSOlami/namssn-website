@@ -1,10 +1,15 @@
 import { EventImg, MainEvent } from "../assets";
-import { NavBar } from "../components";
+import { NavBar, Footer } from "../components";
 import Event from "../components/Event";
+import { motion } from "framer-motion";
 
 const EventsPage = () => {
 	return (
-		<div>
+		<motion.main
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+		>
 			<NavBar />
 			<div className="p-5">
 				<div className="flex flex-col pt-24 pb-5">
@@ -42,7 +47,8 @@ const EventsPage = () => {
 					/>
 				</div>
 			</div>
-		</div>
+			<Footer />
+		</motion.main>
 	);
 };
 

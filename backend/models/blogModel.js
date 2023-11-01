@@ -6,16 +6,21 @@ const blogSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    coverImage: {
+      type: String, // Path or URL to the image
+      required: true,
+    },
     content: {
       type: String,
       required: true,
     },
-	tags: {
-		type: [String],
-		required: true,
+    tags: {
+      type: [String],
+      required: true,
 	  },
-    image: {
-      type: String, // Path or URL to the image
+    author: {
+      type: String,
+      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

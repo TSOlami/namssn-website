@@ -1,4 +1,4 @@
-import { Image2, Image3, Image5, Image6, Image7 } from "../assets";
+import { Image2, Image3, Image5, Image7 } from "../assets";
 
 export const navLinks = [
   { href: "/", label: "Home" },
@@ -6,7 +6,7 @@ export const navLinks = [
   { href: "/blog", label: "Blog" },
   { href: "/departmental-fees", label: "Departmental Fees" },
   { href: "/events", label: "Events" },
-  { href: "/contact-us", label: "Contact Us" },
+  { href: "/#contact-us", label: "Contact Us" },
 ];
 
 export const blogPosts = [
@@ -101,29 +101,14 @@ export const blogPosts = [
         comment: "I enjoyed this article.",
       },
     ],
-  },
-  {
-    id: 5,
-    title: "The revolution of mathematics and its forerunners",
-    body: "Vivamus varius auctor justo, at cursus justo cursus ac. Sed fringilla nisi ut eros sollicitudin, nec ullamcorper lectus laoreet. Praesent fermentum vehicula libero, nec dictum tortor. Fusce auctor metus et odio dictum, eget hendrerit libero cursus. Nullam non tortor eu purus rhoncus bibendum at ac elit. Aliquam rhoncus orci ac justo vehicula, nec elementum odio venenatis.",
-    image: Image6,
-    tags: ["Vivamus", "Varius", "Auctor"],
-    date: "September 20, 2023",
-    author: "William Wilson",
-    upvotes: 18,
-    downvotes: 4,
-    comments: [
-      {
-        id: 1,
-        user: "Ava",
-        comment: "Informative content!",
-      },
-      {
-        id: 2,
-        user: "James",
-        comment: "Well done!",
-      },
-    ],
   }
-  
+];
+
+export const teamMembers = [
+  [
+
+  ],
+  [
+
+  ],[]
 ];

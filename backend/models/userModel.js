@@ -24,7 +24,10 @@ const userSchema = mongoose.Schema(
     },
     matricNumber: {
       type: String,
-      unique: true,
+      default: '',
+    },
+    level: {
+      type: String,
     },
     password: {
       type: String,
@@ -66,7 +69,7 @@ const userSchema = mongoose.Schema(
         },
       },
     ],
-    verified: {
+    isVerified: {
       type: Boolean,
       default: false, // Default to false
     },
@@ -74,6 +77,14 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ['user', 'admin'],
       default: 'user', // Default role is 'user'
+    },
+    otpGenerated: {
+      type: Boolean,
+      default: false, // Default to false
+    },
+    otpVerified: {
+      type: Boolean,
+      default: false, // Default to false
     },
   },
   {
