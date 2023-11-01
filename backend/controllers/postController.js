@@ -99,7 +99,9 @@ const getUserPosts = asyncHandler(async (req, res) => {
   
 	  // Fetch the user's posts from the database
     console.log("Fetching posts for user: ", userId);
-	  const userPosts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+	  const userPosts = await Post.find({ user: userId })
+			.sort({ createdAt: -1 })
+			.populate('user', '-password');
   
 	  if (!userPosts) {
 		res.status(404).json({ message: "No posts found for this user." });
