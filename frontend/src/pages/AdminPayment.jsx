@@ -227,8 +227,8 @@ const AdminPayment = () => {
 						allpayments?.map((payment) => (
 							<RecentPayments
 								key={payment._id}
-								email={payment.user.email}
-								matricNo={payment.user.matricNumber}
+								email={payment.user?.email}
+								matricNo={payment.user?.matricNumber}
 								createdAt={payment.createdAt}
 								amount={payment.category.amount} // Access category.amount
 								reference={payment.transactionReference} // Access transactionReference
