@@ -11,11 +11,25 @@ import { useUpvotePostMutation, useDownvotePostMutation, useDeletePostMutation, 
 import { ProfileImg } from "../assets";
 import { toast } from "react-toastify";
 
-const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, avatar, createdAt, u_id, postId }) => {
+const Post = ({ post, updatePostData  }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
+	console.log("Post: ",post);
+
+	// Get the post details from the props
+	const postId = post?._id;
+	const u_id = post?.user._id;
+	const upvotes = post?.upvotes.length;
+	const downvotes = post?.downvotes.length;
+	const text = post?.text;
+	const image = post?.image;
+	const createdAt = post?.createdAt;
+	const name = post?.user.name;
+	const username = post?.user.username;
+	const avatar = post?.user.profilePicture;
+	const isVerified = post?.user.isVerified;
 
   const navigate = useNavigate();
   const routeToComments = () => {
@@ -77,9 +91,9 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
         // Toggle the upvote state
         setIsUpvoted(!isUpvoted);
 				toast.success("Upvoted!");
-				console.log('Upvote successful:', response);
 				dispatch(setPosts({...response.post}));
-        console.log('Upvote successful:', response);
+				// Update the post data in Home component with the new data
+        updatePostData(postId, response.post);
       } else {
         console.error('Upvote failed:', response);
       }
@@ -105,6 +119,8 @@ const Post = ({ isVerified, upvotes, downvotes,	text, image, name, username, ava
 				console.log('Downvote successful:', response);
 				dispatch(setPosts({...response.post}));
 				toast.success("Downvoted!");
+				// Update the post data in Home component with the new data
+        updatePostData(postId, response.post);
       } else {
         console.error('Downvote failed:', response);
       }
