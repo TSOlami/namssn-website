@@ -99,7 +99,7 @@ const Search = () => {
                     <div className="sticky top-[0.01%] z-[300] bg-white">
                         <HeaderComponent title="SEARCH" url={"Placeholder"} />
                     </div>
-                    <div className='mt-4 font-serif w-[200px] lg:hidden md:hidden'>
+                    <div className='z-[500] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
                         <Select onChange={handleChange} options={options} styles={customStyles} isSearchable={false} placeholder="Filter"/>
                     </div>
                     <div className="hidden sticky top-[8.5%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">

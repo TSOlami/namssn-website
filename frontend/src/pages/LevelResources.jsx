@@ -23,6 +23,7 @@ const LevelResources = () => {
                 }
             } catch (err) {
                 console.log(err);
+                setData("error")
             }
         };
         fetchData(); // call the fetchData function
@@ -76,8 +77,12 @@ const LevelResources = () => {
             // console.log(data)
     
         }, [value]);
+
+        const handleReload = () => {
+            window.location.reload();
+        }
     
-    if (data) {
+    if (data && data !== "error") {
         const fileList = data.map(obj => Object.keys(obj)[0])
 
         return (
@@ -123,6 +128,31 @@ const LevelResources = () => {
                 </div>
             </div>
         )
+    } else if (data && data === "error") {
+        return (
+            <div className="lg:flex lg:justify-between">
+                <Sidebar/>
+                <div className="text-xl flex flex-col items-center font-crimson text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
+                    <div><span>Unable to fetch resources.</span></div>
+                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload.</span></div>
+                </div>
+                <div className="w-[27%] sm:hidden md:hidden hidden lg:block">
+                    <AnnouncementContainer />
+                </div>
+            </div>
+        )
+    } else if (data === null) {
+        return (
+            <div className="w-[100%] flex justify-between">
+                <Sidebar/>
+                <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+                    Fetching...
+                </div>
+                <div className="w-[27%] sm:hidden md:block hidden lg:block">
+                    <AnnouncementContainer />
+                </div>
+            </div>
+            )
     }
 }
 
