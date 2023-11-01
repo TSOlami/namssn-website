@@ -119,17 +119,7 @@ const UserProfile = () => {
             userPosts?.map((post) => (
               <Post
                 key={post._id}
-                upvotes={post.upvotes.length}
-                downvotes={post.downvotes.length}
-                isVerified={isVerified}
-                text={post.text}
-                name={name}
-                avatar={avatar}
-                image={post.image}
-                username={username}
-                createdAt={post.createdAt}
-                postId={post._id}
-                u_id={user._id}
+                post={post}
               />
             ))
           )}
