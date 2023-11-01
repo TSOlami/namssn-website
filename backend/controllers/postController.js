@@ -121,7 +121,7 @@ const updatePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
   
 	// Find the post by its ID
-	const post = await Post.findById(postId);
+	const post = await Post.findById(postId).populate('user', '-password');
   
 	if (!post) {
 	  res.status(404);
@@ -304,7 +304,7 @@ const getPostComments = asyncHandler(async (req, res) => {
   
 	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
-	const post = await Post.findById(postId);
+	const post = await Post.findById(postId).populate('user', '-password');
   
 	if (!post) {
 	  res.status(404);
@@ -392,7 +392,7 @@ const updatePostComment = asyncHandler(async (req, res) => {
 	}
   
 	// Find the comment by its ID
-	const comment = await PostComment.findById(commentId);
+	const comment = await PostComment.findById(commentId).populate('user', '-password');
   
 	if (!comment) {
 	  res.status(404);

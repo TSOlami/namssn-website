@@ -64,13 +64,13 @@ const AnnouncementContainer = () => {
           <h2 className="border-b-2 text-xl font-bold py-3">
             {level} {level !== "General" && "Level"} Announcements
           </h2>
-          {groupedAnnouncements[level].map((announcement) => (
+          {groupedAnnouncements[level]?.map((announcement) => (
             <Announcement
-              key={announcement._id}
-              name={announcement.user.name}
-              text={announcement.text}
-              isVerified={announcement.user.isVerified}
-              createdAt={announcement.createdAt}
+              key={announcement?._id}
+              name={announcement?.user?.name}
+              text={announcement?.text}
+              isVerified={announcement?.user?.isVerified}
+              createdAt={announcement?.createdAt}
             />
           ))}
         </div>
