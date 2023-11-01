@@ -35,8 +35,6 @@ const Profile = () => {
 		_id: userInfo?._id,
 	});
 
-	console.log("User posts: ", userPosts);
-	
 	// Use useEffect to set posts after component mounts
 	useEffect(() => {
 		if (userPosts) {
