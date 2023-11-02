@@ -137,9 +137,9 @@ export const teamMembers = [
 		role: "Backend Developer",
 		image: Timi,
 		team: "Tech",
-		facebook: "",
-		linkedin: "",
-    twitter: "",
+		facebook: "https://web.facebook.com/100016232149332/",
+		linkedin: "https://www.linkedin.com/in/timilehin-olusa-781386250/",
+    twitter: "https://twitter.com/TimmieOlusa",
 	},
   {
 		name: "Oluwasegun Abraham Ajeolu",
