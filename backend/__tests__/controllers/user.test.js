@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import createServer from "../../utils/server";
+import createServer from "../../utils/server.js";
 import User from "../../models/userModel";
 
 const app = createServer();
