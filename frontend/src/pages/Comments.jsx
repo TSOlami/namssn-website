@@ -86,6 +86,7 @@ const Comments = () => {
 						placeholder="Add comment"
 						id=""
 						value={commentText}
+						required
 						onChange={(e) => setCommentText(e.target.value)}
 						className="resize-none border-2 border-gray-40 h-[47px] w-full p-2 rounded-xl mr-1 m-2 "
 					></textarea>
