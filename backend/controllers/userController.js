@@ -768,5 +768,5 @@ export {
   getPaymentOptions,
   verifyUserPayment,
   resendOTP,
-  getSearchResults
+  getSearchResults,
 };
