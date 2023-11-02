@@ -11,6 +11,7 @@ import Category from '../models/categoryModel.js';
 import UserOTPVerification from '../models/userOTPVerification.js';
 import {postResource, getResources, getSpecifiedResources,deleteResource} from '../utils/resourceLogic.js';
 import getData from '../utils/searchUtils/getData.js';
+import path from 'path';
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -632,6 +633,9 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
   try {
+    // const folderName = 'uploads'
+    // const folderPath = path.resolve(__dirname, folderName)
+    // console.log( folderName)
     const filesDetails = await getResources(req, res);
     if (filesDetails) {
       // console.log(filesDetails)

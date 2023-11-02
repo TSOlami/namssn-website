@@ -10,7 +10,7 @@ import adminRoutes from '../routes/adminRoutes.js';
 
 import { notFound, errorHandler } from '../middleware/errormiddleware.js';
 
-const createServer = () => {
+function createServer() {
   // Create an Express application
   const app = express();
 
@@ -39,6 +39,7 @@ const createServer = () => {
   // Define a route for the root URL '/'
   app.get('/', (req, res) => res.send('Server is ready'));
 
+  route(app);
   return app;
 };
 
