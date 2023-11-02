@@ -204,16 +204,6 @@ export const teamMembers = [
 		linkedin: "",
     twitter: "",
 	},
- 
-  {
-		name: "Oluwasegun Abraham Ajeolu",
-		role: "President",
-		image: Team14,
-		team: "Executive",
-		facebook: "",
-		linkedin: "",
-    twitter: "",
-	},
   {
 		name: "Ogunnusi Kolalwole Rapheal",
 		role: "Director Of Socials",
