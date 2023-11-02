@@ -37,7 +37,7 @@ const Search = () => {
         const fetchData = async () => {
             if (filter && value) {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/v1/users/search?filter=${filter}&value=${value}`);
+                    const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
                     if (res) {
                         console.log(res);
                         // setData({})
