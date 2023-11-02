@@ -10,7 +10,7 @@ import adminRoutes from '../routes/adminRoutes.js';
 
 import { notFound, errorHandler } from '../middleware/errormiddleware.js';
 
-const createServer = () => {
+function createServer() {
   // Create an Express application
   const app = express();
 

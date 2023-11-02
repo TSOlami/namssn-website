@@ -2,7 +2,7 @@ import { ResourceCard } from ".";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { formatDateToTime } from "../utils";
 
-const base_url = 'http://localhost:5000/api/v1/users/resources/'
+const base_url = 'https://namssn-futminna.onrender.com/api/v1/users/resources/'
 
 const isSubDictPresent = (mainDict, subDict) => {
     for (const [key, value] of Object.entries(subDict)) {

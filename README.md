@@ -1,32 +1,57 @@
-<div align="center">
-<h1 align="center">
+<div >
+<h1 >
 <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
 <br>NAMSSN-WEBSITE</h1>
-<h3>◦ HTTPStatus Exception: 401</h3>
-<h3>◦ Developed with the software and tools below.</h3>
+<h3>
+Welcome to the NAMSSN Website Repository! We're thrilled to have you here. This repository is dedicated to our department website for the Federal University of Technology Minna.
 
-<p align="center">
-<img src="https://img.shields.io/badge/SVG-FFB13B.svg?style&logo=SVG&logoColor=black" alt="SVG" />
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style&logo=JavaScript&logoColor=black" alt="JavaScript" />
-<img src="https://img.shields.io/badge/HTML5-E34F26.svg?style&logo=HTML5&logoColor=white" alt="HTML5" />
-<img src="https://img.shields.io/badge/PostCSS-DD3A0A.svg?style&logo=PostCSS&logoColor=white" alt="PostCSS" />
-<img src="https://img.shields.io/badge/Autoprefixer-DD3735.svg?style&logo=Autoprefixer&logoColor=white" alt="Autoprefixer" />
-<img src="https://img.shields.io/badge/styledcomponents-DB7093.svg?style&logo=styled-components&logoColor=white" alt="styledcomponents" />
-<img src="https://img.shields.io/badge/Nodemon-76D04B.svg?style&logo=Nodemon&logoColor=white" alt="Nodemon" />
-<img src="https://img.shields.io/badge/Vite-646CFF.svg?style&logo=Vite&logoColor=white" alt="Vite" />
+## About NAMSSN Website
 
-<img src="https://img.shields.io/badge/React-61DAFB.svg?style&logo=React&logoColor=black" alt="React" />
-<img src="https://img.shields.io/badge/Axios-5A29E4.svg?style&logo=Axios&logoColor=white" alt="Axios" />
-<img src="https://img.shields.io/badge/ESLint-4B32C3.svg?style&logo=ESLint&logoColor=white" alt="ESLint" />
-<img src="https://img.shields.io/badge/MongoDB-47A248.svg?style&logo=MongoDB&logoColor=white" alt="MongoDB" />
-<img src="https://img.shields.io/badge/Markdown-000000.svg?style&logo=Markdown&logoColor=white" alt="Markdown" />
-<img src="https://img.shields.io/badge/Express-000000.svg?style&logo=Express&logoColor=white" alt="Express" />
-<img src="https://img.shields.io/badge/JSON-000000.svg?style&logo=JSON&logoColor=white" alt="JSON" />
-</p>
-<img src="https://img.shields.io/github/license/TSOlami/namssn-website?style&color=5D6D7E" alt="GitHub license" />
-<img src="https://img.shields.io/github/last-commit/TSOlami/namssn-website?style&color=5D6D7E" alt="git-last-commit" />
-<img src="https://img.shields.io/github/commit-activity/m/TSOlami/namssn-website?style&color=5D6D7E" alt="GitHub commit activity" />
-<img src="https://img.shields.io/github/languages/top/TSOlami/namssn-website?style&color=5D6D7E" alt="GitHub top language" />
+The NAMSSN website is designed to empower knowledge and community engagement. Whether you're a student, an admin, or simply curious about our platform, we've got you covered. Explore the essential features, sign up, access learning resources, make secure payments, and much more.
+
+## Video Tour
+
+For a quick visual tour of our platform, be sure to check out our [video tour](https://www.youtube.com/watch?v=A32tpbaTDf4).
+
+
+## Get Involved
+
+We encourage you to get involved with our project. If you have ideas, suggestions, or would like to contribute, please don't hesitate to reach out. We're always looking for ways to improve and grow.
+
+Stay connected with us, and subscribe for more updates. Thank you for visiting the NAMSSN Website Repository!
+
+</h3>
+
+<div padding: 20px;">
+  <h1 color: #2f4f4f;">Explore the Tech Stack</h1>
+
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+    <div>
+      <h3 style="color: #0074d9;">Frontend:</h3>
+      <img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black" alt="JavaScript" /><br />
+      <img src="https://img.shields.io/badge/TailwindCSS-38B2AC.svg?style=for-the-badge&logo=Tailwind-CSS&logoColor=white" alt="TailwindCSS" /><br />
+      <img src="https://img.shields.io/badge/HTML5-E34F26.svg?style=for-the-badge&logo=HTML5&logoColor=white" alt="HTML5" /><br />
+      <img src="https://img.shields.io/badge/React-61DAFB.svg?style=for-the-badge&logo=React&logoColor=black" alt="React" /><br />
+      <img src="https://img.shields.io/badge/Redux-764ABC.svg?style=for-the-badge&logo=Redux&logoColor=yellow" alt="Redux" /><br />
+      <img src="https://img.shields.io/badge/Vite-646CFF.svg?style=for-the-badge&logo=Vite&logoColor=white" alt="Vite" /><br />
+      <img src="https://img.shields.io/badge/SVG-FFB13B.svg?style=for-the-badge&logo=SVG&logoColor=black" alt="SVG" /><br />
+    </div>
+    <div >
+      <h3 style="color: #dc3545;">Backend:</h3>
+      <img src="https://img.shields.io/badge/MongoDB-47A248.svg?style=for-the-badge&logo=MongoDB&logoColor=green" alt="MongoDB" /><br />
+      <img src="https://img.shields.io/badge/Express-000000.svg?style=for-the-badge&logo=Express&logoColor=yellow" alt="Express" /><br />
+      <img src="https://img.shields.io/badge/JSON-000000.svg?style=for-the-badge&logo=JSON&logoColor=blue" alt="JSON" /><br />
+    </div>
+    <div>
+      <h3 style="color: #17a2b8;">Other Tools:</h3>
+      <img src="https://img.shields.io/badge/Markdown-000000.svg?style=for-the-badge&logo=Markdown&logoColor=green" alt="Markdown" /><br />
+      <img src="https://img.shields.io/badge/ESLint-4B32C3.svg?style=for-the-badge&logo=ESLint&logoColor=yellow" alt="ESLint" /><br />
+    </div>
+  </div>
+  <p style="text-align: center;">
+    <img src="https://img.shields.io/github/last-commit/TSOlami/namssn-website?style=for-the-badge&color=green" alt="git-last-commit" />
+    <img src="https://img.shields.io/github/commit-activity/m/TSOlami/namssn-website?style=for-the-badge&color=yellow" alt="GitHub commit activity" />
+    </p>
 </div>
 
 ---
@@ -36,7 +61,7 @@
 - [📍 Overview](#-overview)
 - [📦 Features](#-features)
 - [📂 Repository Structure](#-repository-structure)
-- [⚙️ Modules](#modules)
+- [⚙️ Modules](#-modules)
 - [🚀 Getting Started](#-getting-started)
     - [🔧 Installation](#-installation)
     - [🤖 Running namssn-website](#-running-namssn-website)
@@ -46,20 +71,35 @@
 - [📄 License](#-license)
 - [👏 Acknowledgments](#-acknowledgments)
 
----
 
+---
 
 ## 📍 Overview
 
-HTTPStatus Exception: 401
+Welcome to our departmental university website, where you'll find a centralized platform dedicated to providing students and departmental admins with a seamless and efficient experience. Explore a range of features and functionalities tailored to your needs.
 
 ---
 
 ## 📦 Features
 
-HTTPStatus Exception: 401
+Discover the key features that empower our platform:
 
----
+- **User Authentication:** Securely log in and manage your user profile. Our role-based access control ensures a personalized experience for both students and departmental admins.
+
+- **Admin Dashboard:** Departmental admins can efficiently post and manage department-specific announcements, user accounts, and other department-related content.
+
+- **Payment Integration:** Handle department dues and other department-related payments with a seamless and secure payment gateway. Keep track of your payment history and receive payment confirmations.
+
+- **Responsive Design:** Enjoy a responsive design that adapts to various devices and screen sizes, enhancing your user experience on the go.
+
+- **Announcement Management:** Stay informed with departmental announcements categorized by date and department. Receive notifications for new updates.
+
+- **Learning Resources:** Access a repository of departmental course materials, resources, and documents. Categorize and manage resources efficiently.
+
+- **User-Admin Communication:** Foster communication between students and departmental admins through messaging, appointment scheduling, and discussion forums.
+
+- **Security and Compliance:** Rest easy knowing that our platform is secure, compliant with data protection regulations, and equipped with backup and disaster recovery procedures.
+
 
 
 ## 📂 Repository Structure
@@ -98,11 +138,12 @@ HTTPStatus Exception: 401
 
 ## ⚙️ Modules
 
+
 <details closed><summary>Backend</summary>
 
 | File                                                                               | Summary                   |
 | ---                                                                                | ---                       |
-| [server.js](https://github.com/TSOlami/namssn-website/blob/main/backend/server.js) | HTTPStatus Exception: 401 |
+| [server.js](https://github.com/TSOlami/namssn-website/blob/main/backend/server.js) | The main server file responsible for handling HTTP requests and responses. |
 
 </details>
 
@@ -110,8 +151,8 @@ HTTPStatus Exception: 401
 
 | File                                                                                                | Summary                   |
 | ---                                                                                                 | ---                       |
-| [adminRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/adminRoutes.js) | HTTPStatus Exception: 401 |
-| [userRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/userRoutes.js)   | HTTPStatus Exception: 401 |
+| [adminRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/adminRoutes.js) | Defines routes and handlers for administrative functions. |
+| [userRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/userRoutes.js)   | Contains routes and controllers for user-related operations. |
 
 </details>
 
@@ -119,7 +160,7 @@ HTTPStatus Exception: 401
 
 | File                                                                              | Summary                   |
 | ---                                                                               | ---                       |
-| [db.js](https://github.com/TSOlami/namssn-website/blob/main/backend/config/db.js) | HTTPStatus Exception: 401 |
+| [db.js](https://github.com/TSOlami/namssn-website/blob/main/backend/config/db.js) | Handles database configuration and connections. |
 
 </details>
 
@@ -127,8 +168,8 @@ HTTPStatus Exception: 401
 
 | File                                                                                                             | Summary                   |
 | ---                                                                                                              | ---                       |
-| [userController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/userController.js)   | HTTPStatus Exception: 401 |
-| [adminController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/adminController.js) | HTTPStatus Exception: 401 |
+| [userController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/userController.js)   | Contains controller functions for user-related actions. |
+| [adminController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/adminController.js) | Includes controller methods for administrative operations. |
 
 </details>
 
@@ -136,8 +177,8 @@ HTTPStatus Exception: 401
 
 | File                                                                                                   | Summary                   |
 | ---                                                                                                    | ---                       |
-| [generateToken.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/generateToken.js) | HTTPStatus Exception: 401 |
-| [paymentback.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/paymentback.js)     | HTTPStatus Exception: 401 |
+| [generateToken.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/generateToken.js) | Provides utility functions for generating authentication tokens. |
+| [paymentback.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/paymentback.js)     | Utility functions related to payment processing. |
 
 </details>
 
@@ -145,8 +186,8 @@ HTTPStatus Exception: 401
 
 | File                                                                                                            | Summary                   |
 | ---                                                                                                             | ---                       |
-| [authMiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/authMiddleware.js)   | HTTPStatus Exception: 401 |
-| [errormiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/errormiddleware.js) | HTTPStatus Exception: 401 |
+| [authMiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/authMiddleware.js)   | Middleware for handling user authentication and authorization. |
+| [errormiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/errormiddleware.js) | Middleware for handling and formatting errors in the application. |
 
 </details>
 
@@ -154,13 +195,72 @@ HTTPStatus Exception: 401
 
 | File                                                                                                    | Summary                   |
 | ---                                                                                                     | ---                       |
-| [blogModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/blogModel.js)         | HTTPStatus Exception: 401 |
-| [userModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/userModel.js)         | HTTPStatus Exception: 401 |
-| [sessionModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/sessionModel.js)   | HTTPStatus Exception: 401 |
-| [postModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/postModel.js)         | HTTPStatus Exception: 401 |
-| [resourceModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/resourceModel.js) | HTTPStatus Exception: 401 |
-| [categoryModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/categoryModel.js) | HTTPStatus Exception: 401 |
-| [paymentModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/paymentModel.js)   | HTTPStatus Exception: 401 |
+| [blogModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/blogModel.js)         | Defines the model for blog posts. |
+| [userModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/userModel.js)         | Defines the model for user data. |
+| [sessionModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/sessionModel.js)   | Models user sessions for authentication. |
+| [postModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/postModel.js)         | Represents the model for posts in the application. |
+| [resourceModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/resourceModel.js) | Defines the model for resources. |
+| [categoryModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/categoryModel.js) | Defines the model for categories. |
+| [paymentModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/paymentModel.js)   | Represents the model for payment-related data. |
+
+</details>
+
+<details closed><summary>Routes</summary>
+
+| File                                                                                                | Summary                   |
+| ---                                                                                                 | ---                       |
+| [adminRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/adminRoutes.js) | Defines routes and handlers for administrative functions. |
+| [userRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/userRoutes.js)   | Contains routes and controllers for user-related operations. |
+
+</details>
+
+<details closed><summary>Config</summary>
+
+| File                                                                              | Summary                   |
+| ---                                                                               | ---                       |
+| [db.js](https://github.com/TSOlami/namssn-website/blob/main/backend/config/db.js) | Handles database configuration and connections. |
+
+</details>
+
+<details closed><summary>Controllers</summary>
+
+| File                                                                                                             | Summary                   |
+| ---                                                                                                              | ---                       |
+| [userController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/userController.js)   | Contains controller functions for user-related actions. |
+| [adminController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/adminController.js) | Includes controller methods for administrative operations. |
+
+</details>
+
+<details closed><summary>Utils</summary>
+
+| File                                                                                                   | Summary                   |
+| ---                                                                                                    | ---                       |
+| [generateToken.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/generateToken.js) | Provides utility functions for generating authentication tokens. |
+| [paymentback.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/paymentback.js)     | Utility functions related to payment processing. |
+
+</details>
+
+<details closed><summary>Middleware</summary>
+
+| File                                                                                                            | Summary                   |
+| ---                                                                                                             | ---                       |
+| [authMiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/authMiddleware.js)   | Middleware for handling user authentication and authorization. |
+| [errormiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/errormiddleware.js) | Middleware for handling and formatting errors in the application. |
+
+</details>
+
+
+<details closed><summary>Models</summary>
+
+| File                                                                                                    | Summary                   |
+| ---                                                                                                     | ---                       |
+| [blogModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/blogModel.js)         | Defines the model for blog posts. |
+| [userModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/userModel.js)         | Defines the model for user data. |
+| [sessionModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/sessionModel.js)   | Models user sessions for authentication. |
+| [postModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/postModel.js)         | Represents the model for posts in the application. |
+| [resourceModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/resourceModel.js) | Defines the model for resources. |
+| [categoryModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/categoryModel.js) | Defines the model for categories. |
+| [paymentModel.js](https://github.com/TSOlami/namssn-website/blob/main/backend/models/paymentModel.js)   | Represents the model for payment-related data. |
 
 </details>
 
@@ -168,11 +268,11 @@ HTTPStatus Exception: 401
 
 | File                                                                                                  | Summary                   |
 | ---                                                                                                   | ---                       |
-| [.eslintrc.cjs](https://github.com/TSOlami/namssn-website/blob/main/frontend/.eslintrc.cjs)           | HTTPStatus Exception: 401 |
-| [vite.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/vite.config.js)         | HTTPStatus Exception: 401 |
-| [tailwind.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/tailwind.config.js) | HTTPStatus Exception: 401 |
-| [postcss.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/postcss.config.js)   | HTTPStatus Exception: 401 |
-| [index.html](https://github.com/TSOlami/namssn-website/blob/main/frontend/index.html)                 | HTTPStatus Exception: 401 |
+| [.eslintrc.cjs](https://github.com/TSOlami/namssn-website/blob/main/frontend/.eslintrc.cjs)           | Contains ESLint configuration for the frontend. |
+| [vite.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/vite.config.js)         | Configuration file for Vite, the build tool. |
+| [tailwind.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/tailwind.config.js) | Tailwind CSS configuration for the frontend. |
+| [postcss.config.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/postcss.config.js)   | PostCSS configuration for the frontend. |
+| [index.html](https://github.com/TSOlami/namssn-website/blob/main/frontend/index.html)                 | HTML file for the frontend's entry point. |
 
 </details>
 
@@ -180,11 +280,11 @@ HTTPStatus Exception: 401
 
 | File                                                                                    | Summary                   |
 | ---                                                                                     | ---                       |
-| [App.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/App.jsx)     | HTTPStatus Exception: 401 |
-| [index.css](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/index.css) | HTTPStatus Exception: 401 |
-| [main.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/main.jsx)   | HTTPStatus Exception: 401 |
-| [store.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/store.js)   | HTTPStatus Exception: 401 |
-| [data.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/data.js)     | HTTPStatus Exception: 401 |
+| [App.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/App.jsx)     | Main component that represents the application. |
+| [index.css](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/index.css) | CSS file for the frontend. |
+| [main.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/main.jsx)   | Main entry point for the frontend. |
+| [store.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/store.js)   | Redux store configuration for state management. |
+| [data.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/data.js)     | Data source or API endpoints for the frontend. |
 
 </details>
 
@@ -192,9 +292,9 @@ HTTPStatus Exception: 401
 
 | File                                                                                                         | Summary                   |
 | ---                                                                                                          | ---                       |
-| [usersApiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/usersApiSlice.js) | HTTPStatus Exception: 401 |
-| [authSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/authSlice.js)         | HTTPStatus Exception: 401 |
-| [apiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/apiSlice.js)           | HTTPStatus Exception: 401 |
+| [usersApiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/usersApiSlice.js) | Redux slice for managing user-related data. |
+| [authSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/authSlice.js)         | Redux slice for handling authentication. |
+| [apiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/apiSlice.js)           | Redux slice for managing API-related data. |
 
 </details>
 
@@ -202,12 +302,12 @@ HTTPStatus Exception: 401
 
 | File                                                                                                     | Summary                   |
 | ---                                                                                                      | ---                       |
-| [Hero.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/Hero.jsx)           | HTTPStatus Exception: 401 |
-| [ContactUs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/ContactUs.jsx) | HTTPStatus Exception: 401 |
-| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/index.js)           | HTTPStatus Exception: 401 |
-| [FAQs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/FAQs.jsx)           | HTTPStatus Exception: 401 |
-| [Features.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/Features.jsx)   | HTTPStatus Exception: 401 |
-| [AboutUs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/AboutUs.jsx)     | HTTPStatus Exception: 401 |
+| [Hero.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/Hero.jsx)           | Component representing the hero section. |
+| [ContactUs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/ContactUs.jsx) | Component for the contact us section. |
+| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/index.js)           | Index file for sections. |
+| [FAQs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/FAQs.jsx)           | Component for frequently asked questions. |
+| [Features.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/Features.jsx)   | Component for displaying features. |
+| [AboutUs.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/sections/AboutUs.jsx)     | Component representing the About Us section. |
 
 </details>
 
@@ -215,24 +315,24 @@ HTTPStatus Exception: 401
 
 | File                                                                                                                               | Summary                   |
 | ---                                                                                                                                | ---                       |
-| [FormErrors.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/FormErrors.jsx)                       | HTTPStatus Exception: 401 |
-| [Event.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Event.jsx)                                 | HTTPStatus Exception: 401 |
-| [PageBox.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/PageBox.jsx)                             | HTTPStatus Exception: 401 |
-| [HeaderComponent.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/HeaderComponent.jsx)             | HTTPStatus Exception: 401 |
-| [Team.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Team.jsx)                                   | HTTPStatus Exception: 401 |
-| [ImageCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/ImageCard.jsx)                         | HTTPStatus Exception: 401 |
-| [FeatureCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/FeatureCard.jsx)                     | HTTPStatus Exception: 401 |
-| [Notification.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Notification.jsx)                   | HTTPStatus Exception: 401 |
-| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/index.js)                                   | HTTPStatus Exception: 401 |
-| [Payment.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Payment.jsx)                             | HTTPStatus Exception: 401 |
-| [InputField.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/InputField.jsx)                       | HTTPStatus Exception: 401 |
-| [Actions.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Actions.jsx)                             | HTTPStatus Exception: 401 |
-| [AnnouncementContainer.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AnnouncementContainer.jsx) | HTTPStatus Exception: 401 |
-| [Announcement.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Announcement.jsx)                   | HTTPStatus Exception: 401 |
-| [AdminCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AdminCard.jsx)                         | HTTPStatus Exception: 401 |
-| [Report.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Report.jsx)                               | HTTPStatus Exception: 401 |
-| [Button.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Button.jsx)                               | HTTPStatus Exception: 401 |
-| [Post.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Post.jsx)                                   | HTTPStatus Exception: 401 |
+| [FormErrors.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/FormErrors.jsx)                       | Component for displaying form errors. |
+| [Event.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Event.jsx)                                 | Component for displaying events. |
+| [PageBox.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/PageBox.jsx)                             | Component for a page box. |
+| [HeaderComponent.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/HeaderComponent.jsx)             | Component representing the header. |
+| [Team.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Team.jsx)                                   | Component for displaying the team. |
+| [ImageCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/ImageCard.jsx)                         | Component for displaying image cards. |
+| [FeatureCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/FeatureCard.jsx)                     | Component for displaying feature cards. |
+| [Notification.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Notification.jsx)                   | Component for displaying notifications. |
+| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/index.js)                                   | Index file for components. |
+| [Payment.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Payment.jsx)                             | Component for handling payments. |
+| [InputField.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/InputField.jsx)                       | Component for input fields. |
+| [Actions.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Actions.jsx)                             | Component for actions. |
+| [AnnouncementContainer.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AnnouncementContainer.jsx) | Component for managing announcements. |
+| [Announcement.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Announcement.jsx)                   | Component for individual announcements. |
+| [AdminCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AdminCard.jsx)                         | Component for administrative cards. |
+| [Report.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Report.jsx)                               | Component for reports. |
+| [Button.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Button.jsx)                               | Component for buttons. |
+| [Post.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Post.jsx)                                   | Component for displaying posts. |
 
 </details>
 
@@ -240,9 +340,9 @@ HTTPStatus Exception: 401
 
 | File                                                                                                                 | Summary                   |
 | ---                                                                                                                  | ---                       |
-| [ContactForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/ContactForm.jsx) | HTTPStatus Exception: 401 |
-| [SignInForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/SignInForm.jsx)   | HTTPStatus Exception: 401 |
-| [SignUpForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/SignUpForm.jsx)   | HTTPStatus Exception: 401 |
+| [ContactForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/ContactForm.jsx) | Component for the contact form. |
+| [SignInForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/SignInForm.jsx)   | Component for the sign-in form. |
+| [SignUpForm.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/forms/SignUpForm.jsx)   | Component for the sign-up form. |
 
 </details>
 
@@ -250,10 +350,10 @@ HTTPStatus Exception: 401
 
 | File                                                                                                           | Summary                   |
 | ---                                                                                                            | ---                       |
-| [Footer.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/Footer.jsx)       | HTTPStatus Exception: 401 |
-| [BottomNav.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/BottomNav.jsx) | HTTPStatus Exception: 401 |
-| [Sidebar.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/Sidebar.jsx)     | HTTPStatus Exception: 401 |
-| [NavBar.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/NavBar.jsx)       | HTTPStatus Exception: 401 |
+| [Footer.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/Footer.jsx)       | Component for the footer. |
+| [BottomNav.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/BottomNav.jsx) | Component for the bottom navigation bar. |
+| [Sidebar.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/Sidebar.jsx)     | Component for the sidebar navigation. |
+| [NavBar.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/nav/NavBar.jsx)       | Component for the navigation bar. |
 
 </details>
 
@@ -261,22 +361,22 @@ HTTPStatus Exception: 401
 
 | File                                                                                                                    | Summary                   |
 | ---                                                                                                                     | ---                       |
-| [Resources.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Resources.jsx)                   | HTTPStatus Exception: 401 |
-| [BlogPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/BlogPage.jsx)                     | HTTPStatus Exception: 401 |
-| [AnnouncementMobile.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AnnouncementMobile.jsx) | HTTPStatus Exception: 401 |
-| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/index.js)                             | HTTPStatus Exception: 401 |
-| [PaymentPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/PaymentPage.jsx)               | HTTPStatus Exception: 401 |
-| [Signup.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Signup.jsx)                         | HTTPStatus Exception: 401 |
-| [Home.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Home.jsx)                             | HTTPStatus Exception: 401 |
-| [Signin.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Signin.jsx)                         | HTTPStatus Exception: 401 |
-| [Profile.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Profile.jsx)                       | HTTPStatus Exception: 401 |
-| [EventsPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/EventsPage.jsx)                 | HTTPStatus Exception: 401 |
-| [AdminDashboard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AdminDashboard.jsx)         | HTTPStatus Exception: 401 |
-| [ErrorPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/ErrorPage.jsx)                   | HTTPStatus Exception: 401 |
-| [AboutUsPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AboutUsPage.jsx)               | HTTPStatus Exception: 401 |
-| [DepartmentalFees.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/DepartmentalFees.jsx)     | HTTPStatus Exception: 401 |
-| [Landing.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Landing.jsx)                       | HTTPStatus Exception: 401 |
-| [NotificationPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/NotificationPage.jsx)     | HTTPStatus Exception: 401 |
+| [Resources.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Resources.jsx)                   | Component for the Resources page. |
+| [BlogPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/BlogPage.jsx)                     | Component for the Blog page. |
+| [AnnouncementMobile.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AnnouncementMobile.jsx) | Component for mobile announcement display. |
+| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/index.js)                             | Index file for pages. |
+| [PaymentPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/PaymentPage.jsx)               | Component for the Payment page. |
+| [Signup.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Signup.jsx)                         | Component for the Signup page. |
+| [Home.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Home.jsx)                             | Component for the Home page. |
+| [Signin.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Signin.jsx)                         | Component for the Signin page. |
+| [Profile.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Profile.jsx)                       | Component for the Profile page. |
+| [EventsPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/EventsPage.jsx)                 | Component for the Events page. |
+| [AdminDashboard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AdminDashboard.jsx)         | Component for the Admin Dashboard page. |
+| [ErrorPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/ErrorPage.jsx)                   | Component for displaying error messages. |
+| [AboutUsPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/AboutUsPage.jsx)               | Component for the About Us page. |
+| [DepartmentalFees.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/DepartmentalFees.jsx)     | Component for displaying departmental fees. |
+| [Landing.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/Landing.jsx)                       | Component for the Landing page. |
+| [NotificationPage.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/pages/NotificationPage.jsx)     | Component for the Notification page. |
 
 </details>
 
@@ -284,10 +384,9 @@ HTTPStatus Exception: 401
 
 | File                                                                                            | Summary                   |
 | ---                                                                                             | ---                       |
-| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/constants/index.js) | HTTPStatus Exception: 401 |
+| [index.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/constants/index.js) | Contains constants used throughout the application. |
 
 </details>
-
 ---
 
 ## 🚀 Getting Started
@@ -296,11 +395,9 @@ HTTPStatus Exception: 401
 
 Please ensure you have the following dependencies installed on your system:
 
-`- ℹ️ Dependency 1`
+`- ℹ️ Node.js`
 
-`- ℹ️ Dependency 2`
 
-`- ℹ️ ...`
 
 ### 🔧 Installation
 
@@ -322,7 +419,7 @@ npm install
 ### 🤖 Running namssn-website
 
 ```sh
-node app.js
+npm run dev
 ```
 
 ### 🧪 Tests
@@ -335,9 +432,63 @@ npm test
 
 ## 🛣 Roadmap
 
-> - [X] `ℹ️  Task 1: Implement X`
-> - [ ] `ℹ️  Task 2: Implement Y`
-> - [ ] `ℹ️ ...`
+> - [ ] `ℹ️  Task 1: Implement User Authentication`
+- [ ] Create user registration and login functionality for students and departmental admins.
+- [ ] Authenticate users securely with password hashing.
+- [ ] Implement role-based access control for students and departmental admins.
+- [ ] Implement a database schema that can handle multiple types of data (e.g., student, departmental admin).
+- [ ] Enable users to reset their passwords.
+
+
+> - [ ] `ℹ️  Task 2: Develop User Profile Page`
+- [ ] Create user profile pages for students and departmental admins.
+- [ ] Allow users to update their profile information.
+- [ ] Display user-specific data and settings.
+
+> - [ ] `ℹ️  Task 3: Create Admin Dashboard`
+- [ ] Develop an admin dashboard for departmental admins to manage department-specific content.
+- [ ] Enable departmental admins to post and manage departmental announcements.
+- [ ] Implement user management features for departmental admins.
+
+> - [ ] `ℹ️  Task 4: Add Payment Integration`
+- [ ] Integrate a secure payment gateway for handling department dues and other department-related payments.
+- [ ] Implement payment history tracking for students.
+- [ ] Send Payments receipts to users uopn successful transaction.
+
+> - [ ] `ℹ️  Task 5: Enhance General App Responsiveness`
+- [ ] Optimize the website layout for various screen sizes, including mobile devices.
+- [ ] Ensure responsive design for different devices and screen resolutions.
+- [ ] Enhance the overall user experience by making the app responsive.
+
+> - [ ] `ℹ️  Task 6: Enhance User Experience`
+- [ ] Implement a user-friendly navigation menu.
+- [ ] Create a search feature for finding departmental resources.
+- [ ] Optimize website performance and loading times.
+
+> - [ ] `ℹ️  Task 7: Handle Announcements`
+- [ ] Enable departmental admins to post announcements related to their department.
+- [ ] Notify students of new departmental announcements via email or notifications.
+- [ ] Organize announcements by date and department.
+
+> - [ ] `ℹ️  Task 8: Manage Learning Resources`
+- [ ] Build a repository for uploading and accessing departmental course materials and resources.
+- [ ] Categorize resources by department, subject, and course.
+- [ ] Implement version control for document updates.
+
+> - [ ] `ℹ️  Task 9: Student-Departmental Admin Communication`
+- [ ] Create a messaging system for students to communicate with departmental admins.
+- [ ] Allow for appointment scheduling and discussion forums.
+- [ ] Implement notifications for new messages and updates.
+
+> - [ ] `ℹ️  Task 10: Security and Compliance`
+- [ ] Conduct security audits and vulnerability assessments.
+- [ ] Ensure compliance with data protection regulations.
+- [ ] Implement backup and disaster recovery procedures.
+
+> - [ ] `ℹ️  Task 11: Testing & Deployment`
+- [ ] Perform unit testing on all components of the application.
+- [ ] Conduct integration testing to ensure all components work together.
+- [ ] Deploy the application to a production environment.
 
 
 ---
@@ -367,13 +518,35 @@ The project maintainers will review your changes and provide feedback or merge t
 
 ## 📄 License
 
-This project is licensed under the `ℹ️  LICENSE-TYPE` License. See the [LICENSE-Type](LICENSE) file for additional info.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for additional information.
 
 ---
 
+
 ## 👏 Acknowledgments
 
-`- ℹ️ List any resources, contributors, inspiration, etc.`
+Contributors:
+1. Tijani Saheed Olalekan
+   - [Github](https://github.com/TSOlami)
+   - [Twitter](https://twitter.com/def_input_name)
+   - [Linkedin](https://linkedin.com/in/saheed-tijani-b9935625b)
+
+2. Abdulkareem Abdulquddus Olayinka
+   - [Github](https://github.com/Slimanyy)
+   - [Twitter](https://twitter.com/Slimany_)
+   - [Linkedin](https://www.linkedin.com/in/slimany/)
+
+3. Timilehin Olusa
+    - [Github](https://github.com/DeepBrain07)
+    - [Twitter](https://twitter.com/TimmieOlusa)
+    - [Linkedin](https://www.linkedin.com/in/timilehin-olusa-781386250/)
+
+4. Ifedolapo Omoniyi
+    - [Github](https://github.com/ifedolapoomoniyi)
+    - [Twitter](https://twitter.com/ife_ifedolapo)
+    - [Linkedin](https://www.linkedin.com/in/ifedolapo-omoniyi/)
+
+
 
 [↑ Return](#Top)
 
