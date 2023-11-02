@@ -10,18 +10,18 @@ import getUser from "./resourcesUtils/getUser.js";
 import getLatestResource from "./resourcesUtils/getLatestResource.js";
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
-import {client} from '../server.js'
+// import {client} from '../server.js'
 import getLastFiveResources from "./resourcesUtils/getLastFiveResources.js";
 
 const getResources = async (req, res) => {
   try {
-    const result = await client.get("files");
+    // const result = await client.get("files");
     // console.log("=========". result)
-    if (result.value !== null) {
-      console.log("here")
-      console.log(JSON.parse(result.value))
-      return JSON.parse(result.value); // Return the value from the getResources function
-    } else {
+    // if (result.value !== null) {
+    //   console.log("here")
+    //   console.log(JSON.parse(result.value))
+    //   return JSON.parse(result.value); // Return the value from the getResources function
+    // } else {
       const level1Resources = await getLastFiveResources('100 Level');
       const level2Resources = await getLastFiveResources('200 Level');
       const level3Resources = await getLastFiveResources('300 Level');
@@ -38,9 +38,9 @@ const getResources = async (req, res) => {
           
         }
       }
-      client.set("files", JSON.stringify(formattedResponse));
+      // client.set("files", JSON.stringify(formattedResponse));
       return formattedResponse;
-    }
+    // }
     
   } catch (err) {
     console.log("An error occurred while retrieving files", err);
@@ -73,22 +73,22 @@ const postResource = async (req, res) => {
         }}
         // await client.delete("files")
         const fileDetails = {[semester]: [formattedResponse]}
-        await client.get("files").then((result) => {
-            if (result.value) {
-              let existingFilesDetiails = JSON.parse(result.value);
-              if (Object.keys(existingFilesDetiails).includes(semester)) {
-                existingFilesDetiails[semester].unshift(formattedResponse)
-                if (Object.keys(existingFilesDetiails[semester]).length > 5) {
-                  existingFilesDetiails[semester].pop()
-                }
-              } else{
-                existingFilesDetiails[semester] = [formattedResponse];
-              }
-              client.set("files", JSON.stringify(existingFilesDetiails))
-            } else {
-              client.set("files", JSON.stringify(fileDetails))
-            }
-        })
+        // await client.get("files").then((result) => {
+        //     if (result.value) {
+        //       let existingFilesDetiails = JSON.parse(result.value);
+        //       if (Object.keys(existingFilesDetiails).includes(semester)) {
+        //         existingFilesDetiails[semester].unshift(formattedResponse)
+        //         if (Object.keys(existingFilesDetiails[semester]).length > 5) {
+        //           existingFilesDetiails[semester].pop()
+        //         }
+        //       } else{
+        //         existingFilesDetiails[semester] = [formattedResponse];
+        //       }
+        //       client.set("files", JSON.stringify(existingFilesDetiails))
+        //     } else {
+        //       client.set("files", JSON.stringify(fileDetails))
+        //     }
+        // })
         return formattedResponse;
       }
     } catch (err) {
@@ -102,6 +102,7 @@ const getSpecifiedResources = async (level) => {
     const response = await getResourcesByLevel(level);
     if (response) {
       const filesList = createFileList(response);
+      console.log(filesList)
       return filesList
     } else {
       console.log('No response');
@@ -128,36 +129,33 @@ const deleteResource = async (req, res) => {
           if (err) {
               console.log("Unable to delete:", err)
           }
-          try {
-              const result = await client.get("files"); // Use await here
-              if (result.value) {
-                  let existingFilesDetiails = JSON.parse(result.value);
-                  const filesUrlList = [...existingFilesDetiails[level].map(dict => Object.keys(dict))].flat()
-                  console.log(filesUrlList)
-                  console.log(fileUrl)
-                  console.log("urllists above")
-                  if (filesUrlList.includes(fileUrl)) {
-                      console.log('present')
-                      const fileIndex = filesUrlList.indexOf(fileUrl)
-                      existingFilesDetiails[level].splice(fileIndex, 1)
-                      console.log("qqqqqqqqqqqqqqqqqq", existingFilesDetiails[level])
-                      const latestResource = await getLatestResource(level) // Use await here
-                      if (latestResource) {
-                        const formattedResponse = {[latestResource.fileUrl]: {
-                          uploaderUsername: latestResource.uploaderName, title: latestResource.title,
-                          description: latestResource.description, date: latestResource.updatedAt, 
-                          semester: latestResource.level, course: latestResource.course
-                        }}
-                        existingFilesDetiails[level].unshift(formattedResponse)
-                        console.log("-------------", formattedResponse)
-                        console.log("}}}}}]", existingFilesDetiails[level].length)
-                      }
-                      client.set("files", JSON.stringify(existingFilesDetiails))
-                    }
-              }
-          } catch (err) {
-              console.log(err)
-          }
+          // try {
+          //     const result = await client.get("files"); // Use await here
+          //     if (result.value) {
+          //         let existingFilesDetiails = JSON.parse(result.value);
+          //         const filesUrlList = [...existingFilesDetiails[level].map(dict => Object.keys(dict))].flat()
+          //         console.log(filesUrlList)
+          //         console.log(fileUrl)
+          //         console.log("urllists above")
+          //         if (filesUrlList.includes(fileUrl)) {
+          //             console.log('present')
+          //             const fileIndex = filesUrlList.indexOf(fileUrl)
+          //             existingFilesDetiails[level].splice(fileIndex, 1)
+          //             const latestResource = await getLatestResource(level) // Use await here
+          //             if (latestResource) {
+          //               const formattedResponse = {[latestResource.fileUrl]: {
+          //                 uploaderUsername: latestResource.uploaderName, title: latestResource.title,
+          //                 description: latestResource.description, date: latestResource.updatedAt, 
+          //                 semester: latestResource.level, course: latestResource.course
+          //               }}
+          //               existingFilesDetiails[level].unshift(formattedResponse)
+          //             }
+          //             client.set("files", JSON.stringify(existingFilesDetiails))
+          //           }
+          //     }
+          // } catch (err) {
+          //     console.log(err)
+          // }
           console.log("File has been deleted successfully");
       })
       return ("Access Approved");

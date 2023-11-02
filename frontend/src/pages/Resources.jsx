@@ -76,7 +76,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
+                const res = await axios.get('http://localhost:5000/api/v1/users/resources');
                 if (res) {
                     console.log(res);
                     setData(res.data); // set the fetched data to the state

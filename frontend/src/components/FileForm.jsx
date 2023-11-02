@@ -73,7 +73,7 @@ const FileForm = (props) => {
             <div className="w-[70%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
                     <div>
-                        <span className={textStyle}> Semester</span>
+                        <span className={textStyle}> Level</span>
                         <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                             <option value="100 Level" className="text-black font-crimson text-lg">Year 1 </option>
                             <option value="200 Level" className="text-black font-crimson text-lg">Year 2 </option>
@@ -82,7 +82,7 @@ const FileForm = (props) => {
                             <option value="500 Level" className="text-black font-crimson text-lg">Year 5 </option>
                         </select>
                     </div> 
-                    <div>
+                    {/* <div>
                         <span className={textStyle}> Course </span>
                         <select value={selectedOption2} onChange={handleSelectChange2} name="dropdown2" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                             <option value="option1" className="text-black font-crimson text-lg">Course A</option>
@@ -90,7 +90,7 @@ const FileForm = (props) => {
                             <option value="option3" className="text-black font-crimson text-lg">Course C</option>
                             <option value="option4" className="text-black font-crimson text-lg">Course D</option>
                         </select>
-                    </div>
+                    </div> */}
                     <div className="flex flex-col mt-2 h-[7em]">
                         <span className={textStyle}> File Description </span>
                         <div className="h-[100%] w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200">
