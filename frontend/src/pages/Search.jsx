@@ -7,6 +7,7 @@ import { PostSearch, ResourceCard, AnnouncementContainer } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
+import Loader from "../components/Loader";
 
 const state = store.getState();
 
@@ -15,6 +16,7 @@ const Search = () => {
     const [value, setValue] = useState('');
     const [filter, setFilter] = useState('')
     const [data, setData] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -35,6 +37,7 @@ const Search = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setIsLoading(true);
             if (filter && value) {
                 try {
                     const res = await axios.get(`http://localhost:5000/api/v1/users/search?filter=${filter}&value=${value}`);
@@ -42,15 +45,21 @@ const Search = () => {
                         console.log(res);
                         // setData({})
                         setData(res.data); // set the fetched data to the state
+                        setIsLoading(false);
                     }
                 } catch (err) {
                     console.log(err);
                     setData("error")
+                    setIsLoading(false);
                 }
             }
         };
         fetchData(); // call the fetchData function
     }, [filter, value]);
+
+    if (isLoading) {
+        return <Loader />; // Render the Loader while data is being fetched
+    }
 
     const handleClick = (val) => {
         window.location.href = `/search?key=${value}&filter=${val}`
@@ -91,7 +100,6 @@ const Search = () => {
         { value: 'resources', label: 'Resources' },
         { value: 'posts', label: 'Posts' }
     ];
-    console.log(selectedFilter)
         return (
             <div className="flex">
                 <Sidebar />
@@ -99,10 +107,10 @@ const Search = () => {
                     <div className="sticky top-[0.01%] z-[300] bg-white">
                         <HeaderComponent title="SEARCH" url={"Placeholder"} />
                     </div>
-                    <div className='z-[500] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
+                    <div className='sticky top-[12%] z-[300] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
                         <Select onChange={handleChange} options={options} styles={customStyles} isSearchable={false} placeholder="Filter"/>
                     </div>
-                    <div className="hidden sticky top-[8.5%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">
+                    <div className="hidden sticky top-[8%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">
                             <div onClick={() => handleClick('all')} className={`mt-4 hover:text-blue-500 cursor-pointer w-[25%] flex justify-center ${filter==='all' ? borderStyle : unselectBorderStyle}`}>
                                 All
                             </div>
@@ -192,7 +200,7 @@ const Search = () => {
                             text={post?.text}
                             name={post?.user?.name}
                             username={post?.user?.username}
-                            avatar={post.user.profilePicture}
+                            avatar={post?.user?.profilePicture}
                             createdAt={post?.createdAt}
                             updatedAt={post?.updatedAt}
                             u_id={post?.user?._id}

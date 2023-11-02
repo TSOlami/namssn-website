@@ -85,7 +85,28 @@ const Home = () => {
 		>
 			<Sidebar />
 			<div className="flex flex-col relative w-full">
-				<HeaderComponent title="Home" url={"Placeholder"} />
+      {isLoading === false && <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
+				  <HeaderComponent title="Home" url={"Placeholder"} />
+			</div>}
+
+        {/* Posts container */}
+        {postsFromStore?.map((post, index) => (
+          <Post
+            key={index}
+            upvotes={post.upvotes.length}
+            downvotes={post.downvotes.length}
+            comments={post.comments.length}
+            isVerified={post.user.isVerified}
+            text={post.text}
+            image={post.image}
+            name={post.user.name}
+            username={post.user.username}
+            avatar={post.user.profilePicture}
+            createdAt={post.createdAt}
+            u_id={post.user._id}
+            postId={post._id}
+          />
+        ))}
 
 				{/* Posts container */}
 				{postData?.map((post, index) => (
