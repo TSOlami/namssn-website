@@ -58,19 +58,6 @@ const LevelResources = () => {
                         if (data[index][file][selectedOption] && data[index][file][selectedOption].toLowerCase().includes(value.toLowerCase())) {
                            newData.push({[file]: data[index][file]})
                            console.log(newData)
-                            // Object.keys(tempData).forEach((key) => {
-                            //     for (let j=0; j<tempData[key].length; j++) {
-                            //         if (isSubDictPresent(tempData[key][j], {[file]: tempData2[index][file]})) {
-                            //             console.log(file)
-                            //             if (Object.keys(newData).includes(key)) {
-                            //                 newData[[key]].push({[file]: tempData2[index][file]})
-                            //             } else {
-                            //                 newData[[key]] = [{[file]: tempData2[index][file]}]
-                            //             }
-                            //             console.log(newData)
-                            //         }
-                            //     }
-                            // })
                             setData(newData)
                         };
                     });
@@ -97,15 +84,15 @@ const LevelResources = () => {
                     <div>
                         <div className="mb-4 flex justify-between">
                             {/* <span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">{level} Resources</span> */}
-                            <div className="flex gap-2 mr-4">
+                            {/* <div className="flex gap-2 mr-4">
                                 <span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
-                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="ring-2 text-gray-300 block w-[55%] mt-1 p-2 border rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                                     <option value="title" className="text-black font-crimson text-lg">Title</option>
                                     <option value="uploaderName" className="text-black font-crimson text-lg">Owner</option>
                                 </select>
-                            </div>
+                            </div> */}
                         </div>
-                        <div className="sticky bg-white shadow-lg border-2 z-10 pl-4 pr-4 top-[10%] left-[33%] border-gray-300 rounded-xl w-[50%]">
+                        <div className="sticky bg-white ring-2 border-2 z-10 pl-4 pr-4 top-[13%] left-[33%] border-gray-300 rounded-xl w-[50%]">
                             <div className="absolute  h-[100%] flex ">
                             <FaMagnifyingGlass  className="mt-1"/>
                             </div>

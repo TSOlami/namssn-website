@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import produce from 'immer';
+// import produce from 'immer';
 import { createSlice } from '@reduxjs/toolkit';
 
 // Helper function to get items from local storage
@@ -15,7 +15,7 @@ const getLocalStorageItem = (key) => {
 
 export const initialState = {
 	userInfo: getLocalStorageItem('userInfo') || null,
-  posts: getLocalStorageItem('userPosts') || [],
+  posts: getLocalStorageItem('userPosts') || null,
   announcements: getLocalStorageItem('userAnnouncements') || null,
   payments: getLocalStorageItem('userPayments') || null,
   category: getLocalStorageItem('userCategories') || null,
@@ -50,13 +50,8 @@ const authSlice = createSlice({
       localStorage.removeItem('userNotifications');
     },
     setPosts(state, action) {
-      // Check if the posts are not already in the state
-      const uniquePosts = action.payload.filter((newPost) =>
-        !state.posts.some((existingPost) => existingPost._id === newPost._id)
-      );
-
-      state.posts = state.posts.concat(uniquePosts); // Append only the unique new posts
-      localStorage.setItem('userPosts', JSON.stringify(state.posts));
+      state.posts = action.payload;
+      localStorage.setItem('userPosts', JSON.stringify(action.payload));
     },
     setAnnouncements(state, action) {
       state.announcements = action.payload;

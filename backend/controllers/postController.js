@@ -99,7 +99,9 @@ const getUserPosts = asyncHandler(async (req, res) => {
   
 	  // Fetch the user's posts from the database
     console.log("Fetching posts for user: ", userId);
-	  const userPosts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+	  const userPosts = await Post.find({ user: userId })
+			.sort({ createdAt: -1 })
+			.populate('user', '-password');
   
 	  if (!userPosts) {
 		res.status(404).json({ message: "No posts found for this user." });
@@ -121,7 +123,7 @@ const updatePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
   
 	// Find the post by its ID
-	const post = await Post.findById(postId);
+	const post = await Post.findById(postId).populate('user', '-password');
   
 	if (!post) {
 	  res.status(404);
@@ -175,8 +177,8 @@ const upvotePost = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
   const userId = req.user._id;
 
-  // Find the post by ID
-  const post = await Post.findById(postId);
+  // Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId).populate('user', '-password');
 
   if (post) {
     // Check if the user has already upvoted the post
@@ -238,8 +240,8 @@ const downvotePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
 	const userId = req.user._id;
 
-	// Find the post by ID
-	const post = await Post.findById(postId);
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId).populate('user', '-password');
 
 	if (post) {
 		// Check if the user has already downvoted the post
@@ -304,7 +306,7 @@ const getPostComments = asyncHandler(async (req, res) => {
   
 	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
-	const post = await Post.findById(postId);
+	const post = await Post.findById(postId).populate('user', '-password');
   
 	if (!post) {
 	  res.status(404);
@@ -330,9 +332,9 @@ const createPostComment = asyncHandler(async (req, res) => {
 	const { text } = req.body;
   
 	console.log("Comment text: ", text);
-	// Find the post by its ID
-	const post = await Post.findById(postId);
-  
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId).populate('user', '-password');
+
 	if (!post) {
 	  res.status(404);
 	  throw new Error('Post not found');
@@ -383,16 +385,16 @@ const updatePostComment = asyncHandler(async (req, res) => {
 	// Extract the updated comment text from the request body
 	const { text } = req.body;
   
-	// Find the post by its ID
-	const post = await Post.findById(postId);
-  
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId).populate('user', '-password');
+
 	if (!post) {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
   
 	// Find the comment by its ID
-	const comment = await PostComment.findById(commentId);
+	const comment = await PostComment.findById(commentId).populate('user', '-password');
   
 	if (!comment) {
 	  res.status(404);
@@ -489,12 +491,12 @@ const upvoteComment = asyncHandler(async (req, res) => {
 	const commentId = req.params.commentId;
 	const userId = req.user._id;
   
-	// Find the post by ID
-	const post = await Post.findById(postId);
-  
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId).populate('user', '-password');
+ 
 	if (post) {
 	  // Find the comment by ID
-	  const comment = await PostComment.findById(commentId);
+	  const comment = await PostComment.findById(commentId).populate('user', '-password');
   
 	  if (comment) {
 		// Check if the user has already upvoted the comment
@@ -516,13 +518,13 @@ const upvoteComment = asyncHandler(async (req, res) => {
 		if (upvotedIndex === -1) {
 		  // The user hasn't upvoted the comment, so add their ID to the upvotes array.
 		  comment.upvotes.push(userId);
-		  console.log("Upvoting comment: ", comment);
+		  console.log("Upvoting comment");
   
 		  // Add 5 points for upvoting
 		  const user = await User.findById(comment.user);
 		  if (user) {
 			user.points += 5;
-		    console.log("Adding 5 points to user: ", user);
+		    console.log("Adding 5 points to user");
 			await user.save();
 		  }
 
@@ -564,11 +566,11 @@ const downvoteComment = asyncHandler(async (req, res) => {
 	const userId = req.user._id;
   
 	// Find the post by ID
-	const post = await Post.findById(postId);
+	const post = await Post.findById(postId).populate('user', '-password');
   
 	if (post) {
 	  // Find the comment by ID
-	  const comment = await PostComment.findById(commentId);
+	  const comment = await PostComment.findById(commentId).populate('user', '-password');
   
 	  if (comment) {
 		// Check if the user has already downvoted the comment

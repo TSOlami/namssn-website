@@ -107,10 +107,10 @@ const Search = () => {
                     <div className="sticky top-[0.01%] z-[300] bg-white">
                         <HeaderComponent title="SEARCH" url={"Placeholder"} />
                     </div>
-                    <div className='z-[500] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
+                    <div className='sticky top-[12%] z-[300] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
                         <Select onChange={handleChange} options={options} styles={customStyles} isSearchable={false} placeholder="Filter"/>
                     </div>
-                    <div className="hidden sticky top-[8.5%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">
+                    <div className="hidden sticky top-[8%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">
                             <div onClick={() => handleClick('all')} className={`mt-4 hover:text-blue-500 cursor-pointer w-[25%] flex justify-center ${filter==='all' ? borderStyle : unselectBorderStyle}`}>
                                 All
                             </div>
@@ -200,7 +200,7 @@ const Search = () => {
                             text={post?.text}
                             name={post?.user?.name}
                             username={post?.user?.username}
-                            avatar={post.user.profilePicture}
+                            avatar={post?.user?.profilePicture}
                             createdAt={post?.createdAt}
                             updatedAt={post?.updatedAt}
                             u_id={post?.user?._id}

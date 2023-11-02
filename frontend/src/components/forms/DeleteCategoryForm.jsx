@@ -77,7 +77,7 @@ const formik = useFormik({
               id="name"
               onChange={formik.handleChange}
               value={formik.values.name}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full"
             />
           </div>
           {formik.touched.name && formik.errors.name ? (
@@ -92,7 +92,7 @@ const formik = useFormik({
               id="session"
               onChange={formik.handleChange}
               value={formik.values.session}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full"
             />
           </div>
           {formik.touched.session && formik.errors.session ? (
@@ -107,7 +107,7 @@ const formik = useFormik({
               id="amount"
               onChange={formik.handleChange}
               value={formik.values.amount}
-              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full pl-10"
+              className="border-2 rounded border-gray-400 h-[40px] p-2 w-full"
             />
           </div>
           {formik.touched.amount && formik.errors.amount ? (
