@@ -86,8 +86,10 @@ const Home = () => {
 		>
 			<Sidebar />
 			<div className="flex flex-col relative w-full">
-				<HeaderComponent title="Home" url={"Placeholder"} />
-				
+      {isLoading === false && <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
+				  <HeaderComponent title="Home" url={"Placeholder"} />
+			</div>}
+
         {/* Posts container */}
         {postsFromStore?.map((post, index) => (
           <Post

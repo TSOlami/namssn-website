@@ -7,6 +7,7 @@ import { PostSearch, ResourceCard,AnnouncementContainer  } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
+import Loader from "../components/Loader";
 
 const state = store.getState();
 
@@ -15,6 +16,7 @@ const Search = () => {
     const [value, setValue] = useState('');
     const [filter, setFilter] = useState('')
     const [data, setData] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -35,6 +37,7 @@ const Search = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setIsLoading(true);
             if (filter && value) {
                 try {
                     const res = await axios.get(`http://localhost:5000/api/v1/users/search?filter=${filter}&value=${value}`);
@@ -42,15 +45,21 @@ const Search = () => {
                         console.log(res);
                         // setData({})
                         setData(res.data); // set the fetched data to the state
+                        setIsLoading(false);
                     }
                 } catch (err) {
                     console.log(err);
                     setData("error")
+                    setIsLoading(false);
                 }
             }
         };
         fetchData(); // call the fetchData function
     }, [filter, value]);
+
+    if (isLoading) {
+        return <Loader />; // Render the Loader while data is being fetched
+    }
 
     const handleClick = (val) => {
         window.location.href = `/search?key=${value}&filter=${val}`
@@ -91,7 +100,6 @@ const Search = () => {
         { value: 'resources', label: 'Resources' },
         { value: 'posts', label: 'Posts' }
     ];
-    console.log(selectedFilter)
         return (
             <div className="flex">
                 <Sidebar />

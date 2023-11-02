@@ -13,6 +13,8 @@ import { motion } from "framer-motion";
 import { formatDateToTime } from "../utils";
 import axios from "axios";
 import { PiPlaceholder } from "react-icons/pi";
+import Loader from '../components/Loader'
+import { IoContractOutline } from "react-icons/io5";
 
 const base_url = "http://localhost:5000/api/v1/users/resources/";
 
@@ -52,6 +54,7 @@ const Resources = () => {
     // const newData = [];
 
     const [selectedOption, setSelectedOption] = useState('title');
+    const isLoading = true;
 
     useEffect(() => {
     }, [selectedOption]);
@@ -90,12 +93,13 @@ const Resources = () => {
         return (
         <div className="w-[100%] flex justify-between">
             <Sidebar/>
-            <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+            {/* <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
                 Fetching...
-            </div>
+            </div> */}
             <div className="w-[27%] sm:hidden md:block hidden lg:block">
                 <AnnouncementContainer />
             </div>
+            {isLoading && <Loader />}
         </div>
         )
     } else if(data && data.length !== 0 && data !== "error") {
@@ -113,7 +117,9 @@ const Resources = () => {
                     <div className="flex relative z-2">
                         <Sidebar/>
                         <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
-                            <HeaderComponent title="RESOURCES" url={"Placeholder"}/>
+                            <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
+                                <HeaderComponent title="RESOURCES" url={"Placeholder"}/>
+                            </div>
                             <div className="lg:pt-5 gap:4 w-[100%]">
                                 {level1FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>

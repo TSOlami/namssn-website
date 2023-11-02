@@ -4,6 +4,7 @@ import { formatDateToTime } from "../utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import Loader from "../components/Loader";
 
 const base_url = "http://localhost:5000/api/v1/users/resources/";
 
@@ -37,6 +38,7 @@ const LevelResources = () => {
     }, [selectedOption]);
 
     const [value, setValue] = useState("")
+    const isLoading = true;
 
     const handleSearch = (e) => {
         setValue(e.target.value)
@@ -145,12 +147,13 @@ const LevelResources = () => {
         return (
             <div className="w-[100%] flex justify-between">
                 <Sidebar/>
-                <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+                {/* <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
                     Fetching...
-                </div>
+                </div> */}
                 <div className="w-[27%] sm:hidden md:block hidden lg:block">
                     <AnnouncementContainer />
                 </div>
+                {isLoading && <Loader />}
             </div>
             )
     }
