@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
-const base_url = "http://localhost:5000/api/v1/users/resources/";
+const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const LevelResources = () => {
     const {level} = useParams()
@@ -15,7 +15,7 @@ const LevelResources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
                 if (res) {
                     console.log(res);
                     setData(res.data); // set the fetched data to the state
