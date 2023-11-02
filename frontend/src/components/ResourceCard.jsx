@@ -212,8 +212,9 @@ const ResourceCard = ({
 							<span className={lgStyle}>{uploaderUsername}</span>
 						</div>
 						<div>
-							<span className={smStyle}>Date Uploaded: </span>
+							<span className={smStyle}>Uploaded </span>
 							<span className={lgStyle}>{date}</span>
+							<span className={smStyle}> ago</span>
 						</div>
 					</div>
 				)}

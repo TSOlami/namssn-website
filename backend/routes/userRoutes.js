@@ -5,7 +5,6 @@ import express from "express";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
-const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
 // Import controllers and middleware
 import {
@@ -295,7 +294,12 @@ router
 router
   .route('/resources/:filename')
   .get((req, res) => {
-    const filePath = path.join(fileDir + '/uploads', req.params.filename)
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const projectRootDirectory = path.join(__dirname, '../../');
+    console.log(projectRootDirectory);
+    const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
     res.sendFile(filePath)
   })
   .delete(deleteUserResources)

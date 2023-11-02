@@ -72,23 +72,23 @@ const HeaderComponent = ({ title, url, back }) => {
 				<FaMagnifyingGlass  />
 			</div> */}
 			{url && (
-				<div className="items-center hidden md:hidden lg:flex">
+				<div className="items-center  lg:flex">
 				<form
 					action=""
 					onSubmit={handleSubmit}
-					className="hidden md:flex  relative"
+					className="flex  relative"
 				>
 					<input
 						type="text"
 						placeholder="Search"
 						name="search"
 						value={search}
-						className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 w-56 md:w-72 pl-3 pr-10"
+						className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 max-w-[7em]  pl-3 pr-10"
 						onChange={handleSearchChange}
 					/>
-					{/* <a className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg" onClick={handleSubmit}>
+					<a className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg" onClick={handleSubmit}>
 						<FaMagnifyingGlass  />
-					</a> */}
+					</a>
 
 
 					{/* <button className="border bg-gray-400 rounded-md">
