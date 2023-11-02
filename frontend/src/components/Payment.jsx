@@ -101,7 +101,7 @@ const PaymentForm = () => {
   // Function to show a toast message with the transaction reference
   const showTransactionReference = (reference) => {
     // console.log("Transaction Reference:", reference); // Add this line for debugging
-    toast.success(`Transaction Reference: ${reference}.`, {
+    toast.success(`Transaction Reference: ${reference}. A payment receipt will be sent to your registered mailbox upon successful payment.`, {
       position: "top-right",
       autoClose: 20000, // Close after 5 seconds
       hideProgressBar: false,
@@ -109,17 +109,6 @@ const PaymentForm = () => {
       pauseOnHover: true,
       draggable: true,
     });
-    toast.success(
-      `A payment receipt will be sent to your registered mailbox upon successful payment.`,
-      {
-        position: "top-right",
-        autoClose: 20000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      }
-    );
   };
 
   const navigate = useNavigate();
