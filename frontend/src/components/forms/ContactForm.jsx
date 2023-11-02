@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
+import { Loader } from "../../components"
+import { useContactUsMutation } from "../../redux";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -8,15 +11,27 @@ const ContactForm = () => {
     message: "",
   });
 
+  const [contactUs, { isLoading }] = useContactUsMutation();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    await toast.promise(contactUs(formData), {
+      pending: "Sending message...",
+      success: "Message sent successfully.",
+      error: "Failed to send message. Please try again.",
+    });
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <h2 className="font-merriweather font-bold md:text-3xl leading-normal py-16 text-xl text-center max-w-xl mx-auto mb-4">Reach Out to Us</h2>
-      <form className="px-12">
+      <form className="px-12" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700">
             Name
@@ -84,6 +99,7 @@ const ContactForm = () => {
           >
             Send Message
           </button>
+          {isLoading && (<Loader />)}
         </div>
       </form>
     </div>

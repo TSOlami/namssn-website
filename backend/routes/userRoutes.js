@@ -36,7 +36,7 @@ import {
   verifyOTP,
   resendOTP,
   verifyUserPayment,
-  getSearchResults
+  getSearchResults,
 } from "../controllers/userController.js";
 
 import { 
@@ -58,7 +58,7 @@ import {
   deleteNotification,
   clearNotifications,
 } from "../controllers/postController.js";
-import { registerMail } from "../controllers/mailer.js";
+import { registerMail, contactUs } from "../controllers/mailer.js";
 import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
 
 
@@ -128,6 +128,17 @@ router.route('/reset-password').put(verifyUser, otpStatusCheck, resetPassword);
  * @access Private (Requires authentication)
  */
 router.post('/logout', logoutUser);
+
+/**
+ * Contact us
+ * 
+ * @route POST /api/v1/users/contact-us
+ * @access Public
+ * @param {string} name - The name of the user
+ * @param {string} email - The email of the user
+ * @param {string} message - The message of the user
+ */
+router.post('/contact-us', contactUs);
 
 /**
  * Get, update, and delete a user profile.

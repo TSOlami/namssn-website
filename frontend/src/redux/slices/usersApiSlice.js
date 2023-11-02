@@ -51,6 +51,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['User'],
       }),
 
+      // Contact Us
+      contactUs: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/contact-us`,
+            method: 'POST',
+            body:data,
+          };
+        },
+      }),
+
       // Logout Query
       logout: builder.mutation({
         query() {
@@ -123,4 +134,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation, useContactUsMutation } = usersApiSlice;

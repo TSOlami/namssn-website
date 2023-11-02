@@ -2,13 +2,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AdminCard, RecentPayments, Sidebar, Loader} from "../components";
 import { HeaderComponent } from "../components";
-import { mockAccounts } from "../data";
 import { MembersImg } from "../assets";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { useGetAllPaymentsQuery,setPayments } from "../redux";
-
-
+import { useGetAllUsersQuery, useGetAllPaymentsQuery, setPayments } from "../redux";
 import {
 	useGetTotalPaymentsQuery,
 	useGetTotalUsersQuery,
@@ -24,7 +21,14 @@ const AdminDashboard = () => {
 	const { data: totalEvents } = useGetTotalEventsQuery();
 	const { data: totalAnnouncements } = useGetTotalAnnouncementsQuery();
 
-	console.log("Total payments: ", totalPayments, "Total users: ", totalUsers, "Total blogs: ", totalBlogs, "Total events: ", totalEvents, "Total announcements: ", totalAnnouncements);
+	const { data: users } = useGetAllUsersQuery();
+
+	console.log("Users: ", users);
+
+	// Sort users by points in descending order
+  const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
+
+	console.log("Sorted Users: ", sortedUsers);
 
 	const dispatch = useDispatch();
 	const { data: allpayments, Loading } = useGetAllPaymentsQuery(
@@ -152,7 +156,7 @@ const AdminDashboard = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{mockAccounts.map((account, index) => (
+									{sortedUsers && sortedUsers.slice(0, 6).map((account, index) => (
 										<tr key={index}>
 											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												{index + 1}
@@ -161,11 +165,11 @@ const AdminDashboard = () => {
 												{account.name}
 											</td>
 											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-												{account.reputation}
+												{account.points}
 											</td>
 											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
 												<Link
-													to={account.verify}
+													to={`/profile/${account._id}`}
 													className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
 												>
 													View
@@ -198,7 +202,10 @@ const AdminDashboard = () => {
 				{/* Recent payments */}
 				<div className="flex flex-row justify-between pr-10">
 					<h3 className="font-bold text-2xl p-4">Recent Payments</h3>
-					<button className="text-primary" > See more</button>
+					<Link to="/admin/payment">
+						<button className="text-primary">See more</button>
+					</Link>
+
 				</div>
 				{/* <div className="w-full px-4">
 					{mockRecentPayments.map((payment, index) => (

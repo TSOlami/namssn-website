@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Resources from "./Resources";
 import store from "../redux/store/store";
-import { PostSearch, ResourceCard,AnnouncementContainer  } from "../components";
+import { PostSearch, ResourceCard, AnnouncementContainer } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
 
 const state = store.getState();
 
-const base_url = "http://localhost:5000/api/v1/users/resources/";
+const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 const Search = () => {
     const [value, setValue] = useState('');
     const [filter, setFilter] = useState('')

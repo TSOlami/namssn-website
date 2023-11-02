@@ -70,4 +70,38 @@ export const registerMail = async (req,res) => {
     return res.status(200).send({msg: 'You should receive an email from us shortly!'})
   })
   .catch(error => res.status(500).send({error}))
-}
+};
+
+/**
+ * POST /api/v1/users/contact-us
+ * 
+ * @desc Send a mail
+ * @access Public
+ * @param {Object} req - Express request object.
+ */
+export const contactUs = async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  // Input validation
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  console.log("Sending message to admin");
+
+  // Message object
+  let msg = {
+    from: email,
+    to: process.env.EMAIL,
+    subject: subject,
+    text: message
+  };
+
+  // Send the email
+  await transporter.sendMail(msg)
+  .then(() => {
+    console.log("Email sent successfully!")
+    return res.status(200).send({msg: 'Your message has been sent successfully!'})
+  })
+  .catch(error => res.status(500).send({error}))
+};
