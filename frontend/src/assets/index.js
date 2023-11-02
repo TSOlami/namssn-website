@@ -50,7 +50,6 @@ import Team6 from './images/img6.jpg';
 import Team7 from './images/img7.jpg';
 import Team8 from './images/img8.jpg';
 import Team9 from './images/img9.jpg';
-import Team10 from './images/img10.jpg';
 import Team11 from './images/img11.jpg';
 import Team12 from './images/img12.jpg';
 import Team13 from './images/img13.jpg';
@@ -59,4 +58,4 @@ import DrStrange from './images/Strange.jpg';
 import Slimany from './images/slimany.jpg';
 import Timi from './images/timi.jpeg';
 
-export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG, Error404, ForgotSVG, PaymentSVG, ResetPasswordSVG, Teejay, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team10, Team11, Team12, Team13, Team14, DrStrange, Slimany, Timi };
+export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, searchIcon, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG, Error404, ForgotSVG, PaymentSVG, ResetPasswordSVG, Teejay, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, DrStrange, Slimany, Timi };
