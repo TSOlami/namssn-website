@@ -14,16 +14,16 @@ const ForgotPage = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
-    e.preventDefault();
+		e.preventDefault();
 
-    // Check if the username is empty
-    if (!username) {
-      toast.error("Please enter a username.");
-      return; // Stop the function execution
-    }
+		// Check if the username is empty
+		if (!username) {
+			toast.error("Please enter a username.");
+			return; // Stop the function execution
+		}
 
-    // Get the user details from the database
-		const user = await getUser({username});
+		// Get the user details from the database
+		const user = await getUser({ username });
 
 		// Check if the user exists
 		if (!user) {
@@ -37,10 +37,10 @@ const ForgotPage = () => {
 			success: "OTP generated successfully.",
 			error: "Failed to generate OTP. Please try again.",
 		});
-		
+
 		// Navigate to the /verify-email page
 		navigate(`/verify-user/${username}`);
-  };
+	};
 
 	return (
 		<motion.div
@@ -60,20 +60,25 @@ const ForgotPage = () => {
 					code to reset your password.
 				</p>
 
-				<form action="">
-				<div className="w-[300px] m-5">
-					<InputField
-						name="username"
-						type="text"
-						id="username"
-						placeholder="Enter your username"
-						onChange={(e) => setUsername(e.target.value)}
-						pad
-						icon={<FaUser />}
-					/>
-				</div>
+				<form action="" className="flex flex-col items-center">
+					<div className="w-[300px] m-5">
+						<InputField
+							name="username"
+							type="text"
+							id="username"
+							placeholder="Enter your username"
+							onChange={(e) => setUsername(e.target.value)}
+							pad
+							icon={<FaUser />}
+						/>
+					</div>
 
-				<button onClick={handleSubmit} className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300">Submit</button>
+					<button
+						onClick={handleSubmit}
+						className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300"
+					>
+						Submit
+					</button>
 				</form>
 			</div>
 		</motion.div>
