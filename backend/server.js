@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import memjs from 'memjs';
 import connectDb from './config/db.js';
-import path from 'path'
+
 import createServer from './utils/server.js';
 
 dotenv.config();
@@ -14,23 +14,7 @@ const port = process.env.PORT || 5000;
 // Create a memjs client
 export const client = memjs.Client.create();
 
-// const app = createServer();
-const app = express();
-// ---------------- deployment-----------------------
-const __dirname1=path.resolve();
-if (process.env.NODE_ENV ==='production') {
-  app.use(express.static(path.join(__dirname1, '/frontend/dist')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname1,'frontend','dist','index.html'));
-  });
-  
-} else {
-  app.get("/",(req,res)=>{
-    res.send('API is running');
-  });
-}
-//-------------deployment--------------
+const app = createServer();
 
 app.listen(port, async () => {
   try {
