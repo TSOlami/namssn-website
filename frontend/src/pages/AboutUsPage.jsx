@@ -1,7 +1,7 @@
 import { AboutImg } from "../assets";
 import { Footer, NavBar } from "../components";
 import Team from "../components/Team";
-import { mockTeam } from "../data";
+import { teamMembers } from "../constants";
 import { motion } from "framer-motion";
 const AboutUsPage = () => {
 	return (
@@ -49,15 +49,16 @@ const AboutUsPage = () => {
 					</span>
 				</h1>
 				<div className="flex flex-row flex-wrap gap-5 items-center justify-center p-5 mb-10">
-					{mockTeam
-						.filter((member) => member.role === "principal")
+					{teamMembers
+						.filter((member) => member.team === "Principal")
 						.map((member, index) => (
 							<div key={index}>
 								<Team
 									name={member.name}
-									position={member.position}
-									image={`src/assets/images/${member.image}`}
+									position={member.role}
+									image={member.image}
 									facebook={member.facebook}
+									twitter={member.twitter}
 									linkedin={member.linkedin}
 								/>
 							</div>
@@ -73,15 +74,16 @@ const AboutUsPage = () => {
 				</h1>
 
 				<div className="flex flex-row flex-wrap gap-5 items-center justify-center p-5 mb-10">
-					{mockTeam
-						.filter((member) => member.role === "executive")
+					{teamMembers
+						.filter((member) => member.team === "Executive")
 						.map((member, index) => (
 							<div key={index}>
 								<Team
 									name={member.name}
-									position={member.position}
-									image={`src/assets/images/${member.image}`}
+									position={member.role}
+									image={member.image}
 									facebook={member.facebook}
+									twitter={member.twitter}
 									linkedin={member.linkedin}
 								/>
 							</div>
@@ -94,15 +96,16 @@ const AboutUsPage = () => {
 				</h1>
 
 				<div className="flex flex-row flex-wrap gap-5 items-center justify-center p-5 mb-10">
-					{mockTeam
-						.filter((member) => member.role === "developer")
+					{teamMembers
+						.filter((member) => member.team === "Tech")
 						.map((member, index) => (
 							<div key={index}>
 								<Team
 									name={member.name}
-									position={member.position}
-									image={`src/assets/images/${member.image}`}
+									position={member.role}
+									image={member.image}
 									facebook={member.facebook}
+									twitter={member.twitter}
 									linkedin={member.linkedin}
 								/>
 							</div>
