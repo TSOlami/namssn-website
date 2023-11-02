@@ -11,15 +11,17 @@ const UserCard = ({name, u_id, isVerified, username, avatar}) => {
                     <img src={avatar || ProfileImg} alt="avatar" className="profile-image-small" />
                 </Link>
             </div>
-            <Link to={`/profile/${u_id}`}>
-                {" "}
-                {/* Wrap the user's name in a Link */}
-                <span className="font-medium flex flex-row items-center gap-2">
-                    <span className="font-semibold">{name}</span>
-                    {isVerified && <FaCircleCheck color="#17A1FA" />}
-                </span>
-            </Link>
-            <span>@{username}</span>
+            <div>
+                <Link to={`/profile/${u_id}`}>
+                    {" "}
+                    {/* Wrap the user's name in a Link */}
+                    <span className="font-medium flex flex-row items-center gap-2">
+                        <span className="font-semibold">{name}</span>
+                        {isVerified && <FaCircleCheck color="#17A1FA" />}
+                    </span>
+                </Link>
+                <span>@{username}</span>
+            </div>
         </div>
     )
 }
