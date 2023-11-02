@@ -39,7 +39,6 @@ function createServer() {
   // Define a route for the root URL '/'
   app.get('/', (req, res) => res.send('Server is ready'));
 
-  route(app);
   return app;
 };
 
