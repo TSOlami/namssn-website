@@ -64,7 +64,7 @@ const Post = ({ post, updatePostData  }) => {
 		handleOpenOptions();
 	};
 	// Get the user ID from the redux store
-	const { _id: userId } = useSelector((state) => state.auth.userInfo);
+	const { _id: userId, role } = useSelector((state) => state.auth.userInfo);
 
 	// Add a state to keep track of the upvote and downvote status
 	const [isUpvoted, setIsUpvoted] = useState(false);
@@ -172,7 +172,7 @@ const Post = ({ post, updatePostData  }) => {
 						onClick={handleOpenOptions}
 					>
 						<div className="cursor-pointer">
-							<PiDotsThreeOutlineVerticalFill />
+							{role === "admin" || userId === u_id ? <PiDotsThreeOutlineVerticalFill /> : null}
 						</div>
 					</span>
 					{openOptions && (

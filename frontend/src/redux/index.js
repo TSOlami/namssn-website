@@ -9,6 +9,7 @@ import {
 	useGetUserQuery,
 	useAllBlogsQuery,
 	useVerifyAccountMutation,
+	useContactUsMutation,
 } from './slices/usersApiSlice';
 import {
 	useGetTotalUsersQuery,
@@ -147,6 +148,7 @@ export {
 	useDeleteNotificationMutation,
 	useMarkNotificationsAsSeenMutation,
 	useClearNotificationsMutation,
+	useContactUsMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,

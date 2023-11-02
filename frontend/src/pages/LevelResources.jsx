@@ -4,8 +4,9 @@ import { formatDateToTime } from "../utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import Loader from "../components/Loader";
 
-const base_url = "http://localhost:5000/api/v1/users/resources/";
+const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const LevelResources = () => {
     const {level} = useParams()
@@ -15,7 +16,7 @@ const LevelResources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
                 if (res) {
                     console.log(res);
                     setData(res.data); // set the fetched data to the state
@@ -37,6 +38,7 @@ const LevelResources = () => {
     }, [selectedOption]);
 
     const [value, setValue] = useState("")
+    const isLoading = true;
 
     const handleSearch = (e) => {
         setValue(e.target.value)
@@ -56,19 +58,6 @@ const LevelResources = () => {
                         if (data[index][file][selectedOption] && data[index][file][selectedOption].toLowerCase().includes(value.toLowerCase())) {
                            newData.push({[file]: data[index][file]})
                            console.log(newData)
-                            // Object.keys(tempData).forEach((key) => {
-                            //     for (let j=0; j<tempData[key].length; j++) {
-                            //         if (isSubDictPresent(tempData[key][j], {[file]: tempData2[index][file]})) {
-                            //             console.log(file)
-                            //             if (Object.keys(newData).includes(key)) {
-                            //                 newData[[key]].push({[file]: tempData2[index][file]})
-                            //             } else {
-                            //                 newData[[key]] = [{[file]: tempData2[index][file]}]
-                            //             }
-                            //             console.log(newData)
-                            //         }
-                            //     }
-                            // })
                             setData(newData)
                         };
                     });
@@ -95,15 +84,15 @@ const LevelResources = () => {
                     <div>
                         <div className="mb-4 flex justify-between">
                             {/* <span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">{level} Resources</span> */}
-                            <div className="flex gap-2 mr-4">
+                            {/* <div className="flex gap-2 mr-4">
                                 <span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
-                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="text-gray-300 block w-[55%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="ring-2 text-gray-300 block w-[55%] mt-1 p-2 border rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                                     <option value="title" className="text-black font-crimson text-lg">Title</option>
                                     <option value="uploaderName" className="text-black font-crimson text-lg">Owner</option>
                                 </select>
-                            </div>
+                            </div> */}
                         </div>
-                        <div className="sticky bg-white shadow-lg border-2 z-10 pl-4 pr-4 top-[10%] left-[33%] border-gray-300 rounded-xl w-[50%]">
+                        <div className="sticky bg-white ring-2 border-2 z-10 pl-4 pr-4 top-[13%] left-[33%] border-gray-300 rounded-xl w-[50%]">
                             <div className="absolute  h-[100%] flex ">
                             <FaMagnifyingGlass  className="mt-1"/>
                             </div>
@@ -145,12 +134,13 @@ const LevelResources = () => {
         return (
             <div className="w-[100%] flex justify-between">
                 <Sidebar/>
-                <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+                {/* <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
                     Fetching...
-                </div>
+                </div> */}
                 <div className="w-[27%] sm:hidden md:block hidden lg:block">
                     <AnnouncementContainer />
                 </div>
+                {isLoading && <Loader />}
             </div>
             )
     }

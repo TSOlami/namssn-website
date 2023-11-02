@@ -26,7 +26,7 @@ const Comments = () => {
 	const auth = useSelector((state) => state.auth);
 
 	// Find the post with a matching _id within the 'auth.posts' array
-	const post = auth.posts.find((p) => p._id === postId);
+	const post = auth.posts?.find((p) => p._id === postId);
 
 	console.log("Post from redux: ", post);
 
@@ -86,6 +86,7 @@ const Comments = () => {
 						placeholder="Add comment"
 						id=""
 						value={commentText}
+						required
 						onChange={(e) => setCommentText(e.target.value)}
 						className="resize-none border-2 border-gray-40 h-[47px] w-full p-2 rounded-xl mr-1 m-2 "
 					></textarea>
