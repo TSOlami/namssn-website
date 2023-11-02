@@ -1,4 +1,4 @@
-import { Image2, Image3, Image5, Image7 } from "../assets";
+import { Image2, Image3, Image5, Image7, Teejay, DrStrange, Timi, Slimany, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team10, Team11, Team12, Team13, Team14 } from "../assets";
 
 export const navLinks = [
   { href: "/", label: "Home" },
@@ -105,10 +105,58 @@ export const blogPosts = [
 ];
 
 export const teamMembers = [
-  [
-
-  ],
-  [
-
-  ],[]
+  {
+		name: "Tijani Saheed Olalekan",
+		role: "Project Manager & Backend Developer",
+		image: Teejay,
+		team: "Tech Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
+  {
+		name: "Ifedolalapo Omoniyi",
+		role: "Frontend Developer & Web Designer",
+		image: DrStrange,
+		team: "Tech Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
+  {
+		name: "Abdulkareem Abdulqudus",
+		role: "Backend Developer",
+		image: Slimany,
+		team: "Tech Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
+  {
+		name: "Timilehin Olusa",
+		role: "Backend Developer",
+		image: Timi,
+		team: "Tech Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
+  {
+		name: "Tijani Saheed Olalekan",
+		role: "Project Manager & Backend Developer",
+		image: Teejay,
+		team: "Executive Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
+  {
+		name: "Tijani Saheed Olalekan",
+		role: "Project Manager & Backend Developer",
+		image: Teejay,
+		team: "Principal Team",
+		facebook: "",
+		linkedin: "",
+    twitter: "",
+	},
 ];
