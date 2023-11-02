@@ -18,7 +18,8 @@ import path from 'path';
 // access	Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email }).select('-password').populate('posts');
+
+  const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
@@ -104,7 +105,7 @@ const verifyAccount = asyncHandler(async (req, res) => {
   const { username, studentEmail } = req.body;
   console.log("Verifying user account: ", username, studentEmail);
   // Find the user by username
-  const user = await User.findOne({ username }).select('-password').populate('posts');
+  const user = await User.findOne({ username });
 
   if (user) {
     // Check if the user has already been verified
@@ -218,7 +219,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
       console.log("Deleting OTP record")
       await UserOTPVerification.deleteMany({ username });
 
-      const user = await User.findOne({ username }).select('-password').populate('posts');
+      const user = await User.findOne({ username });
 
       // Set otpVerified to true
       user.otpVerified = true;

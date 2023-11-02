@@ -1,5 +1,6 @@
 import { FaCircleCheck } from "react-icons/fa6";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -22,10 +23,12 @@ const PostComments = ({
     upvotes,
     downvotes,
 }) => {
-    const [openOptions, setopenOptions] = useState(false);
-    const handleOpenOptions = () => {
-        setopenOptions(!openOptions);
-    };
+  const [openOptions, setopenOptions] = useState(false);
+  const handleOpenOptions = () => {
+      setopenOptions(!openOptions);
+  };
+  
+  const { _id: userId, role } = useSelector((state) => state.auth.userInfo);
 
   const date = new Date(createdAt);
 
@@ -102,7 +105,7 @@ const PostComments = ({
                         className="absolute right-0 active:bg-greyish rounded-md p-2"
                         onClick={handleOpenOptions}
                     >
-                        <div className="cursor-pointer"><PiDotsThreeOutlineVerticalFill />
+                        <div className="cursor-pointer">{role === "admin" || userId === u_id ? <PiDotsThreeOutlineVerticalFill /> : null}
                         </div>
                     </span>
                     {openOptions && (
