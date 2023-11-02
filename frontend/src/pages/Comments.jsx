@@ -26,7 +26,7 @@ const Comments = () => {
 	const auth = useSelector((state) => state.auth);
 
 	// Find the post with a matching _id within the 'auth.posts' array
-	const post = auth.posts.find((p) => p._id === postId);
+	const post = auth.posts?.find((p) => p._id === postId);
 
 	console.log("Post from redux: ", post);
 
