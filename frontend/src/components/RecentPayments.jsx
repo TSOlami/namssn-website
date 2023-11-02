@@ -22,7 +22,7 @@ const RecentPayments = ({
 					<strong>Matric No:</strong> {matricNo}
 				</div>
 				<div className="mb-2">
-					<strong>Reference:</strong> {reference}
+					<strong>Reference Id:</strong> {reference}
 				</div>
 				<div className="mb-2">
 					<strong>Category:</strong> {category}
