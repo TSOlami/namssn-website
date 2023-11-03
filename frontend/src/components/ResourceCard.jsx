@@ -1,4 +1,4 @@
-import CerHat from "../assets/CerHat.png";
+import CerHat from "../assets/icons/CerHat.png";
 import axios from "axios";
 import store from "../redux/store/store";
 import { toast } from "react-toastify";
