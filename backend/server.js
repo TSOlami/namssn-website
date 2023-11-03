@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import memjs from 'memjs';
+// import memjs from 'memjs';
 import connectDb from './config/db.js';
 connectDb();
 import path from 'path'
@@ -14,7 +14,7 @@ const app = createServer();
 const port = process.env.PORT || 5000;
 
 // Create a memjs client
-export const client = memjs.Client.create();
+// export const client = memjs.Client.create();
 
 // ---------------- deployment-----------------------
 const __dirname1=path.resolve();

@@ -203,17 +203,18 @@ const ResourceCard = ({
 							<span className={smStyle}>category: </span>
 							<span className={lgStyle}>{semester}</span>
 						</div>
-						<div>
+						{/* <div>
 							<span className={smStyle}>course: </span>
 							<span className={lgStyle}>{course}</span>
-						</div>
+						</div> */}
 						<div>
 							<span className={smStyle}>By: </span>{" "}
 							<span className={lgStyle}>{uploaderUsername}</span>
 						</div>
 						<div>
-							<span className={smStyle}>Date Uploaded: </span>
+							<span className={smStyle}>Uploaded </span>
 							<span className={lgStyle}>{date}</span>
+							<span className={smStyle}> ago</span>
 						</div>
 					</div>
 				)}

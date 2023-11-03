@@ -16,7 +16,7 @@ import { PiPlaceholder } from "react-icons/pi";
 import Loader from '../components/Loader'
 import { IoContractOutline } from "react-icons/io5";
 
-const base_url = "http://localhost:5000/api/v1/users/resources/";
+const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;

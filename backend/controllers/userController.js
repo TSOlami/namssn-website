@@ -614,6 +614,7 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
   try {
+    console.log("here")
     // const folderName = 'uploads'
     // const folderPath = path.resolve(__dirname, folderName)
     // console.log( folderName)
