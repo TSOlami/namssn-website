@@ -16,7 +16,7 @@ import { PiPlaceholder } from "react-icons/pi";
 import Loader from '../components/Loader'
 import { IoContractOutline } from "react-icons/io5";
 
-const base_url = "http://localhost:5000/api/v1/users/resources/";
+const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state.auth.userInfo;
@@ -76,7 +76,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/v1/users/resources');
+                const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
                 if (res) {
                     console.log(res);
                     setData(res.data); // set the fetched data to the state
