@@ -14,7 +14,7 @@ import { formatDateToTime } from "../utils";
 import axios from "axios";
 import { PiPlaceholder } from "react-icons/pi";
 import Loader from '../components/Loader'
-import { IoContractOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
@@ -136,7 +136,10 @@ const Resources = () => {
                                             />
                                         ))}
                                     </div>
-                                    {level1FileList.length > 4 && (<a href="http://localhost:3000/resources/100%20Level"><button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button></a>)}
+                                    {level1FileList.length > 4 && (
+        <Link to="/resources/100%20Level">
+            <button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+        </Link>)}
                                 </div>)}
                                 {level2FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>
@@ -153,7 +156,10 @@ const Resources = () => {
                                             />
                                         ))}
                                     </div>
-                                    {level2FileList.length > 4 && (<a href="http://localhost:3000/resources/200%20Level"><button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button></a>)}
+                                    {level2FileList.length > 4 && (
+        <Link to="/resources/200%20Level">
+            <button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+        </Link>)}
                                 </div>)}
                                 {level3FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>
@@ -170,7 +176,10 @@ const Resources = () => {
                                             />
                                         ))}
                                     </div>
-                                    {level3FileList.length > 4 && (<a href="http://localhost:3000/resources/300%20Level"><button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button></a>)}
+                                    {level3FileList.length > 4 && (
+        <Link to="/resources/300%20Level">
+            <button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+        </Link>)}
                                 </div>)}
                                 {level4FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>    
@@ -187,7 +196,10 @@ const Resources = () => {
                                             />
                                         ))}
                                     </div>
-                                        {level4FileList.length > 4 && (<a href="http://localhost:3000/resources/400%20Level"><button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button></a>)}
+                                        {level4FileList.length > 4 && (
+        <Link to="/resources/400%20Level">
+            <button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+        </Link>)}
                                 </div>)}
                                 {level5FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                                 <div className={levelStyle}>
@@ -204,7 +216,10 @@ const Resources = () => {
                                             />
                                         ))}
                                     </div>
-                                    {level5FileList.length > 4 && (<a href="http://localhost:3000/resources/500%20Level"><button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button></a>)}
+                                    {level5FileList.length > 4 && (
+        <Link to="/resources/500%20Level">
+            <button className="w-[100%] bg-green-600 hover:bg-green-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+        </Link>)}
                                 </div>)}
                             </div> 
                             <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed bottom-4 right-4 md:right-[18em] lg:right-[30%] xl:right-[30%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">

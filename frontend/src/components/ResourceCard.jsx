@@ -83,6 +83,19 @@ const ResourceCard = ({
 	const cardClass =
 	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
 
+	const handleShare = async () => {
+        try {
+            await navigator.share({
+                title: title,
+                text: 'Check out this link!',
+                url: fileUrl
+            });
+            console.log('Link shared successfully');
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
 	// manage state for the delete options button
 	const [openOptions, setOpenOptions] = useState(false);
 	const handleSetOpenOptions = () => {
@@ -154,7 +167,6 @@ const ResourceCard = ({
 
 	return (
 		<div className="w-[10em] flex flex-col items-center my-2">
-			<ShareButton title={title} fileUrl={fileUrl}/>
 
 			<div
 				className={cardClass + " relative"}
@@ -189,6 +201,12 @@ const ResourceCard = ({
 								className="bg-white p-2 absolute right-3 top-[50px] flex items-center shadow-lg w-[120px] hover:border border-black z-[201]"
 							>
 								Details
+							</div>
+							<div
+								onClick={handleShare}
+								className="bg-white p-2 absolute right-3 top-[92px] flex items-center shadow-lg w-[120px] hover:border border-black z-[201]"
+							>
+								Share
 							</div>
 						</div>
 					)}
