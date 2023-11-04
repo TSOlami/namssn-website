@@ -25,6 +25,7 @@ const AdminEvents = () => {
 							<AdminEventsCard
 								key={index}
 								title={event.title}
+								date={event.date}
 								flier={event.flier}
 							/>
 						))}
