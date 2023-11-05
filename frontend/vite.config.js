@@ -8,7 +8,7 @@ export default defineConfig({
 		port: 3000,
 		proxy: {
 			"/api/v1": {
-				target: "https://namssn-futminna.onrender.com",
+				target: 'http://localhost:5000',
 				changeOrigin: true,
 			},
 		},

@@ -177,6 +177,8 @@ const upvotePost = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
   const userId = req.user._id;
 
+	console.log("Upvoting post: ", postId);
+
   // Find the post by ID and populate the user information excluding the password field
   const post = await Post.findById(postId).populate('user', '-password');
 
@@ -197,16 +199,27 @@ const upvotePost = asyncHandler(async (req, res) => {
       }
     }
 
-    if (upvotedIndex === -1) {
-      // The user hasn't upvoted the post, so add their ID to the upvotes array.
-      post.upvotes.push(userId);
+				
+		if (upvotedIndex !== -1) {
+			// The user has already upvoted the post, so remove their ID from the upvotes array.
+			post.upvotes.splice(upvotedIndex, 1);
 
-      // Add 5 points for upvoting
-      const user = await User.findById(post.user);
-      if (user) {
-        user.points += 5;
-        await user.save();
-      }
+			// Deduct 5 points for removing an upvote
+			const user = await User.findById(post.user);
+			if (user) {
+				user.points -= 5;
+				await user.save();
+			}
+		} else {
+			// The user hasn't upvoted the post, so add their ID to the upvotes array.
+			post.upvotes.push(userId);
+
+			// Add 5 points for upvoting
+			const user = await User.findById(post.user);
+			if (user) {
+				user.points += 5;
+				await user.save();
+			}
 
 			if (post.user.username !== req.user.username) {
 				// Create a notification for the post owner
@@ -218,7 +231,9 @@ const upvotePost = asyncHandler(async (req, res) => {
 				});
 				await notification.save();
 			}
-    }
+		}
+
+		console.log("Upvoted post successfully: ", post);
 
 		await post.save();
 
@@ -260,15 +275,25 @@ const downvotePost = asyncHandler(async (req, res) => {
 			}
 		}
 
-		if (downvotedIndex === -1) {
+		if (downvotedIndex !== -1) {
+			// The user has already downvoted the post, so remove their ID from the downvotes array.
+			post.downvotes.splice(downvotedIndex, 1);
+
+			// Deduct 2 points for removing a downvote
+			const user = await User.findById(post.user);
+			if (user) {
+			  user.points -= 2;
+			  await user.save();
+			}
+		} else {
 			// The user hasn't downvoted the post, so add their ID to the downvotes array.
 			post.downvotes.push(userId);
 
 			// Deduct 2 points for downvoting
 			const user = await User.findById(post.user);
 			if (user) {
-			  user.points -= 2;
-			  await user.save();
+				user.points -= 2;
+				await user.save();
 			}
 
 			if (post.user.username !== req.user.username) {

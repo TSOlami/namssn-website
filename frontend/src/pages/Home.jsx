@@ -32,7 +32,7 @@ const Home = () => {
     if (posts) {
       console.log("Posts from api call: ", posts);
       // Merge the new data with the existing postData
-      setPostData([...postData, ...posts.posts]);
+      setPostData((prevData) => [...prevData, ...posts.posts]);
 
       // Dispatch the updated posts to your Redux store
       dispatch(setPosts([...postData, ...posts.posts]));
@@ -46,11 +46,19 @@ const Home = () => {
 
   // Function to update the post data when a vote is cast
   const updatePostData = (postId, newPostData) => {
-    // Find the post in postData by postId and update it with newPostData
-    const updatedPosts = postData.map((post) =>
-      post._id === postId ? newPostData : post
-    );
-    setPostData(updatedPosts);
+    setPostData((prevData) => {
+      const postIndex = prevData.findIndex((post) => post._id === postId);
+  
+      if (postIndex === -1) {
+        // If the post doesn't exist in the array, add it
+        return [...prevData, newPostData];
+      } else {
+        // If the post already exists, update it
+        return prevData.map((post, index) =>
+          index === postIndex ? newPostData : post
+        );
+      }
+    });
   };
 
   // Function to fetch more posts

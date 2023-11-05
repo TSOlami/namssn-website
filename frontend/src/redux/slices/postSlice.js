@@ -83,7 +83,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Downvote Post Query
@@ -95,7 +94,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Get Post Comments Query
