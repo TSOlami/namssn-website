@@ -18,7 +18,7 @@ export default {
     }, 
     extend: {
       fontFamily: {
-        'crimson': ['Roboto', 'sans-serif'],
+        'crimson': ['Crimson Text', 'sans-serif'],
         'merriweather': ['Montserrat', 'serif'], 
       },
       colors: {
