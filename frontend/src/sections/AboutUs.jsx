@@ -20,7 +20,7 @@ const AboutUs = () => {
         /> <h1 className='header-text'>About Us</h1>
       </div>
       <div className='flex flex-col gap-5'>
-        <p className="text-xl font-crimson">
+        <p className="text-xl font-roboto">
         NAMSSN FUTMINNA Chapter is your one-stop destination for academic resources, knowledge sharing, and staying updated with all the exciting events and news happening on our campus. We&apos;ve created this platform to empower our students, providing an easy and accessible way to enhance your educational journey.
         </p>
         <Link to='/about-us' className="text-container flex border-primary w-fit">

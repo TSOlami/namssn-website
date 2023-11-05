@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
 
@@ -40,7 +38,7 @@
     font-size: 2rem;
     color: #000;
     font-weight: 700;
-    font-family: Merriweather;
+    font-family: montserrat;
     font-style: normal;
   }
 
@@ -124,15 +122,15 @@
   }
 
   .info-text {
-    @apply font-merriweather text-secondary text-lg leading-7;
+    @apply font-montserrat text-secondary text-lg leading-7;
   }
 
   .body-text {
-    @apply font-crimson leading-normal;
+    @apply font-roboto leading-normal;
   }
 
   .nav-text {
-    @apply font-crimson font-normal text-xl leading-normal;
+    @apply font-roboto font-normal text-xl leading-normal;
   }
 
   .profile-image {
@@ -146,11 +144,11 @@
   }
 
   .header-text {
-    @apply font-merriweather font-bold md:text-3xl leading-normal py-6 text-2xl;
+    @apply font-montserrat font-bold md:text-3xl leading-normal py-6 text-2xl;
   }
 
   .text-container {
-    @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson  whitespace-normal;
+    @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-roboto  whitespace-normal;
   }
 
   input[type='file'] {

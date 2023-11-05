@@ -23,7 +23,7 @@ const BlogPage = () => {
 		>
 			<NavBar />
 			<section className="padding w-full">
-				<h1 className="font-crimson text-primary text-2xl items-start mt-8">
+				<h1 className="font-roboto text-primary text-2xl items-start mt-8">
 					Recent Blog Posts
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
@@ -31,14 +31,14 @@ const BlogPage = () => {
 						<div key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
-									<h2 className="text-black text-2xl md:text-3xl font-bold font-merriweather">
+									<h2 className="text-black text-2xl md:text-3xl font-bold font-montserrat">
 										{blog.title}
 									</h2>
 									<div className="flex space-x-2 gap-2.5 mt-2">
 										{blog.tags.map((tag, index) => (
 											<span
 												key={index}
-												className=" font-crimson px-3 py-1 bg-tertiary rounded justify-center items-center text-black text-center text-base font-normal"
+												className=" font-roboto px-3 py-1 bg-tertiary rounded justify-center items-center text-black text-center text-base font-normal"
 											>
 												{tag}
 											</span>
@@ -46,10 +46,10 @@ const BlogPage = () => {
 									</div>
 								</div>
 								<div className="grid gap-y-0 mt-4 text-right">
-									<p className="text-primary text-xl md:text-2xl font-bold font-crimson">
+									<p className="text-primary text-xl md:text-2xl font-bold font-roboto">
 										{blog.author}
 									</p>
-									<p className="text-xl text-black font-normal font-crimson my-2 md:my-4">
+									<p className="text-xl text-black font-normal font-roboto my-2 md:my-4">
 										{formatDateToTime(blog.createdAt)}
 									</p>
 								</div>

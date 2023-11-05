@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Loader from "../Loader";
 
 const FileForm = (props) => {
-    const textStyle = "font-bold font-crimson text-lg"
+    const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -65,11 +65,11 @@ const FileForm = (props) => {
                     <div>
                         <span className={textStyle}> Level</span>
                         <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                            <option value="100 Level" className="text-black font-crimson text-lg">Year 1 </option>
-                            <option value="200 Level" className="text-black font-crimson text-lg">Year 2 </option>
-                            <option value="300 Level" className="text-black font-crimson text-lg">Year 3 </option>
-                            <option value="400 Level" className="text-black font-crimson text-lg">Year 4 </option>
-                            <option value="500 Level" className="text-black font-crimson text-lg">Year 5 </option>
+                            <option value="100 Level" className="text-black font-roboto text-lg">Year 1 </option>
+                            <option value="200 Level" className="text-black font-roboto text-lg">Year 2 </option>
+                            <option value="300 Level" className="text-black font-roboto text-lg">Year 3 </option>
+                            <option value="400 Level" className="text-black font-roboto text-lg">Year 4 </option>
+                            <option value="500 Level" className="text-black font-roboto text-lg">Year 5 </option>
                         </select>
                     </div>
                     <div className="flex flex-col mt-2 h-[7em]">

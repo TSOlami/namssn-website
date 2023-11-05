@@ -32,7 +32,7 @@ const Hero = () => {
             {word.split('').map((char, index) => (
               <motion.span 
               variants={typingAnimation} 
-              className="inline-block font-crimson text-sm md:text-lg text-small md:text- " 
+              className="inline-block font-roboto text-sm md:text-lg text-small md:text- " 
               key={index}>
                 {char}
               </motion.span>

@@ -205,7 +205,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 				</div>
 
 				{/* Post content goes here */}
-				<div className="font-crimson text-xl leading-normal">
+				<div className="font-roboto text-xl leading-normal">
 					<div onClick={routeToComments}>{text}</div>
 					{image && (
 						<div className="post-image-container pt-2">

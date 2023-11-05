@@ -57,23 +57,24 @@ const DepartmentalFees = () => {
 					whileInView={{ rotateY: 0 }}
 					exit={{ opacity: 0, x: -100 }}
 					transition={{ duration: 0.5 }}
-					className="bg-black rounded-3xl w-[300px] border-gray-400 border-2 shadow-md"
+					className="bg-black rounded-2xl w-[300px] border-gray-400 border-2 shadow-md"
 				>
-					<div className=" bg-white p-5 rounded-b-3xl border-t-0 rounded-3xl">
-						<h3 className="text-2xl font-semibold text-center">
-							Departmental dues
+					<div className="flex flex-col bg-white p-5 rounded-b-3xl border-t-0 rounded-2xl">
+						<h3 className="text-2xl font-bold text-center font-montserrat">
+							Departmental dues	
 						</h3>
-						<div>
+						<div className="text-xl font-roboto font-normal my-5">
 							Let&apos;s help NAMSSN by paying our departmental
 							dues on time.
+							Ensure you use your matric number as the description
+							for the transfer.
 						</div>
 						<div>
-							Ensure you use your matric number as the description
-							for the transfer
+							
 						</div>
 						<div className="text-center">
-							<span className="block">Amount:</span>
-							<span className="block font-semibold text-2xl">
+							<span className="text-xl font-normal block">Amount:</span>
+							<span className="block font-bold font-montserrat text-2xl">
 								#5,000
 							</span>
 						</div>
@@ -94,7 +95,7 @@ const DepartmentalFees = () => {
 						Sign in to make other payments.
 					</h3>
 					<div>
-						To make othr payments on this website, sign in now to
+						To make other payments on this website, sign in now to
 						ensure we allocate the right payment information to you
 					</div>
 					<div>

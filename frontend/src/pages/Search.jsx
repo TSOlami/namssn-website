@@ -139,7 +139,7 @@ const Search = () => {
                             />
                         ))}
                     </div>) : filter==='users' && (
-                    <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching user was found</div>
+                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching user was found</div>
                     )}
                     {filter==='all' && data.resources && data.resources.length!==0 && <div className="ml-6 mt-4">
                         {<div className="font-serif text-lg text-gray-400">
@@ -177,7 +177,7 @@ const Search = () => {
                         ))}
                         </div>
                     </div>) : filter==='resources' && (
-                    <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching resource was found</div>
+                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching resource was found</div>
                     )}
                     {filter==='all' && data.posts && data.posts.length!==0 && <div className="mt-4">
                     {<div className="mb-2 ml-6 font-serif text-lg text-gray-400">
@@ -225,7 +225,7 @@ const Search = () => {
                         />
                     ))}
                     </div>) : filter==='posts' && (
-                    <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching post was found</div>
+                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching post was found</div>
                     )}
                 </div>
                     {/* <div className="w-[%]">
@@ -265,7 +265,7 @@ const Search = () => {
         )
     } else if(data===null) {
         return (
-            <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[50%] font-medium top-[40%]">
+            <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[50%] font-medium top-[40%]">
                 Loading...
             </div>
         )

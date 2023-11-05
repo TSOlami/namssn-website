@@ -79,7 +79,7 @@ const Resources = () => {
         return (
         <div className="w-[100%] flex justify-between">
             <Sidebar/>
-            {/* <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+            {/* <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
                 Fetching...
             </div> */}
             <div className="w-[27%] sm:hidden md:block hidden lg:block">
@@ -106,7 +106,7 @@ const Resources = () => {
                         <div className="lg:pt-5 gap:4 w-[100%]">
                             {level1FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                             <div onClick={toggleDropDown1} className={`${levelStyle} ${dropDown1 === -1 ? 'ring-2 hover:ring-0 bg-gray-600' : 'bg-gray-900'}`}>
-                                <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-crimson sm:text-xl text-white text-sm">100 Level</span>
+                                <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-roboto sm:text-xl text-white text-sm">100 Level</span>
                             </div>
                             {dropDown1===-1 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level1FileList.map((file, index) => ( 
@@ -127,7 +127,7 @@ const Resources = () => {
                             </div>)}
                             {level2FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                             <div onClick={toggleDropDown2} className={`${levelStyle} ${dropDown2 === -2 ? 'ring-2 hover:ring-0 bg-gray-600' : 'bg-gray-900'}`}>
-                                <span className="font-bold pl-4 font-crimson absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">200 Level</span>
+                                <span className="font-bold pl-4 font-roboto absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">200 Level</span>
                             </div>
                             {dropDown2===-2 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level2FileList.map((file, index) => ( 
@@ -148,7 +148,7 @@ const Resources = () => {
                             </div>)}
                             {level3FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                             <div onClick={toggleDropDown3} className={`${levelStyle} ${dropDown3 === -3 ? 'ring-2 hover:ring-0 bg-gray-600' : 'bg-gray-900'}`}>
-                                <span className="font-bold pl-4 font-crimson absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">300 Level</span>
+                                <span className="font-bold pl-4 font-roboto absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">300 Level</span>
                             </div>
                             {dropDown3===-3 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level3FileList.map((file, index) => ( 
@@ -169,7 +169,7 @@ const Resources = () => {
                             </div>)}
                             {level4FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                             <div onClick={toggleDropDown4} className={`${levelStyle} ${dropDown4 === -4 ? 'ring-2 hover:ring-0 bg-gray-600' : 'bg-gray-900'}`}>    
-                                <span className="font-bold pl-4 font-crimson absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">400 Level</span>
+                                <span className="font-bold pl-4 font-roboto absolute left-4 lg:left-[14em] sm:text-xl text-white text-sm">400 Level</span>
                             </div>
                             {dropDown4===-4 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level4FileList.map((file, index) => ( 
@@ -190,7 +190,7 @@ const Resources = () => {
                             </div>)}
                             {level5FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
                             <div onClick={toggleDropDown5} className={`${levelStyle} ${dropDown5 === -5 ? 'ring-2 hover:ring-0 bg-gray-600' : 'bg-gray-900'}`}>
-                                <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-crimson sm:text-xl text-white text-sm">500 Level</span>
+                                <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-roboto sm:text-xl text-white text-sm">500 Level</span>
                             </div>
                             {dropDown5===-5 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level5FileList.map((file, index) => ( 
@@ -228,7 +228,7 @@ const Resources = () => {
             return (
             <div className="flex">
                 <Sidebar/>
-                <div className="text-xl font-crimson text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
+                <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
                     No file uploaded yet
                 </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
@@ -249,7 +249,7 @@ const Resources = () => {
         return (
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>
-                <div className="text-xl flex flex-col items-center font-crimson text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
+                <div className="text-xl flex flex-col items-center font-roboto text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
                     <div><span>Unable to fetch resources.</span></div>
                     <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload.</span></div>
                 </div>

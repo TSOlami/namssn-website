@@ -30,7 +30,7 @@ const ContactForm = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="font-merriweather font-bold md:text-3xl leading-normal pt-16 text-xl text-center max-w-xl mx-auto mb-4">Reach Out to Us</h2>
+      <h2 className="font-montserrat font-bold md:text-3xl leading-normal pt-16 text-xl text-center max-w-xl mx-auto mb-4">Reach Out to Us</h2>
       <form className="lg:px-12 px-4" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700">

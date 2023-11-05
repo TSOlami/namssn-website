@@ -22,10 +22,10 @@ const Features = () => {
 						className="flex md:flex-row bg-tertiary mx-auto rounded-2xl shadow-xl flex-col pb-5"
 					>
 						<div className="flex flex-col justify-center px-8 pt-5 pb-4">
-							<h3 className="text-3xl font-bold font-crimson">
+							<h3 className="text-3xl font-bold font-roboto">
 								Access to Past Questions and Answers
 							</h3>
-							<p className="text-xl font-crimson">
+							<p className="text-xl font-roboto">
 								Ace your exams with free access to a
 								comprehensive database of past questions and
 								answers, specifically tailored to FUTMINNA
@@ -44,10 +44,10 @@ const Features = () => {
 							transition={{ duration: 0.5 }}
 							className="flex flex-col justify-center px-8 pt-10 pb-10"
 						>
-							<h3 className="text-3xl font-bold font-crimson">
+							<h3 className="text-3xl font-bold font-roboto">
 								Interactive Discussions
 							</h3>
-							<p className="text-xl font-crimson mx-auto">
+							<p className="text-xl font-roboto mx-auto">
 								Engage in thought-provoking discussions, share
 								your opinions on various topics, and ask
 								questions – all within a vibrant and welcoming
@@ -66,10 +66,10 @@ const Features = () => {
 						className="flex flex-row bg-tertiary rounded-2xl mx-auto max-w-[25rem] shadow-xl"
 					>
 						<motion.div className="flex flex-col justify-center px-10 pt-10 pb-5">
-							<h3 className="text-3xl font-bold font-crimson">
+							<h3 className="text-3xl font-bold font-roboto">
 								Effortless Payment
 							</h3>
-							<p className="text-xl font-crimson">
+							<p className="text-xl font-roboto">
 								Easily pay your departmental dues, making
 								financial transactions a breeze.
 							</p>
@@ -82,10 +82,10 @@ const Features = () => {
 						className="flex md:flex-row flex-col bg-zinc-900 mx-auto rounded-2xl shadow-xl"
 					>
 						<motion.div className="flex flex-col justify-center px-10 pt-20 pb-10">
-							<h3 className="text-3xl text-white font-bold font-crimson">
+							<h3 className="text-3xl text-white font-bold font-roboto">
 								Stay Informed
 							</h3>
-							<p className="text-xl text-white font-crimson">
+							<p className="text-xl text-white font-roboto">
 								Keep up to date with all the latest campus
 								events, blog news, and important updates. Never
 								miss a beat when it comes to what&apos;s

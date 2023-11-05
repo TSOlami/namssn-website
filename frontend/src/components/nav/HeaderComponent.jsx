@@ -66,7 +66,7 @@ const HeaderComponent = ({ title, url, back }) => {
 			/>
 			{/* <h1 className="text-xl text-center w-full md:text-3xl">{title}</h1> */}
 			<div className="">
-				<span className="px-4  font-bold font-crimson sm:text-xl text-blue-900 text-xl">{title.toUpperCase()}</span>
+				<span className="px-4  font-bold font-roboto sm:text-xl text-blue-900 text-xl">{title.toUpperCase()}</span>
 			</div>
 			{/* <div className="lg:hidden relative right-[50%]">
 				<FaMagnifyingGlass  />

@@ -21,7 +21,7 @@ const AboutUsPage = () => {
 					<img src={AboutImg} alt="" />
 				</div>
 
-				<p className="text-xl font-crimson md:p-10 p-5 md:w-[80%] m-auto my-5">
+				<p className="text-xl font-roboto md:p-10 p-5 md:w-[80%] m-auto my-5">
 					We believe in the power of collective learning, and we&apos;ve
 					designed this platform to help you excel academically while
 					also providing a space for social interaction. Join us and

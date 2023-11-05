@@ -18,8 +18,8 @@ export default {
     }, 
     extend: {
       fontFamily: {
-        'crimson': ['Crimson Text', 'sans-serif'],
-        'merriweather': ['Montserrat', 'serif'], 
+        'roboto': ['Roboto', 'sans-serif'],
+        'montserrat': ['Montserrat', 'serif'], 
       },
       colors: {
         "primary": "#17A1FA",
