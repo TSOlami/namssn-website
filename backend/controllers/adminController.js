@@ -294,7 +294,7 @@ const getAllPayments = asyncHandler(async (req, res) => {
   try {
     // Fetch all payment records from the payment model, populate 'user' and 'category', and sort by createdAt in descending order
     const allPayments = await Payment.find()
-      .populate('user')
+      .populate('user', '-password')
       .populate('category')
       .sort({ createdAt: -1 });
       

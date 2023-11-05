@@ -562,7 +562,7 @@ const postUserResources = asyncHandler(async (req, res) => {
 // Get All Events
 const getAllEvents = asyncHandler(async (req, res) => {
   // Fetch all events from the event model
-  const allEvents = await Event.find().populate('user');
+  const allEvents = await Event.find().populate('user', '-password');
 
   res.status(200).json(allEvents);
 });
@@ -570,7 +570,7 @@ const getAllEvents = asyncHandler(async (req, res) => {
 // Get All Announcements
 const getAllAnnouncements = asyncHandler(async (req, res) => {
   // Fetch all announcements from the announcement model
-  const allAnnouncements = await Announcement.find().populate('user');
+  const allAnnouncements = await Announcement.find().populate('user', '-password');
 
   res.status(200).json(allAnnouncements);
 });
@@ -591,7 +591,7 @@ const getUserAnnouncements = asyncHandler(async (req, res) => {
 const getAllBlogs = asyncHandler(async (req, res) => {
   // Fetch all blogs from the database and sort by timestamp in descending order
   const allBlogs = await Blog.find()
-    .populate('user') // 'user' is the field referencing the user who posted the blog
+    .populate('user', '-password') // 'user' is the field referencing the user who posted the blog
     .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest blogs first)
 
   res.status(200).json(allBlogs);
@@ -602,7 +602,7 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 const getUserBlogs = asyncHandler(async (req, res) => {
   // Fetch all blogs from the database and sort by timestamp in descending order
   const userBlogs = await Blog.find({ user: req.user._id })
-    .populate('user') // 'user' is the field referencing the user who posted the blog
+    .populate('user', '-password') // 'user' is the field referencing the user who posted the blog
     .sort({ createdAt: -1 }); // Sort by timestamp in descending order (latest blogs first)
   
   res.status(200).json(userBlogs);

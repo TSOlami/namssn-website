@@ -22,7 +22,7 @@ const createPost = asyncHandler(async (req, res) => {
   
 	// Save the new post to the database
 	const createdPost = await newPost.save();
-  
+
 	// Update the user's `posts` array
 	const user = await User.findById(userId);
   
@@ -31,8 +31,11 @@ const createPost = asyncHandler(async (req, res) => {
 
 	// Save the updated user document to the database
 	await user.save();
+
+	// Retrieve the post from the database and populate the `user` field
+  const savedPost = await Post.findById(createdPost._id).populate('user', '-password');
   
-	res.status(201).json(createdPost);
+	res.status(201).json(savedPost);
   });
   
 // @desc Get all posts and sort by timestamp

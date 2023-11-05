@@ -47,7 +47,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Update Post Query
@@ -59,7 +58,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Delete Post Query
@@ -71,7 +69,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Upvote Post Query

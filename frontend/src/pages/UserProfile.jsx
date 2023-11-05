@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
@@ -23,6 +24,38 @@ const UserProfile = () => {
 
   // Fetch user posts from the server
   const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
+
+  // Set state for managing posts
+  const [postData, setPostData] = useState([]);
+
+  // Use useEffect to set posts after component mounts
+  useEffect(() => {
+    if (userPosts) {
+      setPostData(userPosts);
+    }
+  }, [userPosts]);
+
+  // Function to update the post data when a vote is cast
+  const updatePostData = (postId, newPostData) => {
+    setPostData((prevData) => {
+      const postIndex = prevData.findIndex((post) => post._id === postId);
+  
+      if (postIndex === -1) {
+        // If the post doesn't exist in the array, add it
+        return [...prevData, newPostData];
+      } else {
+        // If the post already exists, update it
+        return prevData.map((post, index) =>
+          index === postIndex ? newPostData : post
+        );
+      }
+    });
+  };
+
+  // Function to remove a post from the post data
+  const removePost = (postId) => {
+    setPostData((prevData) => prevData.filter((post) => post._id !== postId));
+  };
 
   // Make user admin
   const [makeUserAdmin] = useMakeUserAdminMutation();
@@ -111,19 +144,23 @@ const UserProfile = () => {
                     <span className="border-b-4 border-primary">Posts</span>
                 </div>
                 <div>
-          {userPosts && userPosts.length === 0 ? ( // Check if userPosts is defined and has no posts
-            <div className="text-center mt-28 p-4 text-gray-500">
-              No posts to display.
-            </div>
-          ) : (
-            userPosts?.map((post) => (
-              <Post
-                key={post._id}
-                post={post}
-              />
-            ))
-          )}
-        </div>
+                {postData && postData?.length === 0 ? ( // Check if userPosts is defined and has no posts
+                  <div className="text-center mt-28 p-4 text-gray-500">
+                    No posts to display.
+                  </div>
+                ) : (
+                  postData?.map((post, index) => (
+                    <Post
+                      key={index}
+                      post={post}
+                      updatePostData={(postId, newPostData) =>
+                        updatePostData(postId, newPostData)
+                      }
+                      removePost={(postId) => removePost(postId)}
+                    />
+                  ))
+                )}
+              </div>
             </div>
             <AnnouncementContainer />
         </div>

@@ -17,7 +17,7 @@ import { ProfileImg } from "../assets";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-const Post = ({ post, updatePostData  }) => {
+const Post = ({ post, updatePostData, removePost }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
@@ -50,11 +50,17 @@ const Post = ({ post, updatePostData  }) => {
 	const [deletePost] = useDeletePostMutation();
 	const handleDeletePost = async () => {
 		try {
-			const response = await deletePost({ postId: postId }).unwrap();
-			console.log(response);
-			dispatch(setPosts({ ...response }));
+			const response = await toast.promise(
+				deletePost({ postId: postId }).unwrap(),
+				{
+					pending: "Deleting post...",
+					success: "Post deleted successfully",
+					error: "Failed to delete post",
+				}
+			);
 			if (response.message === "success") {
 				console.log("Post deleted successfully", response);
+				removePost(postId);
 			} else {
 				console.error("Post deletion failed", response);
 			}
@@ -92,15 +98,18 @@ const Post = ({ post, updatePostData  }) => {
 
 		try {
 			// Perform the upvote logic to send an API call to the server
-			const response = await upvotePost({
-				postId: postId,
-				data: data,
-			}).unwrap();
+			const response = await toast.promise(
+				upvotePost({ postId: postId, data: data }).unwrap(),
+				{
+					pending: "Upvoting...",
+					success: "Upvoted!",
+					error: "Upvote failed",
+				}
+			);
 
 			if (response.message === "success") {
 				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
-				toast.success("Upvoted!");
 				dispatch(setPosts({...response.post}));
 				// Update the post data in Home component with the new data
         updatePostData(postId, response.post);
@@ -121,14 +130,20 @@ const Post = ({ post, updatePostData  }) => {
   
     try {
       // Perform the downvote logic to send an API call to the server
-      const response = await downvotePost({ postId: postId, data: {} }).unwrap();
+      const response = await toast.promise(
+				downvotePost({ postId: postId, data: {} }).unwrap(),
+				{
+					pending: "Downvoting...",
+					success: "Downvoted!",
+					error: "Downvote failed",
+				}
+			);
   
       if (response.message === "success") {
         // Toggle the downvote state
         setIsDownvoted(!isDownvoted);
 				console.log('Downvote successful:', response);
 				dispatch(setPosts({...response.post}));
-				toast.success("Downvoted!");
 				// Update the post data in Home component with the new data
         updatePostData(postId, response.post);
       } else {

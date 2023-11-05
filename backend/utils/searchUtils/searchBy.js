@@ -15,7 +15,7 @@ const searchUsers = async (username) => {
 
 const searchPosts = async (value) => {
   try {
-      const posts = await Post.find({ text: { $regex: `.*${value}.*`, $options: 'i'} }).populate('user');
+      const posts = await Post.find({ text: { $regex: `.*${value}.*`, $options: 'i'} }).populate('user', '-password');
       return posts;
     } catch (error) {
       // handle error appropriately

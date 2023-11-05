@@ -44,6 +44,12 @@ const Home = () => {
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
 
+  // Function to append new post to the post data
+  const appendNewPost = (newPostData) => {
+    // Append the new post data to your local state
+    setPostData((prevData) => [newPostData, ...prevData]);
+  };
+
   // Function to update the post data when a vote is cast
   const updatePostData = (postId, newPostData) => {
     setPostData((prevData) => {
@@ -61,8 +67,12 @@ const Home = () => {
     });
   };
 
-  // Function to fetch more posts
+  // Function to remove a post from the post data
+  const removePost = (postId) => {
+    setPostData((prevData) => prevData.filter((post) => post._id !== postId));
+  };
 
+  // Function to fetch more posts
   const [paginationLoading, setPaginationLoading] = useState(false);
   const getNextPosts = async (pageCurrent) => {
     setPaginationLoading(true);
@@ -105,6 +115,7 @@ const Home = () => {
             updatePostData={(postId, newPostData) =>
               updatePostData(postId, newPostData)
             }
+            removePost={(postId) => removePost(postId)}
           />
         ))}
 
@@ -134,7 +145,7 @@ const Home = () => {
 
         <div>
           {isModalOpen && (
-            <AddPostForm handleModalOpen={handleModalOpen} />
+            <AddPostForm handleModalOpen={handleModalOpen} appendNewPost={appendNewPost} />
           )}
         </div>
       </div>

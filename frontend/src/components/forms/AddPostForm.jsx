@@ -3,20 +3,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { FormErrors, Loader } from "../../components";
-import { useCreatePostMutation, setPosts } from "../../redux";
+import { useCreatePostMutation } from "../../redux";
 import { convertToBase64 } from "../../utils";
 
 
-const AddPostForm = ({handleModalOpen}) => {
+const AddPostForm = ({handleModalOpen, appendNewPost}) => {
   // Get user info from redux store
   // const { userInfo } = useSelector((state) => state.auth);
 
   // Setup Dispatch
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [createPost, { isLoading }] = useCreatePostMutation();
@@ -39,13 +37,22 @@ const AddPostForm = ({handleModalOpen}) => {
       try {
         values = Object.assign(values, { image: file || ""});
         
-        const res = await createPost(values).unwrap();
-        console.log(res);
-        dispatch(setPosts({ ...res }));
+        const res = await toast.promise(
+          createPost(values).unwrap(),
+          {
+            pending: "Creating post...",
+            success: "Post created successfully",
+            error: "Failed to create post",
+          }
+        );
+
+        // Append the newly created post to your local state
+        // Call the appendNewPost function to append the newly created post
+        appendNewPost(res);
+
         // Close the modal
         handleModalOpen(); 
         navigate("/home");
-        toast.success("Post created successfully");
       } catch (err) {
         console.error("Failed to create a post:", err);
         toast.error(err?.data?.message || err?.error)

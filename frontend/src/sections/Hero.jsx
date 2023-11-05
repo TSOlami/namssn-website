@@ -32,7 +32,7 @@ const Hero = () => {
             {word.split('').map((char, index) => (
               <motion.span 
               variants={typingAnimation} 
-              className="inline-block" 
+              className="inline-block font-crimson text-sm md:text-lg text-small md:text- " 
               key={index}>
                 {char}
               </motion.span>
@@ -50,9 +50,9 @@ const Hero = () => {
     <div className="body-text">
     Are you a proud member of the National Association of Mathematical Science Students (NAMSSN) at the Federal University of Technology, Minna (FUTMINNA)? Welcome to your digital home – the NAMSSN FUTMINNA Chapter website.
     </div>
-    <div className="flex flex-row justify-around w-full py-5 gap-4 md:justify-normal">
-    <Link to='/signup' className="button-1">Sign Up</Link>
-    <Link to='/signin' className="button-2">Log In</Link>
+    <div className="flex flex-row w-full py-5 gap-4 md:justify-normal">
+      <Link to='/signup' className="button-1">Sign Up</Link>
+      <Link to='/signin' className="button-2">Log In</Link>
     </div>
     </div>
     <div className="pt-5 px-10">

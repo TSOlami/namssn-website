@@ -2,7 +2,7 @@ import Resource from '../../models/resourceModel.js';
 
 const getResource = async (fileUrl) => {
     try {
-        const resource = await Resource.findOne({fileUrl: fileUrl}).populate('user');
+        const resource = await Resource.findOne({fileUrl: fileUrl}).populate('user', '-password');
         if (resource) {
             console.log("Resource found")
         } else {
