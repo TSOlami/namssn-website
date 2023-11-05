@@ -69,3 +69,6 @@ dist-ssr
 
 # pmpm lock files
 pnpm-lock.yaml
+
+# Local Netlify folder
+.netlify

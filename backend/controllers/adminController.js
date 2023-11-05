@@ -387,7 +387,7 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
 
 // Create Event
 const createEvent = asyncHandler(async (req, res) => {
-  const { title, image } = req.body; // You can add more event properties as needed
+  const { title, date, image } = req.body; // You can add more event properties as needed
   const userId = req.user._id;
 
   console.log("Creating event");
@@ -396,6 +396,7 @@ const createEvent = asyncHandler(async (req, res) => {
   // Create a new event
   const newEvent = new Event({
     title,
+    date,
     image,
     user: userId, // Associate the event with the user who created it
   });
@@ -423,7 +424,7 @@ const getUserEvents = asyncHandler(async (req, res) => {
 // Update Event
 const updateEvent = asyncHandler(async (req, res) => {
   const eventId = req.params.eventId; // Get the event ID from the request parameters
-  const { title, image } = req.body;
+  const { title, date, image } = req.body;
 
   try {
     // Find the event by ID
@@ -441,6 +442,7 @@ const updateEvent = asyncHandler(async (req, res) => {
 
     // Update the event's image
     event.title = title || event.title;
+    event.date = date || event.date;
     event.image = image || event.image;
 
     // Save the updated event
