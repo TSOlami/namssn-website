@@ -126,7 +126,7 @@ const Resources = () => {
                                     <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-crimson sm:text-xl text-white text-sm">100 Level</span>
                                 </div>
                                     <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                        {level1FileList.map((file, index) => ( 
+                                        {level1FileList?.map((file, index) => ( 
                                             <ResourceCard key={index} fileUrl={base_url + file} description={data['100 Level'][index][file]['description']}
                                             uploaderUsername = {data['100 Level'][index][file]['uploaderUsername']}
                                             title = {data['100 Level'][index][file]['title']}
@@ -194,7 +194,7 @@ const Resources = () => {
                                     <span className="font-bold pl-4 absolute left-4 lg:left-[14em] font-crimson sm:text-xl text-white text-sm">500 Level</span>
                                 </div>
                                     <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                        {level5FileList.map((file, index) => ( 
+                                        {level5FileList?.map((file, index) => ( 
                                             <ResourceCard key={index} fileUrl={base_url + file} description={data['500 Level'][index][file]['description']}
                                             uploaderUsername = {data['500 Level'][index][file]['uploaderUsername']}
                                             title = {data['500 Level'][index][file]['title']}
@@ -217,7 +217,7 @@ const Resources = () => {
                         </div>
                     </div>
                     <div className="fixed z-1 bottom-[10em] left-[10em] md:left-[15em] lg:left-[20em] w-[60%]">
-                        <FileForm name={userInfo.name} userId={userInfo._id} show={isPopUpVisible} onClose={handlePopUpClose} />
+                        <FileForm name={userInfo?.name} userId={userInfo?._id} show={isPopUpVisible} onClose={handlePopUpClose} />
                     </div>
                 </div>  
             );

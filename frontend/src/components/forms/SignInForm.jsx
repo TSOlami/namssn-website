@@ -9,7 +9,6 @@ import { useLoginMutation, useSendMailMutation, setCredentials } from '../../red
 import FormErrors from './FormErrors';
 import InputField from "../InputField";
 import { toast } from "react-toastify";
-import Loader from "../Loader";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +16,7 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [ login, { isLoading }]= useLoginMutation();
+  const [ login ]= useLoginMutation();
 
   const [sendMail] = useSendMailMutation();
 
@@ -63,7 +62,11 @@ const SignInForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-        const res = await login(values).unwrap();
+        const res = await toast.promise(login(values).unwrap(), {
+          pending: 'Logging in...',
+          success: { render: 'Login successful, Welcome back!' },
+        });
+
         dispatch(setCredentials({...res}));
         // Trigger sending the email after a successful login
       const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
@@ -81,7 +84,6 @@ const SignInForm = () => {
         });
       }
         navigate('/home');
-        toast.success('Login successful, Welcome back!');
       } catch (err) {
         toast.error(err?.data?.message || err?.error)
       }
@@ -147,14 +149,12 @@ const SignInForm = () => {
       <FormErrors error={formik.errors.password} />
     ) : null}
 
-    { isLoading && <Loader />}
-
     <Link to="/forgot-password" className="text-gray-500 text-right text-md">
       Forgot Password?
     </Link>
     <button
       type="submit"
-      className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
+      className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
     >
       Log In
     </button>

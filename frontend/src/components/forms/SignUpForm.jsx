@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import {FormErrors, InputField } from "../../components";
-import Loader from "../Loader";
 import { useRegisterMutation, useSendMailMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
@@ -41,7 +40,7 @@ const SignUpForm = () => {
     }
   }, [navigate, userInfo]);
 
-  const [ register, { isLoading }] = useRegisterMutation();
+  const [ register ] = useRegisterMutation();
 
   const [ sendMail ] = useSendMailMutation();
 
@@ -79,7 +78,11 @@ const SignUpForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-        const res = await register(values).unwrap();
+        const res = await toast.promise(register(values).unwrap(), {
+          pending: "Registering...",
+          success: "Registration successful. Welcome to NAMSSN (FUTMINNA)!",
+        });
+
         dispatch(setCredentials({...res}));
         // Registration successful, now send the registration email
         let { username, email } = res;
@@ -88,7 +91,6 @@ const SignUpForm = () => {
           return Promise.resolve(msg);
         }
         navigate('/home');
-        toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
       } catch (err) {
         toast.error(err?.data?.message || err?.error)
       }
@@ -226,11 +228,9 @@ const SignUpForm = () => {
         <FormErrors error={formik.errors.confirmPassword} />
       ) : null}
 
-      { isLoading && <Loader />}
-
       <button
         type="submit"
-        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
+        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
       >
         Sign Up
       </button>
