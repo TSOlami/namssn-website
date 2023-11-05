@@ -1,4 +1,4 @@
-import getUser from "./getUser.js";
+// creates a formatted list of files and their details
 const createFileList = async (response) => {
     const fileList = [];
     for (const resource of response) {

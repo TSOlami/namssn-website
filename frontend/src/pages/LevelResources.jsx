@@ -30,13 +30,6 @@ const LevelResources = () => {
         fetchData(); // call the fetchData function
     }, []);
 
-    const [selectedOption, setSelectedOption] = useState('title');
-    const handleSelectChange = (e) => {
-        setSelectedOption(e.target.value);
-        };
-    useEffect(() => {
-    }, [selectedOption]);
-
     const [value, setValue] = useState("")
     const isLoading = true;
 
@@ -47,33 +40,31 @@ const LevelResources = () => {
     useEffect(() => {
             // console.log(value)
             if (value === '' && tempData) {
+                // if value is an empty string
                 setData(tempData)
-            } else if (selectedOption && value !== '') {
+            } else if (value !== '') {
+                // if value is not an empty string
                 if (data && data.length !== 0) {
-                    const myfileList = data.map(obj => Object.keys(obj)[0]);
-                    console.log(myfileList)
+                    const myfileList = data.map(obj => Object.keys(obj)[0]); // a list of file names
                     const newData = [];
                     myfileList.map((file, index) => {
-                        console.log(data[index][file][selectedOption])
-                        if (data[index][file][selectedOption] && data[index][file][selectedOption].toLowerCase().includes(value.toLowerCase())) {
+                        console.log(data[index][file]['title'])
+                        if (data[index][file]['title'] && data[index][file]['title'].toLowerCase().includes(value.toLowerCase())) {
                            newData.push({[file]: data[index][file]})
-                           console.log(newData)
                             setData(newData)
                         };
                     });
                 }
             }
-            // console.log(data)
-    
         }, [value]);
 
         const handleReload = () => {
+            // reloads the page
             window.location.reload();
         }
     
     if (data && data !== "error") {
         const fileList = data.map(obj => Object.keys(obj)[0])
-
         return (
             <div className="flex">
                 <Sidebar/>
@@ -83,16 +74,8 @@ const LevelResources = () => {
                     </div>
                     <div>
                         <div className="mb-4 flex justify-between">
-                            {/* <span className="px-4 pb-4  font-bold font-crimson sm:text-xl text-blue-900 text-sm">{level} Resources</span> */}
-                            {/* <div className="flex gap-2 mr-4">
-                                <span className="font-serif text-blue-900 text-[0.95em]">Filter: </span>
-                                <select value={selectedOption} onChange={handleSelectChange} name="dropdown" className="ring-2 text-gray-300 block w-[55%] mt-1 p-2 border rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                                    <option value="title" className="text-black font-crimson text-lg">Title</option>
-                                    <option value="uploaderName" className="text-black font-crimson text-lg">Owner</option>
-                                </select>
-                            </div> */}
                         </div>
-                        <div className="sticky bg-white ring-2 border-2 z-10 pl-4 pr-4 top-[13%] left-[33%] border-gray-300 rounded-xl w-[50%]">
+                        <div className="sticky bg-white ring-2 border-2 z-[500] pl-4 pr-4 top-[15%] md:top-[13%] left-[33%] border-gray-300 rounded-xl w-[50%]">
                             <div className="absolute  h-[100%] flex ">
                             <FaMagnifyingGlass  className="mt-1"/>
                             </div>

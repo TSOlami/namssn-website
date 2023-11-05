@@ -1,5 +1,6 @@
 import Resource from '../../models/resourceModel.js';
 
+// returns all resources
 const getAllResources = async () => {
     try {
         const allResources = await Resource.find();

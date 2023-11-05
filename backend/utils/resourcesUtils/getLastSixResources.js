@@ -1,9 +1,9 @@
 import Resource from "../../models/resourceModel.js";
 
 // Find the last five uploaded resources
-const getLastFiveResources = async (level) => {
+const getLastSixResources = async (level) => {
   try {
-    const lastFiveResources = await Resource.find({level: level}).sort({ createdAt: -1 }).limit(5);
+    const lastFiveResources = await Resource.find({level: level}).sort({ createdAt: -1 }).limit(6);
     console.log(lastFiveResources);
     return lastFiveResources;
   } catch (error) {
@@ -12,4 +12,4 @@ const getLastFiveResources = async (level) => {
   }
 };
 
-export default getLastFiveResources;
+export default getLastSixResources;

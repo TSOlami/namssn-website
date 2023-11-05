@@ -1,6 +1,7 @@
 import Resource from '../../models/resourceModel.js';
 
 const getResourcesByLevel = async (level) => {
+    // gets all the resources for a specified level
     try {
         const resource = await Resource.find({level: level}).sort({ updatedAt: -1 });
         if (resource) {

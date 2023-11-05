@@ -12,6 +12,9 @@ import UserOTPVerification from '../models/userOTPVerification.js';
 import {postResource, getResources, getSpecifiedResources,deleteResource} from '../utils/resourceLogic.js';
 import getData from '../utils/searchUtils/getData.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+
 
 // @desc	Authenticate user/set token
 // Route	post  /api/v1/users/auth
@@ -614,13 +617,8 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
   try {
-    console.log("here")
-    // const folderName = 'uploads'
-    // const folderPath = path.resolve(__dirname, folderName)
-    // console.log( folderName)
     const filesDetails = await getResources(req, res);
     if (filesDetails) {
-      // console.log(filesDetails)
       res.json(filesDetails);
     }
   } catch (err) {
@@ -628,6 +626,21 @@ const getUserResources = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc	Get a file
+// Route	GET  /api/v1/users/resources/filename
+// access	Private
+const getFile = asyncHandler(async (req, res) => {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const projectRootDirectory = path.join(__dirname, '../../');
+    console.log(projectRootDirectory);
+    const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
+    res.sendFile(filePath)
+})
+
+// @desc	Get resources for a specified level
+// Route	GET  /api/v1/users/level/resources
+// access	Private
 const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
   const level =req.params.level
   console.log(level)
@@ -766,6 +779,7 @@ export {
   postUserResources,
   getUserResources,
   getSpecifiedLevelResources,
+  getFile,
   updateUserResources,
   deleteUserResources,
   postUserPayment,

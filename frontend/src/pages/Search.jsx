@@ -1,15 +1,11 @@
 import Select from 'react-select'
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Resources from "./Resources";
 import store from "../redux/store/store";
-import { PostSearch, ResourceCard, AnnouncementContainer } from "../components";
+import { PostSearch, ResourceCard } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
 import Loader from "../components/Loader";
-
-const state = store.getState();
 
 const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 const Search = () => {
@@ -22,7 +18,7 @@ const Search = () => {
         const params = new URLSearchParams(window.location.search);
         const queryValue = params.get('key');
         if (queryValue) {
-            setValue(queryValue);
+            setValue(queryValue); // set the search value
             console.log(queryValue)
         }
     }, []);
@@ -31,7 +27,7 @@ const Search = () => {
         const params = new URLSearchParams(window.location.search);
         const filterValue = params.get('filter');
         if (filterValue) {
-            setFilter(filterValue);
+            setFilter(filterValue); // set the filter value
         }
     }, []);
 
@@ -43,7 +39,6 @@ const Search = () => {
                     const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
                     if (res) {
                         console.log(res);
-                        // setData({})
                         setData(res.data); // set the fetched data to the state
                         setIsLoading(false);
                     }
@@ -76,9 +71,7 @@ const Search = () => {
         console.log(data.users)
         let fileUrls = []
         if (data.resources) {
-            fileUrls = [...new Set(data.resources.flatMap(obj => Object.keys(obj)))]
-            // console.log(data.resources)
-            // console.log(fileUrls)
+            fileUrls = [...new Set(data.resources.flatMap(obj => Object.keys(obj)))] // a list of file urls
         }
 
     const handleChange = (val) => {
