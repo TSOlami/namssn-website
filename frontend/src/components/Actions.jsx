@@ -34,11 +34,11 @@ const Actions = ({
 						className="flex flex-row items-center gap-1"
 					>
 						{isUpvoted ? (
-							<BiSolidUpvote color="blue" />
+							<BiSolidUpvote color="#17A1FA" />
 						) : (
 							<BiSolidUpvote />
 						)}
-						<span>{upvotes} {" "} </span>
+						<span>{upvotes?.lenght} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -54,7 +54,7 @@ const Actions = ({
 						) : (
 							<BiSolidDownvote />
 						)}
-						<span>{downvotes}{" "} </span>
+						<span>{downvotes?.lenght}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>

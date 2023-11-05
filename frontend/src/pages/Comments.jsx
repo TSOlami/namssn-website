@@ -108,8 +108,8 @@ const Comments = () => {
 								key={comment?._id}
 								postId={comment?.post}
 								commentId={comment._id}
-								upvotes={comment?.upvotes?.length}
-								downvotes={comment?.downvotes?.length}
+								upvotes={comment?.upvotes}
+								downvotes={comment?.downvotes}
 								text={comment?.text}
 								createdAt={comment?.createdAt}
 								u_id={comment?.user._id}

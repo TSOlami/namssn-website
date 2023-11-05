@@ -282,10 +282,10 @@ const downvotePost = asyncHandler(async (req, res) => {
 			// The user has already downvoted the post, so remove their ID from the downvotes array.
 			post.downvotes.splice(downvotedIndex, 1);
 
-			// Deduct 2 points for removing a downvote
+			// Add 2 points for removing a downvote
 			const user = await User.findById(post.user);
 			if (user) {
-			  user.points -= 2;
+			  user.points += 2;
 			  await user.save();
 			}
 		} else {
@@ -543,18 +543,26 @@ const upvoteComment = asyncHandler(async (req, res) => {
 		  }
 		}
   
-		if (upvotedIndex === -1) {
-		  // The user hasn't upvoted the comment, so add their ID to the upvotes array.
-		  comment.upvotes.push(userId);
-		  console.log("Upvoting comment");
-  
-		  // Add 5 points for upvoting
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points += 5;
-		    console.log("Adding 5 points to user");
-			await user.save();
-		  }
+		if (upvotedIndex !== -1) {
+			// The user has already upvoted the comment, so remove their ID from the upvotes array.
+			comment.upvotes.splice(upvotedIndex, 1);
+
+			// Deduct 5 points for removing an upvote
+			const user = await User.findById(comment.user);
+			if (user) {
+				user.points -= 5;
+				await user.save();
+			}
+		} else {
+			// The user hasn't upvoted the comment, so add their ID to the upvotes array.
+			comment.upvotes.push(userId);
+
+			// Add 5 points for upvoting
+			const user = await User.findById(comment.user);
+			if (user) {
+				user.points += 5;
+				await user.save();
+			}
 
 			if (post.user.username !== req.user.username) {
 				// Create a notification for the comment owner
@@ -566,7 +574,6 @@ const upvoteComment = asyncHandler(async (req, res) => {
 				});
 				await notification.save();
 			}
-			
 		}
   
 		await comment.save();
@@ -616,17 +623,27 @@ const downvoteComment = asyncHandler(async (req, res) => {
 			await user.save();
 		  }
 		}
-  
-		if (downvotedIndex === -1) {
-		  // The user hasn't downvoted the comment, so add their ID to the downvotes array.
-		  comment.downvotes.push(userId);
-  
-		  // Deduct 2 points for downvoting
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 2;
-			await user.save();
-		  }
+
+		if (downvotedIndex !== -1) {
+			// The user has already downvoted the comment, so remove their ID from the downvotes array.
+			comment.downvotes.splice(downvotedIndex, 1);
+
+			// Add 2 points for removing a downvote
+			const user = await User.findById(comment.user);
+			if (user) {
+			  user.points += 2;
+			  await user.save();
+			}
+		} else {
+			// The user hasn't downvoted the comment, so add their ID to the downvotes array.
+			comment.downvotes.push(userId);
+
+			// Deduct 2 points for downvoting
+			const user = await User.findById(comment.user);
+			if (user) {
+				user.points -= 2;
+				await user.save();
+			}
 
 			if (post.user.username !== req.user.username) {
 				// Create a notification for the comment owner
@@ -638,7 +655,6 @@ const downvoteComment = asyncHandler(async (req, res) => {
 				});
 				await notification.save();
 			}
-
 		}
   
 		await comment.save();

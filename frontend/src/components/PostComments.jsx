@@ -9,6 +9,7 @@ import { useDeleteCommentMutation, useUpvoteCommentMutation, useDownvoteCommentM
 import { formatDateToTime } from "../utils";
 import { ProfileImg } from "../assets";
 import { CommentActions } from "../components";
+import { toast } from "react-toastify";
 
 const PostComments = ({
     isVerified,
@@ -32,6 +33,15 @@ const PostComments = ({
 
   const date = new Date(createdAt);
 
+  // Check if the user has upvoted or downvoted the post
+  const initialUpvoteStatus = upvotes.includes(userId);
+  const initialDownvoteStatus = downvotes.includes(userId);
+
+  
+  // State for keeping track of upvotes and downvotes status
+  const [isUpvoted, setIsUpvoted] = useState(initialUpvoteStatus);
+  const [isDownvoted, setIsDownvoted] = useState(initialDownvoteStatus);
+
   // Post deletion
   const [deleteComment] = useDeleteCommentMutation();
   const [upvoteComment] = useUpvoteCommentMutation();
@@ -39,25 +49,52 @@ const PostComments = ({
   
   // Handle comment upvote
   const handleUpvote = async () => {
+    // Add logic to prevent the user from upvoting and downvoting at the same time
+		if (isDownvoted) {
+			setIsDownvoted(false);
+		}
+    
     try {
-      const response = await upvoteComment({commentId, postId}).unwrap();
-      if (response.message === 'success') {
-        console.log("Comment upvoted successfully", response);
-      } else {
-        console.error("Comment upvote failed", response);
+        const response = await toast.promise(
+          upvoteComment({commentId, postId}).unwrap(),
+          {
+            pending: "Upvoting comment...",
+            success: "Comment upvoted successfully",
+            error: "Failed to upvote comment",
+          }
+        );
+        
+        if (response.message === 'success') {
+          // Toggle the upvote state
+          setIsUpvoted(!isUpvoted);
+        }
       }
-    }
-    catch (error) {
-      console.error("Comment upvote failed", error);
-    }
-  };
+      catch (error) {
+        console.error("Comment upvote failed", error);
+      }
+    };
 
   // Handle comment downvote
   const handleDownvote = async () => {
+    // Add logic to prevent the user from upvoting and downvoting at the same time
+    if (isUpvoted) {
+      setIsUpvoted(false);
+    }
+
     try {
-      const response = await downvoteComment({commentId, postId}).unwrap();
+      const response = await toast.promise(
+        downvoteComment({commentId, postId}).unwrap(),
+        {
+          pending: "Downvoting comment...",
+          success: "Comment downvoted successfully",
+          error: "Failed to downvote comment",
+        }
+      );
       if (response.message === 'success') {
         console.log("Comment downvoted successfully", response);
+
+        // Toggle the downvote state
+        setIsDownvoted(!isDownvoted);
       }} catch (error) {
         console.error("Comment downvote failed", error);
       }
@@ -105,7 +142,7 @@ const PostComments = ({
                         className="absolute right-0 active:bg-greyish rounded-md p-2"
                         onClick={handleOpenOptions}
                     >
-                        <div className="cursor-pointer">{role === "admin" || userId === u_id ? <PiDotsThreeOutlineVerticalFill /> : null}
+                        <div className="cursor-pointer">{role === "admin" || userId === u_id ?   <PiDotsThreeOutlineVerticalFill /> : null}
                         </div>
                     </span>
                     {openOptions && (
@@ -124,6 +161,8 @@ const PostComments = ({
                     onUpvote={handleUpvote}
                     onDownvote={handleDownvote}
                     postId={postId}
+                    isUpvoted={isUpvoted}
+                    isDownvoted={isDownvoted}
                 />
 
             </div>
