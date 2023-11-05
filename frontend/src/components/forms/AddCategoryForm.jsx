@@ -40,10 +40,16 @@ const AddCategoryForm = ({ handleModal }) => {
     onSubmit: async (values) => {
       try {
         console.log(values);
-        const res = await createCategory(values).unwrap();
+        const res = await toast.promise(
+          createCategory(values).unwrap(),
+          {
+            pending: "Creating Payment Category...",
+            success: "Payment Category created successfully",
+          }
+        );
         console.log(res);
+        handleModal();
         navigate("/admin/payment");
-        toast.success("Payment Category created successfully");
       } catch (err) {
         console.error("Failed to create payment:", err);
         toast.error(err?.data?.message || err?.error)

@@ -64,7 +64,7 @@ const SignInForm = () => {
 			try {
         const res = await toast.promise(login(values).unwrap(), {
           pending: 'Logging in...',
-          success: { render: 'Login successful, Welcome back!' },
+          success: "Log in successful, welcome back!",
         });
 
         dispatch(setCredentials({...res}));

@@ -65,14 +65,15 @@ const AdminAnnouncements = () => {
 
       console.log("Submitted values:", values);
       // Dispatch the createAnnouncement action
-      const res = await createAnnouncement(values).unwrap();
-      console.log("Response:", res);
+      const res = await toast.promise(createAnnouncement(values).unwrap(), {
+        pending: "Creating announcement...",
+        success: "Announcement created!",
+      });
+
       // Dispatch the setAnnouncement action
       dispatch(setAnnouncements(res));
       // Reset the form
       formik.resetForm();
-      // Show a success toast
-      toast.success("Announcement created!");
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
       console.log("Error:", err?.data?.message || err?.error);
@@ -102,12 +103,18 @@ const AdminAnnouncements = () => {
   const handleDeleteClick = async (announcement) => {
     // Handle the delete logic for the announcement
     console.log("Deleting announcement:", announcement._id);
-    const res = await deleteAnnouncement(announcement._id).unwrap();
+    const res = await toast.promise(
+      deleteAnnouncement(announcement._id).unwrap(),
+      {
+        pending: "Deleting announcement...",
+        success: "Announcement deleted!",
+        error: "An error occurred while deleting the announcement"
+      }
+    );
     console.log("Response:", res);
     // Dispatch the setAnnouncement action
     dispatch(setAnnouncements(res));
     // Show a success toast
-    toast.success("Announcement deleted!");
   };
 
   // Use the useFormik hook to manage the form state

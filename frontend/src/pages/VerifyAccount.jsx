@@ -17,17 +17,14 @@ const VerifyAccount = () => {
   const handleResendOTP = async () => {
     // Use the resendAccountVerificationOTP function to resend OTP
     try {
-      const { code, error } = await resendAccountVerificationOTP(username, studentEmail);
+      await toast.promise(
+        resendAccountVerificationOTP(username, studentEmail),
+        {
+          pending: "Sending OTP...",
+          success: "OTP sent successfully, please check your student email.",
+        }
+      );
 
-      if (code) {
-        // OTP sent successfully
-        console.log("Resent OTP successfully");
-        toast.success("OTP has been resent to your email.");
-      } else if (error) {
-        // Handle any error from the resend operation
-        console.error("Failed to resend OTP");
-        toast.error("Failed to resend OTP. Please try again.");
-      }
     } catch (error) {
       // Handle any unexpected errors
       console.error("An error occurred during OTP resend:", error);

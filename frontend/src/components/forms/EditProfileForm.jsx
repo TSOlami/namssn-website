@@ -64,11 +64,15 @@ const EditProfileForm = ({ handleModal }) => {
       onSubmit: async (values) => {
         try {
           let updatedValues = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
-          const res = await updateUser(updatedValues).unwrap();
+          // Call the updateUser function to update the user's profile
+          const res = await toast.promise(updateUser(updatedValues).unwrap(), {
+            pending: 'Updating profile...',
+            success: 'Profile updated successfully',
+          });
+
+          // Dispatch the setCredentials action to update the userInfo object in the state
           dispatch(setCredentials({...res}));
           navigate('/profile');
-          console.log(values);
-          toast.success('Profile updated!');
           handleModal();
         } catch (err) {
           toast.error(err?.data?.message || err?.error)

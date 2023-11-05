@@ -33,7 +33,17 @@ const NotificationPage = () => {
 	const handleClearNotifications = async () => {
 		// Call the clearNotifications mutation to clear notifications
 		try {
-			await clearNotifications();
+			await toast.promise(
+				clearNotifications(),
+				{
+					pending: "Clearing notifications...",
+					success: "Notifications cleared successfully!",
+				},
+				{
+					position: "bottom-center",
+					toastId: "clearNotifications",
+				}
+			);
 			// If successful, show a toast notification
 			dispatch(setNotifications([]));
 			toast.success("Notifications cleared successfully!");

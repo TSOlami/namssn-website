@@ -63,10 +63,18 @@ const AdminBlogs = () => {
 		onSubmit: async (values) => {
 			try {
 				let updatedValues = Object.assign(values, { coverImage: file });
-        const res = await createBlog(updatedValues).unwrap();
+        const res = await toast.promise(createBlog(updatedValues).unwrap(), {
+					pending: "Creating blog post...",
+					success: "Blog post created successfully",
+					
+					error: {
+						render({ data }) {
+							return `Failed to create blog post: ${data.message}`;
+						},
+					},
+				});
         dispatch(setBlogs({...res}));
         formik.resetForm();
-        toast.success("Blog post created successfully");
 				console.log(values);
 			} catch (error) {
 				if (error.data.message == 'request entity too large') {
@@ -86,8 +94,15 @@ const AdminBlogs = () => {
     // Delete the blog post
     try {
       const blogId = blog._id;
-      await deleteBlog(blogId).unwrap();
-      toast.success("Blog post deleted successfully");
+      await toast.promise(deleteBlog(blogId).unwrap(), {
+				pending: "Deleting blog post...",
+				success: "Blog post deleted successfully",
+				error: {
+					render({ data }) {
+						return `Failed to delete blog post: ${data.message}`;
+					},
+				},
+			});
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.message || error?.error);
