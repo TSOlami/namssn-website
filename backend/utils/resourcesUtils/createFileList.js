@@ -10,6 +10,7 @@ const createFileList = async (response) => {
           const fileDetails = {
             [resource.fileUrl]: {
               uploaderUsername: resource.name,
+              uploaderId: resource.user,
               title: resource.title,
               description: resource.description,
               date: formattedDate,

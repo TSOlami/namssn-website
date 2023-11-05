@@ -8,8 +8,10 @@ import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
 const state = store.getState();
 const userInfo = state.auth.userInfo;
+const isAdmin = userInfo?.role;
 const ResourceCard = ({
 	uploaderUsername,
+	uploaderId,
 	title,
 	course,
 	fileUrl,
@@ -118,15 +120,6 @@ const ResourceCard = ({
 				<div ref={buttonRef}>
 					{openOptions && (
 						<div>
-							{/* {isAdmin === "admin" && ( */}
-								<button
-									onClick={handleNewDelete}
-									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
-								>
-									<MdDelete /> <span>Delete Post</span>
-								</button>
-							{/* )} */}
-
 							<div
 								onClick={handleSetShowDetails}
 								className="bg-white p-2 absolute right-3 top-[50px] flex items-center shadow-lg w-[120px] hover:border border-black z-[201]"
@@ -139,6 +132,14 @@ const ResourceCard = ({
 							>
 								Share
 							</div>
+							{isAdmin === "admin" || uploaderId===userInfo._id &&
+								<button
+									onClick={handleNewDelete}
+									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
+								>
+									<MdDelete /> <span>Delete Post</span>
+								</button>
+							}
 						</div>
 					)}
 				</div>
