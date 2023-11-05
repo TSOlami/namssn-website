@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 const Actions = ({
 	upvotes,
 	downvotes,
-	shares,
+	isUpvoted,
+	isDownvoted,
 	onUpvote,
 	onDownvote,
 	postId,
@@ -32,8 +33,12 @@ const Actions = ({
 						onClick={onUpvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidUpvote color="#17A1FA" />
-						<span>{upvotes} </span>
+						{isUpvoted ? (
+							<BiSolidUpvote color="blue" />
+						) : (
+							<BiSolidUpvote />
+						)}
+						<span>{upvotes} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -44,7 +49,12 @@ const Actions = ({
 						onClick={onDownvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidDownvote color="red" /> {downvotes}{" "}
+						{isDownvoted ? (
+							<BiSolidDownvote color="red" />
+						) : (
+							<BiSolidDownvote />
+						)}
+						<span>{downvotes}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>
@@ -66,7 +76,7 @@ const Actions = ({
 
 			<div>
 				<span className="flex items-center gap-1 cursor-pointer">
-					<BiShareAlt /> {shares}
+					<BiShareAlt />
 				</span>
 				<span>Share</span>
 			</div>

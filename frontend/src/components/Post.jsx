@@ -66,9 +66,13 @@ const Post = ({ post, updatePostData  }) => {
 	// Get the user ID from the redux store
 	const { _id: userId, role } = useSelector((state) => state.auth.userInfo);
 
+	// Check if the user has upvoted or downvoted the post
+	const isUpvotedInitial = post?.upvotes.includes(userId);
+	const isDownvotedInitial = post?.downvotes.includes(userId);
+
 	// Add a state to keep track of the upvote and downvote status
-	const [isUpvoted, setIsUpvoted] = useState(false);
-	const [isDownvoted, setIsDownvoted] = useState(false);
+	const [isUpvoted, setIsUpvoted] = useState(isUpvotedInitial);
+	const [isDownvoted, setIsDownvoted] = useState(isDownvotedInitial);
 
 	// Add the upvote and downvote mutations
 	const [upvotePost] = useUpvotePostMutation();

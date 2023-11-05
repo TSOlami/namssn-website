@@ -56,7 +56,7 @@ const FileForm = (props) => {
             formData.append('semester', selectedOption1);
             formData.append('course', selectedOption2)
             try {
-                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
+                await axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData);
                 toast.success("File Uploaded Successfully");
                 setIsLoading(false);
                 window.location.reload()
