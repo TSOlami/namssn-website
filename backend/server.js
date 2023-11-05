@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// import memjs from 'memjs';
 import connectDb from './config/db.js';
 connectDb();
 import path from 'path'
@@ -12,9 +11,6 @@ const app = createServer();
 
 // Define the port number for the server, default to 5000 if not provided in the environment
 const port = process.env.PORT || 5000;
-
-// Create a memjs client
-// export const client = memjs.Client.create();
 
 // ---------------- deployment-----------------------
 const __dirname1=path.resolve();

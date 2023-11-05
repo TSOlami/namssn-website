@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import Loader from "./Loader";
+import Loader from "../Loader";
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-crimson text-lg"

@@ -15,7 +15,7 @@ import FormErrors from '../components/forms/FormErrors'
 import InputField from './InputField'
 import HeaderComponent from './nav/HeaderComponent';
 import ResourceCard from './ResourceCard';
-import FileForm from './FileForm';
+import FileForm from './forms/FileForm';
 import Loader from './Loader';
 import PrivateRoutes from './PrivateRoutes';
 import EditProfileForm from './forms/EditProfileForm';
