@@ -1,5 +1,5 @@
 import * as fs from "fs";
-
+// check if the upload directory is already created, else, creates it
 export default async function checkUploadDirectory(directory) {
     try {
       await fs.promises.access(directory, fs.constants.F_OK);

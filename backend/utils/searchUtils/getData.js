@@ -30,14 +30,12 @@ const getData = async (value, filter) => {
                 const resources = await searchResources(value);
                 const formattedResources = await createFileList(resources);
                 data['resources'] = formattedResources
-                console.log("======================", formattedResources)
                 break;
             case 'posts':
                 const posts = await searchPosts(value);
                 data['posts'] = posts;
                 break;
         }
-        // console.log(data)
         return data
     }
 }

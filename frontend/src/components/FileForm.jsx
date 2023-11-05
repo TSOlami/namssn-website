@@ -4,16 +4,13 @@ import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "./Loader";
-// import { FileContext } from "./FileProvider";
 
 const FileForm = (props) => {
-    // const [fileDetails, setFileDetails] = useContext(FileContext)
     const textStyle = "font-bold font-crimson text-lg"
     const errorStyle = "text-red-500 text-sm";
-    // console.log(filesDetails)
     const [isLoading, setIsLoading] = useState(false);
-
     const [inputValue, setInputValue] = useState("");
+    
     useEffect(() => {
     }, [inputValue]);
     const [selectedOption1, setSelectedOption1] = useState("100 Level");
@@ -23,15 +20,6 @@ const FileForm = (props) => {
         };
     useEffect(() => {
     }, [selectedOption1]);
-
-    const handleSelectChange2 = (e) => {
-        setSelectedOption2(e.target.value);
-    }
-
-    // useEffect(() => {
-    //     console.log(fileDetails)
-    //     setFileDetails()
-    // }, [fileData])
 
     const validationSchema = Yup.object().shape({
         file: Yup.mixed()
@@ -56,7 +44,7 @@ const FileForm = (props) => {
             formData.append('semester', selectedOption1);
             formData.append('course', selectedOption2)
             try {
-                const res = await axios.post('http://127.0.0.1:5000/api/v1/users/resources', formData);
+                const res = await axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData);
                 toast.success("File Uploaded Successfully");
                 setIsLoading(false);
                 window.location.reload()
@@ -81,16 +69,7 @@ const FileForm = (props) => {
                             <option value="400 Level" className="text-black font-crimson text-lg">Year 4 </option>
                             <option value="500 Level" className="text-black font-crimson text-lg">Year 5 </option>
                         </select>
-                    </div> 
-                    {/* <div>
-                        <span className={textStyle}> Course </span>
-                        <select value={selectedOption2} onChange={handleSelectChange2} name="dropdown2" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                            <option value="option1" className="text-black font-crimson text-lg">Course A</option>
-                            <option value="option2" className="text-black font-crimson text-lg">Course B</option>
-                            <option value="option3" className="text-black font-crimson text-lg">Course C</option>
-                            <option value="option4" className="text-black font-crimson text-lg">Course D</option>
-                        </select>
-                    </div> */}
+                    </div>
                     <div className="flex flex-col mt-2 h-[7em]">
                         <span className={textStyle}> File Description </span>
                         <div className="h-[100%] w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200">

@@ -2,6 +2,7 @@ import User from "../../models/userModel.js";
 import Post from "../../models/postModel.js";
 import Resource from "../../models/resourceModel.js";
 
+// search for matching user
 const searchUsers = async (username) => {
     try {
         const users = await User.find({ username: { $regex: `.*${username}.*`, $options: 'i'} });
@@ -13,6 +14,7 @@ const searchUsers = async (username) => {
       }
 }
 
+// search for matching post
 const searchPosts = async (value) => {
   try {
       const posts = await Post.find({ text: { $regex: `.*${value}.*`, $options: 'i'} }).populate('user');
@@ -24,6 +26,7 @@ const searchPosts = async (value) => {
     }
 }
 
+// search for matching resource
 const searchResources = async (value) => {
   try {
       const resources = await Resource.find({ title: { $regex: `.*${value}.*`, $options: 'i'} });

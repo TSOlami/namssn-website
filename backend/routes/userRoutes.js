@@ -1,6 +1,3 @@
-import * as fs from "fs";
-import { fileURLToPath } from 'url';
-import path from 'path'
 import express from "express";
 
 // Create an instance of an Express Router to define routes.
@@ -27,7 +24,7 @@ import {
   postUserResources,
   getUserResources,
   getSpecifiedLevelResources,
-  updateUserResources,
+  getFile,
   deleteUserResources,
   postUserPayment,
   getUserPayments,
@@ -304,15 +301,7 @@ router
 
 router
   .route('/resources/:filename')
-  .get((req, res) => {
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const projectRootDirectory = path.join(__dirname, '../../');
-    console.log(projectRootDirectory);
-    const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
-    res.sendFile(filePath)
-  })
+  .get(getFile)
   .delete(deleteUserResources)
 
 router

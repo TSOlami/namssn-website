@@ -54,7 +54,7 @@ const AnnouncementContainer = () => {
   });
 
 	return (
-		<div className={location.pathname === '/announcements' ? "border-gray-300 border-l-2 p-4 md:flex flex-col gap-1 mb-6" : "border-gray-300 border-l-2 p-4 md:flex flex-col gap-1 hidden mb-4 xl:w-[360px]"}>
+		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 xl:w-[360px]"}>
 			<h1 className="text-3xl font-bold py-2 border-b-2 ">
 				Announcements
 			</h1>
