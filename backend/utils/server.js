@@ -15,7 +15,7 @@ function createServer() {
   const app = express();
 
   // Middleware setup
-  app.use(express.json()); // Parse JSON request bodies
+  app.use(express.json({ limit: '10mb' })); // Parse JSON request bodies
   app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
   app.use(cookieParser()); // Parse cookies
   app.use(cors());
