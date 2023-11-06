@@ -13,12 +13,18 @@ const Actions = ({
 	isDownvoted,
 	onUpvote,
 	onDownvote,
+	comments,
 	postId,
 }) => {
 	const navigate = useNavigate();
 	const routeToComments = () => {
 		navigate(`/comments/${postId}`);
 	};
+
+	// Define upvotes and downvotes
+	upvotes = upvotes?.length;
+	downvotes = downvotes?.length;
+	comments = comments?.length;
 
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
@@ -38,7 +44,7 @@ const Actions = ({
 						) : (
 							<BiSolidUpvote />
 						)}
-						<span>{upvotes?.lenght} {" "} </span>
+						<span>{upvotes} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -54,7 +60,7 @@ const Actions = ({
 						) : (
 							<BiSolidDownvote />
 						)}
-						<span>{downvotes?.lenght}{" "} </span>
+						<span>{downvotes}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>
@@ -68,6 +74,7 @@ const Actions = ({
 							onClick={routeToComments}
 						>
 							<BiComment />
+							<span>{comments}{" "} </span>
 						</button>
 					</span>
 					<span>Comments</span>

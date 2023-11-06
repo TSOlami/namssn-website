@@ -26,8 +26,9 @@ const Post = ({ post, updatePostData, removePost }) => {
 	// Get the post details from the props
 	const postId = post?._id;
 	const u_id = post?.user._id;
-	const upvotes = post?.upvotes.length;
-	const downvotes = post?.downvotes.length;
+	const upvotes = post?.upvotes;
+	const downvotes = post?.downvotes;
+	const comments = post?.comments;
 	const text = post?.text;
 	const image = post?.image;
 	const createdAt = post?.createdAt;
@@ -250,6 +251,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 					onUpvote={handleUpvote}
 					isDownvoted={isDownvoted}
 					onDownvote={handleDownvote}
+					comments={comments}
 					postId={postId}
 				/>
 			</div>
