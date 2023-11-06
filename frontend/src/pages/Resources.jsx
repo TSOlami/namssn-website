@@ -12,6 +12,7 @@ import { formatDateToTime } from "../utils";
 import axios from "axios";
 import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
+import { BiSolidUpvote } from "react-icons/bi";
 
 const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
@@ -211,7 +212,7 @@ const Resources = () => {
                             </div>)}
                         </div> 
                         <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed bottom-4 right-4 md:right-[18em] lg:right-[30%] xl:right-[30%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
-                            <img className="lg:w-[30px]" src={Upload} alt="Upload" />
+                            <BiSolidUpvote color="#fff"/>
                         </button>
                         
                     </div>
@@ -219,7 +220,7 @@ const Resources = () => {
                         <AnnouncementContainer />
                     </div>
                 </div>
-                <div className="fixed z-1 bottom-[10em] left-[10em] md:left-[15em] lg:left-[20em] w-[60%]">
+                <div className="fixed z-1 bottom-[10em] left-[3.5em] md:left-[15em] lg:left-[20em] w-[100%] md:w-[60%]">
                     <FileForm name={userInfo.name} userId={userInfo._id} show={isPopUpVisible} onClose={handlePopUpClose} />
                 </div>
             </div>  
@@ -233,7 +234,7 @@ const Resources = () => {
                 </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
                     <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
-                        <img className="lg:w-[30px]" src={Upload} alt="Upload" />
+                    <BiSolidUpvote color="#fff"/>
                     </button>
                 </div>
                 <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block bg-gray-200": "w-[35%] bg-gray-200 sm:hidden md:block hidden lg:block"}>

@@ -20,9 +20,9 @@ const HeaderComponent = ({ title, url, back }) => {
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		window.location.href = `/search?key=${search}&filter=${selectedOption}`
-		// console.log(e.target.value);
-		// setSearch(e.target.value);
+		if (search !== "") {
+			window.location.href = `/search?key=${search}&filter=all`
+		}
 	};
 
 	// navigate back to previous page
@@ -42,10 +42,6 @@ const HeaderComponent = ({ title, url, back }) => {
 		dispatch(setNavOpen());
 	};
 
-	const [selectedOption, setSelectedOption] = useState('all');
-    const handleSelectChange = (e) => {
-        setSelectedOption(e.target.value);
-    };
 
 	return (
 		<div className="flex flex-row border-b-2 border-blue-700  md:justify-between w-[100%] items-center gap-2 p-5 md:py-2 drop-shadow-md">
@@ -66,13 +62,10 @@ const HeaderComponent = ({ title, url, back }) => {
 			/>
 			{/* <h1 className="text-xl text-center w-full md:text-3xl">{title}</h1> */}
 			<div className="">
-				<span className="px-4  font-bold font-roboto sm:text-xl text-blue-900 text-xl">{title.toUpperCase()}</span>
+				<span className="px-4  font-bold font-crimson sm:text-xl text-blue-900 text-xl">{title.toUpperCase()}</span>
 			</div>
-			{/* <div className="lg:hidden relative right-[50%]">
-				<FaMagnifyingGlass  />
-			</div> */}
 			{url && (
-				<div className="items-center  lg:flex">
+				<div className="items-center lg:flex">
 				<form
 					action=""
 					onSubmit={handleSubmit}

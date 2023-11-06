@@ -11,9 +11,23 @@ const CommentActions = ({
 	onDownvote,
 	isUpvoted,
 	isDownvoted,
+	postId
 }) => {
 	upvotes = upvotes?.length;
 	downvotes = downvotes?.length;
+
+	const handleShare = async () => {
+        try {
+            await navigator.share({
+                title: "Share comment",
+                text: 'Check out this comment!',
+                url: `/comments/${postId}`
+            });
+            console.log('Link shared successfully');
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
 
 	console.log("CommentActions: ", upvotes, downvotes);
 	return (
@@ -51,7 +65,7 @@ const CommentActions = ({
 				<span>Downvotes</span>
 			</div>
 
-			<div>
+			<div onClick={handleShare}>
 				<span className="flex items-center gap-1">
 					<BiShareAlt />
 				</span>

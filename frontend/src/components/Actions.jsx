@@ -20,6 +20,18 @@ const Actions = ({
 		navigate(`/comments/${postId}`);
 	};
 
+	const handleShare = async () => {
+        try {
+            await navigator.share({
+                title: "Share post",
+                text: 'Check out this post!',
+                url: `/comments/${postId}`
+            });
+            console.log('Link shared successfully');
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
 	// 	setOpencomment(!openComment);
@@ -74,7 +86,7 @@ const Actions = ({
 				</div>
 			)}
 
-			<div>
+			<div onClick={handleShare}>
 				<span className="flex items-center gap-1 cursor-pointer">
 					<BiShareAlt />
 				</span>
