@@ -564,6 +564,7 @@ const postUserResources = asyncHandler(async (req, res) => {
 
 // Get All Events
 const getAllEvents = asyncHandler(async (req, res) => {
+  console.log("Fetching all events");
   // Fetch all events from the event model
   const allEvents = await Event.find().populate('user', '-password');
 
