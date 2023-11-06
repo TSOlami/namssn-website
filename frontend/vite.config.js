@@ -8,7 +8,7 @@ export default defineConfig({
 		port: 3000,
 		proxy: {
 			"/api/v1": {
-				target: 'http://localhost:5000',
+				target: 'https://namssnbackend.onrender.com',
 				changeOrigin: true,
 			},
 		},
