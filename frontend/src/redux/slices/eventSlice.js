@@ -13,7 +13,7 @@ export const eventsApiSlice = apiSlice.injectEndpoints({
 						method: "GET",
 					};
 				},
-				providesTags: ["Event"],
+				providesTags: ["userEvents"],
 			}),
 		}
 	},

@@ -20,46 +20,42 @@ const EventForm = () => {
 
 	const initialValues = {
 		title: "",
-		// description: "",
-		// date: "",
-		// time: "",
-		// location: "",
-		// image: null,
+		date: "",
+		location: "",
 	};
 
 	const validationSchema = Yup.object({
 		title: Yup.string().required("Event title cannot be empty"),
-		// description: Yup.string().required("Event description is required"),
-		// date: Yup.date().required("Event date is required"),
-		// time: Yup.string().required("Time is required"),
-		// location: Yup.string().required("Event location is required"),
-		// image: Yup.mixed()
-		// 	.nullable()
-		// 	.required("An event flyer is required")
-		// 	.test(
-		// 		"size",
-		// 		"File size is too big",
-		// 		(value) => value && value.size <= 1024 * 1024 // 5MB
-		// 	)
-		// 	.test(
-		// 		"type",
-		// 		"Invalid file format selection",
-		// 		(value) =>
-		// 			// console.log(value);
-		// 			!value || (value && SUPPORTED_FORMATS.includes(value?.type))
-		// 	),
+		date: Yup.date().required("Event date is required"),
+		location: Yup.string().required("Event location is required"),
 	});
 
 	const formik = useFormik({
 		initialValues: initialValues,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			// Check if image is empty
+			if (file === undefined) {
+				toast.error("Please upload a valid event flyer");
+				return;
+			}
+			// Add the file to the form data and send to the server
 			try {
 				let updatedValues = Object.assign(values, { image: file });
 				const res = await createEvent(updatedValues).unwrap();
 				dispatch(setEvents({ ...res }));
 				toast.success("Event created successfully");
 				console.log(updatedValues);
+
+				// Reset form and clear uploaded image
+				formik.resetForm();
+				setFile(null);
+
+				// Reset the input element for file upload
+				const inputElement = document.getElementById("image");
+				if (inputElement) {
+					inputElement.value = null;
+				}
 			} catch (error) {
 				toast.error("Something went wrong");
 				console.log(error);
@@ -68,7 +64,16 @@ const EventForm = () => {
 	});
 
 	// File upload handler
-	const onUpload = async e => {
+	const onUpload = async (e) => {
+		// Check file size, must be 2MB or less
+		const file = e.target.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+		if (file.size > maxSize) {
+			toast.error("File size too large");
+
+			return;
+		}
+		// File size is okay, convert to base64
 		const base64 = await convertToBase64(e.target.files[0]);
 		setFile(base64);
   };
@@ -103,7 +108,7 @@ const EventForm = () => {
 				<FormErrors error={formik.errors.description} />
 			) : null} */}
 
-			{/* <label htmlFor="location" className="mt-5">Event Location</label>
+			<label htmlFor="location" className="mt-5">Event Location</label>
 			<InputField
 				name="location"
 				id="location"
@@ -113,9 +118,9 @@ const EventForm = () => {
 			/>
 			{formik.touched.location && formik.errors.location ? (
 				<FormErrors error={formik.errors.location} />
-			) : null} */}
+			) : null}
 
-			{/* <label htmlFor="date" className="mt-5">Event Date</label>
+			<label htmlFor="date" className="mt-5">Event Date</label>
 			<input
 				type="date"
 				name="date"
@@ -126,10 +131,10 @@ const EventForm = () => {
 			/>
 			{formik.touched.date && formik.errors.date ? (
 				<FormErrors error={formik.errors.date} />
-			) : null} */}
+			) : null}
 
 			<label htmlFor="image" className="mt-5 cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">Add Event Flyer</label>
-      <input onChange={onUpload} type="file" name="image" id="image" className="p-5 bg-black text-white rounded-lg" />
+      <input required onChange={onUpload} type="file" name="image" id="image" className="p-5 bg-black text-white rounded-lg" />
 
 			<div className="mt-5 flex flex-row gap-8 ml-auto">
 				<button type="button" className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300">Delete Event</button>

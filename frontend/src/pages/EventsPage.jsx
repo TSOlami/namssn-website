@@ -1,9 +1,18 @@
 import { EventImg, MainEvent } from "../assets";
-import { NavBar, Footer } from "../components";
+import { NavBar, Footer, Loader } from "../components";
 import Event from "../components/Event";
 import { motion } from "framer-motion";
 
+import { useAllEventsQuery } from "../redux";
+
 const EventsPage = () => {
+	const { data, isLoading } = useAllEventsQuery();
+
+	console.log(data);
+	
+	if (isLoading) {
+		return <Loader />;
+	}
 	return (
 		<motion.main
 			initial={{ opacity: 0, x: 100 }}
@@ -21,30 +30,15 @@ const EventsPage = () => {
 					</div>
 				</div>
 				<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
-					<Event
-						image={EventImg}
-						description="NAMSSN year2 Vs MCB year 2"
-						date="Septemeber 20"
-						location="Sport center"
-					/>
-					<Event
-						image={EventImg}
-						description="NAMSSN year2 Vs MCB year 2"
-						date="Septemeber 20"
-						location="Sport center"
-					/>
-					<Event
-						image={EventImg}
-						description="NAMSSN year2 Vs MCB year 2"
-						date="Septemeber 20"
-						location="Sport center"
-					/>
-					<Event
-						image={EventImg}
-						description="NAMSSN year2 Vs MCB year 2"
-						date="Septemeber 20"
-						location="Sport center"
-					/>
+				{data.map((event, index) => (
+            <Event
+              key={index}
+              image={event.image} // Adjust the property to match your data structure
+              description={event.title} // Adjust the property to match your data structure
+              date={event.date} // Adjust the property to match your data structure
+              location={event.location} // Adjust the property to match your data structure
+            />
+          ))}
 				</div>
 			</div>
 			<Footer />

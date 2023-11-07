@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
 	AdminEventsCard,
 	EventForm,
@@ -5,9 +6,10 @@ import {
 	Sidebar,
 } from "../components";
 import { mockEvents } from "../data";
-import { motion } from "framer-motion";
+
 
 const AdminEvents = () => {
+	
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -26,6 +28,8 @@ const AdminEvents = () => {
 								key={index}
 								title={event.title}
 								date={event.date}
+								// location={event.location}
+								// flier={event.image}
 								flier={event.flier}
 							/>
 						))}
