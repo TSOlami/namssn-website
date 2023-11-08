@@ -22,7 +22,7 @@ const Actions = ({
 	};
 
 	const handleShare = async () => {
-        if (postId) {
+    if (postId) {
 			try {
 				await navigator.share({
 					title: "Share post",
@@ -45,7 +45,7 @@ const Actions = ({
 				console.error('Error sharing:', error);
 			}
 		}
-    };
+  };
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
 	// 	setOpencomment(!openComment);
