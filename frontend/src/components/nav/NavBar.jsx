@@ -38,8 +38,8 @@ const NavBar = () => {
 			<nav
 				className={
 					isNavOpen
-						? "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-screen lg:h-auto z-10 fixed left-0 w-[315px] lg:static lg:w-auto transition-all duration-400"
-						: "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-screen lg:h-auto z-10 fixed left-[-100%] w-[315px] lg:static lg:w-auto transition-all duration-400"
+						? "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-full lg:h-auto z-10 fixed left-0 w-[315px] lg:static lg:w-auto transition-all duration-400"
+						: "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-full lg:h-auto z-10 fixed left-[-100%] w-[315px] lg:static lg:w-auto transition-all duration-400"
 				}
 			>
 				<div className="logo-container pt-2">
