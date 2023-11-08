@@ -1,9 +1,15 @@
 import { SignUpForm } from "../components";
 import { SignUpImage } from "../assets";
+import { motion } from "framer-motion";
 
 const SignUp = () => {
-	return(
-		<div className="flex md:flex-row flex-col bg-primary h-screen">
+	return (
+		<motion.div
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			className="flex md:flex-row flex-col bg-primary h-screen"
+		>
 			{/* Vector image container */}
 			<div className="bg-primary h-[20%] md:h-screen md:block w-full md:w-[40%]">
 				<img
@@ -17,10 +23,10 @@ const SignUp = () => {
 				<h1 className="font-bold text-2xl text-center pt-5 md:p-10">
 					Welcome To NAMSSN Website
 				</h1>
-				<SignUpForm/>
+				<SignUpForm />
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 
-export default SignUp
+export default SignUp;

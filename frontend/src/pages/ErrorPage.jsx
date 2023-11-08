@@ -13,8 +13,8 @@ const ErrorPage = () => {
 			>
 				<img src={Error404} alt="" />
 			</motion.div>
-			<div className="text-3xl font-bold text-center">Error 404</div>
-			<div className="text-center text-lg">
+			{/* <div className="text-3xl font-bold text-center">Error 404</div> */}
+			<div className="text-center text-xl p-3">
 				Sorry, we can&apos;t find what you&apos;re looking for
 			</div>
 			<Link to="/" className="button-2 hover:opacity-75 m-10">

@@ -13,6 +13,7 @@ const Actions = ({
 	isDownvoted,
 	onUpvote,
 	onDownvote,
+	comments,
 	postId,
 	blogId
 }) => {
@@ -20,7 +21,6 @@ const Actions = ({
 	const routeToComments = () => {
 		navigate(`/comments/${postId}`);
 	};
-
 	const handleShare = async () => {
     if (postId) {
 			try {
@@ -45,7 +45,12 @@ const Actions = ({
 				console.error('Error sharing:', error);
 			}
 		}
-  };
+    };
+	// Define upvotes and downvotes
+	upvotes = upvotes?.length;
+	downvotes = downvotes?.length;
+	comments = comments?.length;
+
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
 	// 	setOpencomment(!openComment);
@@ -64,7 +69,7 @@ const Actions = ({
 						) : (
 							<BiSolidUpvote />
 						)}
-						<span>{upvotes?.lenght} {" "} </span>
+						<span>{upvotes} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -80,7 +85,7 @@ const Actions = ({
 						) : (
 							<BiSolidDownvote />
 						)}
-						<span>{downvotes?.lenght}{" "} </span>
+						<span>{downvotes}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>
@@ -94,6 +99,7 @@ const Actions = ({
 							onClick={routeToComments}
 						>
 							<BiComment />
+							<span>{comments}{" "} </span>
 						</button>
 					</span>
 					<span>Comments</span>

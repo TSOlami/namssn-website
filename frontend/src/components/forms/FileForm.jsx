@@ -45,6 +45,7 @@ const FileForm = (props) => {
             formData.append('semester', selectedOption1);
             formData.append('course', selectedOption2)
             try {
+
                 await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/files/upload', formData), {
                     pending: 'Uploading file...',
                     success: 'File uploaded successfully',
@@ -61,7 +62,7 @@ const FileForm = (props) => {
 
     if(props.show) {
         return (
-            <div className="w-[70%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
+            <div className="w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
                     <div>
                         <span className={textStyle}> Level</span>
@@ -86,7 +87,7 @@ const FileForm = (props) => {
                         <span className={textStyle}> File </span>
                         <label className="flex justify-center items-center rounded-full bg-blue-700 hover:bg-blue-500 w-[60%] h-[2em]">
                             <FaUpload color="#ffff"/>
-                            <div className="ml-[2em]"><span className="font-mono font-medium text-white">Choose File</span></div>
+                            <div className="ml-[2em]"><span className="font-mono font-medium text-white">Select</span></div>
                             <input
                             style={{ display: 'none' }} type="file" name="file" onChange={(event) => formik.setFieldValue("file", event.currentTarget.files[0])} onBlur={formik.handleBlur}
                             />
