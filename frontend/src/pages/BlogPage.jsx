@@ -28,7 +28,7 @@ const BlogPage = () => {
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
 					{blogs?.map((blog) => (
-						<div key={blog._id} className="mb-6">
+						<div id={blog._id} key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
 									<h2 className="text-black text-2xl md:text-3xl font-bold font-montserrat">
@@ -68,6 +68,7 @@ const BlogPage = () => {
 										downvotes={blog.downvotes}
 										shares="5"
 										comments="10"
+										blogId={blog._id}
 									/>
 									{readMore ? (
 										<p className="body-text my-4">

@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "../Loader";
+import { FaUpload } from "react-icons/fa6";
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
@@ -83,9 +84,13 @@ const FileForm = (props) => {
                     </div> 
                     <div className="mt-2 flex flex-col">
                         <span className={textStyle}> File </span>
-                        <input
-                            type="file" name="file" onChange={(event) => formik.setFieldValue("file", event.currentTarget.files[0])} onBlur={formik.handleBlur}
-                        />
+                        <label className="flex justify-center items-center rounded-full bg-blue-700 hover:bg-blue-500 w-[60%] h-[2em]">
+                            <FaUpload color="#ffff"/>
+                            <div className="ml-[2em]"><span className="font-mono font-medium text-white">Choose File</span></div>
+                            <input
+                            style={{ display: 'none' }} type="file" name="file" onChange={(event) => formik.setFieldValue("file", event.currentTarget.files[0])} onBlur={formik.handleBlur}
+                            />
+                        </label>
                         {formik.touched.file && formik.errors.file ? (
                             <div className={errorStyle}>{formik.errors.file}</div>
                         ) : null}

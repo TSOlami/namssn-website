@@ -13,19 +13,39 @@ const Actions = ({
 	isDownvoted,
 	onUpvote,
 	onDownvote,
-	comments,
 	postId,
+	blogId
 }) => {
 	const navigate = useNavigate();
 	const routeToComments = () => {
 		navigate(`/comments/${postId}`);
 	};
 
-	// Define upvotes and downvotes
-	upvotes = upvotes?.length;
-	downvotes = downvotes?.length;
-	comments = comments?.length;
-
+	const handleShare = async () => {
+        if (postId) {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/comments/${postId}`
+				});
+				console.log('Link shared successfully');
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		} else {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/blog#${blogId}`
+				});
+				console.log('Link shared successfully');
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		}
+    };
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
 	// 	setOpencomment(!openComment);
@@ -44,7 +64,7 @@ const Actions = ({
 						) : (
 							<BiSolidUpvote />
 						)}
-						<span>{upvotes} {" "} </span>
+						<span>{upvotes?.lenght} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -60,7 +80,7 @@ const Actions = ({
 						) : (
 							<BiSolidDownvote />
 						)}
-						<span>{downvotes}{" "} </span>
+						<span>{downvotes?.lenght}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>
@@ -74,14 +94,13 @@ const Actions = ({
 							onClick={routeToComments}
 						>
 							<BiComment />
-							<span>{comments}{" "} </span>
 						</button>
 					</span>
 					<span>Comments</span>
 				</div>
 			)}
 
-			<div>
+			<div onClick={handleShare}>
 				<span className="flex items-center gap-1 cursor-pointer">
 					<BiShareAlt />
 				</span>

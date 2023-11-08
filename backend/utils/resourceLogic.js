@@ -70,7 +70,6 @@ const getSpecifiedResources = async (level) => {
     const response = await getResourcesByLevel(level);
     if (response) {
       const filesList = createFileList(response);
-      console.log(filesList)
       return filesList
     } else {
       console.log('No response');
