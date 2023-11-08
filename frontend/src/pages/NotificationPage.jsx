@@ -69,10 +69,10 @@ const NotificationPage = () => {
 						No notifications to display.
 					</div>
 				) : (
-					<div className="fixed bottom-20 sm:bottom-16 right-[7vw] md:right-[10vw] lg:right-[30vw] cursor-pointer">
+					<div className="w-full">
 						<button
 							onClick={handleClearNotifications}
-							className="button-2 hover:opacity-70"
+							className="button-2 hover:opacity-70 fixed bottom-20 sm:bottom-16 right-[7vw] md:right-[10vw] lg:right-[30vw] cursor-pointer"
 						>
 							<FaTrash />
 							Clear Notifications
