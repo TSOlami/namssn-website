@@ -100,7 +100,7 @@ const EditProfileForm = ({ handleModal }) => {
           <img src={file || profilePicture || ProfileImg} alt="" className='profile-image m-2'/>
           </label>
 
-          <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
+          <input onChange={onUpload} type="file" name="profile" id="profile" className="" style={{ display: 'none' }}/>
         </div>
         <div>
           <label htmlFor="name">Name</label>
