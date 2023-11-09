@@ -4,6 +4,7 @@ import store from "../redux/store/store";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
+import { FaFileLines } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
 const state = store.getState();
@@ -106,7 +107,7 @@ const ResourceCard = ({
 				className={cardClass + " relative"}
 				onClick={() => viewFile(fileUrl)}
 			>
-				<img src={CerHat} />
+				<FaFileLines/>
 				<span className="pb-2 ">{title}</span>
 				<span
 					onClick={(event) => {

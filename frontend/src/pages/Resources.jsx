@@ -17,7 +17,7 @@ const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
-const levelStyle = "w-[100%]  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
+const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
 
 const Resources = () => {
     const [data, setData] = useState(null);
@@ -224,7 +224,7 @@ const Resources = () => {
                         <AnnouncementContainer />
                     </div>
                 </div>
-                <div className="fixed z-1 bottom-[10em] left-[10%] md:left-[15em] lg:left-[20em] w-[100%] md:w-[50%]">
+                <div className="fixed z-1 bottom-[7em] left-[10%] md:left-[15em] lg:left-[20em] w-[100%] md:w-[50%]">
                     <FileForm name={userInfo?.name} userId={userInfo?._id} show={isPopUpVisible} onClose={handlePopUpClose} />
                 </div>
             </div>  
@@ -255,8 +255,8 @@ const Resources = () => {
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>
                 <div className="text-xl flex flex-col items-center font-roboto text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
-                    <div><span>Unable to fetch resources.</span></div>
-                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload.</span></div>
+                    <div><span>Unable to fetch resources</span></div>
+                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload</span></div>
                 </div>
                 <div className="w-[27%] sm:hidden bg-slate-800 md:hidden hidden lg:block">
                     <AnnouncementContainer />

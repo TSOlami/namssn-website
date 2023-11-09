@@ -4,13 +4,15 @@ import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "../Loader";
-import { FaUpload } from "react-icons/fa6";
+import { BiUpload } from "react-icons/bi";
+import { FaXmark } from "react-icons/fa6";
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [fileName, setFileName] = useState("Select File");
     
     useEffect(() => {
     }, [inputValue]);
@@ -46,7 +48,7 @@ const FileForm = (props) => {
             formData.append('course', selectedOption2)
             try {
 
-                await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/files/upload', formData), {
+                await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData), {
                     pending: 'Uploading file...',
                     success: 'File uploaded successfully',
                 });
@@ -64,9 +66,12 @@ const FileForm = (props) => {
         return (
             <div className="w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
+                    <button onClick={props.onClose} className="ml-[88%] md:ml-[90%] text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
+                        <FaXmark/>
+                    </button>
                     <div>
                         <span className={textStyle}> Level</span>
-                        <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                        <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="font-roboto text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                             <option value="100 Level" className="text-black font-roboto text-lg">Year 1 </option>
                             <option value="200 Level" className="text-black font-roboto text-lg">Year 2 </option>
                             <option value="300 Level" className="text-black font-roboto text-lg">Year 3 </option>
@@ -76,7 +81,7 @@ const FileForm = (props) => {
                     </div>
                     <div className="flex flex-col mt-2 h-[7em]">
                         <span className={textStyle}> File Description </span>
-                        <div className="h-[100%] w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200">
+                        <div className="font-roboto h-[100%] w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200">
                             <textarea
                             className="w-full resize-y h-full whitespace-wrap outline-none"
                             placeholder="Input file description (optional)"
@@ -85,20 +90,31 @@ const FileForm = (props) => {
                     </div> 
                     <div className="mt-2 flex flex-col">
                         <span className={textStyle}> File </span>
-                        <label className="flex justify-center items-center rounded-full bg-blue-700 hover:bg-blue-500 w-[60%] h-[2em]">
-                            <FaUpload color="#ffff"/>
-                            <div className="ml-[2em]"><span className="font-mono font-medium text-white">Select</span></div>
+                        <label className="flex justify-between  border border-black items-center rounded-md w-[80%] h-[2.5em]">
+                            <div className="ml-[2em]">
+                                <span className="font-roboto text-gray-300">
+                                    {fileName.length > 20 ? `${fileName.substring(0,15)}...` : fileName}
+                                </span>
+                            </div>
+                            <BiUpload className="mr-[2em]" color="#0f0f0f"/>
                             <input
-                            style={{ display: 'none' }} type="file" name="file" onChange={(event) => formik.setFieldValue("file", event.currentTarget.files[0])} onBlur={formik.handleBlur}
+                            style={{ display: 'none' }} type="file"
+                            name="file"
+                            onChange={(event) => {
+                                formik.setFieldValue("file", event.currentTarget.files[0])
+                                if (event.currentTarget.files[0]) {
+                                    setFileName(event.currentTarget.files[0].name);
+                                }
+                            }}
+                            onBlur={formik.handleBlur}
                             />
                         </label>
                         {formik.touched.file && formik.errors.file ? (
                             <div className={errorStyle}>{formik.errors.file}</div>
                         ) : null}
                     </div> 
-                    <div className="flex justify-between mt-4">
-                        <button className="py-2 px-4 hover:bg-red-900 bg-red-600 border rounded-lg text-white" onClick={props.onClose}>Cancel</button>
-                        <button type="submit" className="py-2 px-4 bg-green-600 hover:bg-green-900 border rounded-lg text-white">Upload</button>
+                    <div className="flex justify-center mt-4">
+                        <button type="submit" className="font-roboto py-2 px-4 bg-blue-600 hover:bg-blue-500 border rounded-lg text-white">Upload</button>
                     </div>
                 </form>
                 <ToastContainer/>

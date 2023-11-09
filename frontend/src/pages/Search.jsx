@@ -68,7 +68,6 @@ const Search = () => {
     const unselectBorderStyle = "border-b-[1px] border-gray-400"
       
     if (data && data !== "error" && Object.keys(data).length !==0) {
-        console.log(data.users)
         let fileUrls = []
         if (data.resources) {
             fileUrls = [...new Set(data.resources.flatMap(obj => Object.keys(obj)))] // a list of file urls
@@ -100,7 +99,7 @@ const Search = () => {
                     <div className="sticky top-[0.01%] z-[300] bg-white">
                         <HeaderComponent title="SEARCH" url={"Placeholder"} />
                     </div>
-                    <div className='sticky top-[12%] z-[300] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
+                    <div className='sticky top-[14.5%] z-[300] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
                         <Select onChange={handleChange} options={options} styles={customStyles} isSearchable={false} placeholder="Filter"/>
                     </div>
                     <div className="hidden sticky top-[8%] h-10 z-[300] bg-white font-serif md:flex lg:flex flex-row w-[100%]">
@@ -139,7 +138,9 @@ const Search = () => {
                             />
                         ))}
                     </div>) : filter==='users' && (
-                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching user was found</div>
+                    <div className="flex flex-col items-center relative top-[13em]">
+                        <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching user </span></div>
+                    </div>
                     )}
                     {filter==='all' && data.resources && data.resources.length!==0 && <div className="ml-6 mt-4">
                         {<div className="font-serif text-lg text-gray-400">
@@ -163,7 +164,7 @@ const Search = () => {
                         {<div className="font-serif text-lg text-gray-400">
                             <span>Resources</span>
                         </div>}
-                        <div className="lg:px-[0.3em] flex flex-wrap gap-4 justify-around">
+                        <div className="lg:px-[0.3em]  flex flex-wrap gap-4 justify-around">
                         {data.resources && filter==='resources' && data.resources.map((resource, index) => (
                             // {console.log(base_url + fileUrls[index], resource[fileUrls[index]]['level'], resource[fileUrls[index]]['title'], resource[fileUrls[index]]['date'], resource[fileUrls[index]]['description'], resource[fileUrls[index]]['uploaderUsername'], )}
 
@@ -177,7 +178,9 @@ const Search = () => {
                         ))}
                         </div>
                     </div>) : filter==='resources' && (
-                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching resource was found</div>
+                    <div className="flex flex-col items-center relative top-[13em]">
+                        <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching resource </span></div>
+                    </div>
                     )}
                     {filter==='all' && data.posts && data.posts.length!==0 && <div className="mt-4">
                     {<div className="mb-2 ml-6 font-serif text-lg text-gray-400">
@@ -225,7 +228,9 @@ const Search = () => {
                         />
                     ))}
                     </div>) : filter==='posts' && (
-                    <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[25%] md:left-[40%] lg:left-[50%] font-medium top-[50%]"> No matching post was found</div>
+                    <div className="flex flex-col items-center relative top-[13em]">
+                        <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching post </span></div>
+                    </div>
                     )}
                 </div>
                     {/* <div className="w-[%]">
