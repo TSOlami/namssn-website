@@ -127,7 +127,7 @@ export const teamMembers = [
     name: "Abdulkareem Abdulqudus",
     role: "Software Engineer",
     image: Slimany,
-    team: "Tech Team",
+    team: "Tech",
     facebook: "",
     linkedin: "https://www.linkedin.com/in/slimany/",
     twitter: "https://twitter.com/Slimany_",
