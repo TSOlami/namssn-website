@@ -134,7 +134,7 @@ const EventForm = () => {
 			) : null}
 
 			<label htmlFor="image" className="mt-5 cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">Add Event Flyer</label>
-      <input required onChange={onUpload} type="file" name="image" id="image" className="p-5 bg-black text-white rounded-lg" />
+      <input style={{ display: 'none' }} required onChange={onUpload} type="file" name="image" id="image" className="p-5 bg-black text-white rounded-lg" />
 
 			<div className="mt-5 flex flex-row gap-8 ml-auto">
 				<button type="button" className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300">Delete Event</button>
