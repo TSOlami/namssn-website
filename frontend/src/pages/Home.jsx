@@ -123,7 +123,7 @@ const Home = () => {
         {isLoading && <Loader />}
 
         {/* Paginate posts buttons */}
-        <div className="flex m-auto">
+        <div className="flex m-auto pb-12 md:pb-0">
           <button
             onClick={() => getNextPosts(page)}
             className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"

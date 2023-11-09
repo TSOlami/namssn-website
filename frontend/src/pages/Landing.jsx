@@ -9,7 +9,7 @@ const Landing = () => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: -100 }}
 			transition={{ duration: 0.5 }}
-			className="relative"
+			className="relative overflow-hidden"
 		>
 			<NavBar />
 			<section className="xl:padding-1 wide:padding-r padding-b">

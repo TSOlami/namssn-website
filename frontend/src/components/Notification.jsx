@@ -1,6 +1,5 @@
 import { BiDownvote, BiUpvote } from "react-icons/bi";
 import { FaCircleCheck, FaRegComment } from "react-icons/fa6";
-import Actions from "./Actions";
 
 import { ProfileImg } from "../assets";
 
@@ -25,7 +24,7 @@ const Notification = ({
 				<div>
 					<img src={avatar || ProfileImg} alt="" className="profile-image-small" />
 				</div>
-				<div className="flex flex-row gap-2">
+				<div className="flex flex-row gap-2 flex-wrap">
 					<span className="font-semibold inline-flex flex-row items-center gap-2">
 						{name}
 						{isVerified && <FaCircleCheck color="#17A1FA" />}

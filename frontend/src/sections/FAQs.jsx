@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
 import { FAQ } from '../assets';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const FAQItem = ({ questionNumber, question, answer }) => {
   const [expanded, setExpanded] = useState(false);
@@ -11,7 +12,7 @@ const FAQItem = ({ questionNumber, question, answer }) => {
 
   return (
     <div className="flex flex-col cursor-pointer" onClick={toggleExpanded}>
-      <div className="flex flex-row justify-between items-center border-b-2">
+      <div className="flex flex-row justify-between items-center border-b-2 pb-2 lg:pb-0">
         <h2 className="text-lg font-normal font-montserrat">
           <span className="text-3xl font-bold font-montserrat">{questionNumber}. </span>
           {question}
@@ -21,9 +22,17 @@ const FAQItem = ({ questionNumber, question, answer }) => {
         </button>
       </div>
       {expanded && (
-        <div className=" p-2 flex flex-row">
+        <AnimatePresence>
+        <motion.div 
+          initial={{ opacity: 0, height:0}}
+          animate={{ opacity: 1, height: "100%" }}
+          exit={{ opacity: 0}}
+          transition={{ duration: 0.8 }}
+
+        className=" p-2 flex flex-row">
           <p className="body-text">{answer}</p>
-        </div>
+        </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );

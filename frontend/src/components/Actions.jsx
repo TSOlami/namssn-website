@@ -22,7 +22,7 @@ const Actions = ({
 		navigate(`/comments/${postId}`);
 	};
 	const handleShare = async () => {
-        if (postId) {
+    if (postId) {
 			try {
 				await navigator.share({
 					title: "Share post",
