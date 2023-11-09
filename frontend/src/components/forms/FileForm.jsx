@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Loader from "../Loader";
 import { BiUpload } from "react-icons/bi";
-import { MdOutlineCancel } from "react-icons/md";
+import { FaXmark } from "react-icons/fa6";
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
@@ -66,9 +66,9 @@ const FileForm = (props) => {
         return (
             <div className="w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
-                    {/* <div className="bg-blue-600 rounded"> */}
-                        <MdOutlineCancel className="md:ml-[90%] ml-[85%] md:w-8 md:h-8 w-8 h-8" color="#cc3030" onClick={props.onClose}/>
-                    {/* </div> */}
+                    <button onClick={props.onClose} className="ml-[88%] md:ml-[90%] text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
+                        <FaXmark/>
+                    </button>
                     <div>
                         <span className={textStyle}> Level</span>
                         <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="font-roboto text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
