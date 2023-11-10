@@ -148,9 +148,9 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 
       // Update Event Mutation
       updateEvent: builder.mutation({
-        query(data) {
+        query(eventId, data) {
           return {
-            url: `${ADMIN_URL}/events`,
+            url: `${ADMIN_URL}/events/${eventId}`,
             method: 'PUT',
             body: data,
           };

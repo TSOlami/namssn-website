@@ -449,6 +449,8 @@ const updateEvent = asyncHandler(async (req, res) => {
     // Save the updated event
     const updatedEvent = await event.save();
 
+    console.log("Updated event");
+
     res.status(200).json(updatedEvent);
   } catch (error) {
     console.error(error);

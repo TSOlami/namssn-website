@@ -88,10 +88,10 @@ router
   router
   .route('/events')
   .post(protect, isAdmin, createEvent) // Create a new event
-  .put(protect, isAdmin, updateEvent) // Update an event
 
 router
   .route('/events/:eventId')
+  .put(protect, isAdmin, updateEvent) // Update an event
   .delete(protect, isAdmin, deleteEvent); // Delete an event
 
 // Get total number of users
