@@ -114,7 +114,7 @@ const FileForm = (props) => {
                         ) : null}
                     </div> 
                     <div className="flex justify-center mt-4">
-                        <button type="submit" className="font-roboto py-2 px-4 bg-blue-600 hover:bg-blue-500 border rounded-lg text-white">Upload</button>
+                        <button type="submit" className="font-roboto py-2 px-4 bg-blue-600 hover:bg-white  hover:border-blue-600 border-2 rounded-lg text-white hover:text-blue-600">Upload</button>
                     </div>
                 </form>
                 <ToastContainer/>
