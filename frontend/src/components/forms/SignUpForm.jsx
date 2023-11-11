@@ -212,7 +212,7 @@ const SignUpForm = () => {
           placeholder="Confirm your password"
           autoComplete="new-password"
         />
-        {showPassword ? (
+        {showConfirmPassword ? (
           <FaRegEyeSlash
             className="absolute right-2 flex self-center justify-center"
             onClick={handleShowConfirmPassword}
