@@ -100,6 +100,7 @@ const NotificationPage = () => {
 						})}
 					</div>
 				)}
+				<div className="w-full h-20 md:hidden"></div>
 			</div>
 			<AnnouncementContainer />
 			{isLoading && <Loader />}
