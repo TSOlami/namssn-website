@@ -1,6 +1,5 @@
 import { AboutImg } from "../assets";
-import { Footer, NavBar } from "../components";
-import Team from "../components/Team";
+import { Footer, NavBar, Team, TechTeam } from "../components";
 import { teamMembers } from "../constants";
 import { motion } from "framer-motion";
 const AboutUsPage = () => {
@@ -100,13 +99,14 @@ const AboutUsPage = () => {
 						.filter((member) => member.team === "Tech")
 						.map((member, index) => (
 							<div key={index}>
-								<Team
+								<TechTeam
 									name={member.name}
 									position={member.role}
 									image={member.image}
 									facebook={member.facebook}
 									twitter={member.twitter}
 									linkedin={member.linkedin}
+									github={member.github}
 								/>
 							</div>
 						))}

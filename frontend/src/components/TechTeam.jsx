@@ -1,11 +1,11 @@
-import { FacebookIcon, TwitterIcon, LinkedinIcon } from "../assets";
+import { FacebookIcon, TwitterIcon, LinkedinIcon, GithubIcon, WebIcon } from "../assets";
 
-const Team = ({ image, facebook, twitter, linkedin, name, position }) => {
+const TechTeam = ({ image, facebook, twitter, linkedin, github, website, name, position }) => {
 	return (
 		<div className="flex flex-col w-[250px] relative gap-3 m-5 shadow-2xl">
-			<div>
-				<img src={image} alt="" className="w-[250px] h-[250px] object-cover rounded-2xl"/>
-			</div>
+			<a href={website}>
+			<img src={image} alt="" className="w-[250px] h-[250px] object-cover rounded-2xl"/>
+			</a>
 
 
       {/* empty styling div */}
@@ -27,14 +27,20 @@ const Team = ({ image, facebook, twitter, linkedin, name, position }) => {
 				<a href={linkedin} className="hover:scale-125">
 					<img src={LinkedinIcon} alt="linkedin" />
 				</a>
+				<a href={github}>
+					<img src={GithubIcon} alt="github" />
+				</a>
+				<a href={website}>
+					<img src={WebIcon} alt="website" />
+				</a>
 			</div>
 
-      <div className="p-4 bg-black text-white rounded-b-2xl">
+      <a href={website} className="p-4 bg-black text-white rounded-b-2xl">
         <div className="font-semibold">{name}</div>
         <div>{position}</div>
-      </div>
+      </a>
 		</div>
 	);
 };
 
-export default Team;
+export default TechTeam;
