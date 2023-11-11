@@ -26,6 +26,12 @@ const ContactForm = () => {
       success: "Message sent successfully.",
       error: "Failed to send message. Please try again.",
     });
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
   };
 
   return (

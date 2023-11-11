@@ -39,14 +39,9 @@ const NotificationPage = () => {
 					pending: "Clearing notifications...",
 					success: "Notifications cleared successfully!",
 				},
-				{
-					position: "bottom-center",
-					toastId: "clearNotifications",
-				}
 			);
 			// If successful, show a toast notification
 			dispatch(setNotifications([]));
-			toast.success("Notifications cleared successfully!");
 		} catch (error) {
 			// Handle any errors if necessary
 			toast.error("Failed to clear notifications!");

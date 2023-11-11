@@ -69,7 +69,7 @@ const SignInForm = () => {
 
         dispatch(setCredentials({...res}));
         // Trigger sending the email after a successful login
-      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
+      const msg = "Welcome back! We're excited to have you back on board.";
       const { email } = userInfo;
       const subject = "You logged in!"
 

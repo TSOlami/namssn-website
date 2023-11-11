@@ -23,7 +23,12 @@ const DepartmentalFees = () => {
 						Pay your departmental dues from the comfort of your
 						room.
 					</div>
-					<Link className="button-2">Pay with Paystack</Link>
+					<Link 
+						to="/signin"
+						className="button-2"
+					>
+						Pay with Paystack
+					</Link>
 				</div>
 				<div className="flex-1 p-2 pt-4 basis-6/12 self-center xl:pl-20">
 					<img src={FeesSVG} alt="" />
