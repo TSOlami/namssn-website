@@ -111,27 +111,27 @@ const Post = ({ post, updatePostData, removePost }) => {
 			if (response.message === "success") {
 				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
-				dispatch(setPosts({...response.post}));
+				dispatch(setPosts({ ...response.post }));
 				// Update the post data in Home component with the new data
-        updatePostData(postId, response.post);
-      } else {
-        console.error('Upvote failed:', response);
-      }
-    } catch (error) {
-      console.error('Upvote failed:', error);
-    }
-  };
+				updatePostData(postId, response.post);
+			} else {
+				console.error("Upvote failed:", response);
+			}
+		} catch (error) {
+			console.error("Upvote failed:", error);
+		}
+	};
 
-  // Function to handle the downvote action
-  const handleDownvote = async () => {
-    // Add logic to prevent the user from upvoting and downvoting at the same time
-    if (isUpvoted) {
-      setIsUpvoted(false);
-    }
-  
-    try {
-      // Perform the downvote logic to send an API call to the server
-      const response = await toast.promise(
+	// Function to handle the downvote action
+	const handleDownvote = async () => {
+		// Add logic to prevent the user from upvoting and downvoting at the same time
+		if (isUpvoted) {
+			setIsUpvoted(false);
+		}
+
+		try {
+			// Perform the downvote logic to send an API call to the server
+			const response = await toast.promise(
 				downvotePost({ postId: postId, data: {} }).unwrap(),
 				{
 					pending: "Downvoting...",
@@ -139,29 +139,29 @@ const Post = ({ post, updatePostData, removePost }) => {
 					error: "Downvote failed",
 				}
 			);
-  
-      if (response.message === "success") {
-        // Toggle the downvote state
-        setIsDownvoted(!isDownvoted);
-				console.log('Downvote successful:', response);
-				dispatch(setPosts({...response.post}));
+
+			if (response.message === "success") {
+				// Toggle the downvote state
+				setIsDownvoted(!isDownvoted);
+				console.log("Downvote successful:", response);
+				dispatch(setPosts({ ...response.post }));
 				// Update the post data in Home component with the new data
-        updatePostData(postId, response.post);
-      } else {
-        console.error('Downvote failed:', response);
-      }
-    } catch (error) {
-      console.error('Downvote failed:', error);
-    }
-  };
-  
+				updatePostData(postId, response.post);
+			} else {
+				console.error("Downvote failed:", response);
+			}
+		} catch (error) {
+			console.error("Downvote failed:", error);
+		}
+	};
+
 	// State to manage the expanded image
 	const [isExpanded, setIsExpanded] = useState(false);
 	const handleExpand = () => {
 		setIsExpanded(!isExpanded);
 	};
 	return (
-		<div className="border-b-2 border-gray-300 p-2 pr-1 flex flex-row gap-1 sm:gap-2 h-fit min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+		<div className="border-b-2 border-gray-300 p-2 pr-1 flex flex-row gap-1 sm:gap-2 h-fit min-w-[350px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 			<div>
 				<Link to={`/profile/${u_id}`}>
 					<img
@@ -178,11 +178,24 @@ const Post = ({ post, updatePostData, removePost }) => {
 						{" "}
 						{/* Wrap the user's name in a Link */}
 						<span className="font-medium flex flex-row items-center gap-1">
-							<span className="font-semibold">{name}</span>
+							<span className="font-semibold">
+								{" "}
+								{name.length > 10 ? (
+									<span>{name.slice(0, 10)}... </span>
+								) : (
+									<span>{name}</span>
+								)}
+							</span>
 							{isVerified && <FaCircleCheck color="#17A1FA" />}
 						</span>
 					</Link>
-					<span>@{username}</span>
+					<span>@
+						{username.length > 10 ? (
+							<span>{username.slice(0, 10)}... </span>
+						) : (
+							<span>{username}</span>
+						)}
+					</span>
 					<span className="text-gray-500">
 						{formatDateToTime(date)}
 					</span>
@@ -192,7 +205,9 @@ const Post = ({ post, updatePostData, removePost }) => {
 						onClick={handleOpenOptions}
 					>
 						<div className="cursor-pointer">
-							{role === "admin" || userId === u_id ? <PiDotsThreeOutlineVerticalFill /> : null}
+							{role === "admin" || userId === u_id ? (
+								<PiDotsThreeOutlineVerticalFill />
+							) : null}
 						</div>
 					</span>
 					{openOptions && (
@@ -213,7 +228,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 							<img
 								src={image}
 								alt="Post Image"
-								className="post-image cursor-pointer"
+								className="post-image cursor-pointer w-full"
 								onClick={handleExpand}
 							/>
 						</div>
