@@ -172,6 +172,7 @@
 
 .hamburger {
   display: none;
+  z-index: 999;
 }
 
 .underline-blue {
@@ -245,7 +246,7 @@
     position: fixed;
     right: 1rem;
     top: 2vh;
-    z-index: 10;
+    z-index: 999;
     background: white;
     border-radius: 5px;
   }
