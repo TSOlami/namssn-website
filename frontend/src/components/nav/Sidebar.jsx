@@ -81,14 +81,12 @@ const Sidebar = () => {
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300 "></span>
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300"></span>
 			</div> */}
-
-			{location.pathname !== "/"  ? (
+			
 				<div className={isNavOpen ? "hamburger active" : "hamburger"} onClick={handleCloseNav}>
 					<span className="bar side"></span>
 					<span className="bar side"></span>
 					<span className="bar side"></span>
 				</div>
-			) : null}
 
 
 			<div
@@ -132,6 +130,7 @@ const Sidebar = () => {
 
 						<li>
 							<Link
+								onClick={handleCloseNav}
 								to="/notifications"
 								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
 							>
