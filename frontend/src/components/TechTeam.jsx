@@ -35,10 +35,10 @@ const TechTeam = ({ image, facebook, twitter, linkedin, github, website, name, p
 				</a>
 			</div>
 
-      <a href={website} className="p-4 bg-black text-white rounded-b-2xl">
+      <div className="p-4 bg-black text-white rounded-b-2xl">
         <div className="font-semibold">{name}</div>
-        <div>{position}</div>
-      </a>
+        <a href={website}>{position}</a>
+      </div>
 		</div>
 	);
 };
