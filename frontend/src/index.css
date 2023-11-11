@@ -86,7 +86,6 @@
     max-height: 200px;
     object-position: center;
     object-fit: cover;
-    object-fit: contain;
     border-radius: 10px;
   }
 }
