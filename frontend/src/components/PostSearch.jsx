@@ -14,7 +14,6 @@ import { ProfileImg } from "../assets";
 const PostSearch = ({key, upvotes, downvotes, comment, isVerified, image,
                     text, name, username, avatar, createdAt, updatedAt,
                     u_id, postId}) => {
-                      console.log(username, name)
     const [openOptions, setopenOptions] = useState(false);
 	
     const handleOpenOptions = () => {

@@ -61,7 +61,7 @@ const VerificationAccountInput = ({ codeLength }) => {
     try {
       let { status, data } = await verifyOTP(username, code);
 
-      if (status === 200) {
+      // if (status === 200) {
         // Call verifyAccount to verify the user's account
         const verifyAccountResponse = await verifyAccount({ username, studentEmail }).unwrap();
 
@@ -86,15 +86,15 @@ const VerificationAccountInput = ({ codeLength }) => {
           navigate("/profile");
           toast.success("Account verification successful.");
         }
-      } else {
-        // Handle any error or failed OTP verification here
-        console.error("Failed to verify OTP");
-        if (data && data.message) {
-          toast.error(data.message); // Display the error message from the server
-        } else {
-          toast.error("Failed to verify OTP. Please try again.");
-        }
-      }
+      // } else {
+      //   // Handle any error or failed OTP verification here
+      //   console.error("Failed to verify OTP");
+      //   if (data && data.message) {
+      //     toast.error(data.message); // Display the error message from the server
+      //   } else {
+      //     toast.error("Failed to verify OTP. Please try again.");
+      //   }
+      // }
     } catch (error) {
       console.error("Error during OTP verification:", error);
       if (error.error.response && error.error.response.data && error.error.response.data.message) {

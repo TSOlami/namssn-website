@@ -189,9 +189,9 @@ const Search = () => {
                         {data.posts && filter==='all' && data.posts.map((post, index) => (
                         <PostSearch
                             key={index}
-                            upvotes={post?.upvotes?.length}
-                            downvotes={post?.downvotes?.length}
-                            comments={post?.comments?.length}
+                            upvotes={post?.upvotes}
+                            downvotes={post?.downvotes}
+                            comments={post?.comments}
                             isVerified={post?.user?.isVerified}
                             text={post?.text}
                             name={post?.user?.name}

@@ -23,7 +23,6 @@ const ResourceCard = ({
 	const cardClass =
 	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
 
-	console.log(uploaderUsername)
 	const handleShare = async () => {
         try {
             await navigator.share({
@@ -108,7 +107,7 @@ const ResourceCard = ({
 				onClick={() => viewFile(fileUrl)}
 			>
 				<FaFileLines/>
-				<span className="pb-2 ">{title}</span>
+				<span className="pb-2 ">{title.length > 20 ? `${title.substring(0,15)}...` : title}</span>
 				<span
 					onClick={(event) => {
 						event.stopPropagation();
@@ -134,13 +133,13 @@ const ResourceCard = ({
 							>
 								Share
 							</div>
-							{isAdmin === "admin" || uploaderId===userInfo._id &&
-								<button
+							{(isAdmin === "admin" || uploaderId===userInfo._id) ?
+								(<button
 									onClick={handleNewDelete}
 									className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
 								>
 									<MdDelete /> <span>Delete Post</span>
-								</button>
+								</button>) : (<div></div>)
 							}
 						</div>
 					)}
