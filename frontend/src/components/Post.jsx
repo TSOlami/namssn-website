@@ -228,7 +228,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 							<img
 								src={image}
 								alt="Post Image"
-								className="post-image cursor-pointer w-full"
+								className="post-image cursor-pointer "
 								onClick={handleExpand}
 							/>
 						</div>
