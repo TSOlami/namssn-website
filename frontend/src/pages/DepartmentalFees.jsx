@@ -42,7 +42,7 @@ const DepartmentalFees = () => {
 							Make Payment
 						</h1>
 						<div>
-							Let&apos;s help NAMSSN by paying our departmental
+							Let&apos;s help NAMSSN grow by paying our departmental
 							dues on time.
 						</div>
 						<div>
@@ -64,7 +64,7 @@ const DepartmentalFees = () => {
 							Departmental dues	
 						</h3>
 						<div className="text-xl font-roboto font-normal my-5">
-							Let&apos;s help NAMSSN by paying our departmental
+							Let&apos;s help NAMSSN grow by paying our departmental
 							dues on time.
 							Ensure you use your matric number as the description
 							for the transfer.

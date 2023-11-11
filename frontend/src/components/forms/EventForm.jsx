@@ -18,8 +18,8 @@ const EventForm = ({ selectedOption }) => {
 	// Use the useDeleteEventMutation hook to delete an event
 	const [deleteEvent] = useDeleteEventMutation();
 
-	// Create state to manage form reset
-	// const [resetForm, setResetForm] = useState(false);
+	// State to manage image preview
+  const [imagePreview, setImagePreview] = useState(selectedOption?.image || null);
 
 	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
@@ -54,6 +54,8 @@ const EventForm = ({ selectedOption }) => {
 			try {
 				let updatedValues = Object.assign(values, { image: file });
 
+				console.log("New values: ", updatedValues);
+
 				if (selectedOption) {
 					// If editing an existing event, use the update mutation
 					const res = await toast.promise(updateEvent(selectedOption._id, updatedValues).unwrap(), {
@@ -61,6 +63,11 @@ const EventForm = ({ selectedOption }) => {
 						success: "Event updated successfully",
 					});
 					dispatch(setEvents({ ...res }));
+
+					// Reload the page after 5 seconds
+					setTimeout(() => {
+						window.location.reload();
+					}, 5000);
 				} else {
 					// If creating a new event, use the create mutation
 					const res = await toast.promise(createEvent(updatedValues).unwrap(), {
@@ -79,6 +86,10 @@ const EventForm = ({ selectedOption }) => {
 						inputElement.value = null;
 					}
 				}
+				// Reload the page after 5 seconds
+				setTimeout(() => {
+					window.location.reload();
+				}, 5000);
 			} catch (error) {
 				toast.error("Something went wrong");
 				console.log(error);
@@ -91,7 +102,7 @@ const EventForm = ({ selectedOption }) => {
 		// Check file size, must be 2MB or less
 		const file = e.target.files[0];
     const maxSize = 2 * 1024 * 1024; // 2MB
-		if (file.size > maxSize) {
+		if (file?.size > maxSize) {
 			toast.error("File size too large");
 
 			return;
@@ -100,6 +111,10 @@ const EventForm = ({ selectedOption }) => {
 		const base64 = await convertToBase64(e.target.files[0]);
 		// Update the file state
 		setFile(base64);
+		
+		// Update the image preview
+    setImagePreview(URL.createObjectURL(file));
+
 		console.log("File Uploaded");
   };
 
@@ -123,6 +138,10 @@ const EventForm = ({ selectedOption }) => {
 			dispatch(setEvents({ ...res }));
 			formik.resetForm();
 			setFile(null);
+			// Reload the page after 5 seconds
+			setTimeout(() => {
+				window.location.reload();
+			}, 5000);
 		} catch (error) {
 			toast.error("Something went wrong");
 			console.log(error);
@@ -203,6 +222,10 @@ const EventForm = ({ selectedOption }) => {
 						/>
 					</>
 				) : (
+					<>
+					{imagePreview && (
+						<img src={imagePreview} alt="Event Flyer" className="w-1/2" />
+					)}
 					<label htmlFor="image" className="cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">
 						Add Event Flyer
 						<input
@@ -214,6 +237,8 @@ const EventForm = ({ selectedOption }) => {
 							className="hidden"
 						/>
 					</label>
+					</>
+					
 				)}
 			</div>
 

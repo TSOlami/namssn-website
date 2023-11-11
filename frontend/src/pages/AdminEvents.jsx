@@ -52,9 +52,8 @@ const AdminEvents = () => {
 								key={index}
 								title={event.title}
 								date={event.date}
-								// location={event.location}
+								location={event.location}
 								// flier={event.image}
-								flier={event.flier}
 							/>
 						))}
 

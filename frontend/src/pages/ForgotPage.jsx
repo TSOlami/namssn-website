@@ -31,12 +31,16 @@ const ForgotPage = () => {
 			return; // Stop the function execution
 		}
 
-		// Generate the OTP and send it to the user's email
+		try {
+			// Generate the OTP and send it to the user's email
 		await toast.promise(generateOTP(username), {
 			pending: "Generating OTP...",
 			success: "OTP generated successfully.",
-			error: "Failed to generate OTP. Please try again.",
 		});
+		} catch (err) {
+			console.log(err);
+			toast.error(err?.data?.message || err?.error);
+		}
 
 		// Navigate to the /verify-email page
 		navigate(`/verify-user/${username}`);
@@ -55,7 +59,7 @@ const ForgotPage = () => {
 
 			<div className="flex items-center flex-col">
 				<h1 className="text-3xl font-bold">Forgot your password ?</h1>
-				<p className="p-2">
+				<p className="text-center p-2">
 					Enter your username and we&apos;ll send you a verification
 					code to reset your password.
 				</p>
