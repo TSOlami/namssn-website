@@ -2,7 +2,7 @@ import React from "react";
 import { Link as ScrollLink } from "react-scroll";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const ScrollToSectionLink = ({ to, ...props }) => {
+const ScrollToSectionLink = ({ to,closeNavbar, ...props }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -10,6 +10,11 @@ const ScrollToSectionLink = ({ to, ...props }) => {
     // If not on the home page, navigate to the home page first
     if (location.pathname !== "/") {
       navigate("/");
+    }
+
+    // Close the navbar if it's open
+    if (closeNavbar) {
+      closeNavbar();
     }
 
     // After navigating, scroll to the target section

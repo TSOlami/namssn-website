@@ -45,6 +45,7 @@ const Sidebar = () => {
 		try {
 			await logoutApiCall().unwrap();
 			dispatch(logout());
+			dispatch(setNavOpen(false));
 			navigate("/");
 		} catch (err) {
 			console.log(err);

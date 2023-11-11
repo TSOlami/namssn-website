@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link as ScrollLink } from "react-scroll";
 import { Link } from "react-router-dom";
 
 import { ScrollToSectionLink } from "../../utils";
@@ -61,6 +60,7 @@ const NavBar = () => {
 								smooth={true}
 								offset={-100}
 								duration={500}
+								closeNavbar={handleNavOpen}
 								className="nav-text hover:underline transition-all font-montserrat"
 							>
 								{item.label}
