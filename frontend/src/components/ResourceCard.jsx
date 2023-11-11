@@ -24,6 +24,7 @@ const ResourceCard = ({
 	"cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
 
 	const handleShare = async () => {
+		e.stopPropagation();
         try {
             await navigator.share({
                 title: title,
