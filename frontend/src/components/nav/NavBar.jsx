@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link as ScrollLink } from "react-scroll";
+import { Link } from "react-router-dom";
+
+import { ScrollToSectionLink } from "../../utils";
 import { NamssnLogo } from "../../assets";
 import { navLinks } from "../../constants";
-import { Link } from "react-router-dom";
 
 const NavBar = () => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
@@ -49,13 +52,26 @@ const NavBar = () => {
 					<span className="logo-text py-[2px]">NAMSSN</span>
 				</div>
 				<ul className="flex-1 flex justify-center lg:justify-evenly items-center ml-6 gap-10 lg:gap-3 flex-col lg:flex-row">
-					{navLinks.map((item) => (
-						<li key={item.label}>
+				{navLinks.map((item) => (
+					<li key={item.label}>
+						{item.label === "Contact Us" ? (
+							<ScrollToSectionLink
+								to="contact"
+								spy={true}
+								smooth={true}
+								offset={-100}
+								duration={500}
+								className="nav-text hover:underline transition-all font-montserrat"
+							>
+								{item.label}
+							</ScrollToSectionLink>
+						) : (
 							<Link to={item.href} className="nav-text hover:underline transition-all font-montserrat">
 								{item.label}
 							</Link>
-						</li>
-					))}
+						)}
+					</li>
+				))}
 				</ul>
 
 				<div className="pb-14 lg:pl-5 lg:p-0 gap-4 flex mx-4 items-center justify-center">

@@ -10,5 +10,6 @@ import { verifyAccount } from "./verifyAccount";
 import { getPosts } from "./getPosts";
 import { verifyPasswordOTP } from "./verifyPasswordOTP";
 import { resendOTP } from "./resendOTP";
+import ScrollToSectionLink from "./scrollUtils";
 
-export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP };
+export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP, ScrollToSectionLink };
