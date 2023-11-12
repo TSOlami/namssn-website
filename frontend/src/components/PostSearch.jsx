@@ -145,7 +145,7 @@ const PostSearch = ({
 							{" "}
 							{/* Wrap the user's name in a Link */}
 							<span className="font-medium flex flex-row items-center gap-2">
-								<span className="font-semibold">{name.length > 10 ? (
+								<span className="font-semibold">{name?.length > 10 ? (
 									<span>{name.slice(0, 10)}... </span>
 								) : (
 									<span>{name}</span>
@@ -155,7 +155,7 @@ const PostSearch = ({
 								)}
 							</span>
 						</Link>
-						<span>@{username.length > 10 ? (
+						<span>@{username?.length > 10 ? (
 							<span>{username.slice(0, 10)}... </span>
 						) : (
 							<span>{username}</span>
