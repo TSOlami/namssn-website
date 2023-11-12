@@ -72,7 +72,6 @@ const ResourceCard = ({
 	};
 
 	const handleFileDelete = async (fileUrl) => {
-		console.log("here")
 		handleSetOpenOptions();
 		await axios
 			.delete(fileUrl, { data: { _id: userInfo._id, level: semester } })
@@ -148,7 +147,7 @@ const ResourceCard = ({
 
 				
 			</div>
-			{showDetails && (
+			{(showDetails && openOptions) && (
 					<div className="flex flex-col pl-2 border border-b-blue-800 bg-white">
 						<span className={lgStyle}>{description}</span>
 						<div>
