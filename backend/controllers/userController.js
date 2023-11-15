@@ -117,6 +117,14 @@ const verifyAccount = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('User already verified');
     }
+
+    // Check if the email provided is already in use by another user
+    const emailExists = await User.findOne({ email: studentEmail });
+    if (emailExists) {
+      res.status(400);
+      throw new Error('Email already in use');
+    }
+
     // Append the user's matric number and student email to the user's data
     user.studentEmail = studentEmail;
     user.isVerified = true;
