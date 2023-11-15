@@ -18,9 +18,4 @@ export default defineConfig({
 		environment: "happy-dom",
 		setupFiles: "tests/setup.js",
 	},
-	build: {
-    rollupOptions: {
-      external: ['react-simple-typewriter'],
-    },
-  },
 });
