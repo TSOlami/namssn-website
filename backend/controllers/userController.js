@@ -101,6 +101,43 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc	Check if email exists
+// Route	POST /api/v1/users/check-email
+// Access Public
+const checkEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Check if the email exists in the database
+    const user = await User.findOne({ email });
+
+    // Return whether the email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// @desc  Check if student email exists
+// Route POST /api/v1/users/check-student-email
+// Access Public
+const checkStudentEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { studentEmail  } = req.body;
+    
+    console.log("Checking student email existence: ", studentEmail);
+    // Check if the student email exists in the database
+    const user = await User.findOne({ studentEmail });
+
+    // Return whether the student email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking student email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // @desc  Verify a user's account
 // Route GET /api/v1/users/verify-account
 // Access Private
@@ -797,4 +834,6 @@ export {
   verifyUserPayment,
   resendOTP,
   getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 };

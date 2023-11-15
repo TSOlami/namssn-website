@@ -33,6 +33,8 @@ import {
   resendOTP,
   verifyUserPayment,
   getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 } from "../controllers/userController.js";
 
 import { 
@@ -83,6 +85,28 @@ router.post('/auth', authUser);
  * @access Private
  */
 router.route('/verify-account').post(verifyAccount);
+
+/**
+ * Check if email exists
+ * 
+ * @route POST /api/v1/users/check-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.post('check-email', checkEmailExistence);
+
+/**
+ * Check if student email exists
+ * 
+ * @route POST /api/v1/users/check-student-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.route('check-student-email').post(checkStudentEmailExistence);
 
 /**
  * Generate OTP
