@@ -1,4 +1,3 @@
-import CerHat from "../assets/icons/CerHat.png";
 import axios from "axios";
 import store from "../redux/store/store";
 import { toast } from "react-toastify";
@@ -70,8 +69,7 @@ const ResourceCard = ({
 		w.location = fileUrl;
 	};
 
-	const handleFileDelete = async (fileUrl) => {
-		console.log("here")
+	const handleFileDelete = async (fileUrl) => {	
 		handleSetOpenOptions();
 		await axios
 			.delete(fileUrl, { data: { _id: userInfo._id, level: semester } })
@@ -96,8 +94,8 @@ const ResourceCard = ({
 		handleFileDelete(fileUrl);
 	};
 
-	const smStyle = "text-sm text-gray-400";
-	const lgStyle = "text-sm text-blue-600";
+	const smStyle = "text-sm text-gray-400 font-serif";
+	const lgStyle = "text-sm text-blue-600 font-serif font-medium";
 
 	return (
 		<div className="w-[10em] flex flex-col items-center my-2">
@@ -147,16 +145,20 @@ const ResourceCard = ({
 
 				
 			</div>
-			{showDetails && (
-					<div className="flex flex-col pl-2 border border-b-blue-800 bg-white">
+			{(showDetails && openOptions) && (
+					<div className="drop-shadow-lg flex flex-col px-2 border border-b-blue-400 border-l-blue-400 border-r-blue-400 bg-white">
 						<span className={lgStyle}>{description}</span>
 						<div>
-							<span className={smStyle}>category: </span>
+							<span className={smStyle}>For </span>
 							<span className={lgStyle}>{semester}</span>
 						</div>
 						<div>
-							<span className={smStyle}>By: </span>{" "}
-							<span className={lgStyle}>{uploaderUsername}</span>
+							<span className={smStyle}>By </span>{" "}
+								<span className={lgStyle}>{uploaderUsername?.length > 10 ? (
+									<span>{uploaderUsername.slice(0, 10)}... </span>
+								) : (
+									<span>{uploaderUsername}</span>
+								)}</span>
 						</div>
 						<div>
 							<span className={smStyle}>Uploaded </span>

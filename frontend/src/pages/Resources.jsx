@@ -123,7 +123,7 @@ const Resources = () => {
                                 </div>}
                                 {level1FileList.length > 4 && dropDown1===-1 && (
                                 <Link to="/resources/100%20Level">
-                                    <button className="w-[100%] bg-blue-600 hover:bg-blue-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                    <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}
                             </div>)}
                             {level2FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
@@ -145,7 +145,7 @@ const Resources = () => {
                                 </div>}
                                 {level2FileList.length > 4 && dropDown2===-2 && (
                                 <Link to="/resources/200%20Level">
-                                    <button className="w-[100%] bg-blue-600 hover:bg-blue-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                    <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}
                             </div>)}
                             {level3FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
@@ -167,7 +167,7 @@ const Resources = () => {
                                 </div>}
                                 {level3FileList.length > 4 && dropDown3===-3 && (
                                 <Link to="/resources/300%20Level">
-                                    <button className="w-[100%] bg-blue-600 hover:bg-blue-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                    <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}
                             </div>)}
                             {level4FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
@@ -189,7 +189,7 @@ const Resources = () => {
                                 </div>}
                                     {level4FileList.length > 4 && dropDown4===-4 && (
                                     <Link to="/resources/400%20Level">
-                                        <button className="w-[100%] bg-blue-600 hover:bg-blue-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                        <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                     </Link>)}
                             </div>)}
                             {level5FileList && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
@@ -211,7 +211,7 @@ const Resources = () => {
                                 </div>}
                                 {level5FileList.length > 4 && dropDown5===-5 && (
                                 <Link to="/resources/500%20Level">
-                                    <button className="w-[100%] bg-blue-600 hover:bg-blue-900 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                    <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}
                             </div>)}
                         </div> 

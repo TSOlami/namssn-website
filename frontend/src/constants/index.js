@@ -146,7 +146,7 @@ export const teamMembers = [
 		facebook: "https://web.facebook.com/100016232149332/",
 		linkedin: "https://www.linkedin.com/in/timilehin-olusa-781386250/",
     twitter: "https://twitter.com/TimmieOlusa",
-    github: "https://github.com",
+    github: "https://github.com/DeepBrain07",
     website: "https://timilehinolusa.netlify.app/",
   },
   {
