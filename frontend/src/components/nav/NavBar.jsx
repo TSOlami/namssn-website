@@ -22,6 +22,8 @@ const NavBar = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isNavOpen]);
 
+	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+
 	return (
 		<header className="px-[10px] my-4 mx-2 w-full fixed top-[-16px] z-[200]">
 
