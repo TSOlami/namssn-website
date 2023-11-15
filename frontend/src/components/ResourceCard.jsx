@@ -8,7 +8,7 @@ import { FaFileLines } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
 const state = store.getState();
-const userInfo = state.auth.userInfo;
+const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
 const ResourceCard = ({
   uploaderUsername,
@@ -75,7 +75,7 @@ const ResourceCard = ({
   const handleFileDelete = async (fileUrl) => {	
     handleSetOpenOptions();
     await axios
-      .delete(fileUrl, { data: { _id: userInfo._id, level: semester } })
+      .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
       .then((res) => {
         if (res.data === "Access Approved") {
           toast.success("File Successfully Deleted!");
@@ -131,7 +131,7 @@ const ResourceCard = ({
               >
                 Share
               </div>
-              {(isAdmin === "admin" || uploaderId===userInfo._id) ?
+              {(isAdmin === "admin" || uploaderId===userInfo?._id) ?
                 (<button
                   onClick={handleNewDelete}
                   className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"

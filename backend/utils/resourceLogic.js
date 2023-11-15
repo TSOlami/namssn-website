@@ -70,6 +70,7 @@ const getSpecifiedResources = async (level) => {
     const response = await getResourcesByLevel(level);
     if (response) {
       const filesList = createFileList(response);
+      console.log(filesList)
       return filesList
     } else {
       console.log('No response');
@@ -87,17 +88,22 @@ const deleteResource = async (req, res) => {
   // client.delete("files")
   const resourceId = await checkUploader(fileUrl, senderId);
 
-  await removeResource(resourceId, senderId)
-  const filepath = path.join(fileDir + '/uploads', req.params.filename)
+  if (resourceId || (req.user && req.user.role === 'admin')) {
+      await removeResource(resourceId, senderId)
+      const filepath = path.join(fileDir + '/uploads', req.params.filename)
 
-  fs.unlink(filepath, async (err) => { // Convert the callback to an async function
-    // deletes the file from the server
-    if (err) {
-        console.log("Unable to delete:", err)
-    }
-    console.log("File has been deleted successfully");
-  })  
-  return ("Access Approved");
+      fs.unlink(filepath, async (err) => { // Convert the callback to an async function
+        // deletes the file from the server
+        if (err) {
+            console.log("Unable to delete:", err)
+        }
+        console.log("File has been deleted successfully");
+    })
+    return ("Access Approved");
+  } else {
+      console.log("Uploader not found")
+      return ("Access Denied");
+  }
 }
 
 

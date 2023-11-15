@@ -3,9 +3,13 @@ import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+import store from "../../redux/store/store";
 import Loader from "../Loader";
 import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
+
+const state = store.getState();
+const userInfo = state?.auth?.userInfo;
 
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
@@ -36,28 +40,32 @@ const FileForm = (props) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            setIsLoading(true);
-            const date = new Date();
-            const formData = new FormData();
-            formData.append('file', values.file);
-            formData.append('userId', props.userId);
-            formData.append('uploaderName', props.name);
-            formData.append('description', inputValue);
-            formData.append('date', date);
-            formData.append('semester', selectedOption1);
-            formData.append('course', selectedOption2)
-            try {
+            if (userInfo?.isVerified === true) {
+                setIsLoading(true);
+                const date = new Date();
+                const formData = new FormData();
+                formData.append('file', values.file);
+                formData.append('userId', props.userId);
+                formData.append('uploaderName', props.name);
+                formData.append('description', inputValue);
+                formData.append('date', date);
+                formData.append('semester', selectedOption1);
+                formData.append('course', selectedOption2)
+                try {
 
-                await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData), {
-                    pending: 'Uploading file...',
-                    success: 'File uploaded successfully',
-                });
-                setIsLoading(false);
-                window.location.reload()
-              } catch (err) {
-                toast.error("File not uploaded, an error occurred");
-                setIsLoading(false);
-              }
+                    await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData), {
+                        pending: 'Uploading file...',
+                        success: 'File uploaded successfully',
+                    });
+                    setIsLoading(false);
+                    window.location.reload()
+                } catch (err) {
+                    toast.error("File not uploaded, an error occurred");
+                    setIsLoading(false);
+                }
+            } else {
+                toast.error("Only verified students are eligible to upload resources")
+            }
         },
     });
 
