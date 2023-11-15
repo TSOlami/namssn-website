@@ -19,7 +19,6 @@ const ResourceSearch = ({query}) => {
     const tempData = JSON.parse(localStorage.getItem("filesDetails"));
     var tempData2 = [...Object.values(tempData)]
     tempData2 = tempData2.flat()
-    // console.log(tempData2)
     
     const newData = {}
 
@@ -30,13 +29,11 @@ const ResourceSearch = ({query}) => {
                 Object.keys(tempData).forEach((key) => {
                     for (let j=0; j<tempData[key].length; j++) {
                         if (isSubDictPresent(tempData[key][j], {[file]: tempData2[index][file]})) {
-                            console.log(file)
                             if (Object.keys(newData).includes(key)) {
                                 newData[[key]].push({[file]: tempData2[index][file]})
                             } else {
                                 newData[[key]] = [{[file]: tempData2[index][file]}]
                             }
-                            console.log(newData)
                         }
                     }
                 });

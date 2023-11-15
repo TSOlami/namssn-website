@@ -47,13 +47,11 @@ const Resources = () => {
             try {
                 const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
                 if (res) {
-                    console.log(res);
                     setData(res.data); // set the fetched data to the state
                 }
             } catch (err) {
                 // set the value of data to "error" is an error occured
                 setData("error")
-                console.log(err);
             }
         };
         fetchData(); // call the fetchData function
@@ -250,7 +248,6 @@ const Resources = () => {
             </div>
         )
     } else if (data==="error") {
-        console.log("ERROR")
         return (
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>

@@ -20,7 +20,6 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     await toast.promise(contactUs(formData), {
       pending: "Sending message...",
       success: "Message sent successfully.",

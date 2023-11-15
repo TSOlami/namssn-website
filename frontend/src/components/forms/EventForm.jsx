@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation, setEvents } from "../../redux";
 
 const EventForm = ({ selectedOption }) => {
-	console.log(selectedOption);
 	// Use the useCreateEventMutation hook to create an event
 	const [createEvent] = useCreateEventMutation();
 
@@ -54,8 +53,6 @@ const EventForm = ({ selectedOption }) => {
 			try {
 				let updatedValues = Object.assign(values, { image: file });
 
-				console.log("New values: ", updatedValues);
-
 				if (selectedOption) {
 					// If editing an existing event, use the update mutation
 					const res = await toast.promise(updateEvent(selectedOption._id, updatedValues).unwrap(), {
@@ -92,7 +89,6 @@ const EventForm = ({ selectedOption }) => {
 				}, 5000);
 			} catch (error) {
 				toast.error("Something went wrong");
-				console.log(error);
 			}
 		},
 	});
@@ -114,8 +110,6 @@ const EventForm = ({ selectedOption }) => {
 		
 		// Update the image preview
     setImagePreview(URL.createObjectURL(file));
-
-		console.log("File Uploaded");
   };
 
 	// Use useEffect to update form values when selectedOption changes
@@ -144,7 +138,6 @@ const EventForm = ({ selectedOption }) => {
 			}, 5000);
 		} catch (error) {
 			toast.error("Something went wrong");
-			console.log(error);
 		}
 	}
 

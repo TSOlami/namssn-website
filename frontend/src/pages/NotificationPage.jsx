@@ -27,8 +27,6 @@ const NotificationPage = () => {
 	// Use the hook to dispatch actions
 	const dispatch = useDispatch();
 
-	console.log("Notifications: ", notifications);
-
 	// Clear notifications
 	const handleClearNotifications = async () => {
 		// Call the clearNotifications mutation to clear notifications

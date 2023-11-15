@@ -10,7 +10,6 @@ import { getUser, generateOTP } from "../utils";
 
 const ForgotPage = () => {
 	const [username, setUsername] = useState("");
-	console.log("Username: ", username);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
@@ -38,7 +37,6 @@ const ForgotPage = () => {
 			success: "OTP generated successfully.",
 		});
 		} catch (err) {
-			console.log(err);
 			toast.error(err?.data?.message || err?.error);
 		}
 

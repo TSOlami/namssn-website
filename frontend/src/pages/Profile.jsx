@@ -26,7 +26,6 @@ const Profile = () => {
 
 	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
-	console.log(noOfPosts)
 
 	const dispatch = useDispatch();
 
@@ -34,8 +33,6 @@ const Profile = () => {
 	const { data: userPosts, isLoading } = useUserPostsQuery({
 		_id: userInfo?._id,
 	});
-
-	console.log("User posts: ", userPosts);
 
 	// State for managing posts
 	const [postData, setPostData] = useState([]);

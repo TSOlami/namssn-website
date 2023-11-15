@@ -55,7 +55,6 @@ const FileForm = (props) => {
                 setIsLoading(false);
                 window.location.reload()
               } catch (err) {
-                console.log(err);
                 toast.error("File not uploaded, an error occurred");
                 setIsLoading(false);
               }

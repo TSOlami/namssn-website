@@ -8,8 +8,6 @@ import { useAllEventsQuery } from "../redux";
 const EventsPage = () => {
 	const { data, isLoading } = useAllEventsQuery();
 
-	console.log(data);
-	
 	if (isLoading) {
 		return <Loader />;
 	}

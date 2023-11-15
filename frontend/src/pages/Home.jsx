@@ -30,7 +30,6 @@ const Home = () => {
   // Dispatch the setPosts action to set the posts in the redux store
   useEffect(() => {
     if (posts) {
-      console.log("Posts from api call: ", posts);
       // Merge the new data with the existing postData
       setPostData((prevData) => [...prevData, ...posts.posts]);
 
@@ -38,8 +37,6 @@ const Home = () => {
       dispatch(setPosts([...postData, ...posts.posts]));
     }
   }, [posts, dispatch]);
-
-  console.log("Posts from state: ", postData);
 
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
@@ -90,7 +87,6 @@ const Home = () => {
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => {
-    console.log("Handle modal open");
     setIsModalOpen(!isModalOpen);
   };
 

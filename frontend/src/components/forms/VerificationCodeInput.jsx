@@ -44,7 +44,6 @@ const VerificationCodeInput = ({ codeLength }) => {
 
 	const code = verificationCode.join("");
 	const handleSubmit = () => {
-		console.log("Verification Code: ", code);
     navigate('/home')
 	};
 

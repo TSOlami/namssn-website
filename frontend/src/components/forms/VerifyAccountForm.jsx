@@ -42,7 +42,6 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
     
         if (OTPResponse.code) {
           // OTP generated successfully, you can now send it to the user or display a success message
-          console.log(`OTP generated successfully: ${OTPResponse.code}`);
           toast.success("OTP has been sent to your email.");
           // Navigate to the /verify-email page
           navigate(`/verify-account/${studentEmail}`);

@@ -93,7 +93,6 @@ const PostComments = ({
 				}
 			);
 			if (response.message === "success") {
-				console.log("Comment downvoted successfully", response);
 
 				// Toggle the downvote state
 				setIsDownvoted(!isDownvoted);
@@ -105,16 +104,17 @@ const PostComments = ({
 
 	const handleDeleteComment = async () => {
 		try {
-			const response = await deleteComment({
+			toast.promise(await deleteComment({
 				commentId,
 				postId,
-			}).unwrap();
-			if (response.message === "success") {
-				console.log("Comment deleted successfully", response);
-			} else {
-				console.error("Comment deletion failed", response);
-			}
+			}).unwrap(),
+			{
+				pending: "Deleting comment...",
+				success: "Comment deleted successfully",
+			});
+			
 		} catch (error) {
+			toast.error("Failed to delete comment");
 			console.error("Comment deletion failed", error);
 		}
 		handleOpenOptions();

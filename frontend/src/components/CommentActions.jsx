@@ -23,13 +23,11 @@ const CommentActions = ({
                 text: 'Check out this comment!',
                 url: `/comments/${postId}`
             });
-            console.log('Link shared successfully');
         } catch (error) {
             console.error('Error sharing:', error);
         }
     };
 
-	console.log("CommentActions: ", upvotes, downvotes);
 	return (
 		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>

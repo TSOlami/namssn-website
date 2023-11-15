@@ -75,19 +75,17 @@ const AdminBlogs = () => {
 				});
         dispatch(setBlogs({...res}));
         formik.resetForm();
-				console.log(values);
 			} catch (error) {
 				if (error.data.message == 'request entity too large') {
 					toast.error('Image size should be less than 200KB');
 				}
-				console.log(error);
+				console.error(error);
 			}
 		},
 	});
 
   // Edit and delete blog handlers
   const handleEditBlog = (blog) => {
-    console.log("Edit blog ", blog._id);
   };
 
   const handleDeleteBlog = async (blog) => {
@@ -104,7 +102,6 @@ const AdminBlogs = () => {
 				},
 			});
     } catch (error) {
-      console.log(error);
       toast.error(error?.data?.message || error?.error);
     }
   };

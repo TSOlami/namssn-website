@@ -60,7 +60,6 @@ const Post = ({ post, updatePostData, removePost }) => {
 				}
 			);
 			if (response.message === "success") {
-				console.log("Post deleted successfully", response);
 				removePost(postId);
 			} else {
 				console.error("Post deletion failed", response);
@@ -143,7 +142,6 @@ const Post = ({ post, updatePostData, removePost }) => {
 			if (response.message === "success") {
 				// Toggle the downvote state
 				setIsDownvoted(!isDownvoted);
-				console.log("Downvote successful:", response);
 				dispatch(setPosts({ ...response.post }));
 				// Update the post data in Home component with the new data
 				updatePostData(postId, response.post);

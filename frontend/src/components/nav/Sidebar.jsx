@@ -48,7 +48,7 @@ const Sidebar = () => {
 			dispatch(setNavOpen(false));
 			navigate("/");
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	};
 

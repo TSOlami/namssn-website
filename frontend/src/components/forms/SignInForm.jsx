@@ -33,8 +33,6 @@ const SignInForm = () => {
           if (response.error) {
             console.error("Failed to send email after login.");
             toast.error("Failed to send a welcome email. Please try again.");
-          } else {
-            console.log("Email sent successfully after login.");
           }
         });
       }
@@ -78,8 +76,6 @@ const SignInForm = () => {
           if (response.error) {
             console.error("Failed to send email after login.");
             toast.error("Failed to send a welcome email. Please try again.");
-          } else {
-            console.log("Email sent successfully after login.");
           }
         });
       }

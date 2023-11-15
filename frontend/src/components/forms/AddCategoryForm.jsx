@@ -39,15 +39,13 @@ const AddCategoryForm = ({ handleModal }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
-        const res = await toast.promise(
+        await toast.promise(
           createCategory(values).unwrap(),
           {
             pending: "Creating Payment Category...",
             success: "Payment Category created successfully",
           }
         );
-        console.log(res);
         handleModal();
         navigate("/admin/payment");
       } catch (err) {

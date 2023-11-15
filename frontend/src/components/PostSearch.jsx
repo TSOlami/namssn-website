@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import { formatDateToTime } from "../utils";
 import {
@@ -15,10 +16,8 @@ import {
 import { ProfileImg } from "../assets";
 
 const PostSearch = ({
-	key,
 	upvotes,
 	downvotes,
-	comment,
 	isVerified,
 	image,
 	text,
@@ -26,7 +25,6 @@ const PostSearch = ({
 	username,
 	avatar,
 	createdAt,
-	updatedAt,
 	u_id,
 	postId,
 }) => {
@@ -47,14 +45,13 @@ const PostSearch = ({
 	const [deletePost] = useDeletePostMutation();
 	const handleDeletePost = async () => {
 		try {
-			const response = await deletePost({ postId: postId }).unwrap();
-			console.log(response);
-			if (response.message === "success") {
-				console.log("Post deleted successfully", response);
-			} else {
-				console.error("Post deletion failed", response);
-			}
+			toast.promise(deletePost({ postId: postId }).unwrap(), {
+				pending: "Deleting post...",
+				success: "Post deleted successfully",
+			});
+			
 		} catch (error) {
+			toast.error("Post deletion failed");
 			console.error("Post deletion failed", error);
 		}
 		handleOpenOptions();
@@ -84,15 +81,15 @@ const PostSearch = ({
 
 		try {
 			// Perform the upvote logic to send an API call to the server
-			const response = await upvotePost({
-				postId: postId,
-				data: data,
-			}).unwrap();
+			const response = toast.promise(upvotePost({ postId, data }).unwrap(), {
+				pending: "Upvoting post...",
+				success: "Post upvoted successfully",
+				error: "Failed to upvote post",
+			});
 
 			if (response.message === "success") {
 				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
-				console.log("Upvote successful:", response);
 			} else {
 				// console.error('Upvote failed:', response);
 			}
@@ -110,10 +107,14 @@ const PostSearch = ({
 
 		try {
 			// Perform the downvote logic to send an API call to the server
-			const response = await downvotePost({
+			const response = toast.promise(downvotePost({
 				postId: postId,
 				data: {},
-			}).unwrap();
+			}).unwrap(), {
+				pending: "Downvoting post...",
+				success: "Post downvoted successfully",
+				error: "Failed to downvote post",
+			});
 
 			if (response.message === "success") {
 				// Toggle the downvote state

@@ -23,12 +23,8 @@ const AdminDashboard = () => {
 
 	const { data: users } = useGetAllUsersQuery();
 
-	console.log("Users: ", users);
-
 	// Sort users by points in descending order
   const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
-
-	console.log("Sorted Users: ", sortedUsers);
 
 	const dispatch = useDispatch();
 	const { data: allpayments, Loading } = useGetAllPaymentsQuery(

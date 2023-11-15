@@ -3,7 +3,6 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { ProfileImg } from "../assets";
 
 const UserCard = ({name, u_id, isVerified, username, avatar}) => {
-    console.log(avatar)
     return (
         <div className="flex flex-row gap-2 lg:gap-2 items-centerborder mb-6 w-full relative">
             <div>
