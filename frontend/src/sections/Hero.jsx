@@ -11,10 +11,10 @@ const Hero = () => {
     <div className="relative lg:w-3/5 flex flex-col justify-center items-start w-full padding-x pt-28">
     <div className="text-container border-black">
       <span
-        className="inline-block font-roboto text-sm md:text-lg lg:text-xl xl:text-2xl"
+        className="inline-block font-roboto text-sm md:text-lg lg:text-xl xl:text-2xl text-primary font-bold"
         aria-hidden
         >
-        <Typewriter words={["Share, Discuss, Learn and Grow."]} loop={true} />
+        <Typewriter words={["Share", "Discuss", "Learn", "Grow"]} loop={true} cursor={true} />
         &nbsp;
       </span>
       <span><img src={polygon} alt="polygon" /></span>
