@@ -47,9 +47,8 @@ const SignInForm = () => {
 	};
 	const validationSchema = Yup.object({
 		email: Yup.string()
-			.required("This field is required")
-			.min(5, "Must be 5 characters or more")
-			.max(30, "Too long"),
+			.email("Invalid email address")
+			.required("Email is required"),
 
 		password: Yup.string()
 			.required("This field is required")

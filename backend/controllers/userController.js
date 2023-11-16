@@ -125,8 +125,6 @@ const checkEmailExistence = asyncHandler(async (req, res) => {
 const checkStudentEmailExistence = asyncHandler(async (req, res) => {
   try {
     const { studentEmail  } = req.body;
-    
-    console.log("Checking student email existence: ", studentEmail);
     // Check if the student email exists in the database
     const user = await User.findOne({ studentEmail });
 
@@ -201,11 +199,9 @@ const verifyAccount = asyncHandler(async (req, res) => {
 const generateOTP = asyncHandler(async (req, res) => {
 try {
   const { username } = req.params;
-  console.log(req.params)
   console.log("Generating OTP for user: ", username);
   const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 
-  console.log(otp)
   // Save the OTP to the database
   await UserOTPVerification.create({
     username,

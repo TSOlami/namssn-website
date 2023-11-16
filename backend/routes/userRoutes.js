@@ -95,7 +95,7 @@ router.route('/verify-account').post(verifyAccount);
  * @returns {boolean} exists - Whether the email exists or not
  * @returns {string} message - The message to be displayed
  */
-router.post('check-email', checkEmailExistence);
+router.route('/check-email').post(checkEmailExistence);
 
 /**
  * Check if student email exists
@@ -106,7 +106,7 @@ router.post('check-email', checkEmailExistence);
  * @returns {boolean} exists - Whether the email exists or not
  * @returns {string} message - The message to be displayed
  */
-router.route('check-student-email').post(checkStudentEmailExistence);
+router.route('/check-student-email').post(checkStudentEmailExistence);
 
 /**
  * Generate OTP
