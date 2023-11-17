@@ -13,5 +13,6 @@ import { resendOTP } from "./resendOTP";
 import { checkEmailExistence } from "./checkEmailExistence";
 import { checkStudentEmailExistence } from "./checkStudentEmailExistence";
 import ScrollToSectionLink from "./scrollUtils";
+import { sendMailNotice } from "./sendMailNotice";
 
-export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP, ScrollToSectionLink, checkEmailExistence, checkStudentEmailExistence };
+export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP, ScrollToSectionLink, checkEmailExistence, checkStudentEmailExistence, sendMailNotice };

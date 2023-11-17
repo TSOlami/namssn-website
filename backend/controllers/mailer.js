@@ -62,7 +62,7 @@ export const registerMail = async (req,res) => {
     html: emailBody
   };
   
-  console.log("Sending Mail to: ", message.to)
+  console.log("Sending Mail to: ", message.to);
   // Send the email
   await transporter.sendMail(message)
   .then(() => {

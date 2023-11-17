@@ -43,5 +43,7 @@ import VerifyCodeInput from './forms/verifyCodeinput';
 import UserCard from './UserCard';
 import Team from './Team';
 import TechTeam from './TechTeam';
+import Modal from './Modal';
+import SendMailModal from './SendMailModal';
 
-export {UserCard, VerifyCodeInput, ShareButton, PostSearch, ResourceSearch, Loader, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm,PaymentVerificationForm, BlogCard, VerificationAccountInput, Team, TechTeam };
+export {UserCard, VerifyCodeInput, ShareButton, PostSearch, ResourceSearch, Loader, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm,PaymentVerificationForm, BlogCard, VerificationAccountInput, Team, TechTeam, Modal, SendMailModal };

@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const ScrollToSectionLink = ({ to, closeNavbar, ...props }) => {
@@ -24,16 +25,7 @@ const ScrollToSectionLink = ({ to, closeNavbar, ...props }) => {
     }, 0);
   }
 
-  return (
-    <a
-      href={to}
-      onClick={e => {
-        e.preventDefault();
-        handleLinkClick();
-      }}
-      {...props}
-    />
-  );
+  return React.createElement("a", { onClick: handleLinkClick, ...props, spy: "true", smooth: "true" });
 };
 
 export default ScrollToSectionLink;
