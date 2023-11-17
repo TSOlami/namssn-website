@@ -12,7 +12,7 @@ import {
   Loader,
   AddPostForm,
 } from "../components";
-import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
+import { useAllPostsQuery, setCurrentPage } from "../redux";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
@@ -27,16 +27,20 @@ const Home = () => {
   // Use the useAllPostsQuery hook to get all posts
   const { data: posts, isLoading } = useAllPostsQuery(Number(page));
 
+  // State to manage HasMore
+  const [hasMore, setHasMore] = useState(true);
+
+  // State to manage getting more posts
+  const [isgettingMorePosts, setIsGettingMorePosts] = useState(false);
+
   // Dispatch the setPosts action to set the posts in the redux store
   useEffect(() => {
     if (posts) {
       // Merge the new data with the existing postData
       setPostData((prevData) => [...prevData, ...posts.posts]);
-
-      // Dispatch the updated posts to your Redux store
-      dispatch(setPosts([...postData, ...posts.posts]));
+      setIsGettingMorePosts(false);
     }
-  }, [posts, dispatch]);
+  }, [posts]);
 
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
@@ -70,19 +74,20 @@ const Home = () => {
   };
 
   // Function to fetch more posts
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const getNextPosts = async (pageCurrent) => {
-    setPaginationLoading(true);
+    setIsGettingMorePosts(true);
     try {
       if (Number(pageCurrent) < Number(totalPages)) {
         dispatch(setCurrentPage(pageCurrent + 1));
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setPaginationLoading(false);
     }
   };
+
+  if (page === totalPages) {
+    setHasMore(false);
+  }
 
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -119,15 +124,24 @@ const Home = () => {
         {isLoading && <Loader />}
 
         {/* Paginate posts buttons */}
-        <div className="flex m-auto pb-12 md:pb-0">
-          <button
-            onClick={() => getNextPosts(page)}
-            className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"
-          >
-            {paginationLoading ? 
-              "Loading..." : "Load more posts"} 
-          </button>
+        {hasMore && (
+          <div className="flex m-auto pb-12 md:pb-0">
+            {isLoading || isgettingMorePosts ? (
+              <button
+              disabled={true}
+              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white cursor-not-allowed"
+              >
+               Loading...
+            </button>) : (
+              <button
+              onClick={() => getNextPosts(page)}
+              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"
+            >
+              Load More posts 
+            </button>
+              )}  
         </div>
+        )}
 
         {/* Add post button */}
         <div
