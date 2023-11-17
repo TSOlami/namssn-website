@@ -1,4 +1,3 @@
-import { EventImg, MainEvent } from "../assets";
 import { NavBar, Footer, Loader } from "../components";
 import Event from "../components/Event";
 import { motion } from "framer-motion";
@@ -23,18 +22,15 @@ const EventsPage = () => {
 					<h1 className="text-3xl font-bold text-center pb-5">
 						Upcoming Events
 					</h1>
-					<div className="flex m-auto">
-						<img src={MainEvent} alt="" />
-					</div>
 				</div>
 				<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
 				{data.map((event, index) => (
             <Event
               key={index}
-              image={event.image} // Adjust the property to match your data structure
-              description={event.title} // Adjust the property to match your data structure
-              date={event.date} // Adjust the property to match your data structure
-              location={event.location} // Adjust the property to match your data structure
+              image={event.image}
+							description={event.description}
+							title={event.title}
+							date={event.date}
             />
           ))}
 				</div>

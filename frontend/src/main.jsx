@@ -51,6 +51,18 @@ const router = createBrowserRouter(
       <Route index={true} key={12} path="/" exact element={<Landing />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route
+        path="/departmental-fees"
+        element={<DepartmentalFees />}
+      />
+      <Route path="/events" element={<EventsPage />} />
+      <Route path="*" element={<ErrorPage />} />
+      <Route
+        key={13}
+        path="/about-us"
+        element={<AboutUsPage />}
+      />
+      <Route path="/blog" element={<BlogPage />} />
       {/* Private routes */}
       <Route path='' element={<ProtectedRoutes />} >
       <Route path="/home" element={<Home />} />
@@ -77,18 +89,6 @@ const router = createBrowserRouter(
       />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route />
-      <Route
-        path="/departmental-fees"
-        element={<DepartmentalFees />}
-      />
-      <Route path="/events" element={<EventsPage />} />
-      <Route path="*" element={<ErrorPage />} />
-      <Route
-        key={13}
-        path="/about-us"
-        element={<AboutUsPage />}
-      />
-      <Route path="/blog" element={<BlogPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/payment" element={<AdminPayment />} />
       <Route path="/comments/:postId" element={<Comments />} />
