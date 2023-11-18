@@ -7,8 +7,11 @@ import path from "path";
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import getLastSixResources from "./resourcesUtils/getLastSixResources.js";
+import axios from "axios";
 import { bot } from "../server.js";
 
+
+const bot_token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I'
 const getResources = async (req, res) => {
   try {
     const level1Resources = await getLastSixResources('100 Level');
@@ -53,8 +56,20 @@ const postResource = async (req, res) => {
       const chatId = 1276219038;
       const fileArrayBuffer = file.data.buffer;
       const fileBuffer = Buffer.from(fileArrayBuffer);
-      // const document = fs.createReadStream('../../backendRoadmap.pdf')
-      await bot.sendDocument(chatId, fileBuffer, { caption: 'random file' })
+      const caption = `${description} - ${filename}`;
+      const form = new FormData();
+      const fileBlob = new Blob([Buffer.from(fileArrayBuffer)], { type: 'application/octet-stream' });
+    form.append('chat_id', chatId);
+    form.append('caption', description );
+    form.append('document', fileBlob, filename);
+
+    // Make the API request using axios
+    const res = await axios.post(`https://api.telegram.org/bot${bot_token}/sendDocument`, form, {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
+      },
+    });
+      // await bot.sendDocument(chatId, fileBuffer, { caption, inputMessageContent: { document: { file_name: filename } } })
           
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, course);
       if (response) {
