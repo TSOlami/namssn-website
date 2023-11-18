@@ -1,4 +1,3 @@
-import checkUploadDirectory from "./resourcesUtils/checkUploadDirectory.js";
 import uploadResource from "./resourcesUtils/uploadResource.js";
 import * as fs from 'fs';
 import createFileList from "./resourcesUtils/createFileList.js";
@@ -8,6 +7,7 @@ import path from "path";
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import getLastSixResources from "./resourcesUtils/getLastSixResources.js";
+import { bot } from "../server.js";
 
 const getResources = async (req, res) => {
   try {
@@ -42,13 +42,20 @@ const postResource = async (req, res) => {
       return res.status(400).send('No file uploaded.');
   }
   const filename = file.name;
-  const uploadDirectory = 'uploads';
 
   try {
-      await checkUploadDirectory(uploadDirectory); // check if the upload directory is already created
       const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
       const fileUrl = uniquefileName + '_' + filename;
-      await fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data); // saves the file on the backend server
+      
+      if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
+        return res.status(400).send('Invalid file data.');
+      }
+      const chatId = 1276219038;
+      const fileArrayBuffer = file.data.buffer;
+      const fileBuffer = Buffer.from(fileArrayBuffer);
+      // const document = fs.createReadStream('../../backendRoadmap.pdf')
+      await bot.sendDocument(chatId, fileBuffer, { caption: 'random file' })
+          
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, course);
       if (response) {
         const formattedResponse = {[fileUrl]: {

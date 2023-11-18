@@ -53,7 +53,7 @@ const FileForm = (props) => {
                 formData.append('course', selectedOption2)
                 try {
 
-                    await toast.promise(axios.post('https://namssn-futminna.onrender.com/api/v1/users/resources', formData), {
+                    await toast.promise(axios.post('http://localhost:5000/api/v1/users/resources', formData), {
                         pending: 'Uploading file...',
                         success: 'File uploaded successfully',
                     });
