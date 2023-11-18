@@ -47,18 +47,15 @@ const postResource = async (req, res) => {
   const filename = file.name;
 
   try {
-      const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-      const fileUrl = uniquefileName + '_' + filename;
-      
-      if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
-        return res.status(400).send('Invalid file data.');
-      }
-      const chatId = 1276219038;
-      const fileArrayBuffer = file.data.buffer;
-      const fileBuffer = Buffer.from(fileArrayBuffer);
-      const caption = `${description} - ${filename}`;
-      const form = new FormData();
-      const fileBlob = new Blob([Buffer.from(fileArrayBuffer)], { type: 'application/octet-stream' });
+    if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
+      return res.status(400).send('Invalid file data.');
+    }
+    const chatId = 1276219038;
+    const fileArrayBuffer = file.data.buffer;
+    // const fileBuffer = Buffer.from(fileArrayBuffer);
+    // const caption = `${description} - ${filename}`;
+    const form = new FormData();
+    const fileBlob = new Blob([Buffer.from(fileArrayBuffer)], { type: 'application/octet-stream' });
     form.append('chat_id', chatId);
     form.append('caption', description );
     form.append('document', fileBlob, filename);
@@ -69,8 +66,10 @@ const postResource = async (req, res) => {
         'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
       },
     });
-      // await bot.sendDocument(chatId, fileBuffer, { caption, inputMessageContent: { document: { file_name: filename } } })
-          
+    if (res) {
+      // console.log(res.data)
+      const fileUrl = res?.data?.result?.document?.file_id
+      console.log(fileUrl) 
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, course);
       if (response) {
         const formattedResponse = {[fileUrl]: {
@@ -80,6 +79,7 @@ const postResource = async (req, res) => {
         }}
         return formattedResponse;
       }
+    }
     } catch (err) {
       console.log(err);
       return [];

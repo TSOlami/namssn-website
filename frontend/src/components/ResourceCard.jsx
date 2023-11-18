@@ -105,7 +105,7 @@ const ResourceCard = ({
         onClick={() => viewFile(fileUrl)}
       >
         <FaFileLines/>
-        <span className="pb-2 ">{title.length > 20 ? `${title.substring(0,15)}...` : title}</span>
+        <span className="pb-2 ">{title.length > 16 ? `${title.substring(0,15)}...` : title}</span>
         <span
           onClick={(event) => {
             event.stopPropagation();
