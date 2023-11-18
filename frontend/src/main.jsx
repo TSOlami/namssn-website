@@ -63,6 +63,9 @@ const router = createBrowserRouter(
         element={<AboutUsPage />}
       />
       <Route path="/blog" element={<BlogPage />} />
+      <Route path="/forgot-password" element={<ForgotPage />} />
+      <Route path="/verify-user/:username" element={<VerifyUserPass />} />
+      <Route path="/reset-password/:username" element={<ResetPassword />} />
       {/* Private routes */}
       <Route path='' element={<ProtectedRoutes />} >
       <Route path="/home" element={<Home />} />
@@ -103,10 +106,7 @@ const router = createBrowserRouter(
         path="/verify-account/:studentEmail"
         element={<VerifyAccount />}
       />
-      <Route path="/verify-user/:username" element={<VerifyUserPass />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/forgot-password" element={<ForgotPage />} />
-      <Route path="/reset-password/:username" element={<ResetPassword />} />
       <Route path="/admin/blogs" element={<AdminBlogs />} />
       </Route>
     </Route>

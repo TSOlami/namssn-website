@@ -20,6 +20,9 @@ const VerifyAccount = () => {
   const [countdown, setCountdown] = useState(120);
 
   const handleResendOTP = async () => {
+    // Update state to prevent frequent resending
+    setCanResendOTP(false);
+    
     // Use the resendAccountVerificationOTP function to resend OTP
     try {
       await toast.promise(
@@ -29,14 +32,14 @@ const VerifyAccount = () => {
           success: "OTP sent successfully, please check your student email.",
         }
       );
-
-      // Reset the countdown and update state to prevent frequent resending
-      setCountdown(120);
-      setCanResendOTP(false);
-
     } catch (err) {
       // Handle any unexpected errors
       toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
+      // Update state to allow resending again
+      setCanResendOTP(true);
+    } finally {
+      // Reset the countdown and update state to prevent frequent resending
+      setCountdown(120);
     }
   };
 
@@ -87,7 +90,7 @@ const VerifyAccount = () => {
 				<VerificationAccountInput codeLength={6} />
         <p >
           Didn&apos;t receive an OTP? {canResendOTP ? (
-            `Click here to resend.`
+            `Click the button below to resend.`
           ) : (
             `Resend in ${countdown} seconds.`
           )}
