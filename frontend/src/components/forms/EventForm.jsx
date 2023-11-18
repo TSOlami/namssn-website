@@ -88,7 +88,7 @@ const EventForm = ({ selectedOption }) => {
 					window.location.reload();
 				}, 5000);
 			} catch (error) {
-				toast.error("Something went wrong");
+				toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 			}
 		},
 	});
@@ -137,7 +137,7 @@ const EventForm = ({ selectedOption }) => {
 				window.location.reload();
 			}, 5000);
 		} catch (error) {
-			toast.error("Something went wrong");
+			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 		}
 	}
 

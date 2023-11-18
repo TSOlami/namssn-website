@@ -57,8 +57,7 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
         handleModalOpen(); 
         navigate("/home");
       } catch (err) {
-        console.error("Failed to create a post:", err);
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
     },
   });

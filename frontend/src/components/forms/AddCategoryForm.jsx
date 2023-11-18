@@ -49,8 +49,7 @@ const AddCategoryForm = ({ handleModal }) => {
         handleModal();
         navigate("/admin/payment");
       } catch (err) {
-        console.error("Failed to create payment:", err);
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
     },
   });

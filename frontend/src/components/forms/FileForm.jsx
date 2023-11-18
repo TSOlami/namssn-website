@@ -60,7 +60,7 @@ const FileForm = (props) => {
                     setIsLoading(false);
                     window.location.reload()
                 } catch (err) {
-                    toast.error("File not uploaded, an error occurred");
+                    toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
                     setIsLoading(false);
                 }
             } else {

@@ -73,7 +73,7 @@ const AdminAnnouncements = () => {
       // Reset the form
       formik.resetForm();
     } catch (err) {
-      toast.error(err?.data?.message || err?.error);
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 

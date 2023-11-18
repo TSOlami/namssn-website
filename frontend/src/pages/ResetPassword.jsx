@@ -64,8 +64,7 @@ const ResetPassword = () => {
 
 				toast.error(res?.error?.error?.data?.message || res?.error?.data?.message);
 			} catch (err) {
-				toast.error(err?.data?.message || err?.error)
-
+				toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 			}
 		},
 	});

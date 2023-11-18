@@ -29,6 +29,7 @@ import {
 	useCreateEventMutation,
 	useUpdateEventMutation,
 	useDeleteEventMutation,
+	useMailNoticeMutation,
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
@@ -151,6 +152,7 @@ export {
 	useClearNotificationsMutation,
 	useContactUsMutation,
 	useCheckStudentEmailMutation,
+	useMailNoticeMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,

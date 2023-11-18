@@ -24,21 +24,9 @@ const SignInForm = () => {
 
   useEffect(() => {
     if (userInfo) {
-      // Trigger sending the email after a successful login
-      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
-      const { email } = userInfo;
-
-      if (email) {
-        sendMail({ userEmail: email, text: msg }).then((response) => {
-          if (response.error) {
-            console.error("Failed to send email after login.");
-            toast.error("Failed to send a welcome email. Please try again.");
-          }
-        });
-      }
       navigate('/home');
     }
-  }, [navigate, sendMail, userInfo]);
+  }, [navigate, userInfo]);
 
 	// Schema and configuration for form validation
 	const initialvalues = {
@@ -80,7 +68,7 @@ const SignInForm = () => {
       }
         navigate('/home');
       } catch (err) {
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
 		},
 	});

@@ -51,8 +51,7 @@ const PostSearch = ({
 			});
 			
 		} catch (error) {
-			toast.error("Post deletion failed");
-			console.error("Post deletion failed", error);
+			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 		}
 		handleOpenOptions();
 	};

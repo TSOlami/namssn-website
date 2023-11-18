@@ -77,10 +77,9 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
           // Set the sending OTP button to false
           setIsSendingOTP(false);
         }
-      } catch (error) {
+      } catch (err) {
         // Handle any unexpected errors here
-        console.error("An error occurred:", error);
-        toast.error("An error occurred while generating OTP. Please try again.");
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
     }
   });

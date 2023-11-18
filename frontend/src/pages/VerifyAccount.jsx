@@ -34,10 +34,9 @@ const VerifyAccount = () => {
       setCountdown(120);
       setCanResendOTP(false);
 
-    } catch (error) {
+    } catch (err) {
       // Handle any unexpected errors
-      console.error("An error occurred during OTP resend:", error);
-      toast.error("An error occurred while resending OTP. Please try again.");
+      toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 

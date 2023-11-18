@@ -55,8 +55,8 @@ const Comments = () => {
 				pending: "Submitting comment...",
 				success: "Comment submitted successfully",
 			})
-		} catch (error) {
-			toast.error("Error submitting comment");
+		} catch (err) {
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
 	};
 	return (

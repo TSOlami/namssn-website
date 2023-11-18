@@ -1,8 +1,0 @@
-{
-	"rewrites": [
-			{
-					"source": "/api/v1/:path*",
-					"destination": "https://namssn-futminna.onrender.com/:path*"
-			}
-	]
-}

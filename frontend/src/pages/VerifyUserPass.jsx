@@ -50,10 +50,9 @@ const VerifyUserPass = () => {
 				setResendDisabled(false);
 			}, 620000);
 
-		} catch (error) {
+		} catch (err) {
 			// Handle any unexpected errors
-			console.error("An error occurred during OTP resend:", error);
-			toast.error("An error occurred while resending OTP. Please try again.");
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 			setResendDisabled(false);
 		}
 	};

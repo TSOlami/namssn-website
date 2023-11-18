@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
+
 import { Modal } from "../components";
-import { sendMailNotice } from "../utils";
+import { useMailNoticeMutation } from "../redux";
 
 const SendMailModal = ({ isOpen, onClose }) => {
   const [subject, setSubject] = useState("");
@@ -8,10 +10,20 @@ const SendMailModal = ({ isOpen, onClose }) => {
   const [selectedLevel, setSelectedLevel] = useState("all");
 	const [sendTo, setSendTo] = useState("email");
 
-  const handleSendMail = () => {
-    // Assuming you have a function in your redux actions to send mail
-    // sendMailNotice({ subject, text, selectedLevel, sendTo });
-		console.log({ subject, text, selectedLevel, sendTo });
+	// Mutation to send mail
+	const [sendMailNotice] = useMailNoticeMutation();
+
+  const handleSendMail = async () => {
+    try {
+			// Use the sendMailNotice util function to send mail
+			await toast.promise(sendMailNotice({ subject, text, selectedLevel, sendTo }), {
+				pending: "Sending mail...",
+				success: "Mail sent successfully",
+			});	
+		} catch (error) {
+			const msg = error?.error?.response?.data?.message || error?.data?.message || error?.error;
+			toast.error(msg);
+		}
     onClose(); // Close the modal after sending mail
   };
 
@@ -24,14 +36,15 @@ const SendMailModal = ({ isOpen, onClose }) => {
           onChange={(e) => setSendTo(e.target.value)}
           className="mt-1 p-2 w-full border rounded-md"
         >
-          <option value="user">User Email</option>
-          <option value="student">Student Email</option>
+          <option value="email">Users Regular Email</option>
+          <option value="studentEmail">Verified Student Email</option>
         </select>
       </div>
       <div className="mb-4 mx-12">
         <label className="block text-sm font-medium text-gray-700">Subject</label>
         <input
           type="text"
+					required
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           className="mt-1 p-2 w-full border rounded-md"
@@ -41,6 +54,7 @@ const SendMailModal = ({ isOpen, onClose }) => {
         <label className="block text-sm font-medium text-gray-700">Text</label>
         <textarea
           value={text}
+					required
           onChange={(e) => setText(e.target.value)}
           className="mt-1 p-2 w-full border rounded-md"
           rows="4"
