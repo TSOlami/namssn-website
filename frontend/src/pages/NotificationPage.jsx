@@ -77,6 +77,7 @@ const NotificationPage = () => {
 									content={notification?.text}
 									downvote={notification?.downvote}
 									upvote={notification?.upvote}
+									tBUser={notification?.triggeredBy._id}
 									name={notification?.triggeredBy?.name}
 									isVerified={
 										notification?.triggeredBy?.isVerified

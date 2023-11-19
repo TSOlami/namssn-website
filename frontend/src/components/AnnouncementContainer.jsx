@@ -9,6 +9,7 @@ const AnnouncementContainer = () => {
 	// Use the useAllAnnouncementsQuery hook to get all announcements
 	const { data: announcements, isLoading: isFetching } =
 		useAllAnnouncementsQuery();
+    console.log("Announcements: ",announcements);
 
 	// Use the useSelector hook to access redux store state
 	const { userInfo } = useSelector((state) => state.auth);

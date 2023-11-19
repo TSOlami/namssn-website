@@ -106,6 +106,7 @@ const Comments = () => {
 						<IoSend />
 					</div>
 				</div>
+				<div className="pb-12">
 				{comments && comments?.length > 0 ? (
 					comments?.map((comment) => {
 						return (
@@ -130,6 +131,7 @@ const Comments = () => {
 						No comments to display.
 					</div>
 				)}
+				</div>
 			</div>
 
 			<AnnouncementContainer />
