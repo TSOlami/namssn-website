@@ -54,7 +54,7 @@ const NotificationPage = () => {
 			className="flex flex-row"
 		>
 			<Sidebar />
-			<div className="w-full">
+			<div className="w-full relative">
 				<HeaderComponent title="Notifications" />
 				{notifications?.length === 0 && !isLoading ? (
 					<div className="flex items-center justify-center text-lg w-full mt-20">
@@ -64,7 +64,7 @@ const NotificationPage = () => {
 					<div className="w-full">
 						<button
 							onClick={handleClearNotifications}
-							className="button-2 hover:opacity-70 fixed bottom-20 sm:bottom-16 right-[7vw] md:right-[10vw] lg:right-[30vw] cursor-pointer"
+							className="button-2 absolute hover:opacity-70 bottom-20 sm:bottom-16 right-[7vw] md:right-[5vw] lg:right-[20vw] cursor-pointer"
 						>
 							<FaTrash />
 							Clear Notifications
