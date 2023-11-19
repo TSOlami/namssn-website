@@ -11,7 +11,7 @@ frontend/.env
 backend/.env
 
 # Config files
-vite.config.js
+*vite.config.js
 
 # Logs
 frontend/logs

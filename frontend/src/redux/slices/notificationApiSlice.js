@@ -37,7 +37,6 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
     // Define a `clearNotifications` endpoint that queries `NOTIFICATION_URL/notifications`
     clearNotifications: builder.mutation({
       query: () => (
-        console.log("clearNotifications"),
         {
         url: `${NOTIFICATION_URL}/notifications`,
         method: "DELETE",

@@ -29,12 +29,10 @@ const Home = () => {
 
   // Use the useGetNotificationsQuery hook to get notifications
   const { data: notifications } = useGetNotificationsQuery();
-  console.log("Notifications: ", notifications);
 
   // Fetch notifications when user logs in and dispatch to Redux store
   useEffect(() => {
     if (notifications) {
-      console.log("Notifications: ", notifications);
       dispatch(setNotifications(notifications));
     }
   }, [notifications, dispatch]);
