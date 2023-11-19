@@ -70,6 +70,7 @@ const NotificationPage = () => {
 							Clear Notifications
 						</button>
 						{notifications?.map((notification, index) => {
+							console.log(notification);
 							return (
 								<Notification
 									key={index}
@@ -77,6 +78,7 @@ const NotificationPage = () => {
 									content={notification?.text}
 									downvote={notification?.downvote}
 									upvote={notification?.upvote}
+									tBUser={notification?.triggeredBy._id}
 									name={notification?.triggeredBy?.name}
 									isVerified={
 										notification?.triggeredBy?.isVerified

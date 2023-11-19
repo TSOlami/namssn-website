@@ -11,6 +11,7 @@ const Notification = ({
 	upvote,
 	downvote,
 	comment,
+	tBUser,
 	name,
 	avatar,
 	content,
@@ -36,6 +37,10 @@ const Notification = ({
 		} 
 	};
 
+	const goToProfile = () => {
+		navigate(`/profile/${tBUser}`);
+	};
+
 	const date = new Date(createdAt);
 	return (
 		<div className={`border-b-2 border-gray-300 p-4 flex flex-row gap-2 min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] ${seen ? '' : 'bg-gray-100'}`}>
@@ -45,16 +50,16 @@ const Notification = ({
 				{comment && <FaRegComment />}
 			</div>
 			<div className="flex flex-col">
-				<div>
+				<div onClick={goToProfile}>
 					<img src={avatar || ProfileImg} alt="" className="profile-image-small" />
 				</div>
 				<div className="flex flex-row gap-2 flex-wrap">
-					<span className="font-semibold inline-flex flex-row items-center gap-2">
+					<span onClick={goToProfile} className="font-semibold inline-flex flex-row items-center gap-2">
 						{name}
 						{isVerified && <FaCircleCheck color="#17A1FA" />}
-						<span className="text-gray-500">
-						{formatDateToTime(date)}
 					</span>
+					<span className="text-gray-500">
+					{formatDateToTime(date)} ago
 					</span>
 					{comment && <span>@{username}</span>}
 					<span onClick={handleOpenNotification} className="cursor-pointer">
