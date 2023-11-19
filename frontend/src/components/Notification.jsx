@@ -22,7 +22,6 @@ const Notification = ({
 }) => {
 	// Use this to navigate to the post page or comment page
 	const navigate = useNavigate();
-	console.log("Post: ",post);
 
 	// Use this to mark the notification as seen
 	const [markNotificationsAsSeen] = useMarkNotificationsAsSeenMutation();
@@ -33,7 +32,7 @@ const Notification = ({
 			markNotificationsAsSeen(notificationId);
 
 			// Navigate to the post page	
-			navigate(`/post/${post}`);
+			navigate(`/comments/${post}`);
 		} 
 	};
 

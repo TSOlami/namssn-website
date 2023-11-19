@@ -9,10 +9,8 @@ export async function verifyOTP(username, code) {
             code,
           };
         const { data, status } = await axios.post('/api/v1/users/verify-otp', requestData);
-        console.log(data);
         return { data, status };
     } catch (error) {
-        console.log(error);
         return Promise.reject({ error });
     }
 }

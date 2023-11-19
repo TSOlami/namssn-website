@@ -40,6 +40,7 @@ import {
 import { 
   createPost,
 	getAllPosts,
+  getPostById,
 	getUserPosts,
   updatePost,
   deletePost,
@@ -215,6 +216,9 @@ router
 router
 .route("/posts")
 .get(getAllPosts);
+
+// Route for getting a post by id
+router.get('/posts/:postId', protect, getPostById);
 
 // Route for getting a user post by id
 router.get('/post/:userId', protect, getUserPosts);

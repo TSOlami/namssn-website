@@ -87,7 +87,8 @@ const SignUpForm = () => {
         // Registration successful, now send the registration email
         let { username, email } = res;
         if (username && email) {
-          await sendMail({ username, userEmail: email, text: msg }).unwrap();
+          const msgWithUsername = `Hi ${username}! ${msg}`;
+          await sendMail({ username, userEmail: email, text: msgWithUsername }).unwrap();
           return Promise.resolve(msg);
         }
         navigate('/home');

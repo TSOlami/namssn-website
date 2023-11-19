@@ -38,10 +38,8 @@ const VerifyAccountForm = ({handleVerifyModal}) => {
         // Use a custom test function for asynchronous validation
         try {
           const exists = await checkStudentEmailExistence(value);
-          console.log("Email exists:", value, exists);
           return !exists;
         } catch (error) {
-          console.error("Error checking email existence:", error);
           return false;
         }
       }),

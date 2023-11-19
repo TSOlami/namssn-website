@@ -70,7 +70,6 @@ const NotificationPage = () => {
 							Clear Notifications
 						</button>
 						{notifications?.map((notification, index) => {
-							console.log("Notification: ", notification);
 							return (
 								<Notification
 									key={index}
