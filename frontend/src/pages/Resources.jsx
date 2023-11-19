@@ -27,6 +27,7 @@ const Resources = () => {
     const [dropDown3, setDropDown3] = useState(3);
     const [dropDown4, setDropDown4] = useState(4);
     const [dropDown5, setDropDown5] = useState(5);
+    const [dropDown6, setDropDown6] = useState(6);
 
     const handleReload = () => {
         window.location.reload();
@@ -45,7 +46,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
+                const res = await axios.get('http://localhost:5000/api/v1/users/resources');
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                 }
@@ -72,6 +73,9 @@ const Resources = () => {
     const toggleDropDown5 = () => {
         setDropDown5(dropDown5 * -1)
     }
+    const toggleDropDown6 = () => {
+        setDropDown6(dropDown6 * -1)
+    }
 
     if (data === null) {
         return (
@@ -93,6 +97,7 @@ const Resources = () => {
         const level3FileList = data['300 Level'] ? data['300 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level4FileList = data['400 Level'] ? data['400 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level5FileList = data['500 Level'] ? data['500 Level'].map(obj => Object.keys(obj)[0]) : null;
+        const telegram = data['N/A'] ? data['N/A'].map(obj => Object.keys(obj)[0]) : null;
         return (
             <div className="relative">
                 <div className="flex relative z-2">
@@ -131,7 +136,7 @@ const Resources = () => {
                             </div>
                             {dropDown2===-2 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level2FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file} description={data['200 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['200 Level'][index][file]['title']} description={data['200 Level'][index][file]['description']}
                                         uploaderUsername = {data['200 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['200 Level'][index][file]['uploaderId']}
                                         title = {data['200 Level'][index][file]['title']}
@@ -153,7 +158,7 @@ const Resources = () => {
                             </div>
                             {dropDown3===-3 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level3FileList.map((file, index) => ( 
-                                        <ResourceCard  key={index} fileUrl={base_url + file} description={data['300 Level'][index][file]['description']}
+                                        <ResourceCard  key={index} fileUrl={base_url + file + '+' + data['300 Level'][index][file]['title']} description={data['300 Level'][index][file]['description']}
                                         uploaderUsername = {data['300 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['300 Level'][index][file]['uploaderId']}
                                         title = {data['300 Level'][index][file]['title']}
@@ -175,7 +180,7 @@ const Resources = () => {
                             </div>
                             {dropDown4===-4 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level4FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file} description={data['400 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['400 Level'][index][file]['title']} description={data['400 Level'][index][file]['description']}
                                         uploaderUsername = {data['400 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['400 Level'][index][file]['uploaderId']}
                                         title = {data['400 Level'][index][file]['title']}
@@ -197,7 +202,7 @@ const Resources = () => {
                             </div>
                             {dropDown5===-5 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level5FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file} description={data['500 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['500 Level'][index][file]['title']} description={data['500 Level'][index][file]['description']}
                                         uploaderUsername = {data['500 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['500 Level'][index][file]['uploaderId']}
                                         title = {data['500 Level'][index][file]['title']}
@@ -208,6 +213,28 @@ const Resources = () => {
                                     ))}
                                 </div>}
                                 {level5FileList.length > 4 && dropDown5===-5 && (
+                                <Link to="/resources/500%20Level">
+                                    <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
+                                </Link>)}
+                            </div>)}
+                            {telegram && (<div className="px-4 pt-6 pb-4 flex items-center flex-col">
+                            <div onClick={toggleDropDown6} className={`${levelStyle} ${dropDown6 === -6 ? 'ring-2 hover:ring-0 bg-gray-900' : 'bg-gray-900'}`}>
+                                <span className={`font-bold pl-4 absolute left-4 lg:left-[14em] font-roboto sm:text-xl ${dropDown6 === -6 ? 'text-blue-300' : 'text-white'} text-sm`}>Telegram</span>
+                                {dropDown6 === -6 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
+                            </div>
+                            {dropDown6===-6 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
+                                    {telegram.map((file, index) => ( 
+                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
+                                        uploaderUsername = {data['N/A'][index][file]['uploaderUsername']}
+                                        uploaderId = {data['N/A'][index][file]['uploaderId']}
+                                        title = {data['N/A'][index][file]['title']}
+                                        date = {formatDateToTime(new Date(data['N/A'][index][file]['date']))}
+                                        semester = {data['N/A'][index][file]['semester']}
+                                        course = {data['N/A'][index][file]['course']}
+                                        />
+                                    ))}
+                                </div>}
+                                {telegram.length > 4 && dropDown6===-6 && (
                                 <Link to="/resources/500%20Level">
                                     <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}

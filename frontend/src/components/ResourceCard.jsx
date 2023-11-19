@@ -84,10 +84,10 @@ const ResourceCard = ({
 
     // Open a new tab or window with the Blob URL
     window.open(blobUrl, '_blank');
-    console.log("HEY")
   };
   
   const downloadFile = (fileUrl) => {
+    // console.log(fileUrl)
     const w = window;
     w.location = fileUrl;
   };

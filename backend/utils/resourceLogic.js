@@ -19,13 +19,19 @@ const getResources = async (req, res) => {
     const level3Resources = await getLastSixResources('300 Level');
     const level4Resources = await getLastSixResources('400 Level');
     const level5Resources = await getLastSixResources('500 Level');
-    const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources];
+    const telegram = await getLastSixResources('N/A');
+    const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources, telegram];
     const formattedResponse = {}
     for (let i=0; i<resources.length; i++) {
-      //  creates a list list of dict with 'filename' as the key and 'details' as the value
+      //  creates a list of dict with 'filename' as the key and 'details' as the value
       if (resources[i].length !== 0) {
         const formattedResources = await createFileList(resources[i])
-        const level = ((i+ 1) * 100).toString() + ' Level';
+        let level = '';
+        if (i+1 === 6) {
+          level = 'N/A'
+        } else {
+          level = ((i+ 1) * 100).toString() + ' Level';
+        }
         console.log(formattedResources)
         formattedResponse[level] = formattedResources
         

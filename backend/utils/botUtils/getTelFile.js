@@ -4,6 +4,7 @@ const getTelFile = async (req, res) => {
     const filenameAndId = req.params.filename;
     const file_id = filenameAndId.split('+')[0]
     const file_name = filenameAndId.split('+')[1]
+    console.log(file_name)
     const token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I';
     const base_url = `https://api.telegram.org/bot${token}`;
     try {
@@ -24,8 +25,6 @@ const getTelFile = async (req, res) => {
         const response = await axios.get(`https://api.telegram.org/file/bot6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I/${file_path}`, { responseType: 'arraybuffer' })
         if (response.data) {
             res.setHeader('Content-Disposition', `attachment; filename="${file_name}"`);
-            // console.log(response)
-            console.log(response.data, "===============")
             return(response.data)
         }
         }
