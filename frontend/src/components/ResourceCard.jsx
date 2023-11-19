@@ -73,6 +73,11 @@ const ResourceCard = ({
     const w = window.open();
     w.location = fileUrl;
   };
+  
+  const downloadFile = (fileUrl) => {
+    // const w = window.open();
+    // w.location = fileUrl;
+  };
 
   const handleFileDelete = async (fileUrl) => {	
     handleSetOpenOptions();
@@ -144,7 +149,7 @@ const ResourceCard = ({
           )}
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
-          <FaCloudDownloadAlt className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          <FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
           <MdPreview onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
         </div>
       </div>
