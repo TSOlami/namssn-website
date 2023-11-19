@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
 	FaHouse,
@@ -22,12 +23,43 @@ import { setNavOpen } from "../../redux/slices/navSlice";
 const Sidebar = () => {
 	const { userInfo } = useSelector((state) => state.auth);
 
+	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
+
+	// Function to handle opening and closing the navbar
 	const handleCloseNav = () => {
 		dispatch(setNavOpen());
 	};
 
+	const handleNavOpen = useCallback(() => {
+    dispatch(setNavOpen());
+  }, [dispatch]);
+
 	const isNavOpen = useSelector((state) => state.nav.navOpen);
+
+	useEffect(() => {
+		const handleOutsideClick = (event) => {
+			// Check if the click target is outside the navbar
+			if (
+				isNavOpen &&
+				event.target.closest(".navbar") === null &&
+				event.target.closest(".hamburger") === null
+			) {
+				// Close the navbar
+				handleNavOpen();
+			}
+		};
+	
+		// Add event listener to the document body
+		document.body.addEventListener("click", handleOutsideClick);
+	
+		return () => {
+			// Remove event listener when the component unmounts
+			document.body.removeEventListener("click", handleOutsideClick);
+		};
+	}, [isNavOpen, handleNavOpen]);
+
+	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;
@@ -48,7 +80,7 @@ const Sidebar = () => {
 			dispatch(setNavOpen(false));
 			navigate("/");
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	};
 

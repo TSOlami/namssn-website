@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -38,10 +38,6 @@ const VerifyCodeInput = ({ codeLength }) => {
 		}
 	};
 
-	useEffect(() => {
-    
-	}, [username]);
-
 	const code = verificationCode.join("");
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -61,7 +57,6 @@ const VerifyCodeInput = ({ codeLength }) => {
 
 		// Navigate to the /reset-password page
 		navigate(`/reset-password/${username}`);
-		
 	};
 
 	return (

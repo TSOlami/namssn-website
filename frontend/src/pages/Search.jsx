@@ -1,6 +1,5 @@
 import Select from 'react-select'
 import { useEffect, useState } from "react";
-import store from "../redux/store/store";
 import { PostSearch, ResourceCard } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
@@ -19,7 +18,6 @@ const Search = () => {
         const queryValue = params.get('key');
         if (queryValue) {
             setValue(queryValue); // set the search value
-            console.log(queryValue)
         }
     }, []);
 
@@ -38,12 +36,10 @@ const Search = () => {
                 try {
                     const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
                     if (res) {
-                        console.log(res);
                         setData(res.data); // set the fetched data to the state
                         setIsLoading(false);
                     }
                 } catch (err) {
-                    console.log(err);
                     setData("error")
                     setIsLoading(false);
                 }
@@ -148,8 +144,6 @@ const Search = () => {
                         </div>}
                         <div className="lg:px-[0.3em] flex flex-wrap gap-4 justify-around">
                         {data.resources && filter==='all' && data.resources.map((resource, index) => (
-                            // {console.log(base_url + fileUrls[index], resource[fileUrls[index]]['level'], resource[fileUrls[index]]['title'], resource[fileUrls[index]]['date'], resource[fileUrls[index]]['description'], resource[fileUrls[index]]['uploaderUsername'], )}
-
                             <ResourceCard key={index} fileUrl={base_url + fileUrls[index]} description={resource[fileUrls[index]]['description']}
                             uploaderUsername = {resource[fileUrls[index]]['uploaderUsername']}
                             title = {resource[fileUrls[index]]['title']}
@@ -166,8 +160,6 @@ const Search = () => {
                         </div>}
                         <div className="lg:px-[0.3em]  flex flex-wrap gap-4 justify-around">
                         {data.resources && filter==='resources' && data.resources.map((resource, index) => (
-                            // {console.log(base_url + fileUrls[index], resource[fileUrls[index]]['level'], resource[fileUrls[index]]['title'], resource[fileUrls[index]]['date'], resource[fileUrls[index]]['description'], resource[fileUrls[index]]['uploaderUsername'], )}
-
                             <ResourceCard key={index} fileUrl={base_url + fileUrls[index]} description={resource[fileUrls[index]]['description']}
                             uploaderUsername = {resource[fileUrls[index]]['uploaderUsername']}
                             title = {resource[fileUrls[index]]['title']}

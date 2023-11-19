@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AdminCard, RecentPayments, Sidebar, Loader} from "../components";
-import { HeaderComponent } from "../components";
+import { HeaderComponent, SendMailModal } from "../components";
 import { MembersImg } from "../assets";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
@@ -23,12 +23,10 @@ const AdminDashboard = () => {
 
 	const { data: users } = useGetAllUsersQuery();
 
-	console.log("Users: ", users);
+	const [isSendMailModalOpen, setIsSendMailModalOpen] = useState(false);
 
 	// Sort users by points in descending order
   const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
-
-	console.log("Sorted Users: ", sortedUsers);
 
 	const dispatch = useDispatch();
 	const { data: allpayments, Loading } = useGetAllPaymentsQuery(
@@ -116,7 +114,9 @@ const AdminDashboard = () => {
 						</h2>
 						<div className="flex flex-row justify-between m-2 rounded-md border-gray-500 border-2 p-1">
 							1. Principal Offices of the department <span></span>
-							<Link className="ml-5 bg-black px-2 rounded-md text-white">
+							<Link
+							to="/about-us"
+							className="ml-5 bg-black px-2 rounded-md text-white">
 								View
 							</Link>
 						</div>
@@ -182,6 +182,20 @@ const AdminDashboard = () => {
 						</div>
 					</div>
 				</div>
+
+				{/* Add a button to open the SendMailModal */}
+        <button
+          onClick={() => setIsSendMailModalOpen(true)}
+          className="bg-primary text-white p-2 rounded-md"
+        >
+          Compose a mail notice
+        </button>
+
+        {/* Render the SendMailModal */}
+        <SendMailModal
+          isOpen={isSendMailModalOpen}
+          onClose={() => setIsSendMailModalOpen(false)}
+        />
 
 				{/* Reported section */}
 				{/*<h3 className="font-bold text-2xl p-4">Reported Accounts</h3>

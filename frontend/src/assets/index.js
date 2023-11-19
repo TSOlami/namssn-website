@@ -59,6 +59,6 @@ import Team15 from './images/img15.jpg';
 import DrStrange from './images/Strange.jpg';
 import Slimany from './images/slimany.jpg';
 import Timi from './images/timi.jpeg';
-import Ifedimeji from './images/Ifedimeji.jpg';
+import Ifedimeji from './images/ifedimeji.jpg';
 
 export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, GithubIcon, WebIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG, Error404, ForgotSVG, PaymentSVG, ResetPasswordSVG, Teejay, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, Team15, DrStrange, Slimany, Timi, Ifedimeji };

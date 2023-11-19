@@ -12,10 +12,10 @@ import {
 } from "../components";
 import { useCommentPostMutation, usePostCommentsQuery } from "../redux";
 import { Loader, PostComments } from "../components";
+import { toast } from "react-toastify";
 
 const Comments = () => {
 	const { postId } = useParams();
-	console.log("Post id: ", postId);
 
 	const { data: comments, isLoading } = usePostCommentsQuery({
 		postId: postId,
@@ -27,8 +27,6 @@ const Comments = () => {
 
 	// Find the post with a matching _id within the 'auth.posts' array
 	const post = auth.posts?.find((p) => p._id === postId);
-
-	console.log("Post from redux: ", post);
 
 	// Use the usePostCommentsQuery hook to fetch comments for the post
 	const [commentText, setCommentText] = useState("");
@@ -48,16 +46,17 @@ const Comments = () => {
 	const handleCommentSubmit = async () => {
 		try {
 			setCommentText("");
-			const response = await commentPost({
+			toast.promise(commentPost({
 				postId: postId,
 				data: {
 					text: commentText,
 				},
-			});
-			console.log(response);
-		} catch (error) {
-			console.error("Comment submission failed", error);
-			console.log(error.message);
+			}), {
+				pending: "Submitting comment...",
+				success: "Comment submitted successfully",
+			})
+		} catch (err) {
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
 	};
 	return (

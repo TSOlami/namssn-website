@@ -29,7 +29,6 @@ const Actions = ({
 					text: 'Check out this post!',
 					url: `/comments/${postId}`
 				});
-				console.log('Link shared successfully');
 			} catch (error) {
 				console.error('Error sharing:', error);
 			}
@@ -40,7 +39,6 @@ const Actions = ({
 					text: 'Check out this post!',
 					url: `/blog#${blogId}`
 				});
-				console.log('Link shared successfully');
 			} catch (error) {
 				console.error('Error sharing:', error);
 			}

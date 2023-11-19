@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import { ScrollToSectionLink } from "../../utils";
@@ -7,9 +7,9 @@ import { navLinks } from "../../constants";
 
 const NavBar = () => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
-	const handleNavOpen = () => {
-		setIsNavOpen(!isNavOpen);
-	};
+	const handleNavOpen = useCallback(() => {
+    setIsNavOpen((prevIsNavOpen) => !prevIsNavOpen);
+  }, []);
 
 	useEffect(() => {
 		const hamburger = document.querySelector(".hamburger");
@@ -22,10 +22,32 @@ const NavBar = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isNavOpen]);
 
+	useEffect(() => {
+		const handleOutsideClick = (event) => {
+			// Check if the click target is outside the navbar
+			if (
+				isNavOpen &&
+				event.target.closest(".navbar") === null &&
+				event.target.closest(".hamburger") === null
+			) {
+				// Close the navbar
+				handleNavOpen();
+			}
+		};
+	
+		// Add event listener to the document body
+		document.body.addEventListener("click", handleOutsideClick);
+	
+		return () => {
+			// Remove event listener when the component unmounts
+			document.body.removeEventListener("click", handleOutsideClick);
+		};
+	}, [isNavOpen, handleNavOpen]);
+	
+	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+
 	return (
 		<header className="px-[10px] my-4 mx-2 w-full fixed top-[-16px] z-[200]">
-
-
 			{/* Namssn logo, absolute code, avoid abeg */}
 			<div>
 				<div className="flex flex-row items-center absolute lg:hidden bg-white w-full">

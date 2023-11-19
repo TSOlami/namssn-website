@@ -75,6 +75,17 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Send mail to all users
+      mailNotice: builder.mutation({
+        query(data) {
+          return {
+            url: `${ADMIN_URL}/notice-mail`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Make a user admin
       makeUserAdmin: builder.mutation({
         query(userId) {
@@ -211,4 +222,5 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetAllUsersQuery,
+  useMailNoticeMutation,
 } = adminApiSlice;

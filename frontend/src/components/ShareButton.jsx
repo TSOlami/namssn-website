@@ -1,14 +1,18 @@
+import { toast } from "react-toastify";
 
 const ShareButton = ({fileUrl, title}) => {
     const handleShare = async () => {
         try {
-            await navigator.share({
+            toast.promise(navigator.share({
                 title: title,
                 text: 'Check out this link!',
                 url: fileUrl
-            });
-            console.log('Link shared successfully');
+            }), {
+                pending: "Sharing...",
+                success: "Shared successfully",
+            })
         } catch (error) {
+            toast.error("Error sharing file");
             console.error('Error sharing:', error);
         }
     };

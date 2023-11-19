@@ -18,12 +18,10 @@ const LevelResources = () => {
             try {
                 const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
                 if (res) {
-                    console.log(res);
                     setData(res.data); // set the fetched data to the state
                     setTempData(res.data)
                 }
             } catch (err) {
-                console.log(err);
                 setData("error")
             }
         };
@@ -38,7 +36,6 @@ const LevelResources = () => {
     }
 
     useEffect(() => {
-            // console.log(value)
             if (value === '' && tempData) {
                 // if value is an empty string
                 setData(tempData)
@@ -48,7 +45,6 @@ const LevelResources = () => {
                     const myfileList = data.map(obj => Object.keys(obj)[0]); // a list of file names
                     const newData = [];
                     myfileList.map((file, index) => {
-                        console.log(data[index][file]['title'])
                         if (data[index][file]['title'] && data[index][file]['title'].toLowerCase().includes(value.toLowerCase())) {
                            newData.push({[file]: data[index][file]})
                             setData(newData)

@@ -11,24 +11,15 @@ const VerifyUserPass = () => {
 	// Get the username parameter from the URL
 	const { username } = useParams();
 
-	// Handle the cooldown time for the resend button
-	const [isResendDisabled, setResendDisabled] = useState(false);
-  const [cooldownTime, setCooldownTime] = useState(0);
+	// Set state to manage when a user can resend OTP
+  const [canResendOTP, setCanResendOTP] = useState(false);
+  const [countdown, setCountdown] = useState(120);
 
 	// Use the resendOTP function to resend OTP
 	const handleResendOTP = async (e) => {
 		e.preventDefault();
 
-		// Check if the cooldown time is greater than 0
-		if (isResendDisabled) {
-      // Do nothing if the button is disabled
-      return;
-    }
-
 		try {
-			// Disable the resend button
-			setResendDisabled(true);
-
 			// Use the resendOTP function to resend OTP
 			await toast.promise(resendOTP(username), {
 				pending: "Resending OTP...",
@@ -36,35 +27,41 @@ const VerifyUserPass = () => {
 				error: "Failed to resend OTP. Please try again.",
 			});
 			
-			// Set the cooldown time
-			setCooldownTime(120);
+			// Reset the countdown and update state to prevent frequent resending
+			setCountdown(120);
+			setCanResendOTP(false);
 
-			// Start the countdown
-			const interval = setInterval(() => {
-				setCooldownTime((prev) => prev - 1);
-			}, 12000);
-
-			// Clear the interval when the cooldown time reaches 0
-			setTimeout(() => {
-				clearInterval(interval);
-				setResendDisabled(false);
-			}, 620000);
-
-		} catch (error) {
+		} catch (err) {
 			// Handle any unexpected errors
-			console.error("An error occurred during OTP resend:", error);
-			toast.error("An error occurred while resending OTP. Please try again.");
-			setResendDisabled(false);
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
 	};
 
 	useEffect(() => {
-		// Check if the cooldown time is equal to 0
-		if (cooldownTime === 0) {
-			// Enable the resend button
-			setResendDisabled(false);
-		}
-	}, [cooldownTime]);
+    let timer;
+  
+    // Start the countdown when the component mounts or when canResendOTP becomes true
+    if (canResendOTP || (canResendOTP === false && countdown > 0)) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+        console.log("Countdown:", countdown);
+      }, 1000);
+    }
+  
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [canResendOTP, countdown]);
+
+  
+  useEffect(() => {
+    // Enable the resend button when the countdown reaches zero
+    if (countdown === 0) {
+      setCanResendOTP(true);
+    }
+  }, [countdown]);
+
 
 	return (
 		<motion.div
@@ -84,13 +81,18 @@ const VerifyUserPass = () => {
 				</p>
 
 				<VerifyCodeInput codeLength={6} />
-				<button
-          onClick={handleResendOTP}
-          className={`p-2 bg-primary text-white px-4 rounded-md mt-4 hover:opacity-80 transition-all duration-300 ${isResendDisabled ? 'cursor-not-allowed' : ''}`}
-          disabled={isResendDisabled}
-        >
-          {isResendDisabled ? `Resend OTP (${cooldownTime} s)` : 'Resend OTP'}
-        </button>
+				<p >
+          Didn&apos;t receive an OTP? {canResendOTP ? (
+            `Click the button below to resend.`
+          ) : (
+            `Resend in ${countdown} seconds.`
+          )}
+        </p>
+        {canResendOTP && (
+          <button onClick={handleResendOTP} className="text-primary">
+            Resend OTP
+          </button>
+        )}
 			</div>
 		</motion.div>
 	);

@@ -1,8 +1,7 @@
 import React from "react";
-import { Link as ScrollLink } from "react-scroll";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const ScrollToSectionLink = ({ to,closeNavbar, ...props }) => {
+const ScrollToSectionLink = ({ to, closeNavbar, ...props }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,14 +18,14 @@ const ScrollToSectionLink = ({ to,closeNavbar, ...props }) => {
 
     // After navigating, scroll to the target section
     setTimeout(() => {
-      ScrollLink.scrollTo(to, {
-        smooth: true,
-        offset: -100,
-        duration: 500,
-      });
-    }, 100);
-  };
+      const target = document.querySelector(to);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 0);
+  }
 
-  return React.createElement(ScrollLink, { to, onClick: handleLinkClick, ...props });
+  return React.createElement("a", { onClick: handleLinkClick, ...props, spy: "true", smooth: "true" });
 };
+
 export default ScrollToSectionLink;

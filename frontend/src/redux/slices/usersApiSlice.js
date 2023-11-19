@@ -27,6 +27,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Check Student Email Query
+      checkStudentEmail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/check-student-email`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Verify Account Query
       verifyAccount: builder.mutation({
         query(data) {
@@ -134,4 +145,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation, useContactUsMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation, useContactUsMutation, useCheckStudentEmailMutation } = usersApiSlice;

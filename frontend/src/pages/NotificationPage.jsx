@@ -27,8 +27,6 @@ const NotificationPage = () => {
 	// Use the hook to dispatch actions
 	const dispatch = useDispatch();
 
-	console.log("Notifications: ", notifications);
-
 	// Clear notifications
 	const handleClearNotifications = async () => {
 		// Call the clearNotifications mutation to clear notifications
@@ -42,10 +40,9 @@ const NotificationPage = () => {
 			);
 			// If successful, show a toast notification
 			dispatch(setNotifications([]));
-		} catch (error) {
+		} catch (err) {
 			// Handle any errors if necessary
-			toast.error("Failed to clear notifications!");
-			console.error("Failed to clear notifications:", error);
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
 	};
 

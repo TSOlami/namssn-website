@@ -101,6 +101,41 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc	Check if email exists
+// Route	POST /api/v1/users/check-email
+// Access Public
+const checkEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Check if the email exists in the database
+    const user = await User.findOne({ email });
+
+    // Return whether the email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// @desc  Check if student email exists
+// Route POST /api/v1/users/check-student-email
+// Access Public
+const checkStudentEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { studentEmail  } = req.body;
+    // Check if the student email exists in the database
+    const user = await User.findOne({ studentEmail });
+
+    // Return whether the student email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking student email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // @desc  Verify a user's account
 // Route GET /api/v1/users/verify-account
 // Access Private
@@ -117,6 +152,14 @@ const verifyAccount = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('User already verified');
     }
+
+    // Check if the email provided is already in use by another user
+    const emailExists = await User.findOne({ email: studentEmail });
+    if (emailExists) {
+      res.status(400);
+      throw new Error('Email already in use');
+    }
+
     // Append the user's matric number and student email to the user's data
     user.studentEmail = studentEmail;
     user.isVerified = true;
@@ -156,11 +199,9 @@ const verifyAccount = asyncHandler(async (req, res) => {
 const generateOTP = asyncHandler(async (req, res) => {
 try {
   const { username } = req.params;
-  console.log(req.params)
   console.log("Generating OTP for user: ", username);
   const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 
-  console.log(otp)
   // Save the OTP to the database
   await UserOTPVerification.create({
     username,
@@ -789,4 +830,6 @@ export {
   verifyUserPayment,
   resendOTP,
   getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 };

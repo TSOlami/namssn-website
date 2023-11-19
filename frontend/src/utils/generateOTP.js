@@ -12,7 +12,6 @@ export async function generateOTP(username) {
 		if (status === 201) {
 			let { data: {email}} = await getUser({ username });
 			let text = `Your OTP is ${code} and is valid for 5 minutes.`;
-			console.log("Sending mail with OTP...: ", code, email, text);
 			await axios.post('/api/v1/users/register-mail', { username, userEmail: email, text, subject: 'OTP' });
 		}
 		return Promise.resolve({ code });
