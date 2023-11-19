@@ -26,9 +26,10 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
 
     // Define a `markNotificationsAsSeen` endpoint that queries `NOTIFICATION_URL/notifications/seen`
     markNotificationsAsSeen: builder.mutation({
-      query: () => ({
+      query: (notificationId) => ({
         url: `${NOTIFICATION_URL}/notifications/seen`,
         method: "PUT",
+        body: { notificationId },
       }),
       invalidatesTags: ["Notification"],
     }),

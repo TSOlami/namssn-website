@@ -231,6 +231,7 @@ const upvotePost = asyncHandler(async (req, res) => {
 					upvote: true,
 					user: post.user, // ID of the post owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
 				});
 				await notification.save();
 			}
@@ -306,6 +307,7 @@ const downvotePost = asyncHandler(async (req, res) => {
 					downvote: true,
 					user: post.user, // ID of the post owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
 				});
 				await notification.save();
 			}
@@ -386,9 +388,10 @@ const createPostComment = asyncHandler(async (req, res) => {
 		// Create a notification for the post owner
 		const notification = new Notification({
 			text: `${req.user.username} commented on your post.`,
-			comment: true,
 			user: post.user, // ID of the post owner
 			triggeredBy: req.user._id, // ID of the user who triggered the notification
+			post: postId,
+			comment: true,
 		});
 		await notification.save();
   }
@@ -500,6 +503,7 @@ const deletePostComment = asyncHandler(async (req, res) => {
 			comment: true,
 			user: post.user, // ID of the post owner
 			triggeredBy: req.user._id, // ID of the user who triggered the notification
+			post: postId,
 		});
 		await notification.save();
 	}
@@ -571,6 +575,8 @@ const upvoteComment = asyncHandler(async (req, res) => {
 					upvote: true,
 					user: comment.user, // ID of the comment owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
+					comment: true,
 				});
 				await notification.save();
 			}
@@ -652,6 +658,8 @@ const downvoteComment = asyncHandler(async (req, res) => {
 					downvote: true,
 					user: comment.user, // ID of the comment owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
+					comment: true,
 				});
 				await notification.save();
 			}
@@ -684,7 +692,7 @@ const getNotifications = asyncHandler(async (req, res) => {
         path: "triggeredBy",
         select: "-password", // Exclude the password field
       });
-			
+		console.log("Notifications: ", notifications);
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -697,9 +705,28 @@ const getNotifications = asyncHandler(async (req, res) => {
  * @access Private (Requires authentication)
  */
 const markNotificationsAsSeen = asyncHandler(async (req, res) => {
-	// Update all notifications for the currently logged-in user
-	await Notification.updateMany({ user: req.user._id }, { seen: true });
-	
+	const notificationId = req.body.notificationId;
+
+	// Find the notification by its ID
+	const notification = await Notification.findById(notificationId);
+
+	if (!notification) {
+	  res.status(404);
+	  throw new Error('Notification not found');
+	}
+
+	// Check if the user who made the request is the owner of the notification (or has the required privileges)
+	if (notification.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+
+	// Update the notification's "seen" field
+	notification.seen = true;
+
+	// Save the updated notification to the database
+	await notification.save();
+
 	res.status(200).json({ message: "success" });
 });
 

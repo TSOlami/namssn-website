@@ -21,7 +21,7 @@ import { setNavOpen } from "../../redux/slices/navSlice";
 // import { useEffect } from "react";
 
 const Sidebar = () => {
-	const { userInfo } = useSelector((state) => state.auth);
+	const { userInfo, notifications } = useSelector((state) => state.auth);
 
 	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
@@ -60,6 +60,9 @@ const Sidebar = () => {
 	}, [isNavOpen, handleNavOpen]);
 
 	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+
+	// Calculate the number of unseen notifications
+  const unseenNotifications = notifications?.filter(notification => !notification.seen).length;
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;
@@ -169,6 +172,11 @@ const Sidebar = () => {
 							>
 								<FaBell />
 								<span>Notifications</span>
+								{unseenNotifications > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-full">
+                    {unseenNotifications}
+                  </span>
+								)}
 							</Link>
 						</li>
 						<li>
