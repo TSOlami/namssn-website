@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import { motion } from "framer-motion";
@@ -10,23 +9,30 @@ import {
 	Post,
 	Sidebar,
 } from "../components";
-import { useCommentPostMutation, usePostCommentsQuery } from "../redux";
+import { useCommentPostMutation, usePostCommentsQuery, usePostQuery } from "../redux";
 import { Loader, PostComments } from "../components";
 import { toast } from "react-toastify";
 
 const Comments = () => {
 	const { postId } = useParams();
 
-	const { data: comments, isLoading } = usePostCommentsQuery({
+	// Use the usePostCommentsQuery hook to fetch comments for the post
+	const { data: comments, isLoading: isCommentsLoading } = usePostCommentsQuery({
 		postId: postId,
 	});
+
+	// Use the usePostQuery hook to fetch the post
+	const { data: post, isLoading: isPostLoading  } = usePostQuery({
+		postId: postId,
+	});
+
 	const [commentPost] = useCommentPostMutation();
 
 	// Use useSelector to select the 'auth' slice of the state
-	const auth = useSelector((state) => state.auth);
+	// const auth = useSelector((state) => state.auth);
 
 	// Find the post with a matching _id within the 'auth.posts' array
-	const post = auth.posts?.find((p) => p._id === postId);
+	// const post = auth.posts?.find((p) => p._id === postId);
 
 	// Use the usePostCommentsQuery hook to fetch comments for the post
 	const [commentText, setCommentText] = useState("");
@@ -37,7 +43,7 @@ const Comments = () => {
 	}
 
 	// Loading indicator while data is being fetched
-	if (isLoading) {
+	if (isCommentsLoading || isPostLoading) {
 		return <Loader />;
 	}
 

@@ -135,8 +135,6 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       // Delete Blog Query
       deleteBlog: builder.mutation({
         query(blogId) {
-          console.log(blogId);
-
           return {
             url: `${ADMIN_URL}/blog/${blogId}`,
             method: 'DELETE',

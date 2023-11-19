@@ -93,6 +93,38 @@ const getAllPosts = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get a post by ID
+// Route GET /api/v1/users/posts/:postId
+// Access Public
+const getPostById = asyncHandler(async (req, res) => {
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId)
+	.populate({
+		path: 'comments',
+		model: 'PostComment',
+		populate: {
+			path: 'user',
+			model: 'User',
+			select: '-password',
+		},
+	})
+	.populate({
+		path: 'user',
+		select: '-password',
+	});
+
+	// If the post is not found, return an error
+	if (!post) {
+		res.status(404);
+		throw new Error('Post not found');
+	}
+
+	res.status(200).json(post);
+});
+
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts
 // Access Private
@@ -778,4 +810,4 @@ const clearNotifications = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
+export { createPost, getAllPosts, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };

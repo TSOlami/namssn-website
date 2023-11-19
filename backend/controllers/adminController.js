@@ -207,8 +207,6 @@ const deleteBlog = asyncHandler(async (req, res) => {
   // Get the blog ID from the request body
   const { blogId } = req.params;
 
-  console.log(blogId);
-
   // Find the blog by ID
   const blog = await Blog.findById(blogId);
 
@@ -224,7 +222,6 @@ const deleteBlog = asyncHandler(async (req, res) => {
   }
 
   // Delete the blog
-  console.log("Deleting blog");
   await Blog.deleteOne({ _id: blogId });
 
   res.status(200).json({ message: 'Blog deleted' });
@@ -282,7 +279,7 @@ const getPaymentStatus = asyncHandler(async (req, res) => {
   try {
     await verifyPayments(req, res);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -300,7 +297,6 @@ const getAllPayments = asyncHandler(async (req, res) => {
       
 
     res.status(200).json(allPayments);
-    // console.log(allPayments)
   } catch (error) {
     // Handle any errors that occur during the process
     res.status(500).json({ error: 'Internal server error' });
@@ -387,7 +383,6 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
 
 // Create Event
 const createEvent = asyncHandler(async (req, res) => {
-  console.log("Creating event");
   const { title, date, location, image } = req.body; // You can add more event properties as needed
   const userId = req.user._id;
 
@@ -448,8 +443,6 @@ const updateEvent = asyncHandler(async (req, res) => {
 
     // Save the updated event
     const updatedEvent = await event.save();
-
-    console.log("Updated event");
 
     res.status(200).json(updatedEvent);
   } catch (error) {

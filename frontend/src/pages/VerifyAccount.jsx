@@ -51,7 +51,6 @@ const VerifyAccount = () => {
     if (canResendOTP || (canResendOTP === false && countdown > 0)) {
       timer = setInterval(() => {
         setCountdown((prev) => prev - 1);
-        console.log("Countdown:", countdown);
       }, 1000);
     }
   

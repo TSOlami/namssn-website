@@ -27,6 +27,16 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         providesTags: ['Post'],
       }),
 
+      // Get a Post Query
+      post: builder.query({
+        query({ postId }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}`,
+            method: 'GET',
+          };
+        },
+      }),
+
       // Get User Posts Query
       userPosts: builder.query({
         query({ _id }) {
@@ -169,6 +179,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useAllPostsQuery,
+  usePostQuery,
   usePaginatedPostsQuery,
   useUserPostsQuery,
   useCreatePostMutation,
