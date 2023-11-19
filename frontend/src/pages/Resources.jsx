@@ -13,7 +13,7 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+const base_url = "http://localhost:5000/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
@@ -109,7 +109,7 @@ const Resources = () => {
                             </div>
                             {dropDown1===-1 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level1FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file} description={data['100 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['100 Level'][index][file]['title']} description={data['100 Level'][index][file]['description']}
                                         uploaderUsername = {data['100 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['100 Level'][index][file]['uploaderId']}
                                         title = {data['100 Level'][index][file]['title']}

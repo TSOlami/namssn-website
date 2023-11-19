@@ -7,6 +7,8 @@ import { HiDotsVertical } from "react-icons/hi";
 import { FaFileLines } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
+import { FaCloudDownloadAlt } from "react-icons/fa";
+import { MdPreview } from "react-icons/md";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
@@ -21,7 +23,7 @@ const ResourceCard = ({
   date,
 }) => {
   const cardClass =
-  "cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
+  "cursor-pointer flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
 
   const handleShare = async () => {
         try {
@@ -102,7 +104,6 @@ const ResourceCard = ({
 
       <div
         className={cardClass + " relative"}
-        onClick={() => viewFile(fileUrl)}
       >
         <FaFileLines/>
         <span className="pb-2 ">{title.length > 16 ? `${title.substring(0,15)}...` : title}</span>
@@ -142,8 +143,10 @@ const ResourceCard = ({
             </div>
           )}
         </div>
-
-        
+        <div className="flex justify-around gap-10 pt-2 -4">
+          <FaCloudDownloadAlt className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          <MdPreview onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+        </div>
       </div>
       {(showDetails && openOptions) && (
           <div className="drop-shadow-lg flex flex-col px-2 border border-b-blue-400 border-l-blue-400 border-r-blue-400 bg-white">

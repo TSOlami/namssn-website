@@ -13,7 +13,7 @@ import {postResource, getResources, getSpecifiedResources,deleteResource} from '
 import getData from '../utils/searchUtils/getData.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import axios from 'axios';
 
 
 // @desc	Authenticate user/set token
@@ -639,14 +639,39 @@ const getUserResources = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/resources/filename
 // access	Private
 const getFile = asyncHandler(async (req, res) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const projectRootDirectory = path.join(__dirname, '../../');
-    console.log(projectRootDirectory);
-    const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
-    res.sendFile(filePath)
+  const filenameAndId = req.params.filename;
+  const file_id = filenameAndId.split('+')[0]
+  const file_name = filenameAndId.split('+')[1]
+  console.log(file_id, file_name)
+  const token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I';
+  const base_url = `https://api.telegram.org/bot${token}`;
+  try {
+    const fileDetails = await axios.get(`${base_url}/getFile?file_id=${file_id}`);
+    const file_path = fileDetails.data.result.file_path;
+    const response = await axios.get(`https://api.telegram.org/file/bot6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I/${file_path}`, { responseType: 'arraybuffer' })
+    if (response.data) {
+      res.setHeader('Content-Disposition', 'inline');
+      res.setHeader('Content-Type', 'application/pdf');
+      const uint8Array = Buffer.from(response.data);
+      const objectUrl = `https://api.telegram.org/file/bot6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I/${file_path}`;
+      console.log(objectUrl)
+      res.send(`<iframe src="${objectUrl}" width="100%" height="100%"></iframe>`);
+      res.setHeader('Content-Disposition', `attachment; filename="${file_name}"`);
+      // console.log(response)
+      // res.send(response.data)
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  // Handle the error appropriately
+    res.status(500).send("Internal Server Error");
+  }
+  // res.send("hello") 
+  // const __filename = fileURLToPath(import.meta.url);
+    // const __dirname = path.dirname(__filename);
+    // const projectRootDirectory = path.join(__dirname, '../../');
+    // console.log(projectRootDirectory);
+    // const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
 })
-
 // @desc	Get resources for a specified level
 // Route	GET  /api/v1/users/level/resources
 // access	Private
