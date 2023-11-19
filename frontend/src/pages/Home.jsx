@@ -46,8 +46,14 @@ const Home = () => {
   // Dispatch the setPosts action to set the posts in the redux store
   useEffect(() => {
     if (posts) {
-      // Merge the new data with the existing postData
-      setPostData((prevData) => [...prevData, ...posts.posts]);
+      // Identify unique post IDs
+      const postIds = new Set(postData.map(post => post._id));
+
+      // Filter out posts that already exist in the postData array
+      const newPosts = posts.posts.filter(post => !postIds.has(post._id));
+      
+      // Append the new posts to the postData array
+      setPostData((prevData) => [...prevData, ...newPosts]);
       setIsGettingMorePosts(false);
     }
   }, [posts]);
@@ -89,15 +95,19 @@ const Home = () => {
     try {
       if (Number(pageCurrent) < Number(totalPages)) {
         dispatch(setCurrentPage(pageCurrent + 1));
+      } else {
+        // If the current page is the last page, set hasMore to false
+        setHasMore(false);
+        setIsGettingMorePosts(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (page === totalPages) {
-    setHasMore(false);
-  }
+  // if (page === totalPages) {
+  //   setHasMore(false);
+  // }
 
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
