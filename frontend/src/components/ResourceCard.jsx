@@ -69,14 +69,27 @@ const ResourceCard = ({
     };
   }, []);
 
-  const viewFile = (fileUrl) => {
-    const w = window.open();
-    w.location = fileUrl;
+  const viewFile = async (fileUrl) => {
+    // const w = window.open;
+    // w.location = fileUrl;
+    const data = {'option': 'view'};
+    const res = await axios.get(fileUrl, {params: data})
+    console.log(res)
+    const uint8Array = new Uint8Array(res.data.split('').map((char) => char.charCodeAt(0)));
+    // Create a Blob from the Uint8Array
+    const blob = new Blob([uint8Array], { type: 'application/pdf' });
+
+    // Create a Blob URL from the Blob
+    const blobUrl = URL.createObjectURL(blob);
+
+    // Open a new tab or window with the Blob URL
+    window.open(blobUrl, '_blank');
+    console.log("HEY")
   };
   
   const downloadFile = (fileUrl) => {
-    // const w = window.open();
-    // w.location = fileUrl;
+    const w = window;
+    w.location = fileUrl;
   };
 
   const handleFileDelete = async (fileUrl) => {	
