@@ -38,7 +38,7 @@ const Comments = () => {
 	const [commentText, setCommentText] = useState("");
 
 	// Check if the post was found
-	if (!post) {
+	if (!isPostLoading || !post) {
 		return <p className="text-center mt-28">This post is unavailable</p>;
 	}
 
