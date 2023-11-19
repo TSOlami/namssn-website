@@ -15,16 +15,27 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { useLogoutMutation } from "../../redux";
+import { useLogoutMutation, useGetNotificationsQuery, setNotifications } from "../../redux";
 import { logout } from "../../redux/slices/authSlice";
 import { setNavOpen } from "../../redux/slices/navSlice";
 // import { useEffect } from "react";
 
 const Sidebar = () => {
-	const { userInfo, notifications } = useSelector((state) => state.auth);
+	const { userInfo } = useSelector((state) => state.auth);
+
+	// Use the hook to get notifications from the backend
+	const { data: notifications } = useGetNotificationsQuery();
 
 	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
+
+	// Dispatch notifications to redux store
+	useEffect(() => {
+		if (notifications) {
+			dispatch(setNotifications(notifications));
+		}
+	}, [notifications, dispatch]);
+
 
 	// Function to handle opening and closing the navbar
 	const handleCloseNav = () => {
@@ -62,7 +73,8 @@ const Sidebar = () => {
 	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
 
 	// Calculate the number of unseen notifications
-  const unseenNotifications = notifications?.filter(notification => !notification.seen).length;
+  const unseenNotifications = notifications?.filter(notification => !notification?.seen)?.length;
+	console.log("Unseen notifications: ", unseenNotifications);
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;
@@ -168,12 +180,12 @@ const Sidebar = () => {
 							<Link
 								onClick={handleCloseNav}
 								to="/notifications"
-								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
+								className="relative transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
 							>
 								<FaBell />
 								<span>Notifications</span>
 								{unseenNotifications > 0 && (
-                  <span className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-full">
+                  <span className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-full text-xs">
                     {unseenNotifications}
                   </span>
 								)}

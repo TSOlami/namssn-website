@@ -38,7 +38,7 @@ const Notification = ({
 
 	const date = new Date(createdAt);
 	return (
-		<div className="border-b-2 border-gray-300 p-4 flex flex-row gap-2 min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px]">
+		<div className={`border-b-2 border-gray-300 p-4 flex flex-row gap-2 min-w-[400px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] ${seen ? '' : 'bg-gray-100'}`}>
 			<div className="text-xl">
 				{upvote && <BiUpvote color="#17A1FA" />}
 				{downvote && <BiDownvote color="red"/>}
