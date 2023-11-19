@@ -70,23 +70,28 @@ const NotificationPage = () => {
 							Clear Notifications
 						</button>
 						{notifications?.map((notification, index) => {
+							console.log("Notification: ", notification);
 							return (
 								<Notification
 									key={index}
-									content={notification.text}
+									notificationId={notification?._id}
+									content={notification?.text}
 									downvote={notification?.downvote}
-									upvote={notification.upvote}
-									name={notification.triggeredBy?.name}
+									upvote={notification?.upvote}
+									name={notification?.triggeredBy?.name}
 									isVerified={
 										notification?.triggeredBy?.isVerified
 									}
 									username={
-										notification.triggeredBy?.username
+										notification?.triggeredBy?.username
 									}
-									comment={notification.comment}
+									post={notification?.post}
+									comment={notification?.comment}
 									avatar={
-										notification.triggeredBy?.profilePicture
+										notification?.triggeredBy?.profilePicture
 									}
+									createdAt={notification?.createdAt}
+									seen={notification?.seen}
 								/>
 							);
 						})}

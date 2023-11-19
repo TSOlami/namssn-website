@@ -12,7 +12,7 @@ import {
   Loader,
   AddPostForm,
 } from "../components";
-import { useAllPostsQuery, setCurrentPage } from "../redux";
+import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications } from "../redux";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
@@ -26,6 +26,18 @@ const Home = () => {
 
   // Use the useAllPostsQuery hook to get all posts
   const { data: posts, isLoading } = useAllPostsQuery(Number(page));
+
+  // Use the useGetNotificationsQuery hook to get notifications
+  const { data: notifications } = useGetNotificationsQuery();
+  console.log("Notifications: ", notifications);
+
+  // Fetch notifications when user logs in and dispatch to Redux store
+  useEffect(() => {
+    if (notifications) {
+      console.log("Notifications: ", notifications);
+      dispatch(setNotifications(notifications));
+    }
+  }, [notifications, dispatch]);
 
   // State to manage HasMore
   const [hasMore, setHasMore] = useState(true);
