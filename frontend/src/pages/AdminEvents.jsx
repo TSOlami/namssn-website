@@ -34,6 +34,15 @@ const AdminEvents = () => {
     setSelectedEvent(selectedEvent);
   };
 
+	const handleCardClick = (title) => {
+    const clickedEvent = events.find((event) => event.title === title);
+    setSelectedEvent(clickedEvent);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedEvent(null);
+  };
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -53,13 +62,16 @@ const AdminEvents = () => {
 								title={event.title}
 								date={event.date}
 								location={event.location}
-								// flier={event.image}
+								flier={event.image}
+								onClick={handleCardClick}
 							/>
 						))}
 
 						{/* Add new event button */}
 						{/* This should load an empty event form */}
-						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
+						<button
+						onClick={handleClearSelection}
+						className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
 							Add New Event
 						</button>
 					</div>

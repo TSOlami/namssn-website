@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation, setEvents } from "../../redux";
 
 const EventForm = ({ selectedOption }) => {
+	console.log(selectedOption);
 	// Use the useCreateEventMutation hook to create an event
 	const [createEvent] = useCreateEventMutation();
 
