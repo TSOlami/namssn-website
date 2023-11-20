@@ -29,13 +29,13 @@ const AdminEvents = () => {
 	}, [dispatch, events]);
 
 	const handleSelectChange = (event) => {
-    const selectedTitle = event.target.value;
-    const selectedEvent = events.find((event) => event.title === selectedTitle);
+    const selectedId = event.target.value;
+    const selectedEvent = events.find((event) => event._id === selectedId);
     setSelectedEvent(selectedEvent);
   };
 
-	const handleCardClick = (title) => {
-    const clickedEvent = events.find((event) => event.title === title);
+	const handleCardClick = (id) => {
+    const clickedEvent = events.find((event) => event._id  === id);
     setSelectedEvent(clickedEvent);
   };
 
@@ -59,6 +59,7 @@ const AdminEvents = () => {
 						{events?.map((event, index) => (
 							<AdminEventsCard
 								key={index}
+								id={event._id}
 								title={event.title}
 								date={event.date}
 								location={event.location}
@@ -89,7 +90,7 @@ const AdminEvents = () => {
 							{/* Add an option for creating a new event */}
 							<option value="createNewEvent">Create New Event</option>
 							{events?.map((event, index) => (
-								<option value={event.title} key={index}>
+								<option value={event._id} key={index}>
 									{event.title}
 								</option>
 							))}
