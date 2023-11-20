@@ -13,6 +13,12 @@ import createServer from './utils/server.js';
 const app = createServer();
 const bot_token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I';
 export const bot = new TelegramBot(bot_token, { polling: true });
+bot.on('message', (msg) => {
+  console.log(msg)
+  if (msg.chat.id !== 1276219034 && msg.chat.type === 'private') {
+    bot.sendMessage(msg.chat.id, "Hello, I'm NAMSSN FUTMINNA Bot. I can't fulfill your request at the moment. If you have any questions or need assistance, visit the NAMSSN official website. Thank you!")
+  }
+})
 bot.on('document', (msg) => {
   documentUploader(msg);
   bot.sendMessage(1276219038, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
