@@ -24,13 +24,13 @@ const EventsPage = () => {
 					</h1>
 				</div>
 				<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
-				{data.map((event, index) => (
+				{data?.map((event, index) => (
             <Event
               key={index}
-              image={event.image}
-							location={event.location}
-							title={event.title}
-							date={event.date}
+              image={event?.image}
+							location={event?.location}
+							title={event?.title}
+							date={event?.date}
             />
           ))}
 				</div>

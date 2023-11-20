@@ -9,7 +9,7 @@ import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation,
 
 const EventForm = ({ selectedOption }) => {
 	// Use the useCreateEventMutation hook to create an event
-	const [createEvent] = useCreateEventMutation();
+	const [createEvent, {isLoading: isCreating}] = useCreateEventMutation();
 
 	// Use the useUpdateEventMutation hook to update an event
 	const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
@@ -249,9 +249,9 @@ const EventForm = ({ selectedOption }) => {
 					Delete Event
 					</button>
 				)}
-				{isUpdating ? (
+				{isUpdating || isCreating ? (
 					<button className="bg-primary rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
-						Updating...
+						{isUpdating? "Updating..." : "Creating..."}
 					</button>
 				) : (
 					<button
