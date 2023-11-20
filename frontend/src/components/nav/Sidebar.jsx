@@ -74,7 +74,6 @@ const Sidebar = () => {
 
 	// Calculate the number of unseen notifications
   const unseenNotifications = notifications?.filter(notification => !notification?.seen)?.length;
-	console.log("Unseen notifications: ", unseenNotifications);
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;

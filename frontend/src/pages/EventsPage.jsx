@@ -28,7 +28,7 @@ const EventsPage = () => {
             <Event
               key={index}
               image={event.image}
-							description={event.description}
+							location={event.location}
 							title={event.title}
 							date={event.date}
             />
