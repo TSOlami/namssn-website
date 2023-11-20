@@ -73,7 +73,7 @@ const NavBar = () => {
 					<span className="logo-text py-[2px]">NAMSSN</span>
 				</div>
 				<ul className="flex-1 flex justify-center lg:justify-evenly items-center ml-6 gap-10 lg:gap-3 flex-col lg:flex-row">
-				{navLinks.map((item) => (
+				{navLinks?.map((item) => (
 					<li key={item.label}>
 						{item.label === "Contact Us" ? (
 							<ScrollToSectionLink

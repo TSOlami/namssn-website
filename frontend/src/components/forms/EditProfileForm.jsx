@@ -132,7 +132,7 @@ const EditProfileForm = ({ handleModal }) => {
         <option value="" disabled>
           Select your level
         </option>
-        {levelOptions.map((level) => (
+        {levelOptions?.map((level) => (
           <option key={level} value={level}>
             {level}
           </option>

@@ -33,11 +33,11 @@ const PaymentList = () => {
               <Loader />
             ) : isError ? (
               <ErrorPage />
-            ) : !payments || !Array.isArray(payments) || payments.length === 0 ? (
+            ) : !payments || !Array.isArray(payments) || payments?.length === 0 ? (
               <p>No payments to be made at the moment.</p>
             ) : (
               <ul>
-                {payments.map((payment) => (
+                {payments?.map((payment) => (
                   <li
                     key={payment._id}
                     className="shadow-xl flex flex-row  justify-between items-center rounded-2xl m-8 p-4 gap-5 md:gap-20 pr-5 md:pr-14"

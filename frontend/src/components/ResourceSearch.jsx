@@ -23,7 +23,7 @@ const ResourceSearch = ({query}) => {
     const newData = {}
 
     if (query && tempData2 && tempData2.length !== 0) {
-        const myfileList = tempData2.map(obj => Object.keys(obj)[0])
+        const myfileList = tempData2?.map(obj => Object.keys(obj)[0])
         myfileList.forEach((file, index) => {
             if (tempData2[index][file]['title'].toLowerCase().includes(query.toLowerCase())) {
                 Object.keys(tempData).forEach((key) => {
@@ -42,7 +42,7 @@ const ResourceSearch = ({query}) => {
     }
     var tempData3 = [...Object.values(newData)]
     tempData3 = tempData3.flat()
-    const fileList = tempData3.map(obj => Object.keys(obj)[0])
+    const fileList = tempData3?.map(obj => Object.keys(obj)[0])
     return (
         <div className="w-full">
             <div className="pt-4 pl-6 text-gray-400">
