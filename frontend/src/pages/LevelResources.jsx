@@ -14,7 +14,6 @@ const LevelResources = () => {
     if (level === 'telegram') {
         modifiedString = 'telegram'
     }
-    console.log(modifiedString)
     const [data, setData] = useState(null)
     const [tempData, setTempData] = useState(null)
     useEffect(() => {

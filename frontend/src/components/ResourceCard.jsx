@@ -9,9 +9,12 @@ import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
+import { Link } from "react-router-dom";
+
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
+
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
@@ -42,6 +45,7 @@ const ResourceCard = ({
 
   // manage state for the delete options button
   const [openOptions, setOpenOptions] = useState(false);
+  const [buffer, setBuffer] = useState(null);
   const handleSetOpenOptions = () => {
     setOpenOptions(!openOptions);
   };
@@ -70,20 +74,30 @@ const ResourceCard = ({
   }, []);
 
   const viewFile = async (fileUrl) => {
+    const data = {'option': 'view'};
+    const res = await axios.get(fileUrl, {params: data});
+    if (res.data) {
+      setBuffer(res.data)
+    }
+    console.log(fileUrl)
     // const w = window.open;
     // w.location = fileUrl;
-    const data = {'option': 'view'};
-    const res = await axios.get(fileUrl, {params: data})
-    console.log(res)
-    const uint8Array = new Uint8Array(res.data.split('').map((char) => char.charCodeAt(0)));
-    // Create a Blob from the Uint8Array
-    const blob = new Blob([uint8Array], { type: 'application/pdf' });
+    
+    // console.log(res.data, "======")
+    // // const bufferContent = Buffer.from(res.data, 'hex');
+    // return (
+    //   <BufferFileViewer bufferContent={res.data} />
+    // )
+    
+    // const uint8Array = new Uint8Array(res.data.split('').map((char) => char.charCodeAt(0)));
+    // // Create a Blob from the Uint8Array
+    // const blob = new Blob([uint8Array], { type: 'application/pdf' });
 
-    // Create a Blob URL from the Blob
-    const blobUrl = URL.createObjectURL(blob);
+    // // Create a Blob URL from the Blob
+    // const blobUrl = URL.createObjectURL(blob);
 
-    // Open a new tab or window with the Blob URL
-    window.open(blobUrl, '_blank');
+    // // Open a new tab or window with the Blob URL
+    // window.open(blobUrl, '_blank');
   };
   
   const downloadFile = (fileUrl) => {
@@ -163,7 +177,9 @@ const ResourceCard = ({
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
           <FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
-          <MdPreview onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          <Link to={`/resources/preview/${title}`} state={fileUrl}> 
+            <MdPreview  onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          </Link>
         </div>
       </div>
       {(showDetails && openOptions) && (

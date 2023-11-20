@@ -13,6 +13,7 @@ import './index.css';
 import store from './redux/store/store';
 import { Payment, PaymentHistory } from "./components";
 import {
+  FilePreview,
 	LevelResources,
 	Search,
 	Landing,
@@ -64,6 +65,10 @@ const router = createBrowserRouter(
       <Route
         path="/resources/:level"
         element={<LevelResources />}
+      />
+      <Route
+        path="/resources/preview/:title"
+        element={<FilePreview />}
       />
       <Route path="/profile" element={<Profile />} />
       <Route path="/profile/:userId" element={<UserProfile />} />
