@@ -12,15 +12,79 @@ const FilePreview = () => {
             uri: fileUrl,
             fileType: "pdf",
             fileName: title 
+        },
+        {
+            uri: fileUrl,
+            fileType: "docx",
+            fileName: title 
+        },
+        {
+            uri: fileUrl,
+            fileType: "jpg",
+            fileName: title 
+        },
+        {
+            uri: fileUrl,
+            fileType: "png",
+            fileName: title 
+        },
+        {
+            uri: fileUrl,
+            fileType: "xsl",
+            fileName: title 
+        },
+        {
+            uri: fileUrl,
+            fileType: "ppt",
+            fileName: title 
         }
     ]
-
-    return (
-        <div>
-            <DocViewer documents={docs} pluginRenderers={DocViewerRenderers}
-            />
-        </div>
-    )
+    const ext = title.split('.')[title.split('.').length - 1].toLowerCase()
+    console.log(ext)
+    switch (ext) {
+        case 'pdf':
+            return (
+                <div>
+                    <DocViewer documents={[docs[0]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            );
+        case 'jpg':
+            return (
+                <div>
+                    <DocViewer documents={[docs[2]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            );
+        case 'png':
+            return (
+                <div>
+                    <DocViewer documents={[docs[3]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            );
+        case 'docx':
+            return (
+                <div>
+                    <DocViewer documents={[docs[1]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            );
+        case 'ppt':
+            return (
+                <div>
+                    <DocViewer documents={[docs[5]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            )
+        case 'xsl':
+            return (
+                <div>
+                    <DocViewer documents={[docs[4]]} pluginRenderers={DocViewerRenderers}
+                    />
+                </div>
+            );
+    }
 }
 
 export default FilePreview;
