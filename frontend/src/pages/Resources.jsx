@@ -235,7 +235,7 @@ const Resources = () => {
                                     ))}
                                 </div>}
                                 {telegram.length > 4 && dropDown6===-6 && (
-                                <Link to="/resources/500%20Level">
+                                <Link to="/resources/telegram">
                                     <button className="w-[100%] bg-blue-600 hover:bg-white hover:text-blue-600 border-2 hover:border-blue-600 font-serif text-md text-white py-2 px-4 rounded-xl mt-4"> more </button>
                                 </Link>)}
                             </div>)}

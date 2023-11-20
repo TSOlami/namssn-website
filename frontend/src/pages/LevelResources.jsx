@@ -6,17 +6,21 @@ import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Loader from "../components/Loader";
 
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+const base_url = "http://localhost:5000/api/v1/users/resources/";
 
 const LevelResources = () => {
     const {level} = useParams()
     let modifiedString = level.replace(/ /g, " ");
+    if (level === 'telegram') {
+        modifiedString = 'telegram'
+    }
+    console.log(modifiedString)
     const [data, setData] = useState(null)
     const [tempData, setTempData] = useState(null)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(`http://localhost:5000/api/v1/users/${modifiedString}/resources/`);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                     setTempData(res.data)
@@ -83,7 +87,7 @@ const LevelResources = () => {
                         </div>
                         <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                             {fileList.map((file, index) => ( 
-                                <ResourceCard key={index} fileUrl={base_url + file} description={data[index][file]['description']}
+                                <ResourceCard key={index} fileUrl={base_url + file + '+' + data[index][file]['title']} description={data[index][file]['description']}
                                 uploaderUsername = {data[index][file]['uploaderUsername']}
                                 title = {data[index][file]['title']}
                                 date = {formatDateToTime(new Date(data[index][file]['date']))}

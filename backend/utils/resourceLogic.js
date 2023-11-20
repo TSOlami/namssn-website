@@ -95,10 +95,12 @@ const postResource = async (req, res) => {
 // gets the resources for a specified level
 const getSpecifiedResources = async (level) => {
   try {
+    if (level === 'telegram') {
+      level = 'N/A'
+    } 
     const response = await getResourcesByLevel(level);
     if (response) {
       const filesList = createFileList(response);
-      console.log(filesList)
       return filesList
     } else {
       console.log('No response');

@@ -656,7 +656,6 @@ const getFile = asyncHandler(async (req, res) => {
 // access	Private
 const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
   const level =req.params.level
-  console.log(level)
   try {
     const allResources = await getSpecifiedResources(level)
     if (allResources) {
