@@ -1,5 +1,6 @@
 import uploadResource from "../resourcesUtils/uploadResource.js";
 import dotenv from 'dotenv';
+dotenv.config();
 
 const bot_id = process.env.BOT_ID;
 const photoUploader = (msg) => {
@@ -14,8 +15,6 @@ const photoUploader = (msg) => {
     const fileurl = photo.file_id;
     const level = 'N/A';
     uploadResource(fileName, description, user_id, user, fileurl, level, "none")
-    // // console.log("document")
-    console.log(chatId, description, user, fileurl);
 }
 
 export default photoUploader;

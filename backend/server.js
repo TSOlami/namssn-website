@@ -13,13 +13,8 @@ import createServer from './utils/server.js';
 const app = createServer();
 const bot_token = process.env.BOT_TOKEN;
 const chat_id = process.env.CHAT_ID;
-console.log(chat_id)
-console.log(bot_token)
 export const bot = new TelegramBot(bot_token, { polling: true });
-console.log(process.env.BOT_TOKEN)
 bot.on('message', (msg) => {
-  console.log(msg)
-  console.log(bot_token, chat_id)
   if (msg.chat.id !== 1276219034 && msg.chat.type === 'private') {
     bot.sendMessage(msg.chat.id, "Hello, I'm NAMSSN FUTMINNA Bot. I can't fulfill your request at the moment. If you have any questions or need assistance, visit the NAMSSN official website. Thank you!")
   }
