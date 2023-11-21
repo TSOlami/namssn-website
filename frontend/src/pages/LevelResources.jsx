@@ -5,14 +5,24 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Loader from "../components/Loader";
+import ErrorPage from "./ErrorPage";
 
 const base_url = "http://localhost:5000/api/v1/users/resources/";
+const routes = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
 const LevelResources = () => {
     const {level} = useParams()
     let modifiedString = level.replace(/ /g, " ");
     if (level === 'telegram') {
         modifiedString = 'telegram'
+    }
+
+    if (!routes.includes(level)) {
+        return (
+            <div>
+                <ErrorPage/>
+            </div>
+            )
     }
     const [data, setData] = useState(null)
     const [tempData, setTempData] = useState(null)
