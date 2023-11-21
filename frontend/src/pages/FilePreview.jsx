@@ -84,6 +84,12 @@ const FilePreview = () => {
                     />
                 </div>
             );
+        default:
+            return (
+                <div>
+                    Cannot Open this type of file
+                </div>
+            );
     }
 }
 
