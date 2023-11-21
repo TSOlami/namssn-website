@@ -13,8 +13,6 @@ const documentUploader = (msg) => {
     const fileurl = msg?.document?.file_id;
     const level = 'N/A';
     uploadResource(fileName, description, user_id, user, fileurl, level, "none")
-    // // console.log("document")
-    console.log(chatId, description, user, fileurl);
 }
 
 export default documentUploader;
