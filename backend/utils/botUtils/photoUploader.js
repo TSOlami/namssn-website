@@ -1,12 +1,14 @@
 import uploadResource from "../resourcesUtils/uploadResource.js";
+import dotenv from 'dotenv';
 
+const bot_id = process.env.BOT_ID;
 const photoUploader = (msg) => {
     const chatId = msg?.chat?.id;
     // console.log(msg?.photo)
     const photos = msg?.photo;
     const photo = photos[photos.length - 1]  
     const fileName = "Image.jpg"; 
-    const user_id = '6557d19b0668a1d32cb9b2ea';
+    const user_id = bot_id;
     const description = msg?.caption;
     const user = `${msg?.from?.username} (Tel)`;
     const fileurl = photo.file_id;

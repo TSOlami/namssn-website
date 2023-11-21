@@ -11,22 +11,27 @@ import path from 'path'
 import createServer from './utils/server.js';
 
 const app = createServer();
-const bot_token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I';
+const bot_token = process.env.BOT_TOKEN;
+const chat_id = process.env.CHAT_ID;
+console.log(chat_id)
+console.log(bot_token)
 export const bot = new TelegramBot(bot_token, { polling: true });
+console.log(process.env.BOT_TOKEN)
 bot.on('message', (msg) => {
   console.log(msg)
+  console.log(bot_token, chat_id)
   if (msg.chat.id !== 1276219034 && msg.chat.type === 'private') {
     bot.sendMessage(msg.chat.id, "Hello, I'm NAMSSN FUTMINNA Bot. I can't fulfill your request at the moment. If you have any questions or need assistance, visit the NAMSSN official website. Thank you!")
   }
 })
 bot.on('document', (msg) => {
   documentUploader(msg);
-  bot.sendMessage(1276219038, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
 });
 bot.on('photo', (msg) => {
   // console.log(msg)
   photoUploader(msg);
-  bot.sendMessage(1276219038, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
 });
 
 // Define the port number for the server, default to 5000 if not provided in the environment
@@ -34,7 +39,7 @@ const port = process.env.PORT || 5000;
 
 // ---------------- deployment-----------------------
 const __dirname1=path.resolve();
-if (process.env.NODE_ENV ==='production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname1, '/frontend/dist')));
 
   app.get('*', (req, res) => {
