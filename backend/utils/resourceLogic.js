@@ -8,10 +8,11 @@ const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import getLastSixResources from "./resourcesUtils/getLastSixResources.js";
 import axios from "axios";
-import { bot } from "../server.js";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
-const bot_token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I'
+const bot_token = process.env.BOT_TOKEN;
 const getResources = async (req, res) => {
   try {
     const level1Resources = await getLastSixResources('100 Level');
@@ -32,7 +33,6 @@ const getResources = async (req, res) => {
         } else {
           level = ((i+ 1) * 100).toString() + ' Level';
         }
-        console.log(formattedResources)
         formattedResponse[level] = formattedResources
         
       }
@@ -56,7 +56,8 @@ const postResource = async (req, res) => {
     if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
       return res.status(400).send('Invalid file data.');
     }
-    const chatId = 1276219038;
+    const chatId = process.env.CHAT_ID;
+    console.log(chatId)
     const fileArrayBuffer = file.data.buffer;
     // const fileBuffer = Buffer.from(fileArrayBuffer);
     // const caption = `${description} - ${filename}`;

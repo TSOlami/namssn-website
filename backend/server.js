@@ -12,21 +12,25 @@ import createServer from './utils/server.js';
 
 const app = createServer();
 const bot_token = process.env.BOT_TOKEN;
-const chat_id = process.env.CHAT_ID;
+const chat_id = process.env.CHAT_ID || 1276219038;
 export const bot = new TelegramBot(bot_token, { polling: true });
 bot.on('message', (msg) => {
-  if (msg.chat.id !== 1276219034 && msg.chat.type === 'private') {
+  console.log(msg)
+  if (msg.chat.id !== chat_id && msg.chat.type === 'private') {
     bot.sendMessage(msg.chat.id, "Hello, I'm NAMSSN FUTMINNA Bot. I can't fulfill your request at the moment. If you have any questions or need assistance, visit the NAMSSN official website. Thank you!")
   }
 })
 bot.on('document', (msg) => {
-  documentUploader(msg);
-  bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  if (msg.chat.id === chat_id) {
+    documentUploader(msg);
+    bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  }
 });
 bot.on('photo', (msg) => {
-  // console.log(msg)
-  photoUploader(msg);
-  bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  if (msg.chat.id === chat_id) {
+    photoUploader(msg);
+    bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+  }
 });
 
 // Define the port number for the server, default to 5000 if not provided in the environment
