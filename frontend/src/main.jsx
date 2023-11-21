@@ -52,6 +52,21 @@ const router = createBrowserRouter(
       <Route index={true} key={12} path="/" exact element={<Landing />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route
+        path="/departmental-fees"
+        element={<DepartmentalFees />}
+      />
+      <Route path="/events" element={<EventsPage />} />
+      <Route path="*" element={<ErrorPage />} />
+      <Route
+        key={13}
+        path="/about-us"
+        element={<AboutUsPage />}
+      />
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/forgot-password" element={<ForgotPage />} />
+      <Route path="/verify-user/:username" element={<VerifyUserPass />} />
+      <Route path="/reset-password/:username" element={<ResetPassword />} />
       {/* Private routes */}
       <Route path='' element={<ProtectedRoutes />} >
       <Route path="/home" element={<Home />} />
@@ -82,18 +97,6 @@ const router = createBrowserRouter(
       />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route />
-      <Route
-        path="/departmental-fees"
-        element={<DepartmentalFees />}
-      />
-      <Route path="/events" element={<EventsPage />} />
-      <Route path="*" element={<ErrorPage />} />
-      <Route
-        key={13}
-        path="/about-us"
-        element={<AboutUsPage />}
-      />
-      <Route path="/blog" element={<BlogPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/payment" element={<AdminPayment />} />
       <Route path="/comments/:postId" element={<Comments />} />
@@ -108,10 +111,7 @@ const router = createBrowserRouter(
         path="/verify-account/:studentEmail"
         element={<VerifyAccount />}
       />
-      <Route path="/verify-user/:username" element={<VerifyUserPass />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/forgot-password" element={<ForgotPage />} />
-      <Route path="/reset-password/:username" element={<ResetPassword />} />
       <Route path="/admin/blogs" element={<AdminBlogs />} />
       </Route>
     </Route>

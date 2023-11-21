@@ -19,7 +19,7 @@ const Footer = () => {
 				</div>
 				<div>
 					<ul className="flex flex-col justify-center items-start ml-8 gap-6">
-						{navLinks.map((item) => (
+						{navLinks?.map((item) => (
 							<li key={item.label}>
 								<Link
 									to={item.href}

@@ -51,7 +51,7 @@ const VerificationCodeInput = ({ codeLength }) => {
 		<div>
 			{/* Check index.css for styling */}
 			<div className="verification-code-input pt-5">
-				{verificationCode.map((digit, index) => (
+				{verificationCode?.map((digit, index) => (
 					<input
 						key={index}
 						type="text"

@@ -22,13 +22,17 @@ const notificationSchema = mongoose.Schema({
 				type: Boolean,
 				default: false,
 		},
-		comment: {
+		post:{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Post", // Reference to the Post model
+		},
+		comment:{
 			type: Boolean,
 			default: false,
 		},
 		triggeredBy: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			ref: "User", //Reference to the user who triggered the notification
 		},
 		seen: {
 				type: Boolean,

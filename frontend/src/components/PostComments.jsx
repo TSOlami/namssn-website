@@ -114,7 +114,7 @@ const PostComments = ({
 			});
 			
 		} catch (error) {
-			toast.error("Failed to delete comment");
+			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 			console.error("Comment deletion failed", error);
 		}
 		handleOpenOptions();

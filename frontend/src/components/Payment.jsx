@@ -92,8 +92,8 @@ const PaymentForm = () => {
           toast.error("Payment initiation failed. Please try again.");
         }
       } catch (error) {
-        console.error("Error initiating payment:", error);
-        toast.error("Payment initiation failed. Please try again.");
+        const msg = error?.error?.response?.data?.message;
+        toast.error(msg || "Payment initiation failed. Please try again.");
       }
     },
   });

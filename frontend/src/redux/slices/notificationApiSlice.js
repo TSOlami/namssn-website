@@ -26,9 +26,10 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
 
     // Define a `markNotificationsAsSeen` endpoint that queries `NOTIFICATION_URL/notifications/seen`
     markNotificationsAsSeen: builder.mutation({
-      query: () => ({
+      query: (notificationId) => ({
         url: `${NOTIFICATION_URL}/notifications/seen`,
         method: "PUT",
+        body: { notificationId },
       }),
       invalidatesTags: ["Notification"],
     }),
@@ -36,7 +37,6 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
     // Define a `clearNotifications` endpoint that queries `NOTIFICATION_URL/notifications`
     clearNotifications: builder.mutation({
       query: () => (
-        console.log("clearNotifications"),
         {
         url: `${NOTIFICATION_URL}/notifications`,
         method: "DELETE",

@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 
-const AdminEventsCard = ({ title, flier }) => {
+const AdminEventsCard = ({ id, title, flier, onClick }) => {
 	useEffect(() => {
 		const clickHandler = (event) => {
+			if (onClick) {
+        onClick(id);
+      }
 			document
 				.querySelectorAll("#event-card")
 				.forEach((card) => card.classList.remove("border-l-4"));
@@ -27,12 +30,12 @@ const AdminEventsCard = ({ title, flier }) => {
 	
 		// Return the cleanup function
 		return cleanup;
-	}, []);
+	}, [onClick, id]);
 	
 	return (
 		<div className="text-black bg-greyish flex gap-2 rounded-lg p-2 px-4 m-4 items-center cursor-pointer hover:scale-105 active:scale-95" id="event-card">
 			<div>
-				<img src={flier} alt="" />
+				<img src={flier} alt="" className="w-10 h-10 rounded-lg" />
 			</div>
 
 			<div className="text-lg text-black">{title}</div>

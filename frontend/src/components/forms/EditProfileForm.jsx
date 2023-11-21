@@ -75,7 +75,7 @@ const EditProfileForm = ({ handleModal }) => {
           navigate('/profile');
           handleModal();
         } catch (err) {
-          toast.error(err?.data?.message || err?.error)
+          toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
         }
       },
 	});
@@ -132,7 +132,7 @@ const EditProfileForm = ({ handleModal }) => {
         <option value="" disabled>
           Select your level
         </option>
-        {levelOptions.map((level) => (
+        {levelOptions?.map((level) => (
           <option key={level} value={level}>
             {level}
           </option>

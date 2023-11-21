@@ -33,11 +33,14 @@ import {
   resendOTP,
   verifyUserPayment,
   getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 } from "../controllers/userController.js";
 
 import { 
   createPost,
 	getAllPosts,
+  getPostById,
 	getUserPosts,
   updatePost,
   deletePost,
@@ -83,6 +86,28 @@ router.post('/auth', authUser);
  * @access Private
  */
 router.route('/verify-account').post(verifyAccount);
+
+/**
+ * Check if email exists
+ * 
+ * @route POST /api/v1/users/check-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.route('/check-email').post(checkEmailExistence);
+
+/**
+ * Check if student email exists
+ * 
+ * @route POST /api/v1/users/check-student-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.route('/check-student-email').post(checkStudentEmailExistence);
 
 /**
  * Generate OTP
@@ -191,6 +216,9 @@ router
 router
 .route("/posts")
 .get(getAllPosts);
+
+// Route for getting a post by id
+router.get('/posts/:postId', protect, getPostById);
 
 // Route for getting a user post by id
 router.get('/post/:userId', protect, getUserPosts);

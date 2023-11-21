@@ -63,6 +63,13 @@ const FilePreview = () => {
                     />
                 </div>
             );
+        case 'jpeg':
+        return (
+            <div>
+                <DocViewer documents={[docs[3]]} pluginRenderers={DocViewerRenderers}
+                />
+            </div>
+        );
         case 'docx':
             return (
                 <div>

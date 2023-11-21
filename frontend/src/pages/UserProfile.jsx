@@ -68,8 +68,8 @@ const UserProfile = () => {
     try {
       await makeUserAdmin(userId).unwrap();
       toast.success(`${name} is now an admin`);
-    } catch (error) {
-      toast.error('Something went wrong');
+    } catch (err) {
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 
@@ -78,8 +78,8 @@ const UserProfile = () => {
     try {
       await removeAdmin(userId).unwrap();
       toast.success(`${name} is no longer an admin`);
-    } catch (error) {
-      toast.error('Something went wrong');
+    } catch (err) {
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 

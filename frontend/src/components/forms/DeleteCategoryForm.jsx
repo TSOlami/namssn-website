@@ -47,7 +47,7 @@ const formik = useFormik({
       }
     } catch (err) {
       // Handle errors during the request
-      toast.error("An error occurred while deleting the category.");
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       console.error("Failed to delete payment category:", err);
     }
     

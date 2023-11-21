@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FaCircleCheck, FaX } from "react-icons/fa6";
 import Actions from "./Actions";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
@@ -18,24 +19,48 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
 const Post = ({ post, updatePostData, removePost }) => {
+	// State to manage the options menu
 	const [openOptions, setopenOptions] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
 
+  // Close options menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      // Check if the click target is outside the options menu
+      if (
+        openOptions &&
+        event.target.closest(".options-menu") === null &&
+        event.target.closest(".pi-dots-icon") === null
+      ) {
+        // Close the options menu
+        setopenOptions(false);
+      }
+    };
+
+    // Add event listener to the document body
+    document.body.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      // Remove event listener when the component unmounts
+      document.body.removeEventListener("click", handleOutsideClick);
+    };
+  }, [openOptions]);
+
 	// Get the post details from the props
 	const postId = post?._id;
-	const u_id = post?.user._id;
+	const u_id = post?.user?._id;
 	const upvotes = post?.upvotes;
 	const downvotes = post?.downvotes;
 	const comments = post?.comments;
 	const text = post?.text;
 	const image = post?.image;
 	const createdAt = post?.createdAt;
-	const name = post?.user.name;
-	const username = post?.user.username;
-	const avatar = post?.user.profilePicture;
-	const isVerified = post?.user.isVerified;
+	const name = post?.user?.name;
+	const username = post?.user?.username;
+	const avatar = post?.user?.profilePicture;
+	const isVerified = post?.user?.isVerified;
 
 	const navigate = useNavigate();
 	const routeToComments = () => {
@@ -178,7 +203,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 						<span className="font-medium flex flex-row items-center gap-1">
 							<span className="font-semibold">
 								{" "}
-								{name.length > 10 ? (
+								{name?.length > 10 ? (
 									<span>{name.slice(0, 10)}... </span>
 								) : (
 									<span>{name}</span>
@@ -188,7 +213,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 						</span>
 					</Link>
 					<span>@
-						{username.length > 10 ? (
+						{username?.length > 10 ? (
 							<span>{username.slice(0, 10)}... </span>
 						) : (
 							<span>{username}</span>

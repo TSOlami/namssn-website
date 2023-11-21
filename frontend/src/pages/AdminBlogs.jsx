@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { BlogCard, HeaderComponent, Sidebar } from "../components";
 import { motion } from "framer-motion";
@@ -26,7 +27,7 @@ const AdminBlogs = () => {
 	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
 
   // Use the useUpdateBlogMutation hook to update a blog post
-  const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
+  // const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
   // Use the useDeleteBlogMutation hook to delete a blog post
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
@@ -75,17 +76,15 @@ const AdminBlogs = () => {
 				});
         dispatch(setBlogs({...res}));
         formik.resetForm();
-			} catch (error) {
-				if (error.data.message == 'request entity too large') {
-					toast.error('Image size should be less than 200KB');
-				}
-				console.error(error);
+			} catch (err) {
+				toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 			}
 		},
 	});
 
   // Edit and delete blog handlers
   const handleEditBlog = (blog) => {
+		console.log(blog);
   };
 
   const handleDeleteBlog = async (blog) => {
@@ -101,8 +100,8 @@ const AdminBlogs = () => {
 					},
 				},
 			});
-    } catch (error) {
-      toast.error(error?.data?.message || error?.error);
+    } catch (err) {
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 

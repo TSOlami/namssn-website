@@ -10,6 +10,9 @@ uploads
 frontend/.env
 backend/.env
 
+# Config files
+*vite.config.js
+
 # Logs
 frontend/logs
 backend/logs

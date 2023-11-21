@@ -117,14 +117,14 @@ const Profile = () => {
 					/>{" "}
 					<button
 						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
+						className="border-2 rounded-2xl border-gray-700 p-1 px-2 hover:text-white hover:bg-primary hover:border-none mt-auto"
 					>
 						Edit Profile
 					</button>
 					{!isVerified && (
 						<button
 						onClick={handleVerifyModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-primary hover:border-none mt-auto"
+						className="border-2 rounded-2xl border-gray-700 p-1 px-2 hover:text-white hover:bg-primary hover:border-none mt-auto"
 					>
 						Verify Account
 					</button>	

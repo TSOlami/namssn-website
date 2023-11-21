@@ -29,9 +29,18 @@ const AdminEvents = () => {
 	}, [dispatch, events]);
 
 	const handleSelectChange = (event) => {
-    const selectedTitle = event.target.value;
-    const selectedEvent = events.find((event) => event.title === selectedTitle);
+    const selectedId = event.target.value;
+    const selectedEvent = events.find((event) => event._id === selectedId);
     setSelectedEvent(selectedEvent);
+  };
+
+	const handleCardClick = (id) => {
+    const clickedEvent = events.find((event) => event._id  === id);
+    setSelectedEvent(clickedEvent);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedEvent(null);
   };
 
 	return (
@@ -50,16 +59,20 @@ const AdminEvents = () => {
 						{events?.map((event, index) => (
 							<AdminEventsCard
 								key={index}
+								id={event._id}
 								title={event.title}
 								date={event.date}
 								location={event.location}
-								// flier={event.image}
+								flier={event.image}
+								onClick={handleCardClick}
 							/>
 						))}
 
 						{/* Add new event button */}
 						{/* This should load an empty event form */}
-						<button className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
+						<button
+						onClick={handleClearSelection}
+						className="m-5 my-10 p-3 bg-primary text-white rounded-sm hover:opacity-80">
 							Add New Event
 						</button>
 					</div>
@@ -77,7 +90,7 @@ const AdminEvents = () => {
 							{/* Add an option for creating a new event */}
 							<option value="createNewEvent">Create New Event</option>
 							{events?.map((event, index) => (
-								<option value={event.title} key={index}>
+								<option value={event._id} key={index}>
 									{event.title}
 								</option>
 							))}

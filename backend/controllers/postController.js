@@ -43,7 +43,6 @@ const createPost = asyncHandler(async (req, res) => {
 // Access Public
 const getAllPosts = asyncHandler(async (req, res) => {
 
-  console.log("Fetching all posts");
 	// Extract pagination parameters from the request query, with default values if not provided
 	const page = parseInt(req.query.page) || 1;
 	const pageSize = parseInt(req.query.pageSize) || 10; // Set a default page size
@@ -76,7 +75,6 @@ const getAllPosts = asyncHandler(async (req, res) => {
 
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    console.log("Total posts: ", totalCount);
     // Response object
     const response = {
       page,
@@ -93,6 +91,38 @@ const getAllPosts = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get a post by ID
+// Route GET /api/v1/users/posts/:postId
+// Access Public
+const getPostById = asyncHandler(async (req, res) => {
+	// Extract the post ID from the request parameters
+	const postId = req.params.postId;
+
+	// Find the post by ID and populate the user information excluding the password field
+  const post = await Post.findById(postId)
+	.populate({
+		path: 'comments',
+		model: 'PostComment',
+		populate: {
+			path: 'user',
+			model: 'User',
+			select: '-password',
+		},
+	})
+	.populate({
+		path: 'user',
+		select: '-password',
+	});
+
+	// If the post is not found, return an error
+	if (!post) {
+		res.status(404);
+		throw new Error('Post not found');
+	}
+
+	res.status(200).json(post);
+});
+
 // @desc Get user's posts (My Posts)
 // Route GET /api/v1/users/posts
 // Access Private
@@ -101,7 +131,6 @@ const getUserPosts = asyncHandler(async (req, res) => {
 	  const userId = req.params.userId; // Get the user ID from the query parameters
   
 	  // Fetch the user's posts from the database
-    console.log("Fetching posts for user: ", userId);
 	  const userPosts = await Post.find({ user: userId })
 			.sort({ createdAt: -1 })
 			.populate('user', '-password');
@@ -110,7 +139,6 @@ const getUserPosts = asyncHandler(async (req, res) => {
 		res.status(404).json({ message: "No posts found for this user." });
 	  } else {
 		res.status(200).json(userPosts);
-		console.log("Got user posts successfully: ", userPosts.length);
 	  }
 	} catch (error) {
 	  console.error("Error fetching user posts:", error);
@@ -180,8 +208,6 @@ const upvotePost = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
   const userId = req.user._id;
 
-	console.log("Upvoting post: ", postId);
-
   // Find the post by ID and populate the user information excluding the password field
   const post = await Post.findById(postId).populate('user', '-password');
 
@@ -231,12 +257,11 @@ const upvotePost = asyncHandler(async (req, res) => {
 					upvote: true,
 					user: post.user, // ID of the post owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
 				});
 				await notification.save();
 			}
 		}
-
-		console.log("Upvoted post successfully: ", post);
 
 		await post.save();
 
@@ -306,13 +331,13 @@ const downvotePost = asyncHandler(async (req, res) => {
 					downvote: true,
 					user: post.user, // ID of the post owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
 				});
 				await notification.save();
 			}
 		}
 
 		await post.save();
-    console.log("Downvoted post successfully");
 		res.status(200).json({
       message: "success",
       post
@@ -332,7 +357,6 @@ const getPostComments = asyncHandler(async (req, res) => {
 	// Extract the post ID from the request parameters
 	const postId = req.params.postId;
   
-	console.log("Fetching comments for post: ", postId);
 	// Find the post by its ID
 	const post = await Post.findById(postId).populate('user', '-password');
   
@@ -359,7 +383,6 @@ const createPostComment = asyncHandler(async (req, res) => {
 	// Extract the comment text from the request body
 	const { text } = req.body;
   
-	console.log("Comment text: ", text);
 	// Find the post by ID and populate the user information excluding the password field
   const post = await Post.findById(postId).populate('user', '-password');
 
@@ -367,7 +390,6 @@ const createPostComment = asyncHandler(async (req, res) => {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
-    console.log("Creating comment for post: ", postId);
 	// Create a new comment
 	const newComment = new PostComment({
 	  text,
@@ -386,9 +408,10 @@ const createPostComment = asyncHandler(async (req, res) => {
 		// Create a notification for the post owner
 		const notification = new Notification({
 			text: `${req.user.username} commented on your post.`,
-			comment: true,
 			user: post.user, // ID of the post owner
 			triggeredBy: req.user._id, // ID of the user who triggered the notification
+			post: postId,
+			comment: true,
 		});
 		await notification.save();
   }
@@ -397,8 +420,7 @@ const createPostComment = asyncHandler(async (req, res) => {
     message: "success",
     createdComment
   });
-  console.log("Created comment successfully");
-  });
+});
 
 /**
  * @desc Update a comment for a post.
@@ -445,8 +467,7 @@ const updatePostComment = asyncHandler(async (req, res) => {
     message: "success",
     updatedComment
   });
-  console.log("Updated comment successfully");
-  });
+});
 
 /**
  * @desc Delete a comment for a post.
@@ -500,13 +521,13 @@ const deletePostComment = asyncHandler(async (req, res) => {
 			comment: true,
 			user: post.user, // ID of the post owner
 			triggeredBy: req.user._id, // ID of the user who triggered the notification
+			post: postId,
 		});
 		await notification.save();
 	}
   
 	res.status(200).json({ message: "success" });
-  console.log("Deleted comment successfully");
-  });
+});
 
 /**
  * @desc Toggle upvote on a comment
@@ -571,6 +592,8 @@ const upvoteComment = asyncHandler(async (req, res) => {
 					upvote: true,
 					user: comment.user, // ID of the comment owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
+					comment: true,
 				});
 				await notification.save();
 			}
@@ -652,6 +675,8 @@ const downvoteComment = asyncHandler(async (req, res) => {
 					downvote: true,
 					user: comment.user, // ID of the comment owner
 					triggeredBy: req.user._id, // ID of the user who triggered the notification
+					post: postId,
+					comment: true,
 				});
 				await notification.save();
 			}
@@ -684,7 +709,6 @@ const getNotifications = asyncHandler(async (req, res) => {
         path: "triggeredBy",
         select: "-password", // Exclude the password field
       });
-			
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -697,9 +721,28 @@ const getNotifications = asyncHandler(async (req, res) => {
  * @access Private (Requires authentication)
  */
 const markNotificationsAsSeen = asyncHandler(async (req, res) => {
-	// Update all notifications for the currently logged-in user
-	await Notification.updateMany({ user: req.user._id }, { seen: true });
-	
+	const notificationId = req.body.notificationId;
+
+	// Find the notification by its ID
+	const notification = await Notification.findById(notificationId);
+
+	if (!notification) {
+	  res.status(404);
+	  throw new Error('Notification not found');
+	}
+
+	// Check if the user who made the request is the owner of the notification (or has the required privileges)
+	if (notification.user.toString() !== req.user._id.toString()) {
+	  res.status(403);
+	  throw new Error('Permission denied');
+	}
+
+	// Update the notification's "seen" field
+	notification.seen = true;
+
+	// Save the updated notification to the database
+	await notification.save();
+
 	res.status(200).json({ message: "success" });
 });
 
@@ -741,7 +784,6 @@ const deleteNotification = asyncHandler(async (req, res) => {
 const clearNotifications = asyncHandler(async (req, res) => {
   try {
     // Remove all notifications for the currently logged-in user
-    console.log("Clearing notifications for user: ", req.user._id);
     await Notification.deleteMany({ user: req.user._id });
 
     res.status(200).json({ message: "success" });
@@ -751,4 +793,4 @@ const clearNotifications = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPost, getAllPosts, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
+export { createPost, getAllPosts, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };

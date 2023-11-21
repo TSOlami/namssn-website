@@ -12,7 +12,7 @@ import {
   Loader,
   AddPostForm,
 } from "../components";
-import { useAllPostsQuery, setPosts, setCurrentPage } from "../redux";
+import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications } from "../redux";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
@@ -27,16 +27,36 @@ const Home = () => {
   // Use the useAllPostsQuery hook to get all posts
   const { data: posts, isLoading } = useAllPostsQuery(Number(page));
 
+  // Use the useGetNotificationsQuery hook to get notifications
+  const { data: notifications } = useGetNotificationsQuery();
+
+  // Fetch notifications when user logs in and dispatch to Redux store
+  useEffect(() => {
+    if (notifications) {
+      dispatch(setNotifications(notifications));
+    }
+  }, [notifications, dispatch]);
+
+  // State to manage HasMore
+  const [hasMore, setHasMore] = useState(true);
+
+  // State to manage getting more posts
+  const [isgettingMorePosts, setIsGettingMorePosts] = useState(false);
+
   // Dispatch the setPosts action to set the posts in the redux store
   useEffect(() => {
     if (posts) {
-      // Merge the new data with the existing postData
-      setPostData((prevData) => [...prevData, ...posts.posts]);
+      // Identify unique post IDs
+      const postIds = new Set(postData.map(post => post._id));
 
-      // Dispatch the updated posts to your Redux store
-      dispatch(setPosts([...postData, ...posts.posts]));
+      // Filter out posts that already exist in the postData array
+      const newPosts = posts.posts.filter(post => !postIds.has(post._id));
+      
+      // Append the new posts to the postData array
+      setPostData((prevData) => [...prevData, ...newPosts]);
+      setIsGettingMorePosts(false);
     }
-  }, [posts, dispatch]);
+  }, [posts]);
 
   // Get the total number of pages from the API response
   const totalPages = posts?.totalPages;
@@ -70,19 +90,24 @@ const Home = () => {
   };
 
   // Function to fetch more posts
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const getNextPosts = async (pageCurrent) => {
-    setPaginationLoading(true);
+    setIsGettingMorePosts(true);
     try {
       if (Number(pageCurrent) < Number(totalPages)) {
         dispatch(setCurrentPage(pageCurrent + 1));
+      } else {
+        // If the current page is the last page, set hasMore to false
+        setHasMore(false);
+        setIsGettingMorePosts(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setPaginationLoading(false);
     }
   };
+
+  // if (page === totalPages) {
+  //   setHasMore(false);
+  // }
 
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -119,15 +144,24 @@ const Home = () => {
         {isLoading && <Loader />}
 
         {/* Paginate posts buttons */}
-        <div className="flex m-auto pb-12 md:pb-0">
-          <button
-            onClick={() => getNextPosts(page)}
-            className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"
-          >
-            {paginationLoading ? 
-              "Loading..." : "Load more posts"} 
-          </button>
+        {hasMore && (
+          <div className="flex m-auto pb-12 md:pb-0">
+            {isLoading || isgettingMorePosts ? (
+              <button
+              disabled={true}
+              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white cursor-not-allowed"
+              >
+               Loading...
+            </button>) : (
+              <button
+              onClick={() => getNextPosts(page)}
+              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"
+            >
+              Load More posts 
+            </button>
+              )}  
         </div>
+        )}
 
         {/* Add post button */}
         <div

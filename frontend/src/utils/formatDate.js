@@ -28,3 +28,19 @@ export function formatDateToTime(date) {
     return `${seconds}s`;
   }
 }
+
+
+export function formatDateToString(date) {
+  if (!date) {
+    return "";
+  }
+
+  const options = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+
+  return date.toLocaleDateString(undefined, options);
+}
+

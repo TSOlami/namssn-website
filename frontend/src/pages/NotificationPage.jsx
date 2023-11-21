@@ -40,10 +40,9 @@ const NotificationPage = () => {
 			);
 			// If successful, show a toast notification
 			dispatch(setNotifications([]));
-		} catch (error) {
+		} catch (err) {
 			// Handle any errors if necessary
-			toast.error("Failed to clear notifications!");
-			console.error("Failed to clear notifications:", error);
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
 	};
 
@@ -55,7 +54,7 @@ const NotificationPage = () => {
 			className="flex flex-row"
 		>
 			<Sidebar />
-			<div className="w-full">
+			<div className="w-full relative">
 				<HeaderComponent title="Notifications" />
 				{notifications?.length === 0 && !isLoading ? (
 					<div className="flex items-center justify-center text-lg w-full mt-20">
@@ -65,7 +64,7 @@ const NotificationPage = () => {
 					<div className="w-full">
 						<button
 							onClick={handleClearNotifications}
-							className="button-2 hover:opacity-70 fixed bottom-20 sm:bottom-16 right-[7vw] md:right-[10vw] lg:right-[30vw] cursor-pointer"
+							className="button-2 absolute hover:opacity-70 bottom-20 sm:bottom-16 right-[7vw] md:right-[5vw] lg:right-[20vw] cursor-pointer"
 						>
 							<FaTrash />
 							Clear Notifications
@@ -74,20 +73,25 @@ const NotificationPage = () => {
 							return (
 								<Notification
 									key={index}
-									content={notification.text}
+									notificationId={notification?._id}
+									content={notification?.text}
 									downvote={notification?.downvote}
-									upvote={notification.upvote}
-									name={notification.triggeredBy?.name}
+									upvote={notification?.upvote}
+									tBUser={notification?.triggeredBy._id}
+									name={notification?.triggeredBy?.name}
 									isVerified={
 										notification?.triggeredBy?.isVerified
 									}
 									username={
-										notification.triggeredBy?.username
+										notification?.triggeredBy?.username
 									}
-									comment={notification.comment}
+									post={notification?.post}
+									comment={notification?.comment}
 									avatar={
-										notification.triggeredBy?.profilePicture
+										notification?.triggeredBy?.profilePicture
 									}
+									createdAt={notification?.createdAt}
+									seen={notification?.seen}
 								/>
 							);
 						})}
