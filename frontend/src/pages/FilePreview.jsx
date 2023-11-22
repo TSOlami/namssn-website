@@ -93,8 +93,8 @@ const FilePreview = () => {
             );
         default:
             return (
-                <div>
-                    Cannot Open this type of file
+                <div className="w-full h-screen text-lg font-roboto text-red-600 flex justify-center items-center">
+                    <span>Unsupported File Type</span>
                 </div>
             );
     }
