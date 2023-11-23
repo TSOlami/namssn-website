@@ -15,12 +15,35 @@ const Actions = ({
 	onDownvote,
 	comments,
 	postId,
+	blogId
 }) => {
 	const navigate = useNavigate();
 	const routeToComments = () => {
 		navigate(`/comments/${postId}`);
 	};
-
+	const handleShare = async () => {
+    if (postId) {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/comments/${postId}`
+				});
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		} else {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/blog#${blogId}`
+				});
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		}
+    };
 	// Define upvotes and downvotes
 	upvotes = upvotes?.length;
 	downvotes = downvotes?.length;
@@ -81,7 +104,7 @@ const Actions = ({
 				</div>
 			)}
 
-			<div>
+			<div onClick={handleShare}>
 				<span className="flex items-center gap-1 cursor-pointer">
 					<BiShareAlt />
 				</span>

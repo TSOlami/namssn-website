@@ -75,6 +75,17 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Send mail to all users
+      mailNotice: builder.mutation({
+        query(data) {
+          return {
+            url: `${ADMIN_URL}/notice-mail`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
       // Make a user admin
       makeUserAdmin: builder.mutation({
         query(userId) {
@@ -124,8 +135,6 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       // Delete Blog Query
       deleteBlog: builder.mutation({
         query(blogId) {
-          console.log(blogId);
-
           return {
             url: `${ADMIN_URL}/blog/${blogId}`,
             method: 'DELETE',
@@ -148,9 +157,9 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 
       // Update Event Mutation
       updateEvent: builder.mutation({
-        query(data) {
+        query(eventId, data) {
           return {
-            url: `${ADMIN_URL}/events`,
+            url: `${ADMIN_URL}/events/${eventId}`,
             method: 'PUT',
             body: data,
           };
@@ -211,4 +220,5 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetAllUsersQuery,
+  useMailNoticeMutation,
 } = adminApiSlice;

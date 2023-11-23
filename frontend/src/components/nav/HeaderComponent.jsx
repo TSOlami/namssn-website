@@ -20,9 +20,9 @@ const HeaderComponent = ({ title, url, back }) => {
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		window.location.href = `/search?key=${search}&filter=${selectedOption}`
-		// console.log(e.target.value);
-		// setSearch(e.target.value);
+		if (search !== "") {
+			window.location.href = `/search?key=${search}&filter=all`;
+		}
 	};
 
 	// navigate back to previous page
@@ -42,14 +42,8 @@ const HeaderComponent = ({ title, url, back }) => {
 		dispatch(setNavOpen());
 	};
 
-	const [selectedOption, setSelectedOption] = useState('all');
-    const handleSelectChange = (e) => {
-        setSelectedOption(e.target.value);
-    };
-
 	return (
-		<div className="flex flex-row border-b-2 border-blue-700  md:justify-between w-[100%] items-center gap-2 p-5 md:py-2 drop-shadow-md">
-
+		<div className="flex flex-row border-b-2 border-blue-700 justify-between w-[100%] items-center gap-2 p-5 md:py-2 drop-shadow-md pr-14 md:pr-5">
 			{back && (
 				<div
 					onClick={handleBack}
@@ -61,44 +55,44 @@ const HeaderComponent = ({ title, url, back }) => {
 			<img
 				src={Avatar}
 				alt="avatar"
-				className="lg:hidden profile-image-small"
+				className={location.pathname === '/home' ? "lg:hidden profile-image-small" : "lg:hidden profile-image-small mr-auto"}
 				onClick={handleNavOpen}
 			/>
 			{/* <h1 className="text-xl text-center w-full md:text-3xl">{title}</h1> */}
 			<div className="">
-				<span className="px-4  font-bold font-roboto sm:text-xl text-blue-900 text-xl">{title.toUpperCase()}</span>
+				<span className="px-4  font-bold font-crimson sm:text-xl text-blue-900 text-xl">
+					{title.toUpperCase()}
+				</span>
 			</div>
-			{/* <div className="lg:hidden relative right-[50%]">
-				<FaMagnifyingGlass  />
-			</div> */}
 			{url && (
-				<div className="items-center  lg:flex">
-				<form
-					action=""
-					onSubmit={handleSubmit}
-					className="flex  relative"
-				>
-					<input
-						type="text"
-						placeholder="Search"
-						name="search"
-						value={search}
-						className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 max-w-[7em]  pl-3 pr-10"
-						onChange={handleSearchChange}
-					/>
-					<a className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg" onClick={handleSubmit}>
-						<FaMagnifyingGlass  />
-					</a>
+				<div className="items-center lg:flex">
+					<form
+						action=""
+						onSubmit={handleSubmit}
+						className="flex  relative"
+					>
+						<input
+							type="text"
+							placeholder="Search"
+							name="search"
+							value={search}
+							className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 max-w-[7em]  pl-3 pr-10"
+							onChange={handleSearchChange}
+						/>
+						<a
+							className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg"
+							onClick={handleSubmit}
+						>
+							<FaMagnifyingGlass />
+						</a>
 
-
-					{/* <button className="border bg-gray-400 rounded-md">
+						{/* <button className="border bg-gray-400 rounded-md">
 						{" "}
 						<a href={`http://localhost:3000/search?key=${search}`}>
 							Go
 						</a>
 					</button> */}
-				</form>
-
+					</form>
 				</div>
 			)}
 		</div>

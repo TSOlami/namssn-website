@@ -10,6 +10,7 @@ import {
 	useAllBlogsQuery,
 	useVerifyAccountMutation,
 	useContactUsMutation,
+	useCheckStudentEmailMutation,
 } from './slices/usersApiSlice';
 import {
 	useGetTotalUsersQuery,
@@ -28,9 +29,11 @@ import {
 	useCreateEventMutation,
 	useUpdateEventMutation,
 	useDeleteEventMutation,
+	useMailNoticeMutation,
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
+	usePostQuery,
 	usePaginatedPostsQuery,
 	useUserPostsQuery,
 	useCreatePostMutation,
@@ -93,6 +96,7 @@ export {
 		useResetPasswordMutation,
 		useGetUserQuery,
 		useAllPostsQuery,
+		usePostQuery,
 		usePaginatedPostsQuery,
 		useUserPostsQuery,
 		useCreatePostMutation,
@@ -149,6 +153,8 @@ export {
 	useMarkNotificationsAsSeenMutation,
 	useClearNotificationsMutation,
 	useContactUsMutation,
+	useCheckStudentEmailMutation,
+	useMailNoticeMutation,
 	setCredentials,
 	setPosts,
 	setAnnouncements,

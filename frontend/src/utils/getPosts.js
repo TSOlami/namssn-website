@@ -10,10 +10,8 @@ export async function getPosts(page, pageSize) {
 		Authorization: `Bearer ${token}`,
 		};
 
-		console.log("Token: ", token)
 
 		const { data, status } = await axios.get(`/api/v1/users/posts?page=${page}&pageSize=${pageSize}`, { headers });
-		console.log("Data from getPosts api call: ", data, status);
 		if (status === 200) {
 			if (data.posts.length === 0) {
 				return { noMorePosts: true };

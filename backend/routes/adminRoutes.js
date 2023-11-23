@@ -30,10 +30,9 @@ import {
   getTotalAnnouncements,
   getTotalBlogs,
   getTotalEvents,
-  getTotalPayments,
-
-  
+  getTotalPayments,  
 } from '../controllers/adminController.js';
+import { mailNotice } from '../controllers/mailer.js';
 
 // Define admin routes and protect them with admin middleware
 
@@ -55,6 +54,9 @@ router
 .route('/payment')
 .post(protect, isAdmin, createCategory)
 .delete(protect, isAdmin, deleteCategory);
+
+// Send mail to all users
+router.route('/notice-mail').post(protect, isAdmin, mailNotice);
 
 // Get, create, update and delete user blogs
 router
@@ -88,10 +90,10 @@ router
   router
   .route('/events')
   .post(protect, isAdmin, createEvent) // Create a new event
-  .put(protect, isAdmin, updateEvent) // Update an event
 
 router
   .route('/events/:eventId')
+  .put(protect, isAdmin, updateEvent) // Update an event
   .delete(protect, isAdmin, deleteEvent); // Delete an event
 
 // Get total number of users

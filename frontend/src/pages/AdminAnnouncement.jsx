@@ -46,7 +46,6 @@ const AdminAnnouncements = () => {
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedLevel(selectedValue);
-    console.log(selectedLevel)
   };
 
   // Define a Yup validation schema for the form fields
@@ -63,7 +62,6 @@ const AdminAnnouncements = () => {
         level: selectedLevel,
       });
 
-      console.log("Submitted values:", values);
       // Dispatch the createAnnouncement action
       const res = await toast.promise(createAnnouncement(values).unwrap(), {
         pending: "Creating announcement...",
@@ -75,8 +73,7 @@ const AdminAnnouncements = () => {
       // Reset the form
       formik.resetForm();
     } catch (err) {
-      toast.error(err?.data?.message || err?.error);
-      console.log("Error:", err?.data?.message || err?.error);
+			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 
@@ -102,7 +99,6 @@ const AdminAnnouncements = () => {
   // Handler for "Delete" button
   const handleDeleteClick = async (announcement) => {
     // Handle the delete logic for the announcement
-    console.log("Deleting announcement:", announcement._id);
     const res = await toast.promise(
       deleteAnnouncement(announcement._id).unwrap(),
       {
@@ -111,7 +107,6 @@ const AdminAnnouncements = () => {
         error: "An error occurred while deleting the announcement"
       }
     );
-    console.log("Response:", res);
     // Dispatch the setAnnouncement action
     dispatch(setAnnouncements(res));
     // Show a success toast
@@ -141,42 +136,36 @@ const AdminAnnouncements = () => {
               title="General Announcements"
               onClick={() => {
                 setSelectedLevel("Non-Student");
-                console.log("Selected level: Non-Student");
               }}
             />
             <AdminAnnouncementCard
               title="100L Announcements"
               onClick={() => {
                 setSelectedLevel("100");
-                console.log("Selected level: 100L");
               }}
             />
             <AdminAnnouncementCard
               title="200L Announcements"
               onClick={() => {
                 setSelectedLevel("200");
-                console.log("Selected level: 200L");
               }}
             />
             <AdminAnnouncementCard
               title="300L Announcements"
               onClick={() => {
                 setSelectedLevel("300");
-                console.log("Selected level: 300L");
               }}
             />
             <AdminAnnouncementCard
               title="400L Announcements"
               onClick={() => {
                 setSelectedLevel("400");
-                console.log("Selected level: 400L");
               }}
             />
             <AdminAnnouncementCard
               title="500L Announcements"
               onClick={() => {
                 setSelectedLevel("500");
-                console.log("Selected level: 500L");
               }}
             />
           </div>

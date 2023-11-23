@@ -22,7 +22,7 @@ const Features = () => {
 						className="flex md:flex-row bg-tertiary mx-auto rounded-2xl shadow-xl flex-col pb-5"
 					>
 						<div className="flex flex-col justify-center px-8 pt-5 pb-4">
-							<h3 className="text-3xl font-bold font-roboto">
+							<h3 className="text-3xl pb-2 leading-tight font-bold font-roboto">
 								Access to Past Questions and Answers
 							</h3>
 							<p className="text-xl font-roboto">
@@ -44,7 +44,7 @@ const Features = () => {
 							transition={{ duration: 0.5 }}
 							className="flex flex-col justify-center px-8 pt-10 pb-10"
 						>
-							<h3 className="text-3xl font-bold font-roboto">
+							<h3 className="text-3xl leading-tight pb-2 font-bold font-roboto">
 								Interactive Discussions
 							</h3>
 							<p className="text-xl font-roboto mx-auto">
@@ -65,8 +65,8 @@ const Features = () => {
 						transition={{ duration: 0.5 }}
 						className="flex flex-row bg-tertiary rounded-2xl mx-auto max-w-[25rem] shadow-xl"
 					>
-						<motion.div className="flex flex-col justify-center px-10 pt-10 pb-5">
-							<h3 className="text-3xl font-bold font-roboto">
+						<motion.div className="flex flex-col justify-center px-10 pt-10 pb-5 ">
+							<h3 className="leading-tight text-3xl pb-2 font-bold font-roboto">
 								Effortless Payment
 							</h3>
 							<p className="text-xl font-roboto">
@@ -82,7 +82,7 @@ const Features = () => {
 						className="flex md:flex-row flex-col bg-zinc-900 mx-auto rounded-2xl shadow-xl"
 					>
 						<motion.div className="flex flex-col justify-center px-10 pt-20 pb-10">
-							<h3 className="text-3xl text-white font-bold font-roboto">
+							<h3 className="text-3xl leading-tight pb-2 text-white font-bold font-roboto">
 								Stay Informed
 							</h3>
 							<p className="text-xl text-white font-roboto">

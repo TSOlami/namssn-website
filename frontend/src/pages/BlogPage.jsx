@@ -1,9 +1,9 @@
-import { NavBar, Footer, Actions } from "../components";
+import { NavBar, Footer } from "../components";
 import { motion } from "framer-motion";
 import { useAllBlogsQuery } from "../redux";
 
 import { Loader } from "../components";
-import { formatDateToTime } from "../utils";
+import { formatDateToString } from "../utils";
 import { useState } from "react";
 
 const BlogPage = () => {
@@ -27,8 +27,12 @@ const BlogPage = () => {
 					Recent Blog Posts
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
-					{blogs?.map((blog) => (
-						<div key={blog._id} className="mb-6">
+					{blogs?.map((blog) => {
+						const date = new Date(blog.createdAt);
+            const formattedDate = formatDateToString(date);
+
+						return (
+							<div id={blog._id} key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
 									<h2 className="text-black text-2xl md:text-3xl font-bold font-montserrat">
@@ -49,8 +53,8 @@ const BlogPage = () => {
 									<p className="text-primary text-xl md:text-2xl font-bold font-roboto">
 										{blog.author}
 									</p>
-									<p className="text-xl text-black font-normal font-roboto my-2 md:my-4">
-										{formatDateToTime(blog.createdAt)}
+									<p className="text-xl text-gray-700 font-normal font-roboto my-2 md:my-4">
+										{formattedDate}
 									</p>
 								</div>
 							</div>
@@ -63,29 +67,23 @@ const BlogPage = () => {
 									/>
 								</div>
 								<div className="p-5">
-									<Actions
-										upvotes={blog.upvotes}
-										downvotes={blog.downvotes}
-										shares="5"
-										comments="10"
-									/>
 									{readMore ? (
-										<p className="body-text my-4">
-											{blog.content}
-
-											<div
+										<p className="body-text my-button4">
+											{blog.content} {" "}
+											<button
 												className="text-primary font-bold pt-2 cursor-pointer"
 												onClick={handleSetReadMore}
 											>
+												{" "}
 												Hide
-											</div>
+											</button>
 										</p>
 									) : (
 										<p>
 											{blog.content.length > 400 ? (
 												<>
 													{blog.content.slice(0, 400)}
-													<span
+													<button
 														onClick={
 															handleSetReadMore
 														}
@@ -93,7 +91,7 @@ const BlogPage = () => {
 													>
 														{" "}
 														...Read More
-													</span>
+													</button>
 												</>
 											) : (
 												blog.content
@@ -105,7 +103,8 @@ const BlogPage = () => {
 								</div>
 							</div>
 						</div>
-					))}
+						)
+					})}
 				</div>
 			</section>
 			{isFetching && <Loader />}

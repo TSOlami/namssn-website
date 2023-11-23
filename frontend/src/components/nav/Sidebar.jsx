@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
 	FaHouse,
@@ -14,7 +15,7 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { useLogoutMutation } from "../../redux";
+import { useLogoutMutation, useGetNotificationsQuery, setNotifications } from "../../redux";
 import { logout } from "../../redux/slices/authSlice";
 import { setNavOpen } from "../../redux/slices/navSlice";
 // import { useEffect } from "react";
@@ -22,12 +23,57 @@ import { setNavOpen } from "../../redux/slices/navSlice";
 const Sidebar = () => {
 	const { userInfo } = useSelector((state) => state.auth);
 
+	// Use the hook to get notifications from the backend
+	const { data: notifications } = useGetNotificationsQuery();
+
+	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
+
+	// Dispatch notifications to redux store
+	useEffect(() => {
+		if (notifications) {
+			dispatch(setNotifications(notifications));
+		}
+	}, [notifications, dispatch]);
+
+
+	// Function to handle opening and closing the navbar
 	const handleCloseNav = () => {
 		dispatch(setNavOpen());
 	};
 
+	const handleNavOpen = useCallback(() => {
+    dispatch(setNavOpen());
+  }, [dispatch]);
+
 	const isNavOpen = useSelector((state) => state.nav.navOpen);
+
+	useEffect(() => {
+		const handleOutsideClick = (event) => {
+			// Check if the click target is outside the navbar
+			if (
+				isNavOpen &&
+				event.target.closest(".navbar") === null &&
+				event.target.closest(".hamburger") === null
+			) {
+				// Close the navbar
+				handleNavOpen();
+			}
+		};
+	
+		// Add event listener to the document body
+		document.body.addEventListener("click", handleOutsideClick);
+	
+		return () => {
+			// Remove event listener when the component unmounts
+			document.body.removeEventListener("click", handleOutsideClick);
+		};
+	}, [isNavOpen, handleNavOpen]);
+
+	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+
+	// Calculate the number of unseen notifications
+  const unseenNotifications = notifications?.filter(notification => !notification?.seen)?.length;
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;
@@ -45,9 +91,10 @@ const Sidebar = () => {
 		try {
 			await logoutApiCall().unwrap();
 			dispatch(logout());
+			dispatch(setNavOpen(false));
 			navigate("/");
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	};
 
@@ -81,14 +128,12 @@ const Sidebar = () => {
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300 "></span>
 				<span className="bg-secondary block w-[33px] h-[4px] my-[6px] mx-auto bg-primary transition-all duration-300"></span>
 			</div> */}
-
-			{location.pathname !== "/"  ? (
+			
 				<div className={isNavOpen ? "hamburger active" : "hamburger"} onClick={handleCloseNav}>
 					<span className="bar side"></span>
 					<span className="bar side"></span>
 					<span className="bar side"></span>
 				</div>
-			) : null}
 
 
 			<div
@@ -132,11 +177,17 @@ const Sidebar = () => {
 
 						<li>
 							<Link
+								onClick={handleCloseNav}
 								to="/notifications"
-								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
+								className="relative transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
 							>
 								<FaBell />
 								<span>Notifications</span>
+								{unseenNotifications > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-full text-xs">
+                    {unseenNotifications}
+                  </span>
+								)}
 							</Link>
 						</li>
 						<li>

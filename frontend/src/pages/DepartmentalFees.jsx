@@ -23,7 +23,12 @@ const DepartmentalFees = () => {
 						Pay your departmental dues from the comfort of your
 						room.
 					</div>
-					<Link className="button-2">Pay with Paystack</Link>
+					<Link 
+						to="/signin"
+						className="button-2"
+					>
+						Pay with Paystack
+					</Link>
 				</div>
 				<div className="flex-1 p-2 pt-4 basis-6/12 self-center xl:pl-20">
 					<img src={FeesSVG} alt="" />
@@ -42,7 +47,7 @@ const DepartmentalFees = () => {
 							Make Payment
 						</h1>
 						<div>
-							Let&apos;s help NAMSSN by paying our departmental
+							Let&apos;s help NAMSSN grow by paying our departmental
 							dues on time.
 						</div>
 						<div>
@@ -64,7 +69,7 @@ const DepartmentalFees = () => {
 							Departmental dues	
 						</h3>
 						<div className="text-xl font-roboto font-normal my-5">
-							Let&apos;s help NAMSSN by paying our departmental
+							Let&apos;s help NAMSSN grow by paying our departmental
 							dues on time.
 							Ensure you use your matric number as the description
 							for the transfer.

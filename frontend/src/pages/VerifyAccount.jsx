@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { VerifyEmailSVG } from "../assets";
 import { useParams } from "react-router-dom";
@@ -14,23 +15,58 @@ const VerifyAccount = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const username = userInfo?.username;
 
+  // Set state to manage when a user can resend OTP
+  const [canResendOTP, setCanResendOTP] = useState(false);
+  const [countdown, setCountdown] = useState(120);
+
   const handleResendOTP = async () => {
+    // Update state to prevent frequent resending
+    setCanResendOTP(false);
+    
     // Use the resendAccountVerificationOTP function to resend OTP
     try {
       await toast.promise(
         resendAccountVerificationOTP(username, studentEmail),
         {
-          pending: "Sending OTP...",
+          pending: "Resending OTP...",
           success: "OTP sent successfully, please check your student email.",
         }
       );
-
-    } catch (error) {
+    } catch (err) {
       // Handle any unexpected errors
-      console.error("An error occurred during OTP resend:", error);
-      toast.error("An error occurred while resending OTP. Please try again.");
+      toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
+      // Update state to allow resending again
+      setCanResendOTP(true);
+    } finally {
+      // Reset the countdown and update state to prevent frequent resending
+      setCountdown(120);
     }
   };
+
+  
+  useEffect(() => {
+    let timer;
+  
+    // Start the countdown when the component mounts or when canResendOTP becomes true
+    if (canResendOTP || (canResendOTP === false && countdown > 0)) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+  
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, [canResendOTP, countdown]);
+
+  
+  useEffect(() => {
+    // Enable the resend button when the countdown reaches zero
+    if (countdown === 0) {
+      setCanResendOTP(true);
+    }
+  }, [countdown]);
 
 	return (
 		<motion.div
@@ -52,8 +88,17 @@ const VerifyAccount = () => {
 
 				<VerificationAccountInput codeLength={6} />
         <p >
-          Didn&apos;t receive an OTP? Click <button onClick={handleResendOTP} className="text-primary">here</button> to resend.
+          Didn&apos;t receive an OTP? {canResendOTP ? (
+            `Click the button below to resend.`
+          ) : (
+            `Resend in ${countdown} seconds.`
+          )}
         </p>
+        {canResendOTP && (
+          <button onClick={handleResendOTP} className="text-primary">
+            Resend OTP
+          </button>
+        )}
 			</div>
 		</motion.div>
 	);

@@ -101,28 +101,68 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc	Check if email exists
+// Route	POST /api/v1/users/check-email
+// Access Public
+const checkEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Check if the email exists in the database
+    const user = await User.findOne({ email });
+
+    // Return whether the email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// @desc  Check if student email exists
+// Route POST /api/v1/users/check-student-email
+// Access Public
+const checkStudentEmailExistence = asyncHandler(async (req, res) => {
+  try {
+    const { studentEmail  } = req.body;
+    // Check if the student email exists in the database
+    const user = await User.findOne({ studentEmail });
+
+    // Return whether the student email exists or not
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Error checking student email existence:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // @desc  Verify a user's account
 // Route GET /api/v1/users/verify-account
 // Access Private
 const verifyAccount = asyncHandler(async (req, res) => {
   const { username, studentEmail } = req.body;
-  console.log("Verifying user account: ", username, studentEmail);
   // Find the user by username
   const user = await User.findOne({ username });
 
   if (user) {
     // Check if the user has already been verified
-    console.log("User found");
     if (user.isVerified) {
       res.status(400);
       throw new Error('User already verified');
     }
+
+    // Check if the email provided is already in use by another user
+    const emailExists = await User.findOne({ email: studentEmail });
+    if (emailExists) {
+      res.status(400);
+      throw new Error('Email already in use');
+    }
+
     // Append the user's matric number and student email to the user's data
     user.studentEmail = studentEmail;
     user.isVerified = true;
 
     // Save the updated user data
-    console.log("Saving user data");
     const updatedUser = await user.save();
 
     // Return the updated user data
@@ -156,11 +196,8 @@ const verifyAccount = asyncHandler(async (req, res) => {
 const generateOTP = asyncHandler(async (req, res) => {
 try {
   const { username } = req.params;
-  console.log(req.params)
-  console.log("Generating OTP for user: ", username);
   const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 
-  console.log(otp)
   // Save the OTP to the database
   await UserOTPVerification.create({
     username,
@@ -174,8 +211,6 @@ try {
   // Set otpGenerated to true
   user.otpGenerated = true;
   await user.save();
-
-  console.log("success")
 
   let code = otp;
 
@@ -193,7 +228,6 @@ const verifyOTP = asyncHandler(async (req, res) => {
   try {
     const { username, code } = req.body;
 
-    console.log(username, code)
     // Input validation
     if (!username || !code) {
       return res.status(400).json({ message: 'Both username and code are required' });
@@ -217,9 +251,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
     const isOTPValid = await otpRecord.matchOtp(code);
 
     if (isOTPValid) {
-      console.log("OTP is valid")
       // Delete the matched OTP record
-      console.log("Deleting OTP record")
       await UserOTPVerification.deleteMany({ username });
 
       const user = await User.findOne({ username });
@@ -270,7 +302,6 @@ const resendOTP = asyncHandler(async (req, res) => {
     });
 
     // Return the OTP to the frontend as a response code
-     console.log("success")
 
     let code = otp;
 
@@ -311,7 +342,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     }
 
     // Update the user's password
-    console.log("Updating user password");
     user.password = password;
 
     // Reset the user's OTP status
@@ -319,7 +349,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     user.otpVerified = false;
 
     // Save the updated user data
-    console.log("Saving user data");
     await user.save();
 
     // Return a success message
@@ -419,11 +448,9 @@ const getUserById = asyncHandler(async (req, res) => {
 // Route GET /api/v1/users/profile/:username
 // Access Public
 const getUserByUsername = asyncHandler(async (req, res) => {
-  console.log("Query: ", req.query);
   const { username } = req.query;
 
   // Find the user by username
-  console.log("Fetching user by username: ", username);
   const user = await User.findOne({ username }).select('-password').populate('posts');
 
   if (user) {
@@ -539,32 +566,19 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // Route POST /api/v1/users/resources
 // Access Private
 const postUserResources = asyncHandler(async (req, res) => {
-  try {
-    const response = await postResource(req, res);
-    // 
-    if (response) {
-      if (response === null) {
-        res.status(500).send("Unable to upload")
-      } else {
-        // console.log("File has been saved successfully");
-        // console.log(response)
-        res.json(response)
-      }
+  const response = await postResource(req, res);
+  // Check if the response is null
+  if (response) {
+    if (response === null) {
+      res.status(500).send("Unable to upload")
+    } else {
+      res.json(response)
     }
-  } catch (err) {
-    console.log(err)
   }
-  // await postResource(req, res)
-  // .then((response) => {
-  //   console.log(`I'm here too=========${response}===========`)
-  //   return (response)
-  // })
-  //   // 
 });
 
 // Get All Events
 const getAllEvents = asyncHandler(async (req, res) => {
-  console.log("Fetching all events");
   // Fetch all events from the event model
   const allEvents = await Event.find().populate('user', '-password');
 
@@ -617,13 +631,9 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  try {
-    const filesDetails = await getResources(req, res);
-    if (filesDetails) {
-      res.json(filesDetails);
-    }
-  } catch (err) {
-    console.log(err);
+  const filesDetails = await getResources(req, res);
+  if (filesDetails) {
+    res.json(filesDetails);
   }
 });
 
@@ -634,7 +644,6 @@ const getFile = asyncHandler(async (req, res) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     const projectRootDirectory = path.join(__dirname, '../../');
-    console.log(projectRootDirectory);
     const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
     res.sendFile(filePath)
 })
@@ -644,17 +653,11 @@ const getFile = asyncHandler(async (req, res) => {
 // access	Private
 const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
   const level =req.params.level
-  console.log(level)
-  try {
-    const allResources = await getSpecifiedResources(level)
-    if (allResources) {
-      // console.log(allResources)
-      res.json(allResources)
-    }
-  } catch (err) {
-    console.log(err)
+  const allResources = await getSpecifiedResources(level)
+  if (allResources) {
+    res.json(allResources)
   }
-})
+});
 
 // @desc	Update a user resources
 // Route	PUT  /api/v1/users/resources
@@ -668,17 +671,13 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
   // res.status(200).json({ message: 'Delete a Resource' });
-    try {
-      const response = await deleteResource(req, res);
-      if (response === "Access Approved") {
-        res.status(200).send(response)
-      } else if (response === "Access Denied") {
-        res.status(200).send(response);
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  });
+  const response = await deleteResource(req, res);
+  if (response === "Access Approved") {
+    res.status(200).send(response)
+  } else if (response === "Access Denied") {
+    res.status(200).send(response);
+  }
+});
 
 
 
@@ -714,7 +713,6 @@ const getUserPayments = asyncHandler(async (req, res) => {
 	  const userId = req.params.userId; // Get the user ID from the query parameters
   
 	  // Fetch the user's posts from the database
-    console.log("Fetching payments for user: ", userId);
 	  const userPayments = await Payment.find({ user: userId })
     .populate('category')
     .sort({ createdAt: -1 });
@@ -723,7 +721,6 @@ const getUserPayments = asyncHandler(async (req, res) => {
 		res.status(404).json({ message: "No payments found for this user." });
 	  } else {
 		res.status(200).json(userPayments);
-		console.log("Got user payments successfully: ", userPayments.length);
 	  }
 	} catch (error) {
 	  console.error("Error fetching user payments:", error);
@@ -736,26 +733,17 @@ const getUserPayments = asyncHandler(async (req, res) => {
 // Route	POST  /api/v1/users/payments
 // access	Private
 const postUserPayment = asyncHandler(async (req, res) => {
-  try {
-    await initiatePayment(req, res);
-  } catch (error) {
-    console.log(error);
-  }
+  await initiatePayment(req, res);
 });
 
 const verifyUserPayment = asyncHandler(async (req, res) => {
-  try {
-    await verifyPayments(req, res);
-  } catch (error) {
-    console.log(error);
-  }
+  await verifyPayments(req, res);
 });
 
 const getSearchResults = asyncHandler(async (req, res) => {
   const value = req.query.value;
   const filter = req.query.filter;
   const data = await getData(value, filter)
-  console.log(data)
   res.json(data)
 })
 
@@ -789,4 +777,6 @@ export {
   verifyUserPayment,
   resendOTP,
   getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 };

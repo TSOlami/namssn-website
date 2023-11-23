@@ -75,7 +75,7 @@ const EditProfileForm = ({ handleModal }) => {
           navigate('/profile');
           handleModal();
         } catch (err) {
-          toast.error(err?.data?.message || err?.error)
+          toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
         }
       },
 	});
@@ -100,7 +100,7 @@ const EditProfileForm = ({ handleModal }) => {
           <img src={file || profilePicture || ProfileImg} alt="" className='profile-image m-2'/>
           </label>
 
-          <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
+          <input onChange={onUpload} type="file" name="profile" id="profile" className="" style={{ display: 'none' }}/>
         </div>
         <div>
           <label htmlFor="name">Name</label>
@@ -132,7 +132,7 @@ const EditProfileForm = ({ handleModal }) => {
         <option value="" disabled>
           Select your level
         </option>
-        {levelOptions.map((level) => (
+        {levelOptions?.map((level) => (
           <option key={level} value={level}>
             {level}
           </option>

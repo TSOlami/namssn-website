@@ -1,6 +1,5 @@
 import { AboutImg } from "../assets";
-import { Footer, NavBar } from "../components";
-import Team from "../components/Team";
+import { Footer, NavBar, Team, TechTeam } from "../components";
 import { teamMembers } from "../constants";
 import { motion } from "framer-motion";
 const AboutUsPage = () => {
@@ -12,9 +11,9 @@ const AboutUsPage = () => {
 		>
 			<NavBar />
 			<div className="pt-24 p-10">
-				<div className="font-bold text-3xl px-8">About Us</div>
+				{/* <div className="font-bold text-3xl px-8">About Us</div> */}
 				<h1 className=" md:text-center font-bold text-3xl md:text-4xl p-4 md:p-8">
-					Know more about NAMSSN FUTMINNA, your HOD, your Excos, and
+					Know more about NAMSSN, your HOD, your Excos, and
 					the 2+2 of the department.
 				</h1>
 				<div className="flex items-center justify-center">
@@ -100,13 +99,14 @@ const AboutUsPage = () => {
 						.filter((member) => member.team === "Tech")
 						.map((member, index) => (
 							<div key={index}>
-								<Team
+								<TechTeam
 									name={member.name}
 									position={member.role}
 									image={member.image}
 									facebook={member.facebook}
 									twitter={member.twitter}
 									linkedin={member.linkedin}
+									github={member.github}
 								/>
 							</div>
 						))}

@@ -1,16 +1,8 @@
-import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
-import { polygon, heroImage } from "../assets"
+import { Link } from "react-router-dom";
+import { polygon, heroImage } from "../assets";
+import { Typewriter } from "react-simple-typewriter";
 
-const Hero = () => {
-  const text = "Share, Discuss, Learn and Grow";
-
-  const typingAnimation = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
-  
+const Hero = () => {  
   return (
 	<section
   id="hero"
@@ -18,31 +10,16 @@ const Hero = () => {
   >
     <div className="relative lg:w-3/5 flex flex-col justify-center items-start w-full padding-x pt-28">
     <div className="text-container border-black">
-      <span className="sr-only">{text}</span>
-      <motion.span
-      initial="hidden"
-      animate="visible"
-      transition={{ 
-        staggerChildren: 0.1
-      }}
-      aria-hidden
-      >
-        {text.split(" ").map((word, index) => (
-          <span key={index} className="inline-block">
-            {word.split('').map((char, index) => (
-              <motion.span 
-              variants={typingAnimation} 
-              className="inline-block font-roboto text-sm md:text-lg text-small md:text- " 
-              key={index}>
-                {char}
-              </motion.span>
-            ))}
-            <span className="inline-block">&nbsp;</span>
-          </span>
-        ))}
-      </motion.span>
+      <span
+        className="inline-block font-roboto text-sm md:text-lg lg:text-xl xl:text-2xl"
+        aria-hidden
+        >
+        <Typewriter words={["Share", "Discuss", "Learn", "Grow"]} loop={true} cursor={true} />
+        &nbsp;
+      </span>
       <span><img src={polygon} alt="polygon" /></span>
       </div>
+      
     <div className="header-text">
     NAMSSN <br />
     FUTMINNA Chapter

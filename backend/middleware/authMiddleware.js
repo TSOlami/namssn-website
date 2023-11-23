@@ -14,7 +14,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // Extract the JWT token from the request cookies.
   token = req.cookies.jwt;
- 
+
   if (token) {
     try {
       // Verify and decode the JWT token using the secret key.
@@ -31,7 +31,7 @@ const protect = asyncHandler(async (req, res, next) => {
     }
   } else {
     res.status(401);
-    throw new Error('Not Authorized, no token');
+    throw new Error('Not Authorized, please login again');
   }
 });
 

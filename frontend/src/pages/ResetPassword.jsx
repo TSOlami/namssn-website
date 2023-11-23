@@ -48,10 +48,11 @@ const ResetPassword = () => {
 			// Reset the password
 			try {
 				// Reset the password
-				const res = await resetPassword({username, password});
-				console.log(res);
+				const res = await toast.promise(resetPassword({username, password}), {
+					pending: "Resetting password...",
+				});
+
 				if (res.data) {
-					console.log("Email: ", res?.data?.email );
 					// Send a congratulatory email to the user
 					await sendMail({ username, userEmail: res?.data?.email, text: msg });
 					// Display a success message
@@ -63,8 +64,7 @@ const ResetPassword = () => {
 
 				toast.error(res?.error?.error?.data?.message || res?.error?.data?.message);
 			} catch (err) {
-				toast.error(err?.data?.message || err?.error)
-
+				toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 			}
 		},
 	});

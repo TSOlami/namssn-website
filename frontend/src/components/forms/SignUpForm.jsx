@@ -87,12 +87,13 @@ const SignUpForm = () => {
         // Registration successful, now send the registration email
         let { username, email } = res;
         if (username && email) {
-          await sendMail({ username, userEmail: email, text: msg }).unwrap();
+          const msgWithUsername = `Hi ${username}! ${msg}`;
+          await sendMail({ username, userEmail: email, text: msgWithUsername }).unwrap();
           return Promise.resolve(msg);
         }
         navigate('/home');
       } catch (err) {
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
 		},
 	});
@@ -212,7 +213,7 @@ const SignUpForm = () => {
           placeholder="Confirm your password"
           autoComplete="new-password"
         />
-        {showPassword ? (
+        {showConfirmPassword ? (
           <FaRegEyeSlash
             className="absolute right-2 flex self-center justify-center"
             onClick={handleShowConfirmPassword}

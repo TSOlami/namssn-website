@@ -1,6 +1,8 @@
+import { Element } from "react-scroll";
+import { motion } from "framer-motion";
+
 import { NavBar, Footer } from "../components";
 import { Hero, AboutUs, Features, FAQs, ContactUs } from "../sections";
-import { motion } from "framer-motion";
 
 const Landing = () => {
 	return (
@@ -9,23 +11,33 @@ const Landing = () => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: -100 }}
 			transition={{ duration: 0.5 }}
-			className="relative"
+			className="relative overflow-hidden"
 		>
 			<NavBar />
 			<section className="xl:padding-1 wide:padding-r padding-b">
-				<Hero />
+			<Element name="hero">
+        <Hero />
+      </Element>
 			</section>
 			<section className="padding">
-				<AboutUs />
+			<Element name="about">
+        <AboutUs />
+      </Element>
 			</section>
 			<section className="padding">
-				<Features />
+			<Element name="features">
+        <Features />
+      </Element>
 			</section>
 			<section className="padding">
-				<FAQs />
+			<Element name="faqs">
+        <FAQs />
+      </Element>
 			</section>
 			<section className="padding" id="contact-us">
-				<ContactUs />
+			<Element name="contact" id="contact-us">
+        <ContactUs />
+      </Element>
 			</section>
 			<section>
 				<Footer />

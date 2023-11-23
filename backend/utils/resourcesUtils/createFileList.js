@@ -9,7 +9,7 @@ const createFileList = async (response) => {
           const formattedDate = formatter.format(date);
           const fileDetails = {
             [resource.fileUrl]: {
-              uploaderUsername: resource.name,
+              uploaderUsername: resource.uploaderName,
               uploaderId: resource.user,
               title: resource.title,
               description: resource.description,

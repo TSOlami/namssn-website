@@ -24,23 +24,9 @@ const SignInForm = () => {
 
   useEffect(() => {
     if (userInfo) {
-      // Trigger sending the email after a successful login
-      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
-      const { email } = userInfo;
-
-      if (email) {
-        sendMail({ userEmail: email, text: msg }).then((response) => {
-          if (response.error) {
-            console.error("Failed to send email after login.");
-            toast.error("Failed to send a welcome email. Please try again.");
-          } else {
-            console.log("Email sent successfully after login.");
-          }
-        });
-      }
       navigate('/home');
     }
-  }, [navigate, sendMail, userInfo]);
+  }, [navigate, userInfo]);
 
 	// Schema and configuration for form validation
 	const initialvalues = {
@@ -49,9 +35,8 @@ const SignInForm = () => {
 	};
 	const validationSchema = Yup.object({
 		email: Yup.string()
-			.required("This field is required")
-			.min(5, "Must be 5 characters or more")
-			.max(30, "Too long"),
+			.email("Invalid email address")
+			.required("Email is required"),
 
 		password: Yup.string()
 			.required("This field is required")
@@ -69,7 +54,7 @@ const SignInForm = () => {
 
         dispatch(setCredentials({...res}));
         // Trigger sending the email after a successful login
-      const msg = "Welcome back to NAMSSN, FUTMINNA chapter! We're excited to have you back on board.";
+      const msg = "Welcome back! We're excited to have you back on board.";
       const { email } = userInfo;
       const subject = "You logged in!"
 
@@ -78,14 +63,12 @@ const SignInForm = () => {
           if (response.error) {
             console.error("Failed to send email after login.");
             toast.error("Failed to send a welcome email. Please try again.");
-          } else {
-            console.log("Email sent successfully after login.");
           }
         });
       }
         navigate('/home');
       } catch (err) {
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
 		},
 	});

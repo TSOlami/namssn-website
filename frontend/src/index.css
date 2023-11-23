@@ -86,7 +86,6 @@
     max-height: 200px;
     object-position: center;
     object-fit: cover;
-    object-fit: contain;
     border-radius: 10px;
   }
 }
@@ -152,7 +151,7 @@
   }
 
   input[type='file'] {
-    @apply block;
+    @apply hidden;
   }
 }
 
@@ -172,6 +171,7 @@
 
 .hamburger {
   display: none;
+  z-index: 999;
 }
 
 .underline-blue {
@@ -245,7 +245,7 @@
     position: fixed;
     right: 1rem;
     top: 2vh;
-    z-index: 10;
+    z-index: 999;
     background: white;
     border-radius: 5px;
   }

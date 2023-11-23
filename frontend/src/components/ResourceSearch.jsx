@@ -19,24 +19,21 @@ const ResourceSearch = ({query}) => {
     const tempData = JSON.parse(localStorage.getItem("filesDetails"));
     var tempData2 = [...Object.values(tempData)]
     tempData2 = tempData2.flat()
-    // console.log(tempData2)
     
     const newData = {}
 
     if (query && tempData2 && tempData2.length !== 0) {
-        const myfileList = tempData2.map(obj => Object.keys(obj)[0])
+        const myfileList = tempData2?.map(obj => Object.keys(obj)[0])
         myfileList.forEach((file, index) => {
             if (tempData2[index][file]['title'].toLowerCase().includes(query.toLowerCase())) {
                 Object.keys(tempData).forEach((key) => {
                     for (let j=0; j<tempData[key].length; j++) {
                         if (isSubDictPresent(tempData[key][j], {[file]: tempData2[index][file]})) {
-                            console.log(file)
                             if (Object.keys(newData).includes(key)) {
                                 newData[[key]].push({[file]: tempData2[index][file]})
                             } else {
                                 newData[[key]] = [{[file]: tempData2[index][file]}]
                             }
-                            console.log(newData)
                         }
                     }
                 });
@@ -45,7 +42,7 @@ const ResourceSearch = ({query}) => {
     }
     var tempData3 = [...Object.values(newData)]
     tempData3 = tempData3.flat()
-    const fileList = tempData3.map(obj => Object.keys(obj)[0])
+    const fileList = tempData3?.map(obj => Object.keys(obj)[0])
     return (
         <div className="w-full">
             <div className="pt-4 pl-6 text-gray-400">
