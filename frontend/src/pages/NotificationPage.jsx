@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";	
+
 
 import {
 	AnnouncementContainer,
@@ -14,18 +17,38 @@ import {
 	useGetNotificationsQuery,
 	useClearNotificationsMutation,
 	setNotifications,
+	logout,
+	useLogoutMutation,
 } from "../redux";
 import { FaTrash } from "react-icons/fa6";
 
 const NotificationPage = () => {
 	// Use the hook to get notifications from the backend
-	const { data: notifications, isLoading } = useGetNotificationsQuery();
+	const { data: notifications, isLoading, error } = useGetNotificationsQuery();
 
-	// Use the hook to clear notifications from the backend
-	const [clearNotifications] = useClearNotificationsMutation();
+	// Use the navigate hook from the react-router-dom to navigate to a different route
+	const navigate = useNavigate();
 
 	// Use the hook to dispatch actions
 	const dispatch = useDispatch();
+
+	// Use the useLogoutMutation hook to logout a user
+	const [logutUser] = useLogoutMutation();
+	
+  // Add a useEffect hook to check if a user is properly authenticated
+  useEffect(() => {
+    if (error?.status === 401) {
+      // If the user is not authenticated, logout the user
+      logutUser();
+      // Dispatch the logout action
+      dispatch(logout());
+      toast.error("Unauthorized, You might need to login again.");
+      navigate("/signin");
+    }
+  }, [error, dispatch, logutUser]);
+
+	// Use the hook to clear notifications from the backend
+	const [clearNotifications] = useClearNotificationsMutation();
 
 	// Clear notifications
 	const handleClearNotifications = async () => {
