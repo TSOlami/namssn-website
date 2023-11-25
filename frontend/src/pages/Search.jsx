@@ -112,7 +112,7 @@ const Search = () => {
                                 Posts
                             </div>
                     </div>
-                    {filter==='all' && data.users && data.users.length!==0 && <div className="ml-6 mt-4">
+                    {filter==='all' && data.users && data.users.length!==0 && <div className="ml-6 mt-8">
                         <div className="mb-2 font-serif text-lg text-gray-400">
                             <span>Users</span>
                         </div>
@@ -123,7 +123,7 @@ const Search = () => {
                             />
                         ))}
                     </div>}
-                    {filter==='users' && data.users && data.users.length!==0 ? (<div className="ml-6 mt-4">
+                    {filter==='users' && data.users && data.users.length!==0 ? (<div className="ml-6 mt-8">
                         <div className="mb-2 font-serif text-lg text-gray-400">
                             <span>Users</span>
                         </div>
