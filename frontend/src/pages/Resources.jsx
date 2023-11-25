@@ -98,6 +98,28 @@ const Resources = () => {
         const level4FileList = data['400 Level'] ? data['400 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level5FileList = data['500 Level'] ? data['500 Level'].map(obj => Object.keys(obj)[0]) : null;
         const telegram = data['N/A'] ? data['N/A'].map(obj => Object.keys(obj)[0]) : null;
+        if (level1FileList === null && level2FileList === null && level3FileList === null
+            && level4FileList === null && level5FileList === null && telegram === null) {
+            return (
+                    <div className="lg:flex lg:justify-between">
+                        <Sidebar/>
+                        <div className="text-xl flex flex-col items-center font-roboto text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
+                            <div><span>No resources uploaded yet</span></div>
+                        </div>
+                        <div className={isPopUpVisible ? "blur-[2px] pointer-events-none lg:w-[65%] sm:w-[100%]" : "lg:w-[65%] sm:w-[100%] block"}>
+                            <button onClick={handlePopUpOpen} className="drop-shadow-2xl ring-2 hover:ring-4 fring-4 fixed left-[45%] top-[45%] z-10 bg-green-600 text-white py-2 px-4 rounded-full">
+                            <BiSolidUpvote color="#fff"/>
+                            </button>
+                        </div>
+                        <div className="w-[27%] sm:hidden bg-slate-800 md:hidden hidden lg:block">
+                            <AnnouncementContainer />
+                        </div>
+                        <div className="fixed z-1 bottom-[7em] left-[10%] md:left-[15em] lg:left-[20em] w-[100%] md:w-[50%]">
+                            <FileForm name={userInfo?.name} userId={userInfo?._id} show={isPopUpVisible} onClose={handlePopUpClose} />
+                        </div>        
+                    </div>
+            )
+        }
         return (
             <div className="relative">
                 <div className="flex relative z-2">
