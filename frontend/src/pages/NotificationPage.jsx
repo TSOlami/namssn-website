@@ -29,6 +29,9 @@ const NotificationPage = () => {
 	// Use the navigate hook from the react-router-dom to navigate to a different route
 	const navigate = useNavigate();
 
+	// Use the hook to dispatch actions
+	const dispatch = useDispatch();
+
 	// Use the useLogoutMutation hook to logout a user
 	const [logutUser] = useLogoutMutation();
 	
@@ -46,9 +49,6 @@ const NotificationPage = () => {
 
 	// Use the hook to clear notifications from the backend
 	const [clearNotifications] = useClearNotificationsMutation();
-
-	// Use the hook to dispatch actions
-	const dispatch = useDispatch();
 
 	// Clear notifications
 	const handleClearNotifications = async () => {
