@@ -1,6 +1,6 @@
-import { FacebookIcon, TwitterIcon, LinkedinIcon, GithubIcon, WebIcon } from "../assets";
+import { LinkedinIcon, GithubIcon, WebIcon } from "../assets";
 
-const TechTeam = ({ image, facebook, twitter, linkedin, github, website, name, position }) => {
+const TechTeam = ({ image, linkedin, github, website, name, position }) => {
 	return (
 		<div className="flex flex-col w-[250px] relative gap-3 m-5 shadow-2xl">
 			<a href={website}>
@@ -18,20 +18,14 @@ const TechTeam = ({ image, facebook, twitter, linkedin, github, website, name, p
       </div>
 
 			<div className="bg-black flex flex-row items-center justify-center text-xl gap-4 text-blue-400 absolute w-28 top-[190px] h-14 mt-5 rounded-tl-2xl pr-4">
-				<a href={facebook} className="hover:scale-125">
-					<img src={FacebookIcon} alt="facebook" />
-				</a>
-				<a href={twitter}>
-					<img src={TwitterIcon} alt="twitter" />
+				<a href={github} className="hover:scale-125">
+					<img src={GithubIcon} alt="github" className="object-cover" />
 				</a>
 				<a href={linkedin} className="hover:scale-125">
-					<img src={LinkedinIcon} alt="linkedin" />
+					<img src={LinkedinIcon} alt="linkedin" className="object-cover" />
 				</a>
-				<a href={github}>
-					<img src={GithubIcon} alt="github" />
-				</a>
-				<a href={website}>
-					<img src={WebIcon} alt="website" />
+				<a href={website}className="hover:scale-125">
+					<img src={WebIcon} alt="website" className="object-cover" />
 				</a>
 			</div>
 
