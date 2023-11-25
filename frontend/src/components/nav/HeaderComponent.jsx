@@ -85,13 +85,6 @@ const HeaderComponent = ({ title, url, back }) => {
 						>
 							<FaMagnifyingGlass />
 						</a>
-
-						{/* <button className="border bg-gray-400 rounded-md">
-						{" "}
-						<a href={`http://localhost:3000/search?key=${search}`}>
-							Go
-						</a>
-					</button> */}
 					</form>
 				</div>
 			)}

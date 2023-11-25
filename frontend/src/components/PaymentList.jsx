@@ -1,7 +1,9 @@
 import  { useEffect } from "react";
-import { useAllPaymentsQuery, setCategories } from "../redux"; // Import Redux Toolkit Query hook and action creator
+import { useAllPaymentsQuery, setCategories, useLogoutMutation, logout } from "../redux"; // Import Redux Toolkit Query hook and action creator
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { HeaderComponent, Loader } from "../components";
 import { ErrorPage } from "../pages";
 
@@ -9,8 +11,27 @@ const PaymentList = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  // Use the navigate hook from the react-router-dom to navigate to a different route
+  const navigate = useNavigate();
+
+  // Use the useLogoutMutation hook to logout a user
+  const [logutUser] = useLogoutMutation();
+
   // Use the useAllPaymentsQuery hook to fetch payments
-  const { data: payments, isLoading, isError } = useAllPaymentsQuery();
+  const { data: payments, isLoading, error, isError } = useAllPaymentsQuery();
+
+  
+  // Add a useEffect hook to check if a user is properly authenticated
+  useEffect(() => {
+    if (error?.status === 401) {
+      // If the user is not authenticated, logout the user
+      logutUser();
+      // Dispatch the logout action
+      dispatch(logout());
+      toast.error("Unauthorized, You might need to login again.");
+      navigate("/signin");
+    }
+  }, [error, dispatch, logutUser]);
 
   useEffect(() => {
     if (!isLoading && !isError && Array.isArray(payments)) {

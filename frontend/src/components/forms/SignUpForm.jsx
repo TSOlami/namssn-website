@@ -40,7 +40,7 @@ const SignUpForm = () => {
     }
   }, [navigate, userInfo]);
 
-  const [ register ] = useRegisterMutation();
+  const [ register, { isLoading } ] = useRegisterMutation();
 
   const [ sendMail ] = useSendMailMutation();
 
@@ -229,12 +229,22 @@ const SignUpForm = () => {
         <FormErrors error={formik.errors.confirmPassword} />
       ) : null}
 
-      <button
-        type="submit"
-        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
-      >
-        Sign Up
-      </button>
+      {isLoading ? (
+        <button
+          type="submit"
+          className="bg-primary text-white rounded-md py-2 mt-4"
+          disabled
+        >
+          Registering...
+        </button>
+      ) : (
+        <button
+          type="submit"
+          className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
+        >
+          Sign Up
+        </button>
+      )}
 
     <div className="text-right">
       Already have an account?{" "}

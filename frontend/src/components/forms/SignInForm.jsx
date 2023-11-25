@@ -16,7 +16,7 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [ login ]= useLoginMutation();
+  const [ login, { isLoading } ] = useLoginMutation();
 
   const [sendMail] = useSendMailMutation();
 
@@ -135,12 +135,22 @@ const SignInForm = () => {
     <Link to="/forgot-password" className="text-gray-500 text-right text-md">
       Forgot Password?
     </Link>
-    <button
-      type="submit"
-      className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
-    >
-      Log In
-    </button>
+    {isLoading ? (
+      <button
+        type="submit"
+        className="bg-primary text-white rounded-md py-2 mt-4"
+        disabled
+      >
+        Logging in...
+      </button>
+    ) : (
+      <button
+        type="submit"
+        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
+      >
+        Log In
+      </button>
+    )}
 
     <div className="text-right">
       Don&rsquo;t have an account?{" "}
