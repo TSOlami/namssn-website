@@ -194,7 +194,7 @@ router.get('/events', getAllEvents);
  * @access Private 
  */
 router.route('/announcements')
-.get(protect, getAllAnnouncements);
+.get(getAllAnnouncements);
 
 // Route for getting all announcements by user
 router
@@ -239,7 +239,7 @@ router
 // Route for getting and deleting all notifications
 router
 .route('/notifications')
-.get(protect, getNotifications)
+.get(getNotifications)
 .delete(protect, clearNotifications);
 
 // Route for marking notifications as seen
