@@ -2,7 +2,10 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const bot_token = '6844885618:AAEtMYQRWmJK5teMpL8AY489J5Dr86B-12I';
+let bot_token = process.env.BOT_TOKEN;
+if (process.env.NODE_ENV === 'production') {
+  bot_token = process.env.PRODUCTION_BOT_TOKEN
+}
 const getTelFile = async (req, res) => {
     const filenameAndId = req.params.filename;
     const file_id = filenameAndId.split('+')[0]
