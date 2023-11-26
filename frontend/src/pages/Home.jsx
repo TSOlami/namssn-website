@@ -125,15 +125,15 @@ const Home = () => {
     }
   };
 
-  // if (page === totalPages) {
-  //   setHasMore(false);
-  // }
-
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  if (isLoadingPosts) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
 
   return (
     <motion.div

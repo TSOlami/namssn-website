@@ -141,6 +141,7 @@ const EventForm = ({ selectedOption }) => {
 		}
 	}
 
+	
 	return (
 		<form
 		className="flex flex-col justify-center p-5 md:px-10 h-full"
