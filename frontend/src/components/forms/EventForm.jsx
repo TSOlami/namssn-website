@@ -64,7 +64,7 @@ const EventForm = ({ selectedOption }) => {
 					// Reload the page after 5 seconds
 					setTimeout(() => {
 						window.location.reload();
-					}, 5000);
+					}, 3000);
 				} else {
 					// If creating a new event, use the create mutation
 					const res = await toast.promise(createEvent(updatedValues).unwrap(), {
@@ -86,7 +86,7 @@ const EventForm = ({ selectedOption }) => {
 				// Reload the page after 5 seconds
 				setTimeout(() => {
 					window.location.reload();
-				}, 5000);
+				}, 3000);
 			} catch (error) {
 				toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 			}
@@ -135,7 +135,7 @@ const EventForm = ({ selectedOption }) => {
 			// Reload the page after 5 seconds
 			setTimeout(() => {
 				window.location.reload();
-			}, 5000);
+			}, 3000);
 		} catch (error) {
 			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 		}
