@@ -74,6 +74,10 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
     setImages([]);
   };
 
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -119,7 +123,6 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
                 {/* <div className="bg-gray-200 w-8 h-8 rounded-full"></div>
                 <div className="bg-gray-200 w-8 h-8 rounded-full"></div> */}
               </div>
-              {isLoading && <Loader />}
               <button
                 type="submit"
                 className={

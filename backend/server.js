@@ -11,7 +11,10 @@ import path from 'path'
 import createServer from './utils/server.js';
 
 const app = createServer();
-const bot_token = process.env.BOT_TOKEN;
+let bot_token = process.env.BOT_TOKEN;
+if (process.env.NODE_ENV === 'production') {
+  bot_token = process.env.PRODUCTION_BOT_TOKEN
+}
 const chat_id = process.env.CHAT_ID || 1276219038;
 export const bot = new TelegramBot(bot_token, { polling: true });
 bot.on('message', (msg) => {
@@ -35,7 +38,6 @@ bot.on('photo', (msg) => {
 
 // Define the port number for the server, default to 5000 if not provided in the environment
 const port = process.env.PORT || 5000;
-
 // ---------------- deployment-----------------------
 const __dirname1=path.resolve();
 if (process.env.NODE_ENV === 'production') {

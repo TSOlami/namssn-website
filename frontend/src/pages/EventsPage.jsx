@@ -10,6 +10,7 @@ const EventsPage = () => {
 	if (isLoading) {
 		return <Loader />;
 	}
+
 	return (
 		<motion.main
 			initial={{ opacity: 0, x: 100 }}
@@ -23,17 +24,28 @@ const EventsPage = () => {
 						Upcoming Events
 					</h1>
 				</div>
-				<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
-				{data?.map((event, index) => (
-            <Event
-              key={index}
-              image={event?.image}
-							location={event?.location}
-							title={event?.title}
-							date={event?.date}
-            />
-          ))}
-				</div>
+				{data && data.length > 0 ? (
+					<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
+					{data?.map((event, index) => (
+							<Event
+								key={index}
+								image={event?.image}
+								location={event?.location}
+								title={event?.title}
+								date={event?.date}
+							/>
+						))}
+					</div>
+					) : (
+						<div className="flex flex-col justify-center items-center">
+							<h1 className="text-xl font-bold text-center pb-5">
+								No events found
+							</h1>
+							<p className="text-lg text-center pb-5">
+								Please check back later
+							</p>
+						</div>
+					)}
 			</div>
 			<Footer />
 		</motion.main>
