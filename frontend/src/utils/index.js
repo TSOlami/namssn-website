@@ -1,4 +1,5 @@
 import { formatDateToTime } from "./formatDate";
+import { formatDateToString } from "./formatDate";
 import { convertToBase64 } from "./convertToBase64";
 import { getUser } from "./getUser";
 import { generateOTP } from "./generateOTP";
@@ -15,4 +16,4 @@ import { checkStudentEmailExistence } from "./checkStudentEmailExistence";
 import ScrollToSectionLink from "./scrollUtils";
 import { sendMailNotice } from "./sendMailNotice";
 
-export { formatDateToTime, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP, ScrollToSectionLink, checkEmailExistence, checkStudentEmailExistence, sendMailNotice };
+export { formatDateToTime, formatDateToString, convertToBase64, getUser, generateOTP, verifyOTP, accountVerificationOTP, resendAccountVerificationOTP, resetPassword, verifyAccount, verifyPasswordOTP, getPosts, resendOTP, ScrollToSectionLink, checkEmailExistence, checkStudentEmailExistence, sendMailNotice };

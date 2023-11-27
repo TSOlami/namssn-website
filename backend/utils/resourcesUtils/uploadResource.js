@@ -23,6 +23,7 @@ const uploadResource = async (filename, description, userId, uploaderName, fileU
         const options = { day: 'numeric', month: 'short', year: '2-digit' };
         const formatter = new Intl.DateTimeFormat('en', options);
         const formattedDate = formatter.format(date);
+        console.log("successfully uploaded")
         return [savedResource, formattedDate, updatedUser.name];
     } catch (err) {
         console.log(err);

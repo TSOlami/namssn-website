@@ -18,7 +18,7 @@ const resourceSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Reference to the user who created the resource
-      required: true,
+      required: false,
     },
     uploaderName: {
       type: String,

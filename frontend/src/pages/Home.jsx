@@ -1,7 +1,9 @@
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import {
   Sidebar,
@@ -12,7 +14,7 @@ import {
   Loader,
   AddPostForm,
 } from "../components";
-import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications } from "../redux";
+import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications, logout, useLogoutMutation } from "../redux";
 
 const Home = () => {
   // Use the useSelector hook to access redux store state
@@ -21,16 +23,34 @@ const Home = () => {
   // Use the useDispatch hook to dispatch actions
   const dispatch = useDispatch();
 
+  // Use the navigate hook from the react-router-dom to navigate to a different route
+  const navigate = useNavigate();
+
+  // Use the useLogoutMutation hook to logout a user
+  const [logutUser] = useLogoutMutation();
+
   // State for managing posts
   const [postData, setPostData] = useState([]);
 
   // Use the useAllPostsQuery hook to get all posts
-  const { data: posts, isLoading } = useAllPostsQuery(Number(page));
+  const { data: posts, isLoading: isLoadingPosts } = useAllPostsQuery(Number(page));
 
-  // Use the useGetNotificationsQuery hook to get notifications
-  const { data: notifications } = useGetNotificationsQuery();
+  // Use the useGetNotificationsQuery hook to get notifications from the API
+  const { data: notifications, isLoading: isLoadingNotis, error  } = useGetNotificationsQuery();
 
-  // Fetch notifications when user logs in and dispatch to Redux store
+  // Add a useEffect hook to check if a user is properly authenticated
+  useEffect(() => {
+    if (error?.status === 401) {
+      // If the user is not authenticated, logout the user
+      logutUser();
+      // Dispatch the logout action
+      dispatch(logout());
+      toast.error("Unauthorized, You might need to login again.");
+      navigate("/signin");
+    }
+  }, [error, dispatch, logutUser]);
+
+  // Set the notifications in the redux store
   useEffect(() => {
     if (notifications) {
       dispatch(setNotifications(notifications));
@@ -46,8 +66,14 @@ const Home = () => {
   // Dispatch the setPosts action to set the posts in the redux store
   useEffect(() => {
     if (posts) {
-      // Merge the new data with the existing postData
-      setPostData((prevData) => [...prevData, ...posts.posts]);
+      // Identify unique post IDs
+      const postIds = new Set(postData.map(post => post._id));
+
+      // Filter out posts that already exist in the postData array
+      const newPosts = posts.posts.filter(post => !postIds.has(post._id));
+      
+      // Append the new posts to the postData array
+      setPostData((prevData) => [...prevData, ...newPosts]);
       setIsGettingMorePosts(false);
     }
   }, [posts]);
@@ -89,21 +115,25 @@ const Home = () => {
     try {
       if (Number(pageCurrent) < Number(totalPages)) {
         dispatch(setCurrentPage(pageCurrent + 1));
+      } else {
+        // If the current page is the last page, set hasMore to false
+        setHasMore(false);
+        setIsGettingMorePosts(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (page === totalPages) {
-    setHasMore(false);
-  }
-
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  if (isLoadingPosts) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
 
   return (
     <motion.div
@@ -114,7 +144,7 @@ const Home = () => {
     >
       <Sidebar />
       <div className="flex flex-col relative w-full">
-      {isLoading === false && <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
+      {isLoadingPosts === false && <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
           <HeaderComponent title="Home" url={"Placeholder"} />
       </div>}
 
@@ -131,12 +161,12 @@ const Home = () => {
         ))}
 
         {/* Loader */}
-        {isLoading && <Loader />}
+        {isLoadingPosts || isLoadingNotis && <Loader />}
 
         {/* Paginate posts buttons */}
         {hasMore && (
           <div className="flex m-auto pb-12 md:pb-0">
-            {isLoading || isgettingMorePosts ? (
+            {isLoadingPosts || isgettingMorePosts ? (
               <button
               disabled={true}
               className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white cursor-not-allowed"

@@ -1,4 +1,3 @@
-import checkUploadDirectory from "./resourcesUtils/checkUploadDirectory.js";
 import uploadResource from "./resourcesUtils/uploadResource.js";
 import * as fs from 'fs';
 import createFileList from "./resourcesUtils/createFileList.js";
@@ -8,7 +7,12 @@ import path from "path";
 const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import getLastSixResources from "./resourcesUtils/getLastSixResources.js";
+import axios from "axios";
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+const bot_token = process.env.BOT_TOKEN;
 const getResources = async (req, res) => {
   try {
     const level1Resources = await getLastSixResources('100 Level');
@@ -16,14 +20,19 @@ const getResources = async (req, res) => {
     const level3Resources = await getLastSixResources('300 Level');
     const level4Resources = await getLastSixResources('400 Level');
     const level5Resources = await getLastSixResources('500 Level');
-    const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources];
+    const telegram = await getLastSixResources('N/A');
+    const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources, telegram];
     const formattedResponse = {}
     for (let i=0; i<resources.length; i++) {
-      //  creates a list list of dict with 'filename' as the key and 'details' as the value
+      //  creates a list of dict with 'filename' as the key and 'details' as the value
       if (resources[i].length !== 0) {
         const formattedResources = await createFileList(resources[i])
-        const level = ((i+ 1) * 100).toString() + ' Level';
-        console.log(formattedResources)
+        let level = '';
+        if (i+1 === 6) {
+          level = 'N/A'
+        } else {
+          level = ((i+ 1) * 100).toString() + ' Level';
+        }
         formattedResponse[level] = formattedResources
         
       }
@@ -42,13 +51,32 @@ const postResource = async (req, res) => {
       return res.status(400).send('No file uploaded.');
   }
   const filename = file.name;
-  const uploadDirectory = 'uploads';
 
   try {
-      await checkUploadDirectory(uploadDirectory); // check if the upload directory is already created
-      const uniquefileName = Date.now() + '_' + Math.random().toString(36).substring(7);
-      const fileUrl = uniquefileName + '_' + filename;
-      await fs.promises.writeFile(`${uploadDirectory}/${fileUrl}`, file.data); // saves the file on the backend server
+    if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
+      return res.status(400).send('Invalid file data.');
+    }
+    const chatId = process.env.CHAT_ID;
+    console.log(chatId)
+    const fileArrayBuffer = file.data.buffer;
+    // const fileBuffer = Buffer.from(fileArrayBuffer);
+    // const caption = `${description} - ${filename}`;
+    const form = new FormData();
+    const fileBlob = new Blob([Buffer.from(fileArrayBuffer)], { type: 'application/octet-stream' });
+    form.append('chat_id', chatId);
+    form.append('caption', description );
+    form.append('document', fileBlob, filename);
+
+    // Make the API request using axios
+    const res = await axios.post(`https://api.telegram.org/bot${bot_token}/sendDocument`, form, {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
+      },
+    });
+    if (res) {
+      // console.log(res.data)
+      const fileUrl = res?.data?.result?.document?.file_id
+      console.log(fileUrl) 
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, course);
       if (response) {
         const formattedResponse = {[fileUrl]: {
@@ -58,6 +86,7 @@ const postResource = async (req, res) => {
         }}
         return formattedResponse;
       }
+    }
     } catch (err) {
       console.log(err);
       return [];
@@ -67,10 +96,12 @@ const postResource = async (req, res) => {
 // gets the resources for a specified level
 const getSpecifiedResources = async (level) => {
   try {
+    if (level === 'telegram') {
+      level = 'N/A'
+    } 
     const response = await getResourcesByLevel(level);
     if (response) {
       const filesList = createFileList(response);
-      console.log(filesList)
       return filesList
     } else {
       console.log('No response');

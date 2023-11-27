@@ -55,6 +55,10 @@ const formik = useFormik({
   
   });
 
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
+  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col justify-center items-center">
       <div className="bg-white p-5 w-[400px] rounded-3xl">
@@ -114,8 +118,6 @@ const formik = useFormik({
             <FormErrors error={formik.errors.amount} />
           ) : null}
           
-          {isLoading && <Loader />}
-  
           <button
             type="submit"
             className="bg-black text-white rounded-lg p-2 mt-5 hover:bg-slate-700"

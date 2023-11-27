@@ -85,6 +85,10 @@ const EditProfileForm = ({ handleModal }) => {
     const base64 = await convertToBase64(e.target.files[0]);
     setFile(base64);
   };
+
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
   
   return (
     <div className="bg-white rounded-2xl p-4 w-96">
@@ -132,7 +136,7 @@ const EditProfileForm = ({ handleModal }) => {
         <option value="" disabled>
           Select your level
         </option>
-        {levelOptions.map((level) => (
+        {levelOptions?.map((level) => (
           <option key={level} value={level}>
             {level}
           </option>
@@ -210,9 +214,6 @@ const EditProfileForm = ({ handleModal }) => {
           ) : null}
         </div>
         <div>
-
-          {isLoading && <Loader />}
-
           <button 
           type='submit'
           className="bg-primary text-white rounded-lg p-2 mt-2 w-full">

@@ -37,14 +37,14 @@ const Comments = () => {
 	// Use the usePostCommentsQuery hook to fetch comments for the post
 	const [commentText, setCommentText] = useState("");
 
-	// Check if the post was found
-	if (!post) {
-		return <p className="text-center mt-28">This post is unavailable</p>;
-	}
-
 	// Loading indicator while data is being fetched
 	if (isCommentsLoading || isPostLoading) {
 		return <Loader />;
+	}
+
+	// Check if the post was found
+	if (!post) {
+		return <p className="text-center mt-28">This post is unavailable</p>;
 	}
 
 	// const { data: post } = usePostCommentsQuery(postId);
@@ -106,6 +106,7 @@ const Comments = () => {
 						<IoSend />
 					</div>
 				</div>
+				<div className="pb-12">
 				{comments && comments?.length > 0 ? (
 					comments?.map((comment) => {
 						return (
@@ -130,6 +131,7 @@ const Comments = () => {
 						No comments to display.
 					</div>
 				)}
+				</div>
 			</div>
 
 			<AnnouncementContainer />

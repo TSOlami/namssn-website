@@ -9,13 +9,13 @@ import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation,
 
 const EventForm = ({ selectedOption }) => {
 	// Use the useCreateEventMutation hook to create an event
-	const [createEvent] = useCreateEventMutation();
+	const [createEvent, {isLoading: isCreating}] = useCreateEventMutation();
 
 	// Use the useUpdateEventMutation hook to update an event
-	const [updateEvent] = useUpdateEventMutation();
+	const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
 
 	// Use the useDeleteEventMutation hook to delete an event
-	const [deleteEvent] = useDeleteEventMutation();
+	const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
 
 	// State to manage image preview
   const [imagePreview, setImagePreview] = useState(selectedOption?.image || null);
@@ -64,7 +64,7 @@ const EventForm = ({ selectedOption }) => {
 					// Reload the page after 5 seconds
 					setTimeout(() => {
 						window.location.reload();
-					}, 5000);
+					}, 3000);
 				} else {
 					// If creating a new event, use the create mutation
 					const res = await toast.promise(createEvent(updatedValues).unwrap(), {
@@ -86,7 +86,7 @@ const EventForm = ({ selectedOption }) => {
 				// Reload the page after 5 seconds
 				setTimeout(() => {
 					window.location.reload();
-				}, 5000);
+				}, 3000);
 			} catch (error) {
 				toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 			}
@@ -135,12 +135,13 @@ const EventForm = ({ selectedOption }) => {
 			// Reload the page after 5 seconds
 			setTimeout(() => {
 				window.location.reload();
-			}, 5000);
+			}, 3000);
 		} catch (error) {
 			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
 		}
 	}
 
+	
 	return (
 		<form
 		className="flex flex-col justify-center p-5 md:px-10 h-full"
@@ -236,12 +237,31 @@ const EventForm = ({ selectedOption }) => {
 			</div>
 
 			<div className="mt-5 flex flex-row gap-8 ml-auto">
-				<button
-				type="button"
-				onClick={handleDelete}
-				className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
-				>Delete Event</button>
-				<button type="submit" className="bg-primary rounded-lg p-3 text-white hover:opacity-75">Save Event</button>
+				{isDeleting ? (
+					<button className="bg-red-500 rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
+						Deleting...
+					</button>
+				) : (
+					<button
+					type="button"
+					onClick={handleDelete}
+					className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
+					>
+					Delete Event
+					</button>
+				)}
+				{isUpdating || isCreating ? (
+					<button className="bg-primary rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
+						{isUpdating? "Updating..." : "Creating..."}
+					</button>
+				) : (
+					<button
+						type="submit"
+						className="bg-primary rounded-lg p-3 text-white hover:bg-primary-dark transition-all duration-300"
+					>
+						{selectedOption ? "Update Event" : "Create Event"}
+					</button>
+				)}
 			</div>
 		</form>
 	);

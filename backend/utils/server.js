@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-import path from 'path';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
@@ -22,10 +21,6 @@ function createServer() {
   app.use(bodyParser.json());
   app.use(fileUpload());
   
-	const uploadsDirectory = path.join('C:/Users/DH4NN/Documents/ALX/namssn-website', 'uploads');
-
-  app.use('/uploads', express.static(uploadsDirectory));
-
 	const apiVersion = process.env.API_VERSION || 'v1';
 
 	app.use(`/api/${apiVersion}/users`, userRoutes);
