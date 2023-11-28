@@ -95,7 +95,7 @@ return (
         </Link>
       </div>) : (
         <div className="flex flex-col items-center justify-center w-full h-full">
-        <h1 className="text-3xl font-semibold text-gray-700">
+        <h1 className="pt-10 text-2xl md:text-3xl font-semibold text-gray-700">
           This feature is not available yet
         </h1>
         <p className="text-xl font-medium text-gray-500">
