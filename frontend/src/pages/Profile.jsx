@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Marquee from "react-fast-marquee";
 
 import {
 	EditProfileForm,
@@ -127,7 +128,14 @@ const Profile = () => {
         {!isVerified && (
           <div className="border-b-2 border-gray-300 w-full bg-red-50 h-12 flex justify-center items-center">
             <span className="font-normal text-gray-700 text-center">
-              Your account is not verified. Verifying your account helps build trust within the community and allows you to enjoy additional features. Click the &quot;Verify Account&quot; button to get started.
+              <Marquee
+							direction={"left"}
+							gradient={false}
+							speed={75}
+							pauseOnHover={true}
+							>
+							Your account is not verified. Verifying your account helps build trust within the community and allows you to enjoy additional features. Click the &quot;Verify Account&quot; button to get started.
+							</Marquee>
             </span>
           </div>
         )}
