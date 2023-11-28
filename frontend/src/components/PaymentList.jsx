@@ -28,7 +28,7 @@ useEffect(() => {
     logutUser();
     // Dispatch the logout action
     dispatch(logout());
-    toast.error("Unauthorized, You might need to login again.");
+    toast.error("Sorry, You might need to login again.");
     navigate("/signin");
   }
 }, [error, dispatch, logutUser]);
