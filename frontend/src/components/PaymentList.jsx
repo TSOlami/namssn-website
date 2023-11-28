@@ -21,7 +21,6 @@ const PaymentList = () => {
   // Use the useAllPaymentsQuery hook to fetch payments
   const { data: payments, isLoading, error, isError } = useAllPaymentsQuery();
 
-
   // Add a useEffect hook to check if a user is properly authenticated
   useEffect(() => {
     if (error?.status === 401) {
