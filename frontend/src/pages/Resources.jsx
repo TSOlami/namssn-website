@@ -13,7 +13,7 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
@@ -46,7 +46,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
+                const res = await axios.get('https://api-namssn-futminna.onrender.com/api/v1/users/resources');
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                 }
