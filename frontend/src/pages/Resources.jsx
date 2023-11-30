@@ -13,7 +13,7 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+const base_url = "http://localhost:5000/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
@@ -46,7 +46,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://namssn-futminna.onrender.com/api/v1/users/resources');
+                const res = await axios.get('http://localhost:5000/api/v1/users/resources');
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                 }
@@ -98,6 +98,7 @@ const Resources = () => {
         const level4FileList = data['400 Level'] ? data['400 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level5FileList = data['500 Level'] ? data['500 Level'].map(obj => Object.keys(obj)[0]) : null;
         const telegram = data['N/A'] ? data['N/A'].map(obj => Object.keys(obj)[0]) : null;
+        console.log(level1FileList)
         if (level1FileList === null && level2FileList === null && level3FileList === null
             && level4FileList === null && level5FileList === null && telegram === null) {
             return (

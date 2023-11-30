@@ -45,7 +45,6 @@ const ResourceCard = ({
 
   // manage state for the delete options button
   const [openOptions, setOpenOptions] = useState(false);
-  const [buffer, setBuffer] = useState(null);
   const handleSetOpenOptions = () => {
     setOpenOptions(!openOptions);
   };
@@ -75,35 +74,16 @@ const ResourceCard = ({
 
   const viewFile = async (fileUrl) => {
     const data = {'option': 'view'};
-    const res = await axios.get(fileUrl, {params: data});
-    if (res.data) {
-      setBuffer(res.data)
-    }
+    const res = await axios.get(fileUrl, {params: data})
     console.log(fileUrl)
-    // const w = window.open;
-    // w.location = fileUrl;
     
-    // console.log(res.data, "======")
-    // // const bufferContent = Buffer.from(res.data, 'hex');
-    // return (
-    //   <BufferFileViewer bufferContent={res.data} />
-    // )
-    
-    // const uint8Array = new Uint8Array(res.data.split('').map((char) => char.charCodeAt(0)));
-    // // Create a Blob from the Uint8Array
-    // const blob = new Blob([uint8Array], { type: 'application/pdf' });
-
-    // // Create a Blob URL from the Blob
-    // const blobUrl = URL.createObjectURL(blob);
-
-    // // Open a new tab or window with the Blob URL
-    // window.open(blobUrl, '_blank');
   };
   
   const downloadFile = (fileUrl) => {
-    // console.log(fileUrl)
+    console.log(fileUrl)
     const w = window;
     w.location = fileUrl;
+    toast.promise(w.location = fileUrl, {pending: "Downloading file..."});
   };
 
   const handleFileDelete = async (fileUrl) => {	

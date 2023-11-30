@@ -643,6 +643,7 @@ const getUserResources = asyncHandler(async (req, res) => {
 // access	Private
 const getFile = asyncHandler(async (req, res) => {
   try {
+    console.log("here")
     const file = await getTelFile(req, res)
     if (file) {
       res.send(file)

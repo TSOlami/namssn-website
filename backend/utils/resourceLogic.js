@@ -3,8 +3,6 @@ import * as fs from 'fs';
 import createFileList from "./resourcesUtils/createFileList.js";
 import checkUploader from "./resourcesUtils/checkUploader.js";
 import removeResource from "./resourcesUtils/removeResource.js";
-import path from "path";
-const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 import getResourcesByLevel from "./resourcesUtils/getResourcesByLevel.js";
 import getLastSixResources from "./resourcesUtils/getLastSixResources.js";
 import axios from "axios";
@@ -12,7 +10,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const bot_token = process.env.BOT_TOKEN;
+let bot_token = process.env.BOT_TOKEN;
+if (process.env.NODE_ENV === 'production') {
+  bot_token = process.env.PRODUCTION_BOT_TOKEN
+}
 const getResources = async (req, res) => {
   try {
     const level1Resources = await getLastSixResources('100 Level');
@@ -57,7 +58,7 @@ const postResource = async (req, res) => {
       return res.status(400).send('Invalid file data.');
     }
     const chatId = process.env.CHAT_ID;
-    console.log(chatId)
+    console.log(chatId, "====================")
     const fileArrayBuffer = file.data.buffer;
     // const fileBuffer = Buffer.from(fileArrayBuffer);
     // const caption = `${description} - ${filename}`;
@@ -114,22 +115,13 @@ const getSpecifiedResources = async (level) => {
 };
 
 const deleteResource = async (req, res) => {
-  const fileUrl = req.params.filename;
+  const fileUrl = req.params.filename.split('+')[0];
   const senderId = req.body._id;
   // client.delete("files")
   const resourceId = await checkUploader(fileUrl, senderId);
 
   if (resourceId || (req.user && req.user.role === 'admin')) {
-      await removeResource(resourceId, senderId)
-      const filepath = path.join(fileDir + '/uploads', req.params.filename)
-
-      fs.unlink(filepath, async (err) => { // Convert the callback to an async function
-        // deletes the file from the server
-        if (err) {
-            console.log("Unable to delete:", err)
-        }
-        console.log("File has been deleted successfully");
-    })
+    await removeResource(resourceId, senderId)
     return ("Access Approved");
   } else {
       console.log("Uploader not found")
