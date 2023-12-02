@@ -14,6 +14,7 @@ const getTelFile = async (req, res) => {
     const base_url = `https://api.telegram.org/bot${bot_token}`;
     try {
         const fileDetails = await axios.get(`${base_url}/getFile?file_id=${file_id}`);
+        console.log(fileDetails)
         const file_path = fileDetails.data.result.file_path;
         // const file_path = 'documents/file_9.pdf'
         console.log(fileDetails, file_path)

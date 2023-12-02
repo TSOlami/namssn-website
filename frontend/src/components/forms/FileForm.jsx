@@ -9,7 +9,6 @@ import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
-// console.log(process.env)
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";

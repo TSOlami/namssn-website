@@ -51,6 +51,7 @@ const postResource = async (req, res) => {
   if (!file) {
       return res.status(400).send('No file uploaded.');
   }
+
   const filename = file.name;
 
   try {
@@ -58,7 +59,6 @@ const postResource = async (req, res) => {
       return res.status(400).send('Invalid file data.');
     }
     const chatId = process.env.CHAT_ID;
-    console.log(chatId, "====================")
     const fileArrayBuffer = file.data.buffer;
     // const fileBuffer = Buffer.from(fileArrayBuffer);
     // const caption = `${description} - ${filename}`;
@@ -76,14 +76,22 @@ const postResource = async (req, res) => {
     });
     if (res) {
       // console.log(res.data)
-      const fileUrl = res?.data?.result?.document?.file_id
-      console.log(fileUrl) 
-      const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, course);
+      let isLarge = false;
+      let fileUrl = res?.data?.result?.document?.file_id
+      if (file.size > 120360) {
+        isLarge = true;
+        const chatId2 = chatId.slice(4, chatId.length)
+        const message_id = res?.data?.result?.message_id;
+        console.log(chatId2, message_id)
+        fileUrl = `https://t.me/c/${chatId2}/${message_id}`
+      }
+      const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, isLarge=isLarge, course);
       if (response) {
         const formattedResponse = {[fileUrl]: {
         uploaderUsername: response[2], title: filename,
         description: description, date: date, 
-        semester: semester, course: course
+        semester: semester, course: course,
+        isLarge: isLarge
         }}
         return formattedResponse;
       }

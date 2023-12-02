@@ -24,9 +24,14 @@ const ResourceCard = ({
   description,
   semester,
   date,
+  isLarge
 }) => {
+  let cardbg = 'bg-blue-300';
+  if (isLarge === true) {
+    cardbg = 'bg-yellow-300';
+  }
   const cardClass =
-  "cursor-pointer flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
+  `cursor-pointer flex flex-col justify-center items-center rounded-[10px] ${cardbg} p-2 sm:w-15 h-[150px] w-[150px]`;
 
   const handleShare = async () => {
         try {
@@ -156,7 +161,7 @@ const ResourceCard = ({
           )}
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
-          <FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
           <Link to={`/resources/preview/${title}`} state={fileUrl}> 
             <MdPreview  onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
           </Link>

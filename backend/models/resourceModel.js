@@ -33,6 +33,10 @@ const resourceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isLarge: {
+      type: Boolean,
+      default: false,
+    },
     course: {
       type: String,
       required: true,
