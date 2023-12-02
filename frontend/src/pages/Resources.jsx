@@ -145,6 +145,7 @@ const Resources = () => {
                                         semester = {data['100 Level'][index][file]['semester']}
                                         course = {data['100 Level'][index][file]['course']}
                                         isLarge={data['100 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}

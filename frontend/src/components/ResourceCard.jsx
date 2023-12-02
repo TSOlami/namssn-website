@@ -24,7 +24,8 @@ const ResourceCard = ({
   description,
   semester,
   date,
-  isLarge
+  isLarge,
+  fileUrl2
 }) => {
   let cardbg = 'bg-blue-300';
   if (isLarge === true) {
@@ -78,17 +79,28 @@ const ResourceCard = ({
   }, []);
 
   const viewFile = async (fileUrl) => {
-    const data = {'option': 'view'};
-    const res = await axios.get(fileUrl, {params: data})
     console.log(fileUrl)
-    
+    const w = window.open();
+    w.location = fileUrl;
   };
   
-  const downloadFile = (fileUrl) => {
-    console.log(fileUrl)
-    const w = window;
-    w.location = fileUrl;
-    toast.promise(w.location = fileUrl, {pending: "Downloading file..."});
+  const downloadFile = async (fileUrl) => {
+    try {
+      const downloadWindow = window.open(fileUrl);
+  
+      if (!downloadWindow) {
+        throw new Error('Popup blocked. Please allow popups and try again.');
+      }
+  
+      // Resolve the promise immediately after opening the new window
+      toast.promise(
+        Promise.resolve(fileUrl),
+        { pending: 'Downloading file...', success: 'File downloaded successfully' }
+      );
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      toast.error('Error downloading file');
+    }
   };
 
   const handleFileDelete = async (fileUrl) => {	
@@ -162,9 +174,9 @@ const ResourceCard = ({
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
           {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
-          <Link to={`/resources/preview/${title}`} state={fileUrl}> 
-            <MdPreview  onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
-          </Link>
+          {isLarge===false ? (<Link to={`/resources/preview/${title}`} state={fileUrl}> 
+            <MdPreview  className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          </Link>) : (<MdPreview  onClick={() => viewFile(fileUrl2)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
         </div>
       </div>
       {(showDetails && openOptions) && (
