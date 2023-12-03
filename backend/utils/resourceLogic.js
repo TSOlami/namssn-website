@@ -78,7 +78,7 @@ const postResource = async (req, res) => {
       let isLarge = false;
       let fileUrl = res?.data?.result?.document?.file_id
       // check if the size of the file is > 20mb
-      if (file.size > 120360) {
+      if (file.size > 19900000) {
         isLarge = true;
         const chatId2 = chatId.slice(4, chatId.length)
         const message_id = res?.data?.result?.message_id;

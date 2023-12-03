@@ -70,7 +70,7 @@ const FileForm = (props) => {
 
     if(props.show) {
         return (
-            <div className="w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
+            <div className="shadow-xl w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
                     <button onClick={props.onClose} className="ml-[88%] md:ml-[90%] text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
                         <FaXmark/>
