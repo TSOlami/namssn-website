@@ -138,7 +138,7 @@ const SignInForm = () => {
     {isLoading ? (
       <button
         type="submit"
-        className="bg-primary text-white rounded-md py-2 mt-4"
+        className="bg-gray-800 text-white rounded-md py-2 mt-4"
         disabled
       >
         Logging in...

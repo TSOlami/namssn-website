@@ -8,48 +8,49 @@ import { HeaderComponent, Loader } from "../components";
 import { ErrorPage } from "../pages";
 
 const PaymentList = () => {
-const { userInfo } = useSelector((state) => state.auth);
-const dispatch = useDispatch();
+  const isFeatureAvailable = false;
+  const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-// Use the navigate hook from the react-router-dom to navigate to a different route
-const navigate = useNavigate();
+  // Use the navigate hook from the react-router-dom to navigate to a different route
+  const navigate = useNavigate();
 
-// Use the useLogoutMutation hook to logout a user
-const [logutUser] = useLogoutMutation();
+  // Use the useLogoutMutation hook to logout a user
+  const [logutUser] = useLogoutMutation();
 
-// Use the useAllPaymentsQuery hook to fetch payments
-const { data: payments, isLoading, error, isError } = useAllPaymentsQuery();
+  // Use the useAllPaymentsQuery hook to fetch payments
+  const { data: payments, isLoading, error, isError } = useAllPaymentsQuery();
 
+  // Add a useEffect hook to check if a user is properly authenticated
+  useEffect(() => {
+    if (error?.status === 401) {
+      // If the user is not authenticated, logout the user
+      logutUser();
+      // Dispatch the logout action
+      dispatch(logout());
+      toast.error("Sorry, You might need to login again.");
+      navigate("/signin");
+    }
+  }, [error, dispatch, logutUser]);
 
-// Add a useEffect hook to check if a user is properly authenticated
-useEffect(() => {
-  if (error?.status === 401) {
-    // If the user is not authenticated, logout the user
-    logutUser();
-    // Dispatch the logout action
-    dispatch(logout());
-    toast.error("Unauthorized, You might need to login again.");
-    navigate("/signin");
+  useEffect(() => {
+    if (!isLoading && !isError && Array.isArray(payments)) {
+      // Set categories in the Redux store
+      dispatch(setCategories(payments));
+    }
+  }, [dispatch, payments, isLoading, isError]);
+
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
   }
-}, [error, dispatch, logutUser]);
-
-useEffect(() => {
-  if (!isLoading && !isError && Array.isArray(payments)) {
-    // Set categories in the Redux store
-    dispatch(setCategories(payments));
-  }
-}, [dispatch, payments, isLoading, isError]);
-
-if (isLoading) {
-  return <Loader />; // Render the Loader while data is being fetched
-}
 
 return (
   <div className="flex flex-row w-full">
     {/* <Sidebar /> */}
     <div className="w-full h-full flex flex-col">
       <HeaderComponent title="Payments" back="true" />
-      <div className="flex md:flex-row flex-col-reverse w-full h-full">
+      {isFeatureAvailable ? (
+        <div className="flex md:flex-row flex-col-reverse w-full h-full">
         <div className="h-full">
           <h1 className="px-4 py-2 text-2xl font-semibold text-gray-700">
             Payments to be Made
@@ -92,7 +93,16 @@ return (
         >
           View Payments History
         </Link>
+      </div>) : (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+        <h1 className="pt-10 text-2xl md:text-3xl font-semibold text-gray-700">
+          This feature is not available yet
+        </h1>
+        <p className="text-xl font-medium text-gray-500">
+          Please check back later
+        </p>
       </div>
+      )}
     </div>
   </div>
   );
