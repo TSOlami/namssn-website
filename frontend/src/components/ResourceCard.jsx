@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
-
+const resourcesUrl = import.meta.env.VITE_RESOURCES_URL;
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
@@ -104,8 +104,9 @@ const ResourceCard = ({
   };
 
   const handleFileDelete = async (fileUrl) => {	
+    console.log(fileUrl)
     handleSetOpenOptions();
-    await axios
+    await toast.promise(axios
       .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
       .then((res) => {
         if (res.data === "Access Approved") {
@@ -117,13 +118,16 @@ const ResourceCard = ({
       })
       .catch(() => {
         toast.error("An error occurred. Unable to delete resource");
-      });
+      }), {
+      pending: 'Deleting file...',
+  });
   };
 
   const handleNewDelete = (e) => {
     e.stopPropagation();
     if (isLarge === true) {
-      handleFileDelete(fileUrl2);
+      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F')
+      handleFileDelete(resourcesUrl+'/'+newFileUrl);
     } else {
       handleFileDelete(fileUrl);
     }

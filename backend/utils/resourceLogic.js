@@ -125,7 +125,6 @@ const getSpecifiedResources = async (level) => {
 const deleteResource = async (req, res) => {
   const fileUrl = req.params.filename.split('+')[0];
   const senderId = req.body._id;
-  // client.delete("files")
   const resourceId = await checkUploader(fileUrl, senderId);
 
   if (resourceId || (req.user && req.user.role === 'admin')) {

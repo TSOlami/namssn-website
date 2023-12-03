@@ -643,7 +643,6 @@ const getUserResources = asyncHandler(async (req, res) => {
 // access	Private
 const getFile = asyncHandler(async (req, res) => {
   try {
-    console.log("here")
     const file = await getTelFile(req, res)
     if (file) {
       res.send(file)
@@ -682,7 +681,6 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-  // res.status(200).json({ message: 'Delete a Resource' });
   const response = await deleteResource(req, res);
   if (response === "Access Approved") {
     res.status(200).send(response)
