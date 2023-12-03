@@ -55,13 +55,12 @@ const postResource = async (req, res) => {
   const filename = file.name;
 
   try {
+    // check if the file has no data
     if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
       return res.status(400).send('Invalid file data.');
     }
     const chatId = process.env.CHAT_ID;
-    const fileArrayBuffer = file.data.buffer;
-    // const fileBuffer = Buffer.from(fileArrayBuffer);
-    // const caption = `${description} - ${filename}`;
+    const fileArrayBuffer = file.data.buffer;;
     const form = new FormData();
     const fileBlob = new Blob([Buffer.from(fileArrayBuffer)], { type: 'application/octet-stream' });
     form.append('chat_id', chatId);
@@ -78,13 +77,14 @@ const postResource = async (req, res) => {
       // console.log(res.data)
       let isLarge = false;
       let fileUrl = res?.data?.result?.document?.file_id
+      // check if the size of the file is > 20mb
       if (file.size > 120360) {
         isLarge = true;
         const chatId2 = chatId.slice(4, chatId.length)
         const message_id = res?.data?.result?.message_id;
-        console.log(chatId2, message_id)
         fileUrl = `https://t.me/c/${chatId2}/${message_id}`
       }
+      // upload the details to the database
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, isLarge=isLarge, course);
       if (response) {
         const formattedResponse = {[fileUrl]: {
@@ -126,7 +126,7 @@ const deleteResource = async (req, res) => {
   const fileUrl = req.params.filename.split('+')[0];
   const senderId = req.body._id;
   const resourceId = await checkUploader(fileUrl, senderId);
-
+  // check if the sender is an admin or the uploader
   if (resourceId || (req.user && req.user.role === 'admin')) {
     await removeResource(resourceId, senderId)
     return ("Access Approved");
