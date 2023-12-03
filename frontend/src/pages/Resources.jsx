@@ -18,7 +18,7 @@ const base_url = "http://localhost:5000/api/v1/users/resources/";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
-
+const get_url = import.meta.env.VITE_RESOURCES_URL
 const Resources = () => {
     const [data, setData] = useState(null);
     const [isPopUpVisible, setPopUpVisible] = useState(false);
@@ -28,7 +28,6 @@ const Resources = () => {
     const [dropDown4, setDropDown4] = useState(4);
     const [dropDown5, setDropDown5] = useState(5);
     const [dropDown6, setDropDown6] = useState(6);
-
     const handleReload = () => {
         window.location.reload();
     }
@@ -46,7 +45,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/v1/users/resources');
+                const res = await axios.get(get_url);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                 }

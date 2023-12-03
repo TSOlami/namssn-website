@@ -9,13 +9,13 @@ import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
+const post_url = import.meta.env.VITE_RESOURCES_URL
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [fileName, setFileName] = useState("Select File");
-    
     useEffect(() => {
     }, [inputValue]);
     const [selectedOption1, setSelectedOption1] = useState("100 Level");
@@ -51,7 +51,7 @@ const FileForm = (props) => {
                 formData.append('course', selectedOption2)
                 try {
 
-                    await toast.promise(axios.post('http://localhost:5000/api/v1/users/resources', formData), {
+                    await toast.promise(axios.post(post_url, formData), {
                         pending: 'Uploading file...',
                         success: 'File uploaded successfully',
                     });

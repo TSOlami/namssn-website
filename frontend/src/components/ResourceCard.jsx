@@ -122,7 +122,12 @@ const ResourceCard = ({
 
   const handleNewDelete = (e) => {
     e.stopPropagation();
-    handleFileDelete(fileUrl);
+    if (isLarge === true) {
+      handleFileDelete(fileUrl2);
+    } else {
+      handleFileDelete(fileUrl);
+    }
+    
   };
 
   const smStyle = "text-sm text-gray-400 font-serif";
@@ -166,7 +171,7 @@ const ResourceCard = ({
                   onClick={handleNewDelete}
                   className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
                 >
-                  <MdDelete /> <span>Delete Post</span>
+                  <MdDelete /> <span>Delete File</span>
                 </button>) : (<div></div>)
               }
             </div>
