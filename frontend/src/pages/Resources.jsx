@@ -13,12 +13,16 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
+<<<<<<< HEAD
 const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
+=======
+const base_url = "http://localhost:5000/api/v1/users/resources/";
+>>>>>>> origin/latest2
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
-
+const get_url = import.meta.env.VITE_RESOURCES_URL
 const Resources = () => {
     const [data, setData] = useState(null);
     const [isPopUpVisible, setPopUpVisible] = useState(false);
@@ -28,7 +32,6 @@ const Resources = () => {
     const [dropDown4, setDropDown4] = useState(4);
     const [dropDown5, setDropDown5] = useState(5);
     const [dropDown6, setDropDown6] = useState(6);
-
     const handleReload = () => {
         window.location.reload();
     }
@@ -46,7 +49,7 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://api-namssn-futminna.onrender.com/api/v1/users/resources');
+                const res = await axios.get(get_url);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                 }
@@ -98,6 +101,7 @@ const Resources = () => {
         const level4FileList = data['400 Level'] ? data['400 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level5FileList = data['500 Level'] ? data['500 Level'].map(obj => Object.keys(obj)[0]) : null;
         const telegram = data['N/A'] ? data['N/A'].map(obj => Object.keys(obj)[0]) : null;
+        console.log(level1FileList)
         if (level1FileList === null && level2FileList === null && level3FileList === null
             && level4FileList === null && level5FileList === null && telegram === null) {
             return (
@@ -143,6 +147,8 @@ const Resources = () => {
                                         date = {formatDateToTime(new Date(data['100 Level'][index][file]['date']))}
                                         semester = {data['100 Level'][index][file]['semester']}
                                         course = {data['100 Level'][index][file]['course']}
+                                        isLarge={data['100 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}

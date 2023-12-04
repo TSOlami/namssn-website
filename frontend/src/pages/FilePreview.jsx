@@ -6,7 +6,7 @@ const FilePreview = () => {
     const { title } = useParams();
     const location = useLocation();
     const fileUrl  = location.state;
-
+    console.log(fileUrl)
     const docs = [
         {
             uri: fileUrl,

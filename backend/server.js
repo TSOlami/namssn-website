@@ -23,18 +23,18 @@ bot.on('message', (msg) => {
     bot.sendMessage(msg.chat.id, "Hello, I'm NAMSSN FUTMINNA Bot. I can't fulfill your request at the moment. If you have any questions or need assistance, visit the NAMSSN official website. Thank you!")
   }
 })
-bot.on('document', (msg) => {
-  if (msg.chat.id === chat_id) {
-    documentUploader(msg);
-    bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
-  }
-});
-bot.on('photo', (msg) => {
-  if (msg.chat.id === chat_id) {
-    photoUploader(msg);
-    bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
-  }
-});
+// bot.on('document', (msg) => {
+//   if (msg.chat.id === chat_id) {
+//     documentUploader(msg);
+//     bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+//   }
+// });
+// bot.on('photo', (msg) => {
+//   if (msg.chat.id === chat_id) {
+//     photoUploader(msg);
+//     bot.sendMessage(chat_id, "This file has been uploaded to our website", {reply_to_message_id: msg.message_id})
+//   }
+// });
 
 // Define the port number for the server, default to 5000 if not provided in the environment
 const port = process.env.PORT || 5000;

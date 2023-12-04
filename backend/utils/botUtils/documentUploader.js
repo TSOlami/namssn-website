@@ -4,7 +4,7 @@ dotenv.config();
 
 const bot_id = process.env.BOT_ID;
 const documentUploader = (msg) => {
-    console.log(msg)
+    console.log(msg, "++++++++")
     const chatId = msg?.chat?.id;
     const fileName = msg?.document?.file_name; 
     const user_id = bot_id;
