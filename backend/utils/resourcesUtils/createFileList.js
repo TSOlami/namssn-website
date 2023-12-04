@@ -15,6 +15,7 @@ const createFileList = async (response) => {
               description: resource.description,
               date: formattedDate,
               semester: resource.level,
+              isLarge: resource.isLarge,
               course: resource.course
             }
           };

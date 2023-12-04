@@ -7,17 +7,15 @@ import store from "../../redux/store/store";
 import Loader from "../Loader";
 import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
-
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
-
+const post_url = import.meta.env.VITE_RESOURCES_URL
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [fileName, setFileName] = useState("Select File");
-    
     useEffect(() => {
     }, [inputValue]);
     const [selectedOption1, setSelectedOption1] = useState("100 Level");
@@ -53,10 +51,11 @@ const FileForm = (props) => {
                 formData.append('course', selectedOption2)
                 try {
 
-                    await toast.promise(axios.post('https://api-namssn-futminna.onrender.com/api/v1/users/resources', formData), {
+                    await toast.promise(axios.post(post_url, formData), {
                         pending: 'Uploading file...',
                         success: 'File uploaded successfully',
                     });
+                    console.log("uploaded")
                     setIsLoading(false);
                     window.location.reload()
                 } catch (err) {
@@ -71,14 +70,14 @@ const FileForm = (props) => {
 
     if(props.show) {
         return (
-            <div className="w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
+            <div className="shadow-xl w-[80%] flex flex-col bg-white gap-4 border rounded-[5%] px-[2.5%] py-[2.5%]">
                 <form onSubmit={formik.handleSubmit}>
                     <button onClick={props.onClose} className="ml-[88%] md:ml-[90%] text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
                         <FaXmark/>
                     </button>
                     <div>
                         <span className={textStyle}> Level</span>
-                        <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="font-roboto text-gray-300 block w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
+                        <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="font-roboto text-gray-300 block w-[80%] mt-1 p-2 border border-gray-400 rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
                             <option value="100 Level" className="text-black font-roboto text-lg">Year 1 </option>
                             <option value="200 Level" className="text-black font-roboto text-lg">Year 2 </option>
                             <option value="300 Level" className="text-black font-roboto text-lg">Year 3 </option>
@@ -88,7 +87,7 @@ const FileForm = (props) => {
                     </div>
                     <div className="flex flex-col mt-2 h-[7em]">
                         <span className={textStyle}> File Description </span>
-                        <div className="font-roboto h-[100%] w-[80%] mt-1 p-2 border border-black rounded-md  focus:ring focus:ring-blue-200">
+                        <div className="font-roboto h-[100%] w-[80%] mt-1 p-2 border border-gray-400 rounded-md  focus:ring focus:ring-blue-200">
                             <textarea
                             className="w-full resize-y h-full whitespace-wrap outline-none"
                             placeholder="Input file description (optional)"
@@ -97,11 +96,13 @@ const FileForm = (props) => {
                     </div> 
                     <div className="mt-2 flex flex-col">
                         <span className={textStyle}> File </span>
-                        <label className="flex justify-between  border border-black items-center rounded-md w-[80%] h-[2.5em]">
+                        <label className="flex justify-between  border border-gray-400 items-center rounded-md w-[80%] h-[2.5em]">
                             <div className="ml-[2em]">
-                                <span className="font-roboto text-gray-300">
+                                {fileName !== "Select File" ? (<span className="font-roboto text-gray-800">
                                     {fileName.length > 20 ? `${fileName.substring(0,15)}...` : fileName}
-                                </span>
+                                </span>) : (<span className="font-roboto text-gray-400">
+                                    {fileName}
+                                </span>)}
                             </div>
                             <BiUpload className="mr-[2em]" color="#0f0f0f"/>
                             <input

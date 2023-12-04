@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
-
+const resourcesUrl = import.meta.env.VITE_RESOURCES_URL;
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
@@ -24,9 +24,15 @@ const ResourceCard = ({
   description,
   semester,
   date,
+  isLarge,
+  fileUrl2
 }) => {
+  let cardbg = 'bg-blue-300';
+  if (isLarge === true) {
+    cardbg = 'bg-yellow-300';
+  }
   const cardClass =
-  "cursor-pointer flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
+  `cursor-pointer flex flex-col justify-center items-center rounded-[10px] ${cardbg} p-2 sm:w-15 h-[150px] w-[150px]`;
 
   const handleShare = async () => {
         try {
@@ -45,7 +51,6 @@ const ResourceCard = ({
 
   // manage state for the delete options button
   const [openOptions, setOpenOptions] = useState(false);
-  const [buffer, setBuffer] = useState(null);
   const handleSetOpenOptions = () => {
     setOpenOptions(!openOptions);
   };
@@ -74,41 +79,34 @@ const ResourceCard = ({
   }, []);
 
   const viewFile = async (fileUrl) => {
-    const data = {'option': 'view'};
-    const res = await axios.get(fileUrl, {params: data});
-    if (res.data) {
-      setBuffer(res.data)
-    }
     console.log(fileUrl)
-    // const w = window.open;
-    // w.location = fileUrl;
-    
-    // console.log(res.data, "======")
-    // // const bufferContent = Buffer.from(res.data, 'hex');
-    // return (
-    //   <BufferFileViewer bufferContent={res.data} />
-    // )
-    
-    // const uint8Array = new Uint8Array(res.data.split('').map((char) => char.charCodeAt(0)));
-    // // Create a Blob from the Uint8Array
-    // const blob = new Blob([uint8Array], { type: 'application/pdf' });
-
-    // // Create a Blob URL from the Blob
-    // const blobUrl = URL.createObjectURL(blob);
-
-    // // Open a new tab or window with the Blob URL
-    // window.open(blobUrl, '_blank');
+    const w = window.open();
+    w.location = fileUrl;
   };
   
-  const downloadFile = (fileUrl) => {
-    // console.log(fileUrl)
-    const w = window;
-    w.location = fileUrl;
+  const downloadFile = async (fileUrl) => {
+    try {
+      const downloadWindow = window.open(fileUrl);
+  
+      if (!downloadWindow) {
+        throw new Error('Popup blocked. Please allow popups and try again.');
+      }
+  
+      // Resolve the promise immediately after opening the new window
+      toast.promise(
+        Promise.resolve(fileUrl),
+        { pending: 'Downloading file...', success: 'File downloaded successfully' }
+      );
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      toast.error('Error downloading file');
+    }
   };
 
   const handleFileDelete = async (fileUrl) => {	
+    console.log(fileUrl)
     handleSetOpenOptions();
-    await axios
+    await toast.promise(axios
       .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
       .then((res) => {
         if (res.data === "Access Approved") {
@@ -120,12 +118,20 @@ const ResourceCard = ({
       })
       .catch(() => {
         toast.error("An error occurred. Unable to delete resource");
-      });
+      }), {
+      pending: 'Deleting file...',
+  });
   };
 
   const handleNewDelete = (e) => {
     e.stopPropagation();
-    handleFileDelete(fileUrl);
+    if (isLarge === true) {
+      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F')
+      handleFileDelete(resourcesUrl+'/'+newFileUrl);
+    } else {
+      handleFileDelete(fileUrl);
+    }
+    
   };
 
   const smStyle = "text-sm text-gray-400 font-serif";
@@ -169,17 +175,17 @@ const ResourceCard = ({
                   onClick={handleNewDelete}
                   className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
                 >
-                  <MdDelete /> <span>Delete Post</span>
+                  <MdDelete /> <span>Delete File</span>
                 </button>) : (<div></div>)
               }
             </div>
           )}
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
-          <FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
-          <Link to={`/resources/preview/${title}`} state={fileUrl}> 
-            <MdPreview  onClick={() => viewFile(fileUrl)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
-          </Link>
+          {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
+          {isLarge===false ? (<Link to={`/resources/preview/${title}`} state={fileUrl}> 
+            <MdPreview  className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          </Link>) : (<MdPreview  onClick={() => viewFile(fileUrl2)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
         </div>
       </div>
       {(showDetails && openOptions) && (
