@@ -36,7 +36,7 @@ const Home = () => {
   const { data: posts, isLoading: isLoadingPosts } = useAllPostsQuery(Number(page));
 
   // Use the useGetNotificationsQuery hook to get notifications from the API
-  const { data: notifications, isLoading: isLoadingNotis, error  } = useGetNotificationsQuery();
+  const { data: notifications, error  } = useGetNotificationsQuery();
 
   // Add a useEffect hook to check if a user is properly authenticated
   useEffect(() => {
@@ -159,9 +159,6 @@ const Home = () => {
             removePost={(postId) => removePost(postId)}
           />
         ))}
-
-        {/* Loader */}
-        {isLoadingPosts || isLoadingNotis && <Loader />}
 
         {/* Paginate posts buttons */}
         {hasMore && (

@@ -13,11 +13,7 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
-<<<<<<< HEAD
 const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
-=======
-const base_url = "http://localhost:5000/api/v1/users/resources/";
->>>>>>> origin/latest2
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
