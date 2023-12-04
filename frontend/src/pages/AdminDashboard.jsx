@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AdminCard, RecentPayments, Sidebar, Loader} from "../components";
+import { AdminCard, RecentPayments, Sidebar, Loader } from "../components";
 import { HeaderComponent, SendMailModal } from "../components";
 import { MembersImg } from "../assets";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { useGetAllUsersQuery, useGetAllPaymentsQuery, setPayments } from "../redux";
+import {
+	useGetAllUsersQuery,
+	useGetAllPaymentsQuery,
+	setPayments,
+} from "../redux";
 import {
 	useGetTotalPaymentsQuery,
 	useGetTotalUsersQuery,
@@ -26,11 +30,10 @@ const AdminDashboard = () => {
 	const [isSendMailModalOpen, setIsSendMailModalOpen] = useState(false);
 
 	// Sort users by points in descending order
-  const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
+	const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
 
 	const dispatch = useDispatch();
-	const { data: allpayments, Loading } = useGetAllPaymentsQuery(
-		{
+	const { data: allpayments, Loading } = useGetAllPaymentsQuery({
 		select: {
 			category: 1, // Only select the category field for population
 			user: 1,
@@ -38,15 +41,14 @@ const AdminDashboard = () => {
 			// Add other fields you need
 		},
 		populate: ["category", "user"],
-		}
-	);
-	
+	});
+
 	useEffect(() => {
-    if (allpayments) {
-      dispatch(setPayments(allpayments));
-    }
-  }, [dispatch, allpayments]);
-  if (Loading) {
+		if (allpayments) {
+			dispatch(setPayments(allpayments));
+		}
+	}, [dispatch, allpayments]);
+	if (Loading) {
 		return <Loader />;
 	}
 	return (
@@ -115,8 +117,9 @@ const AdminDashboard = () => {
 						<div className="flex flex-row justify-between m-2 rounded-md border-gray-500 border-2 p-1">
 							1. Principal Offices of the department <span></span>
 							<Link
-							to="/about-us"
-							className="ml-5 bg-black px-2 rounded-md text-white">
+								to="/about-us"
+								className="ml-5 bg-black px-2 rounded-md text-white"
+							>
 								View
 							</Link>
 						</div>
@@ -156,27 +159,30 @@ const AdminDashboard = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{sortedUsers && sortedUsers.slice(0, 6).map((account, index) => (
-										<tr key={index}>
-											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-												{index + 1}
-											</td>
-											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-												{account.name}
-											</td>
-											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-												{account.points}
-											</td>
-											<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-												<Link
-													to={`/profile/${account._id}`}
-													className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
-												>
-													View
-												</Link>
-											</td>
-										</tr>
-									))}
+									{sortedUsers &&
+										sortedUsers
+											.slice(0, 6)
+											.map((account, index) => (
+												<tr key={index}>
+													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+														{index + 1}
+													</td>
+													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+														{account.name}
+													</td>
+													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+														{account.points}
+													</td>
+													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+														<Link
+															to={`/profile/${account._id}`}
+															className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
+														>
+															View
+														</Link>
+													</td>
+												</tr>
+											))}
 								</tbody>
 							</table>
 						</div>
@@ -184,18 +190,20 @@ const AdminDashboard = () => {
 				</div>
 
 				{/* Add a button to open the SendMailModal */}
-        <button
-          onClick={() => setIsSendMailModalOpen(true)}
-          className="bg-primary text-white p-2 rounded-md"
-        >
-          Compose a mail notice
-        </button>
+				{!isSendMailModalOpen && (
+					<button
+						onClick={() => setIsSendMailModalOpen(true)}
+						className="bg-primary m-3 text-white p-2 rounded-md"
+					>
+						Compose a mail notice
+					</button>
+				)}
 
-        {/* Render the SendMailModal */}
-        <SendMailModal
-          isOpen={isSendMailModalOpen}
-          onClose={() => setIsSendMailModalOpen(false)}
-        />
+				{/* Render the SendMailModal */}
+				<SendMailModal
+					isOpen={isSendMailModalOpen}
+					onClose={() => setIsSendMailModalOpen(false)}
+				/>
 
 				{/* Reported section */}
 				{/*<h3 className="font-bold text-2xl p-4">Reported Accounts</h3>
@@ -219,7 +227,6 @@ const AdminDashboard = () => {
 					<Link to="/admin/payment">
 						<button className="text-primary">See more</button>
 					</Link>
-
 				</div>
 				{/* <div className="w-full px-4">
 					{mockRecentPayments.map((payment, index) => (

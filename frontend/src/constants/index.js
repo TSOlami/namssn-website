@@ -26,10 +26,9 @@ export const teamMembers = [
 		role: "Frontend Developer & Web Designer",
 		image: DrStrange,
 		team: "Tech",
-		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com/in/ifedolapo-omoniyi/",
     twitter: "https://twitter.com/ife_ifedolapo",
-    github: "https://github.com",
+    github: "https://github.com/ifedolapoomoniyi",
     website: "https://ifedolapo.netlify.app/",
   },
   {
@@ -37,7 +36,6 @@ export const teamMembers = [
     role: "Software Engineer",
     image: Slimany,
     team: "Tech",
-    facebook: "https://web.facebook.com/",
     linkedin: "https://www.linkedin.com/in/slimany/",
     twitter: "https://twitter.com/Slimany_",
     github: "https://github.com",
@@ -56,7 +54,7 @@ export const teamMembers = [
   },
   {
     name: "Ifedimeji Omoniyi",
-    role: "Backend Developer",
+    role: "UI/UX Designer",
     image: Ifedimeji,
     team: "Tech",
     facebook: "https://web.facebook.com/",

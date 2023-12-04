@@ -108,14 +108,14 @@ const UserProfile = () => {
         <div className="flex">
             <Sidebar />
 
-            <div>
+            <div className='w-full min-w-[350px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]'>
                 <div className="p-3 pl-6 flex flex-col">
                     <span className="font-semibold text-lg">{name}</span>
                     <span>{noOfPosts} posts</span>
                 </div>
                 {/* profile image and cover image */}
                 <div className="w-full h-32 bg-primary z-[-1]"></div>
-                <div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
+                <div className="flex flex-row justify-between items-center relative top-[-25px] my-[-30px] p-3 pl-6 z-[0]">
                     <img src={avatar || ProfileImg} alt="" className="profile-image"/>
                     {currentUserIsAdmin && (
                         isAdmin ? (

@@ -96,10 +96,10 @@ return (
       </div>) : (
         <div className="flex flex-col items-center justify-center w-full h-full">
         <h1 className="pt-10 text-2xl md:text-3xl font-semibold text-gray-700">
-          This feature is not available yet
+          This feature will be available soon.
         </h1>
         <p className="text-xl font-medium text-gray-500">
-          Please check back later
+          Please stay tuned!
         </p>
       </div>
       )}
