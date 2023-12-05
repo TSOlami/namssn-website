@@ -59,7 +59,7 @@ const Notification = ({
 						{isVerified && <FaCircleCheck color="#17A1FA" />}
 					</span>
 					<span className="text-gray-500">
-					{formatDateToTime(date)} ago
+					{formatDateToTime(date)}
 					</span>
 					{comment && <span>@{username}</span>}
 					<span onClick={handleOpenNotification} className="cursor-pointer">
