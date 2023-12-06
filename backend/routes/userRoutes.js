@@ -194,7 +194,7 @@ router.get('/events', getAllEvents);
  * @access Private 
  */
 router.route('/announcements')
-.get(protect, getAllAnnouncements);
+.get(getAllAnnouncements);
 
 // Route for getting all announcements by user
 router
