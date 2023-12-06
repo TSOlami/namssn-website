@@ -139,10 +139,10 @@ const ResetPassword = () => {
 							onClick={handleShowPassword}
 						/>
 					)}
-					{formik.touched.newPassword && formik.errors.newPassword ? (
-						<FormErrors error={formik.errors.newPassword} />
-					) : null}
 				</div>
+				{formik.touched.newPassword && formik.errors.newPassword ? (
+					<FormErrors error={formik.errors.newPassword} />
+				) : null}
 
 				<div className="w-full relative flex">
 					<InputField
@@ -165,11 +165,11 @@ const ResetPassword = () => {
 							onClick={handleShowConfirmPassword}
 						/>
 					)}
-					{formik.touched.confirmPassword &&
-					formik.errors.confirmPassword ? (
-						<FormErrors error={formik.errors.confirmPassword} />
-					) : null}
 				</div>
+				{formik.touched.confirmPassword &&
+				formik.errors.confirmPassword ? (
+					<FormErrors error={formik.errors.confirmPassword} />
+				) : null}
 
 				<button
 					type="submit"
