@@ -41,7 +41,7 @@ const createPost = asyncHandler(async (req, res) => {
 // @desc Get all posts and sort by timestamp
 // Route GET /api/v1/user/posts
 // Access Public
-const getAllPosts = asyncHandler(async (req, res) => {
+const getPosts = asyncHandler(async (req, res) => {
 
 	// Extract pagination parameters from the request query, with default values if not provided
 	const page = parseInt(req.query.page) || 1;
@@ -793,4 +793,4 @@ const clearNotifications = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPost, getAllPosts, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
+export { createPost, getPosts, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
