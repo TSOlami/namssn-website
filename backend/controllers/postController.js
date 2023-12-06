@@ -42,6 +42,8 @@ const createPost = asyncHandler(async (req, res) => {
 // Route GET /api/v1/user/posts
 // Access Public
 const getPosts = asyncHandler(async (req, res) => {
+	// Start the timer
+  console.time('getPosts');
 
 	// Extract pagination parameters from the request query, with default values if not provided
 	const page = parseInt(req.query.page) || 1;
@@ -68,7 +70,8 @@ const getPosts = asyncHandler(async (req, res) => {
       })
       .sort({ createdAt: -1 }) // Sort by timestamp in descending order (latest posts first)
       .skip(skip)
-      .limit(pageSize);
+      .limit(pageSize)
+			.lean();
 
     // Count all posts (to determine if there are more pages)
     const totalCount = await Post.countDocuments();
@@ -84,6 +87,8 @@ const getPosts = asyncHandler(async (req, res) => {
       posts,
     };
 
+		// Stop the timer and log the time elapsed for this request
+		console.timeEnd('getPosts');
     res.status(200).json(response);
   } catch (error) {
     console.error('Error fetching posts:', error);
