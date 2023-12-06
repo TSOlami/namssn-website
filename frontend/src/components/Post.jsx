@@ -46,7 +46,7 @@ const Post = ({ post, updatePostData, removePost }) => {
       // Remove event listener when the component unmounts
       document.body.removeEventListener("click", handleOutsideClick);
     };
-  }, [openOptions]);
+  }, []);
 
 	// Get the post details from the props
 	const postId = post?._id;
