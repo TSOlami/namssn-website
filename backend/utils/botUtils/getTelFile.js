@@ -2,22 +2,17 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-let bot_token = process.env.BOT_TOKEN;
-if (process.env.NODE_ENV === 'production') {
-  bot_token = process.env.PRODUCTION_BOT_TOKEN
-}
 const getTelFile = async (req, res) => {
+    console.log("HERERERERERERER")
     const filenameAndId = req.params.filename;
     const file_id = filenameAndId.split('+')[0]
     const file_name = filenameAndId.split('+')[1]
+    const bot_token = filenameAndId.split('+')[2]
     console.log(file_name)
     const base_url = `https://api.telegram.org/bot${bot_token}`;
     try {
         const fileDetails = await axios.get(`${base_url}/getFile?file_id=${file_id}`);
-        console.log(fileDetails)
         const file_path = fileDetails.data.result.file_path;
-        // const file_path = 'documents/file_9.pdf'
-        console.log(fileDetails, file_path)
         if (req?.query?.option === 'view') {
             const response = await axios.get(`https://api.telegram.org/file/bot${bot_token}/${file_path}`, { responseType: 'arraybuffer' })
             if (response.data) {
