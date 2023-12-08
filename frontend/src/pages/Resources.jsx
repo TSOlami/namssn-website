@@ -159,7 +159,7 @@ const Resources = () => {
                             </div>
                             {dropDown2===-2 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level2FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + file + '+' + data['200 Level'][index][file]['title'] + '+' + data['200 Level'][index][file]['botToken']} description={data['200 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['200 Level'][index][file]['title'] + '+' + data['200 Level'][index][file]['botToken']} description={data['200 Level'][index][file]['description']}
                                         uploaderUsername = {data['200 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['200 Level'][index][file]['uploaderId']}
                                         title = {data['200 Level'][index][file]['title']}
@@ -183,7 +183,7 @@ const Resources = () => {
                             </div>
                             {dropDown3===-3 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level3FileList.map((file, index) => ( 
-                                        <ResourceCard  key={index} fileUrl={get_url + file + '+' + data['300 Level'][index][file]['title'] + '+' + data['300 Level'][index][file]['botToken']} description={data['300 Level'][index][file]['description']}
+                                        <ResourceCard  key={index} fileUrl={get_url + '/' + file + '+' + data['300 Level'][index][file]['title'] + '+' + data['300 Level'][index][file]['botToken']} description={data['300 Level'][index][file]['description']}
                                         uploaderUsername = {data['300 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['300 Level'][index][file]['uploaderId']}
                                         title = {data['300 Level'][index][file]['title']}
@@ -207,7 +207,7 @@ const Resources = () => {
                             </div>
                             {dropDown4===-4 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level4FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + file + '+' + data['400 Level'][index][file]['title'] + '+' + data['400 Level'][index][file]['botToken']} description={data['400 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['400 Level'][index][file]['title'] + '+' + data['400 Level'][index][file]['botToken']} description={data['400 Level'][index][file]['description']}
                                         uploaderUsername = {data['400 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['400 Level'][index][file]['uploaderId']}
                                         title = {data['400 Level'][index][file]['title']}
@@ -231,7 +231,7 @@ const Resources = () => {
                             </div>
                             {dropDown5===-5 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level5FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + file + '+' + data['500 Level'][index][file]['title'] + '+' + data['500 Level'][index][file]['botToken']} description={data['500 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['500 Level'][index][file]['title'] + '+' + data['500 Level'][index][file]['botToken']} description={data['500 Level'][index][file]['description']}
                                         uploaderUsername = {data['500 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['500 Level'][index][file]['uploaderId']}
                                         title = {data['500 Level'][index][file]['title']}
@@ -255,7 +255,7 @@ const Resources = () => {
                             </div>
                             {dropDown6===-6 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {telegram.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
                                         uploaderUsername = {data['N/A'][index][file]['uploaderUsername']}
                                         uploaderId = {data['N/A'][index][file]['uploaderId']}
                                         title = {data['N/A'][index][file]['title']}
