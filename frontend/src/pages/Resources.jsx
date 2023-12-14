@@ -96,7 +96,6 @@ const Resources = () => {
         const level4FileList = data['400 Level'] ? data['400 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level5FileList = data['500 Level'] ? data['500 Level'].map(obj => Object.keys(obj)[0]) : null;
         const telegram = data['N/A'] ? data['N/A'].map(obj => Object.keys(obj)[0]) : null;
-        console.log(level1FileList)
         if (level1FileList === null && level2FileList === null && level3FileList === null
             && level4FileList === null && level5FileList === null && telegram === null) {
             return (
