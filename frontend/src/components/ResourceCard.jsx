@@ -25,7 +25,7 @@ const ResourceCard = ({
   semester,
   date,
   isLarge,
-  fileUrl2
+  fileUrl2,
 }) => {
   let cardbg = 'bg-blue-300';
   if (isLarge === true) {
@@ -86,6 +86,7 @@ const ResourceCard = ({
   
   const downloadFile = async (fileUrl) => {
     try {
+      console.log(fileUrl)
       const downloadWindow = window.open(fileUrl);
   
       if (!downloadWindow) {

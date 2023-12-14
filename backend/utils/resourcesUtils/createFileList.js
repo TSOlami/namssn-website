@@ -16,7 +16,8 @@ const createFileList = async (response) => {
               date: formattedDate,
               semester: resource.level,
               isLarge: resource.isLarge,
-              course: resource.course
+              course: resource.course,
+              botToken: resource.botToken
             }
           };
           fileList.push(fileDetails);

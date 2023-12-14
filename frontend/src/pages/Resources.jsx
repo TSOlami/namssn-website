@@ -13,7 +13,6 @@ import Loader from '../components/Loader'
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
-const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
 
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
@@ -136,7 +135,7 @@ const Resources = () => {
                             </div>
                             {dropDown1===-1 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level1FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['100 Level'][index][file]['title']} description={data['100 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['100 Level'][index][file]['title'] + '+' + data['100 Level'][index][file]['botToken']} description={data['100 Level'][index][file]['description']}
                                         uploaderUsername = {data['100 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['100 Level'][index][file]['uploaderId']}
                                         title = {data['100 Level'][index][file]['title']}
@@ -160,13 +159,15 @@ const Resources = () => {
                             </div>
                             {dropDown2===-2 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level2FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['200 Level'][index][file]['title']} description={data['200 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['200 Level'][index][file]['title'] + '+' + data['200 Level'][index][file]['botToken']} description={data['200 Level'][index][file]['description']}
                                         uploaderUsername = {data['200 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['200 Level'][index][file]['uploaderId']}
                                         title = {data['200 Level'][index][file]['title']}
                                         date = {formatDateToTime(new Date(data['200 Level'][index][file]['date']))}
                                         semester = {data['200 Level'][index][file]['semester']}
                                         course = {data['200 Level'][index][file]['course']}
+                                        isLarge={data['200 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}
@@ -182,13 +183,15 @@ const Resources = () => {
                             </div>
                             {dropDown3===-3 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level3FileList.map((file, index) => ( 
-                                        <ResourceCard  key={index} fileUrl={base_url + file + '+' + data['300 Level'][index][file]['title']} description={data['300 Level'][index][file]['description']}
+                                        <ResourceCard  key={index} fileUrl={get_url + '/' + file + '+' + data['300 Level'][index][file]['title'] + '+' + data['300 Level'][index][file]['botToken']} description={data['300 Level'][index][file]['description']}
                                         uploaderUsername = {data['300 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['300 Level'][index][file]['uploaderId']}
                                         title = {data['300 Level'][index][file]['title']}
                                         date = {formatDateToTime(new Date(data['300 Level'][index][file]['date']))}
                                         semester = {data['300 Level'][index][file]['semester']}
                                         course = {data['300 Level'][index][file]['course']}
+                                        isLarge={data['300 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}
@@ -204,13 +207,15 @@ const Resources = () => {
                             </div>
                             {dropDown4===-4 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level4FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['400 Level'][index][file]['title']} description={data['400 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['400 Level'][index][file]['title'] + '+' + data['400 Level'][index][file]['botToken']} description={data['400 Level'][index][file]['description']}
                                         uploaderUsername = {data['400 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['400 Level'][index][file]['uploaderId']}
                                         title = {data['400 Level'][index][file]['title']}
                                         date = {formatDateToTime(new Date(data['400 Level'][index][file]['date']))}
                                         semester = {data['400 Level'][index][file]['semester']}
                                         course = {data['400 Level'][index][file]['course']}
+                                        isLarge={data['400 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}
@@ -226,13 +231,15 @@ const Resources = () => {
                             </div>
                             {dropDown5===-5 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level5FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['500 Level'][index][file]['title']} description={data['500 Level'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['500 Level'][index][file]['title'] + '+' + data['500 Level'][index][file]['botToken']} description={data['500 Level'][index][file]['description']}
                                         uploaderUsername = {data['500 Level'][index][file]['uploaderUsername']}
                                         uploaderId = {data['500 Level'][index][file]['uploaderId']}
                                         title = {data['500 Level'][index][file]['title']}
                                         date = {formatDateToTime(new Date(data['500 Level'][index][file]['date']))}
                                         semester = {data['500 Level'][index][file]['semester']}
                                         course = {data['500 Level'][index][file]['course']}
+                                        isLarge={data['500 Level'][index][file]['isLarge']}
+                                        fileUrl2={file}
                                         />
                                     ))}
                                 </div>}
@@ -248,7 +255,7 @@ const Resources = () => {
                             </div>
                             {dropDown6===-6 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {telegram.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={base_url + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
+                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
                                         uploaderUsername = {data['N/A'][index][file]['uploaderUsername']}
                                         uploaderId = {data['N/A'][index][file]['uploaderId']}
                                         title = {data['N/A'][index][file]['title']}

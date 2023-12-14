@@ -40,7 +40,11 @@ const resourceSchema = mongoose.Schema(
     course: {
       type: String,
       required: true,
-    }
+    },
+    botToken: {
+      type: String,
+      required: true,
+    },
   },
   {
     // Automatically generate createdAt and updatedAt timestamps.
