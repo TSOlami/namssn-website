@@ -1,16 +1,20 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import store from "../../redux/store/store";
 import Loader from "../Loader";
 import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
-const state = store.getState();
-const userInfo = state?.auth?.userInfo;
+
+
 const post_url = import.meta.env.VITE_RESOURCES_URL
+
 const FileForm = (props) => {
+    // Get the user info from the redux store
+    const userInfo = useSelector((state) => state.auth.userInfo);
+
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";
     const [isLoading, setIsLoading] = useState(false);
