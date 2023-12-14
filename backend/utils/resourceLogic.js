@@ -85,13 +85,13 @@ const postResource = async (req, res) => {
         fileUrl = `https://t.me/c/${chatId2}/${message_id}`
       }
       // upload the details to the database
-      const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, isLarge=isLarge, course);
+      const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, isLarge=isLarge, course, bot_token);
       if (response) {
         const formattedResponse = {[fileUrl]: {
         uploaderUsername: response[2], title: filename,
         description: description, date: date, 
         semester: semester, course: course,
-        isLarge: isLarge
+        isLarge: isLarge, botToken: bot_token,
         }}
         return formattedResponse;
       }

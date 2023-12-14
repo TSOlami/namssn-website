@@ -134,7 +134,7 @@ const Profile = () => {
 							speed={75}
 							pauseOnHover={true}
 							>
-							Your account is not verified. Verifying your account helps build trust within the community and allows you to enjoy additional features. Click the &quot;Verify Account&quot; button to get started.
+							Your account is not verified. Verifying your account helps build trust within the community and allows you to enjoy additional features. Click the &quot;Verify Account&quot; button to get started.&nbsp;
 							</Marquee>
             </span>
           </div>

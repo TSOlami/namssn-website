@@ -2,7 +2,7 @@ import Resource from '../../models/resourceModel.js';
 import User from '../../models/userModel.js';
 
 // uploads a resource to the database
-const uploadResource = async (filename, description, userId, uploaderName, fileUrl, level, isLarge, course) => {
+const uploadResource = async (filename, description, userId, uploaderName, fileUrl, level, isLarge, course, bot_token) => {
     try {
         const newResource = new Resource({
             title: filename,
@@ -12,7 +12,8 @@ const uploadResource = async (filename, description, userId, uploaderName, fileU
             fileUrl: fileUrl,
             level: level,
             isLarge: isLarge,
-            course: course
+            course: course,
+            botToken: bot_token
         });
         const savedResource = await newResource.save();        
         const updatedUser = await User.findOneAndUpdate(

@@ -55,7 +55,6 @@ const FileForm = (props) => {
                         pending: 'Uploading file...',
                         success: 'File uploaded successfully',
                     });
-                    console.log("uploaded")
                     setIsLoading(false);
                     window.location.reload()
                 } catch (err) {
