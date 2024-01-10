@@ -13,7 +13,8 @@ import {postResource, getResources, getSpecifiedResources,deleteResource} from '
 import getData from '../utils/searchUtils/getData.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import axios from 'axios';
+import getTelFile from '../utils/botUtils/getTelFile.js';
 
 
 // @desc	Authenticate user/set token
@@ -641,11 +642,16 @@ const getUserResources = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/resources/filename
 // access	Private
 const getFile = asyncHandler(async (req, res) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const projectRootDirectory = path.join(__dirname, '../../');
-    const filePath = path.join(projectRootDirectory + '/uploads', req.params.filename)
-    res.sendFile(filePath)
+  try {
+    const file = await getTelFile(req, res)
+    if (file) {
+      res.send(file)
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    // Handle the error appropriately
+    res.status(500).send("Internal Server Error");
+  }
 })
 
 // @desc	Get resources for a specified level
@@ -653,9 +659,14 @@ const getFile = asyncHandler(async (req, res) => {
 // access	Private
 const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
   const level =req.params.level
-  const allResources = await getSpecifiedResources(level)
-  if (allResources) {
-    res.json(allResources)
+  try {
+    const allResources = await getSpecifiedResources(level)
+    if (allResources) {
+      // console.log(allResources)
+      res.json(allResources)
+    }
+  } catch (err) {
+    console.log(err)
   }
 });
 
@@ -670,7 +681,6 @@ const updateUserResources = asyncHandler(async (req, res) => {
 // Route	DELETE  /api/v1/users/resources
 // access	Private
 const deleteUserResources = asyncHandler(async (req, res) => {
-  // res.status(200).json({ message: 'Delete a Resource' });
   const response = await deleteResource(req, res);
   if (response === "Access Approved") {
     res.status(200).send(response)

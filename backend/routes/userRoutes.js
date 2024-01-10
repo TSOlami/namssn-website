@@ -39,7 +39,7 @@ import {
 
 import { 
   createPost,
-	getAllPosts,
+	getPosts,
   getPostById,
 	getUserPosts,
   updatePost,
@@ -194,7 +194,7 @@ router.get('/events', getAllEvents);
  * @access Private 
  */
 router.route('/announcements')
-.get(protect, getAllAnnouncements);
+.get(getAllAnnouncements);
 
 // Route for getting all announcements by user
 router
@@ -215,7 +215,7 @@ router
 // Route for getting all posts
 router
 .route("/posts")
-.get(getAllPosts);
+.get(getPosts);
 
 // Route for getting a post by id
 router.get('/posts/:postId', protect, getPostById);

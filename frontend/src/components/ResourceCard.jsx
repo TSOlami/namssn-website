@@ -7,9 +7,14 @@ import { HiDotsVertical } from "react-icons/hi";
 import { FaFileLines } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useRef } from "react";
+import { FaCloudDownloadAlt } from "react-icons/fa";
+import { MdPreview } from "react-icons/md";
+import { Link } from "react-router-dom";
+
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
+const resourcesUrl = import.meta.env.VITE_RESOURCES_URL;
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
@@ -19,9 +24,15 @@ const ResourceCard = ({
   description,
   semester,
   date,
+  isLarge,
+  fileUrl2,
 }) => {
+  let cardbg = 'bg-blue-300';
+  if (isLarge === true) {
+    cardbg = 'bg-yellow-300';
+  }
   const cardClass =
-  "cursor-pointer hover:drop-shadow-xl flex flex-col justify-center items-center rounded-[10px] bg-cardbg p-2 sm:w-15 h-[150px] w-[150px] ";
+  `cursor-pointer flex flex-col justify-center items-center rounded-[10px] ${cardbg} p-2 sm:w-15 h-[150px] w-[150px]`;
 
   const handleShare = async () => {
         try {
@@ -67,14 +78,36 @@ const ResourceCard = ({
     };
   }, []);
 
-  const viewFile = (fileUrl) => {
+  const viewFile = async (fileUrl) => {
+    console.log(fileUrl)
     const w = window.open();
     w.location = fileUrl;
   };
+  
+  const downloadFile = async (fileUrl) => {
+    try {
+      console.log(fileUrl)
+      const downloadWindow = window.open(fileUrl);
+  
+      if (!downloadWindow) {
+        throw new Error('Popup blocked. Please allow popups and try again.');
+      }
+  
+      // Resolve the promise immediately after opening the new window
+      toast.promise(
+        Promise.resolve(fileUrl),
+        { pending: 'Downloading file...', success: 'File downloaded successfully' }
+      );
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      toast.error('Error downloading file');
+    }
+  };
 
   const handleFileDelete = async (fileUrl) => {	
+    console.log(fileUrl)
     handleSetOpenOptions();
-    await axios
+    await toast.promise(axios
       .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
       .then((res) => {
         if (res.data === "Access Approved") {
@@ -86,12 +119,20 @@ const ResourceCard = ({
       })
       .catch(() => {
         toast.error("An error occurred. Unable to delete resource");
-      });
+      }), {
+      pending: 'Deleting file...',
+  });
   };
 
   const handleNewDelete = (e) => {
     e.stopPropagation();
-    handleFileDelete(fileUrl);
+    if (isLarge === true) {
+      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F')
+      handleFileDelete(resourcesUrl+'/'+newFileUrl);
+    } else {
+      handleFileDelete(fileUrl);
+    }
+    
   };
 
   const smStyle = "text-sm text-gray-400 font-serif";
@@ -102,10 +143,9 @@ const ResourceCard = ({
 
       <div
         className={cardClass + " relative"}
-        onClick={() => viewFile(fileUrl)}
       >
         <FaFileLines/>
-        <span className="pb-2 ">{title.length > 20 ? `${title.substring(0,15)}...` : title}</span>
+        <span className="pb-2 ">{title.length > 16 ? `${title.substring(0,15)}...` : title}</span>
         <span
           onClick={(event) => {
             event.stopPropagation();
@@ -136,14 +176,18 @@ const ResourceCard = ({
                   onClick={handleNewDelete}
                   className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"
                 >
-                  <MdDelete /> <span>Delete Post</span>
+                  <MdDelete /> <span>Delete File</span>
                 </button>) : (<div></div>)
               }
             </div>
           )}
         </div>
-
-        
+        <div className="flex justify-around gap-10 pt-2 -4">
+          {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
+          {isLarge===false ? (<Link to={`/resources/preview/${title}`} state={fileUrl}> 
+            <MdPreview  className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+          </Link>) : (<MdPreview  onClick={() => viewFile(fileUrl2)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
+        </div>
       </div>
       {(showDetails && openOptions) && (
           <div className="drop-shadow-lg flex flex-col px-2 border border-b-blue-400 border-l-blue-400 border-r-blue-400 bg-white">

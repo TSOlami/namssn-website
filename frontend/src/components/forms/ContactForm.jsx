@@ -33,6 +33,10 @@ const ContactForm = () => {
     });
   };
 
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
+  
   return (
     <div className="max-w-2xl mx-auto">
       <h2 className="font-montserrat font-bold md:text-3xl leading-normal pt-16 text-xl text-center max-w-xl mx-auto mb-4">Reach Out to Us</h2>
@@ -104,7 +108,6 @@ const ContactForm = () => {
           >
             Send Message
           </button>
-          {isLoading && (<Loader />)}
         </div>
       </form>
     </div>

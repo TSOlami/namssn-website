@@ -4,7 +4,6 @@ import Resource from "../../models/resourceModel.js";
 const getLastSixResources = async (level) => {
   try {
     const lastFiveResources = await Resource.find({level: level}).sort({ createdAt: -1 }).limit(6);
-    console.log(lastFiveResources);
     return lastFiveResources;
   } catch (error) {
     console.error('Error retrieving the last five resources:', error);

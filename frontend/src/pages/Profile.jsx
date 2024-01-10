@@ -1,6 +1,9 @@
 import { FaCircleCheck } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Marquee from "react-fast-marquee";
 
 import {
 	EditProfileForm,
@@ -11,7 +14,11 @@ import {
 	VerifyAccountForm,
 } from "../components";
 import { ProfileImg } from "../assets";
-import { useUserPostsQuery, setPosts } from "../redux";
+import {
+	useUserPostsQuery,
+	logout,
+	useLogoutMutation,
+} from "../redux";
 import { motion } from "framer-motion";
 
 const Profile = () => {
@@ -28,12 +35,29 @@ const Profile = () => {
 	const noOfPosts = userInfo?.posts?.length;
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	// Use the useLogoutMutation hook to logout a user
+	const [logutUser] = useLogoutMutation();
 
 	// Fetch user posts from redux store
-	const { data: userPosts, isLoading } = useUserPostsQuery({
+	const { data: userPosts, isLoading, error } = useUserPostsQuery({
 		_id: userInfo?._id,
 	});
 
+	
+  // Add a useEffect hook to check if a user is properly authenticated
+  useEffect(() => {
+    if (error?.status === 401) {
+      // If the user is not authenticated, logout the user
+      logutUser();
+      // Dispatch the logout action
+      dispatch(logout());
+      toast.error("Sorry, You might need to login again.");
+      navigate("/signin");
+    }
+  }, [error, dispatch, logutUser]);
+	
 	// State for managing posts
 	const [postData, setPostData] = useState([]);
 
@@ -65,13 +89,6 @@ const Profile = () => {
 	const removePost = (postId) => {
     setPostData((prevData) => prevData.filter((post) => post._id !== postId));
   };
-	
-	// Use useEffect to set posts after component mounts
-	useEffect(() => {
-		if (userPosts) {
-			dispatch(setPosts(userPosts));
-		}
-	}, [dispatch, userPosts]);
 
 	// Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,6 +124,21 @@ const Profile = () => {
 						{noOfPosts} {noOfPosts === 1 ? "post" : "posts"}
 					</span>
 				</div>
+				{/* Display a message for non-verified users */}
+        {!isVerified && (
+          <div className="border-b-2 border-gray-300 w-full bg-red-50 h-12 flex justify-center items-center">
+            <span className="font-normal text-gray-700 text-center">
+              <Marquee
+							direction={"left"}
+							gradient={false}
+							speed={75}
+							pauseOnHover={true}
+							>
+							Your account is not verified. Verifying your account helps build trust within the community and allows you to enjoy additional features. Click the &quot;Verify Account&quot; button to get started.&nbsp;
+							</Marquee>
+            </span>
+          </div>
+        )}
 				{/* profile image and cover image */}
 				<div className="w-full h-32 bg-primary z-[-1]"></div>
 				<div className="flex flex-row justify-between items-center relative top-[-40px] my-[-30px] p-3 pl-6 z-[0]">
@@ -115,9 +147,10 @@ const Profile = () => {
 						alt="avatar"
 						className="profile-image"
 					/>{" "}
+					<div className="flex flex-col gap-4">
 					<button
 						onClick={handleModal}
-						className="border-2 rounded-2xl border-gray-700 p-1 px-2 hover:text-white hover:bg-primary hover:border-none mt-auto"
+						className="border-2 rounded-2xl border-white text-white p-1 px-2 hover:text-primary bg-primary hover:bg-white hover:border-none mt-auto"
 					>
 						Edit Profile
 					</button>
@@ -129,6 +162,7 @@ const Profile = () => {
 						Verify Account
 					</button>	
 					)}
+					</div>
 				</div>
 				<div className="flex flex-col text-sm p-3 pl-6">
 					<span className="font-semibold flex flex-row items-center gap-2 text-lg">

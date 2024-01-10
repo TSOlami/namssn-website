@@ -2,7 +2,7 @@ import Resource from '../../models/resourceModel.js';
 import User from '../../models/userModel.js';
 
 // uploads a resource to the database
-const uploadResource = async (filename, description, userId, uploaderName, fileUrl, level, course) => {
+const uploadResource = async (filename, description, userId, uploaderName, fileUrl, level, isLarge, course, bot_token) => {
     try {
         const newResource = new Resource({
             title: filename,
@@ -11,7 +11,9 @@ const uploadResource = async (filename, description, userId, uploaderName, fileU
             uploaderName: uploaderName,
             fileUrl: fileUrl,
             level: level,
-            course: course
+            isLarge: isLarge,
+            course: course,
+            botToken: bot_token
         });
         const savedResource = await newResource.save();        
         const updatedUser = await User.findOneAndUpdate(
@@ -23,6 +25,7 @@ const uploadResource = async (filename, description, userId, uploaderName, fileU
         const options = { day: 'numeric', month: 'short', year: '2-digit' };
         const formatter = new Intl.DateTimeFormat('en', options);
         const formattedDate = formatter.format(date);
+        console.log("successfully uploaded")
         return [savedResource, formattedDate, updatedUser.name];
     } catch (err) {
         console.log(err);

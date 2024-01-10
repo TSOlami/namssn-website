@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ResetPasswordSVG } from "../assets";
 import { FormErrors, InputField } from "../components";
-import { FaLock } from "react-icons/fa6";
+import { FaLock, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { BiSolidLock } from "react-icons/bi";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -9,8 +9,21 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useResetPasswordMutation, useSendMailMutation } from "../redux";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const ResetPassword = () => {
+	// State to manage the password visibility
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+	// Function to toggle the password visibility
+	const handleShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
+	const handleShowConfirmPassword = () => {
+		setShowConfirmPassword(!showConfirmPassword)
+	}
+
 	// Get the username parameter from the URL
 	const { username } = useParams();
 
@@ -21,7 +34,8 @@ const ResetPassword = () => {
 	const [sendMail] = useSendMailMutation();
 
 	// Define a mail text
-	const msg = "Your password has been successfully reset. You can now login with your new password. If you didn't request this change, please contact our support team immediately.";
+	const msg =
+		"Your password has been successfully reset. You can now login with your new password. If you didn't request this change, please contact our support team immediately.";
 
 	// Navigate to the login page
 	const navigate = useNavigate();
@@ -48,23 +62,39 @@ const ResetPassword = () => {
 			// Reset the password
 			try {
 				// Reset the password
-				const res = await toast.promise(resetPassword({username, password}), {
-					pending: "Resetting password...",
-				});
+				const res = await toast.promise(
+					resetPassword({ username, password }),
+					{
+						pending: "Resetting password...",
+					}
+				);
 
 				if (res.data) {
 					// Send a congratulatory email to the user
-					await sendMail({ username, userEmail: res?.data?.email, text: msg });
+					await sendMail({
+						username,
+						userEmail: res?.data?.email,
+						text: msg,
+					});
 					// Display a success message
-					toast.success("Password reset successfully. You will be redirected to the sign-in page to login with your new password.");
-          setTimeout(() => {
-            navigate("/signin");
-          }, 3000); // Redirect to sign-in page after 3 seconds
+					toast.success(
+						"Password reset successfully. You will be redirected to the sign-in page to login with your new password."
+					);
+					setTimeout(() => {
+						navigate("/signin");
+					}, 3000); // Redirect to sign-in page after 3 seconds
 				}
 
-				toast.error(res?.error?.error?.data?.message || res?.error?.data?.message);
+				toast.error(
+					res?.error?.error?.data?.message ||
+						res?.error?.data?.message
+				);
 			} catch (err) {
-				toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
+				toast.error(
+					err?.error?.response?.data?.message ||
+						err?.data?.message ||
+						err?.error
+				);
 			}
 		},
 	});
@@ -88,36 +118,63 @@ const ResetPassword = () => {
 				className="flex items-center flex-col gap-5 w-[300px]"
 			>
 				<h1 className="text-3xl font-bold">Reset Your Password</h1>
-				<div className="w-full">
+				<div className="w-full relative flex">
 					<InputField
 						name="newPassword"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						placeholder="Enter New Password"
 						pad
 						icon={<FaLock />}
 						onChange={formik.handleChange("newPassword")}
 					/>
-					{formik.touched.newPassword && formik.errors.newPassword ? (
-						<FormErrors error={formik.errors.newPassword} />
-					) : null}
-				</div>
 
-				<div className="w-full">
+					{showPassword ? (
+						<FaRegEyeSlash
+							className="absolute right-2 flex self-center justify-center"
+							onClick={handleShowPassword}
+						/>
+					) : (
+						<FaRegEye
+							className="absolute right-2 flex self-center justify-center"
+							onClick={handleShowPassword}
+						/>
+					)}
+				</div>
+				{formik.touched.newPassword && formik.errors.newPassword ? (
+					<FormErrors error={formik.errors.newPassword} />
+				) : null}
+
+				<div className="w-full relative flex">
 					<InputField
 						name="ConfirmPassword"
-						type="password"
+						type={showConfirmPassword ? "text" : "password"}
 						placeholder="Confirm New Password"
 						pad
 						icon={<BiSolidLock />}
 						onChange={formik.handleChange("confirmPassword")}
 					/>
-					{formik.touched.confirmPassword &&
-					formik.errors.confirmPassword ? (
-						<FormErrors error={formik.errors.confirmPassword} />
-					) : null}
-				</div>
 
-				<button type="submit" className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300">
+					{showConfirmPassword ? (
+						<FaRegEyeSlash
+							className="absolute right-2 flex self-center justify-center"
+							onClick={handleShowConfirmPassword}
+						/>
+					) : (
+						<FaRegEye
+							className="absolute right-2 flex self-center justify-center"
+							onClick={handleShowConfirmPassword}
+						/>
+					)}
+				</div>
+				{formik.touched.confirmPassword &&
+				formik.errors.confirmPassword ? (
+					<FormErrors error={formik.errors.confirmPassword} />
+				) : null}
+
+				<button
+					type="submit"
+					className="p-2 bg-primary text-white px-4 rounded-md w-[300px] mt-4 hover:opacity-80 transition-all duration-300"
+				>
 					Submit
 				</button>
 			</form>

@@ -13,6 +13,7 @@ import './index.css';
 import store from './redux/store/store';
 import { Payment, PaymentHistory } from "./components";
 import {
+  FilePreview,
 	LevelResources,
 	Search,
 	Landing,
@@ -68,46 +69,50 @@ const router = createBrowserRouter(
       <Route path="/reset-password/:username" element={<ResetPassword />} />
       {/* Private routes */}
       <Route path='' element={<ProtectedRoutes />} >
-      <Route path="/home" element={<Home />} />
-      <Route path="/payments" element={<PaymentPage />} />
-      <Route path="/payments/pay/:id" element={<Payment />} />
-      <Route
-        path="/payments/:userId"
-        element={<PaymentHistory />}
-      />
-      <Route path="/resources" element={<Resources />} />
-      <Route
-        path="/resources/:level"
-        element={<LevelResources />}
-      />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/profile/:userId" element={<UserProfile />} />
-      <Route
-        path="/announcements"
-        element={<AnnouncementMobile />}
-      />
-      <Route
-        path="/notifications"
-        element={<NotificationPage />}
-      />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/payment" element={<AdminPayment />} />
-      <Route path="/comments/:postId" element={<Comments />} />
-      <Route path="/admin/events" element={<AdminEvents />} />
-      <Route path="/search" element={<Search />} />
-      <Route
-        path="/admin/announcements"
-        element={<AdminAnnouncement />}
-      />
-      <Route path="/admin/users" element={<VerifyUsers />} />
-      <Route
-        path="/verify-account/:studentEmail"
-        element={<VerifyAccount />}
-      />
-      <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/admin/blogs" element={<AdminBlogs />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/payments" element={<PaymentPage />} />
+        <Route path="/payments/pay/:id" element={<Payment />} />
+        <Route
+          path="/payments/:userId"
+          element={<PaymentHistory />}
+        />
+        <Route path="/resources" element={<Resources />} />
+        <Route
+          path="/resources/:level"
+          element={<LevelResources />}
+        />
+        <Route
+          path="/resources/preview/:title"
+          element={<FilePreview />}
+        />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />
+        <Route
+          path="/announcements"
+          element={<AnnouncementMobile />}
+        />
+        <Route
+          path="/notifications"
+          element={<NotificationPage />}
+        />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/payment" element={<AdminPayment />} />
+        <Route path="/comments/:postId" element={<Comments />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
+        <Route path="/search" element={<Search />} />
+        <Route
+          path="/admin/announcements"
+          element={<AdminAnnouncement />}
+        />
+        <Route path="/admin/users" element={<VerifyUsers />} />
+        <Route
+          path="/verify-account/:studentEmail"
+          element={<VerifyAccount />}
+        />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/admin/blogs" element={<AdminBlogs />} />
       </Route>
     </Route>
   )
