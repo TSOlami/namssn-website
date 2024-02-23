@@ -79,9 +79,6 @@ const Resources = () => {
         return (
         <div className="w-[100%] flex justify-between">
             <Sidebar/>
-            {/* <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
-                Fetching...
-            </div> */}
             <div className="w-[27%] sm:hidden md:block hidden lg:block">
                 <AnnouncementContainer />
             </div>
@@ -311,7 +308,7 @@ const Resources = () => {
                 <Sidebar/>
                 <div className="text-xl flex flex-col items-center font-roboto text-gray-500 w-[100%] fixed right-[3%] font-medium top-[40%]">
                     <div><span>Unable to fetch resources</span></div>
-                    <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload</span></div>
+                    <div className="pt-2"><button className="p-2 hover:bg-white hover:border-2 hover:text-blue-600 hover:border-blue-600 text-white bg-blue-600 rounded-full" onClick={handleReload}>Try again</button></div>
                 </div>
                 <div className="w-[27%] sm:hidden bg-slate-800 md:hidden hidden lg:block">
                     <AnnouncementContainer />

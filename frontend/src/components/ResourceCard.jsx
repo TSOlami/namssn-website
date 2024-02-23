@@ -42,7 +42,6 @@ const ResourceCard = ({
               url: fileUrl
           }), {
             pending: "Sharing...",
-            success: "Shared successfully",
             });
         } catch (error) {
             console.error('Error sharing:', error);
@@ -171,7 +170,7 @@ const ResourceCard = ({
               >
                 Share
               </div>
-              {(isAdmin === "admin" || uploaderId===userInfo?._id) ?
+              {(uploaderId===userInfo?._id) ?
                 (<button
                   onClick={handleNewDelete}
                   className="text-red-500 p-2 absolute bg-white right-3 top-2 flex items-center gap-2 shadow-lg z-[201] hover:border border-black"

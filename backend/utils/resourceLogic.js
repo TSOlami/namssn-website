@@ -127,7 +127,7 @@ const deleteResource = async (req, res) => {
   const senderId = req.body._id;
   const resourceId = await checkUploader(fileUrl, senderId);
   // check if the sender is an admin or the uploader
-  if (resourceId || (req.user && req.user.role === 'admin')) {
+  if (resourceId) {
     await removeResource(resourceId, senderId)
     return ("Access Approved");
   } else {
