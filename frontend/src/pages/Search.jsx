@@ -5,8 +5,10 @@ import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
 import Loader from "../components/Loader";
-
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+let base_url = import.meta.env.VITE_RESOURCES_URL
+if (import.meta.env.MODE === 'production') {
+    base_url = import.meta.env.BACKEND_URL
+}
 const Search = () => {
     const [value, setValue] = useState('');
     const [filter, setFilter] = useState('')
@@ -34,7 +36,7 @@ const Search = () => {
             setIsLoading(true);
             if (filter && value) {
                 try {
-                    const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
+                    const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
                     if (res) {
                         setData(res.data); // set the fetched data to the state
                         setIsLoading(false);

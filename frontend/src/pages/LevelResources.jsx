@@ -7,7 +7,10 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Loader from "../components/Loader";
 import ErrorPage from "./ErrorPage";
 
-const base_url = "https://namssn-futminna.onrender.com/api/v1/users/resources/";
+let base_url = import.meta.env.VITE_RESOURCES_URL
+if (import.meta.env.MODE === 'production') {
+    base_url = import.meta.env.BACKEND_URL
+}
 const routes = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
 const LevelResources = () => {
@@ -29,7 +32,7 @@ const LevelResources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                     setTempData(res.data)
