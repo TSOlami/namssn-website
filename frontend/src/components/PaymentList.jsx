@@ -95,10 +95,10 @@ return (
         </Link>
       </div>) : (
         <div className="flex flex-col items-center justify-center w-full h-full">
-        <h1 className="pt-10 text-2xl md:text-3xl font-semibold text-gray-700">
+        <h1 className="pt-10 text-xl md:text-2xl font-semibold text-gray-700">
           This feature will be available soon.
         </h1>
-        <p className="text-xl font-medium text-gray-500">
+        <p className="text-lg font-medium text-gray-500">
           Please stay tuned!
         </p>
       </div>
