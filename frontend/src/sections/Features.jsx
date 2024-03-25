@@ -7,7 +7,7 @@ const Features = () => {
 			initial={{ opacity: 0, x: 100 }}
 			whileInView={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: -100 }}
-			transition={{ duration: 0.5 }}
+			transition={{ duration: 0.8 }}
 		>
 			<h1 className="header-text text-center max-w-xl mx-auto">
 				Why You Should Use NAMSSN Website
@@ -15,7 +15,7 @@ const Features = () => {
 			<div className="flex flex-col justify-center items-center pt-16 sm:pt-10">
 				<div className="flex flex-col lg:flex-row gap-4">
 					<motion.div
-						initial={{ rotate: 270 }}
+						initial={{ rotate: 45 }}
 						whileInView={{ rotate: 0 }}
 						exit={{ opacity: 0, x: -100 }}
 						transition={{ duration: 0.5 }}
@@ -38,7 +38,7 @@ const Features = () => {
 					</motion.div>
 					<div className="flex flex-row bg-tertiary rounded-2xl max-w-[25rem] mx-auto shadow-xl">
 						<motion.div
-							initial={{ rotate: 270 }}
+							initial={{ rotate: 45 }}
 							whileInView={{ rotate: 0 }}
 							exit={{ opacity: 0, x: -100 }}
 							transition={{ duration: 0.5 }}
@@ -59,7 +59,7 @@ const Features = () => {
 
 				<div className="flex flex-col lg:flex-row gap-10 pt-8">
 					<motion.div
-						initial={{ rotateY: 270 }}
+						initial={{ rotateY: 45 }}
 						whileInView={{ rotateY: 0 }}
 						exit={{ opacity: 0, x: -100 }}
 						transition={{ duration: 0.5 }}
