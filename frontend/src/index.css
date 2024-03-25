@@ -129,7 +129,7 @@
   }
 
   .nav-text {
-    @apply font-roboto font-normal text-xl leading-normal;
+    @apply font-roboto font-normal text-xl md:text-lg leading-normal;
   }
 
   .profile-image {
