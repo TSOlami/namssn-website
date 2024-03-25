@@ -12,7 +12,7 @@ export const navLinks = [
 export const teamMembers = [
   {
 		name: "Tijani Saheed Olalekan",
-		role: "Project Manager & Backend Developer",
+		role: "Software Engineer & Project Manager",
 		image: Teejay,
 		team: "Tech",
 		facebook: "https://web.facebook.com/profile.php?id=100059079370738",
