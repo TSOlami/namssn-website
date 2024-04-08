@@ -7,7 +7,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Loader from "../components/Loader";
 import ErrorPage from "./ErrorPage";
 
-let base_url = import.meta.env.VITE_BACKEND_URL
+let base_url = 'http://localhost:5000/api/v1/users/'
 
 const routes = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
@@ -30,7 +30,7 @@ const LevelResources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(`${base_url}/${modifiedString}/resources`);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                     setTempData(res.data)

@@ -632,7 +632,6 @@ const getUserBlogs = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/Resources
 // access	Private
 const getUserResources = asyncHandler(async (req, res) => {
-  console.log("here")
   const filesDetails = await getResources(req, res);
   if (filesDetails) {
     res.json(filesDetails);
@@ -659,6 +658,7 @@ const getFile = asyncHandler(async (req, res) => {
 // Route	GET  /api/v1/users/level/resources
 // access	Private
 const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
+  console.log("here")
   const level =req.params.level
   try {
     const allResources = await getSpecifiedResources(level)
