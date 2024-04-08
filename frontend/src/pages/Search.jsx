@@ -5,10 +5,7 @@ import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
 import Loader from "../components/Loader";
-let base_url = import.meta.env.VITE_RESOURCES_URL
-if (import.meta.env.MODE === 'production') {
-    base_url = import.meta.env.BACKEND_URL
-}
+let base_url = import.meta.env.VITE_BACKEND_URL
 const Search = () => {
     const [value, setValue] = useState('');
     const [filter, setFilter] = useState('')

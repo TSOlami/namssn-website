@@ -7,10 +7,8 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Loader from "../components/Loader";
 import ErrorPage from "./ErrorPage";
 
-let base_url = import.meta.env.VITE_RESOURCES_URL
-if (import.meta.env.MODE === 'production') {
-    base_url = import.meta.env.BACKEND_URL
-}
+let base_url = import.meta.env.VITE_BACKEND_URL
+
 const routes = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
 const LevelResources = () => {

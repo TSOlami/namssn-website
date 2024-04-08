@@ -17,10 +17,7 @@ import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
-let get_url = import.meta.env.VITE_RESOURCES_URL
-if (import.meta.env.MODE === 'production') {
-    get_url = import.meta.env.BACKEND_URL
-}
+let get_url = import.meta.env.VITE_BACKEND_URL
 const Resources = () => {
     const [data, setData] = useState(null);
     const [isPopUpVisible, setPopUpVisible] = useState(false);

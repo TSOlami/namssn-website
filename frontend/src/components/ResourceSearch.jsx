@@ -2,8 +2,7 @@ import { ResourceCard } from ".";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { formatDateToTime } from "../utils";
 
-const base_url = 'https://namssn-futminna.onrender.com/api/v1/users/resources/'
-
+const base_url = import.meta.env.VITE_BACKEND_URL;
 const isSubDictPresent = (mainDict, subDict) => {
     for (const [key, value] of Object.entries(subDict)) {
         if (mainDict[key] !== value) {

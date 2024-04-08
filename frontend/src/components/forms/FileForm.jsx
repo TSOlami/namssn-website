@@ -9,10 +9,8 @@ import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
-let post_url = import.meta.env.VITE_RESOURCES_URL
-if (import.meta.env.MODE === 'production') {
-    post_url = import.meta.env.BACKEND_URL
-}
+let post_url = import.meta.env.VITE_BACKEND_URL
+
 const FileForm = (props) => {
     const textStyle = "font-bold font-roboto text-lg"
     const errorStyle = "text-red-500 text-sm";

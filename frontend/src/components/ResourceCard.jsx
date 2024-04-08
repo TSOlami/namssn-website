@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const state = store.getState();
 const userInfo = state?.auth?.userInfo;
 const isAdmin = userInfo?.role;
-const resourcesUrl = import.meta.env.VITE_RESOURCES_URL;
+const resourcesUrl = import.meta.env.VITE_BACKEND_URL;
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
