@@ -18,7 +18,11 @@ const resourceSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Reference to the user who created the resource
-      required: true,
+      required: false,
+    },
+    uploaderName: {
+      type: String,
+      required: true
     },
     // The path or URL to the resource file.
     fileUrl: {
@@ -29,10 +33,18 @@ const resourceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isLarge: {
+      type: Boolean,
+      default: false,
+    },
     course: {
       type: String,
       required: true,
-    }
+    },
+    botToken: {
+      type: String,
+      required: true,
+    },
   },
   {
     // Automatically generate createdAt and updatedAt timestamps.

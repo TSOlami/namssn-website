@@ -1,19 +1,19 @@
-import * as fs from "fs";
-import { fileURLToPath } from 'url';
-import path from 'path'
 import express from "express";
 
 // Create an instance of an Express Router to define routes.
 const router = express.Router();
-const fileDir = 'C:/Users/DH4NN/Documents/ALX/namssn-website';
 
 // Import controllers and middleware
 import {
   authUser,
   registerUser,
+  verifyAccount,
+  generateOTP,
+  resetPassword,
   logoutUser,
   getUserProfile,
   getUserById,
+  getUserByUsername,
   updateUserProfile,
   deleteUserProfile,
   getAllEvents,
@@ -23,15 +23,24 @@ import {
   getUserBlogs,
   postUserResources,
   getUserResources,
-  updateUserResources,
+  getSpecifiedLevelResources,
+  getFile,
   deleteUserResources,
   postUserPayment,
-  getUserPayment,
+  getUserPayments,
+  getPaymentOptions,
+  verifyOTP,
+  resendOTP,
+  verifyUserPayment,
+  getSearchResults,
+  checkEmailExistence,
+  checkStudentEmailExistence,
 } from "../controllers/userController.js";
 
 import { 
   createPost,
-	getAllPosts,
+	getPosts,
+  getPostById,
 	getUserPosts,
   updatePost,
   deletePost,
@@ -43,10 +52,17 @@ import {
   deletePostComment,
   upvoteComment,
   downvoteComment,
+  getNotifications,
+  markNotificationsAsSeen,
+  deleteNotification,
+  clearNotifications,
 } from "../controllers/postController.js";
+import { registerMail, contactUs } from "../controllers/mailer.js";
+import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
 
-import { protect } from "../middleware/authMiddleware.js";
 
+// Route for sending a welcome email
+router.route('/register-mail').post(registerMail);
 /**
  * Register a new user.
  *
@@ -64,12 +80,86 @@ router.post('/', registerUser);
 router.post('/auth', authUser);
 
 /**
+ * Verify a user account.
+ * 
+ * @route POST /api/v1/users/verify-account
+ * @access Private
+ */
+router.route('/verify-account').post(verifyAccount);
+
+/**
+ * Check if email exists
+ * 
+ * @route POST /api/v1/users/check-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.route('/check-email').post(checkEmailExistence);
+
+/**
+ * Check if student email exists
+ * 
+ * @route POST /api/v1/users/check-student-email
+ * @access Public
+ * @param {string} email - The email of the user
+ * @returns {boolean} exists - Whether the email exists or not
+ * @returns {string} message - The message to be displayed
+ */
+router.route('/check-student-email').post(checkStudentEmailExistence);
+
+/**
+ * Generate OTP
+ * 
+ * @route GET /api/v1/users/generate-otp
+ * @access Public
+ */
+router.route('/generate-otp/:username').get(verifyUser, generateOTP);
+
+/**
+ * Resend OTP
+ * 
+ * @route GET /api/v1/users/resend-otp
+ * @access Public
+ * @param {string} username - The username of the user to resend OTP to
+ */
+router.route('/resend-otp/:username').get(verifyUser, resendOTP);
+
+/**
+ * Verify  generated OTP
+ * 
+ * @route  POST /api/v1/users/otp
+ * @access Public
+ */
+router.route('/verify-otp').post(verifyUser, verifyOTP);
+
+/**
+ * Reset Password
+ * 
+ * PUT /api/v1/users/reset-password
+ * @access Public
+ */
+router.route('/reset-password').put(verifyUser, otpStatusCheck, resetPassword);
+
+/**
  * Logout a user.
  *
  * @route POST /api/v1/users/logout
  * @access Private (Requires authentication)
  */
 router.post('/logout', logoutUser);
+
+/**
+ * Contact us
+ * 
+ * @route POST /api/v1/users/contact-us
+ * @access Public
+ * @param {string} name - The name of the user
+ * @param {string} email - The email of the user
+ * @param {string} message - The message of the user
+ */
+router.post('/contact-us', contactUs);
 
 /**
  * Get, update, and delete a user profile.
@@ -88,6 +178,9 @@ router
 // Route for getting a user by id
 router.route('/profile/:userId').get(protect, getUserById);
 
+// Route for getting a user by username
+router.route('/user').get(getUserByUsername);
+
 /**
  * Get Events
  * @route GET /api/v1/users/events
@@ -101,7 +194,7 @@ router.get('/events', getAllEvents);
  * @access Private 
  */
 router.route('/announcements')
-.get(protect, getAllAnnouncements);
+.get(getAllAnnouncements);
 
 // Route for getting all announcements by user
 router
@@ -122,7 +215,10 @@ router
 // Route for getting all posts
 router
 .route("/posts")
-.get(protect, getAllPosts);
+.get(getPosts);
+
+// Route for getting a post by id
+router.get('/posts/:postId', protect, getPostById);
 
 // Route for getting a user post by id
 router.get('/post/:userId', protect, getUserPosts);
@@ -139,6 +235,23 @@ router
 .post(protect, createPost)
 .put(protect, updatePost)
 .delete(protect, deletePost);
+
+// Route for getting and deleting all notifications
+router
+.route('/notifications')
+.get(protect, getNotifications)
+.delete(protect, clearNotifications);
+
+// Route for marking notifications as seen
+router
+.route('/notifications/seen')
+.put(protect, markNotificationsAsSeen);
+
+// Route for deleting a notification
+router
+.route('/notifications/:notificationId')
+.delete(protect, deleteNotification);
+
 
 /**
  * Get, create, update and delete user post comments.
@@ -205,17 +318,18 @@ router
  * @route POST /api/v1/users/payments
  * @access Private (Requires authentication)
  */
+router.get('/payments/:userId', protect, getUserPayments);
+router.post('/payments/verify', protect, verifyUserPayment);
 router
   .route('/payments')
-  .get(protect, getUserPayment)
+  .get(protect, getPaymentOptions)
+  // .get(protect, getUserPayment)
   .post(protect,postUserPayment);
+
 
 router
   .route('/resources/:filename')
-  .get((req, res) => {
-    const filePath = path.join(fileDir + '/uploads', req.params.filename)
-    res.sendFile(filePath)
-  })
+  .get(getFile)
   .delete(deleteUserResources)
 
 router
@@ -223,4 +337,9 @@ router
   .post(postUserResources)
   .get(getUserResources);
 
+router
+  .get('/:level/resources', getSpecifiedLevelResources)
+
+router
+  .get('/search', getSearchResults)
 export default router;

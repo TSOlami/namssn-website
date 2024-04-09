@@ -1,11 +1,17 @@
 # Dependencies
 frontend/node_modules
 backend/node_modules
+*lock.json
+package-lock.json
+uploads/*
+uploads
 
 # Env files
 frontend/.env
 backend/.env
-.env
+
+# Config files
+*vite.config.js
 
 # Logs
 frontend/logs
@@ -66,3 +72,9 @@ dist-ssr
 
 # pmpm lock files
 pnpm-lock.yaml
+
+# Local Netlify folder
+.netlify
+
+# SSH keys
+*.pem

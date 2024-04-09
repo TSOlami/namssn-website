@@ -6,6 +6,18 @@ import mongoose from "mongoose";
 
 const eventSchema = mongoose.Schema(
 	{
+		title: {
+			type: String,
+			required: true,
+		},
+		date: {
+			type: String,
+			required: false,
+		},
+		location: {
+			type: String,
+			required: false,
+		},
 		image: {
 			type: String, // You can use a string to store the image URL or path
 			required: true,

@@ -286,39 +286,78 @@ export const mockRecentPayments = [
 export const mockEvents = [
 	{
 		title: "Sin City Night",
-		description: "Here lies the best day of every student's life, and the worst of the lecturers",
+		description:
+			"Here lies the best day of every student's life, and the worst of the lecturers",
 		location: "Rotary Club Hall",
 		date: "2021-06-12",
-		flier: "/src/assets/images/Event2.png"
+		flier: "/src/assets/images/Event2.png",
 	},
-	
+
 	{
 		title: "Departmental Dinner",
 		description: "This is a description of the event",
 		location: "Rotary Club Hall",
 		date: "2024-06-12",
-		flier: "/src/assets/images/Event1.png"
+		flier: "/src/assets/images/Event1.png",
 	},
 	{
 		title: "NAMSSN Year 2 vs MCB",
 		description: "This is a description of the event",
 		location: "Rotary Club Hall",
 		date: "2021-06-12",
-		flier: "/src/assets/images/Event3.png"
+		flier: "/src/assets/images/Event3.png",
 	},
 	{
 		title: "Sin City Night",
 		description: "This is a description of the event",
 		location: "Rotary Club Hall",
 		date: "2021-06-12",
-		flier: "/src/assets/images/Event1.png"
+		flier: "/src/assets/images/Event1.png",
 	},
 	{
 		title: "Sin City Night",
 		description: "This is a description of the event",
 		location: "Rotary Club Hall",
 		date: "2021-06-12",
-		flier: "/src/assets/images/Event1.png"
+		flier: "/src/assets/images/Event1.png",
 	},
+];
 
-]
+export const mockUsers = [
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+	{
+		name: "Ifedimeji Omoniyi",
+		username: "design_hashira",
+		points: 100,
+		avatar: "avatar2.png",
+	},
+];

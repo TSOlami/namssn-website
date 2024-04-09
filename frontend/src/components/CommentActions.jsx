@@ -7,11 +7,27 @@ import {
 const CommentActions = ({
 	upvotes,
 	downvotes,
-	shares,
 	onUpvote,
 	onDownvote,
+	isUpvoted,
+	isDownvoted,
+	postId
 }) => {
-	console.log("CommentActions: ", upvotes, downvotes, shares);
+	upvotes = upvotes?.length;
+	downvotes = downvotes?.length;
+
+	const handleShare = async () => {
+        try {
+            await navigator.share({
+                title: "Share comment",
+                text: 'Check out this comment!',
+                url: `/comments/${postId}`
+            });
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
 	return (
 		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>
@@ -20,7 +36,11 @@ const CommentActions = ({
 						onClick={onUpvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidUpvote color="#17A1FA" />
+						{isUpvoted ? (
+							<BiSolidUpvote color="#17A1FA" />
+						) : (
+							<BiSolidUpvote />
+						)}
 						<span>{upvotes} </span>
 					</button>
 				</span>
@@ -32,15 +52,20 @@ const CommentActions = ({
 						onClick={onDownvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidDownvote color="red" /> {downvotes}{" "}
+						{isDownvoted ? (
+							<BiSolidDownvote color="red" />
+						) : (
+							<BiSolidDownvote />
+						)}
+						{downvotes}{" "}
 					</button>
 				</span>
 				<span>Downvotes</span>
 			</div>
 
-			<div>
+			<div onClick={handleShare}>
 				<span className="flex items-center gap-1">
-					<BiShareAlt /> {shares}
+					<BiShareAlt />
 				</span>
 				<span>Share</span>
 			</div>

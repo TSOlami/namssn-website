@@ -78,6 +78,14 @@ const userSchema = mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user', // Default role is 'user'
     },
+    otpGenerated: {
+      type: Boolean,
+      default: false, // Default to false
+    },
+    otpVerified: {
+      type: Boolean,
+      default: false, // Default to false
+    },
   },
   {
     timestamps: true, // Automatically generate createdAt and updatedAt timestamps

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -38,7 +38,7 @@
     font-size: 2rem;
     color: #000;
     font-weight: 700;
-    font-family: Merriweather;
+    font-family: montserrat;
     font-style: normal;
   }
 
@@ -54,7 +54,7 @@
     color: #000;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
-  
+
   .button-2 {
     display: inline-flex;
     padding: 0.4375rem 1.25rem;
@@ -66,7 +66,28 @@
     color: #FFF;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
-  
+
+  /* Define a class for the post images */
+  .post-image-container {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    margin-left: auto;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px gray;
+    border-radius: 10px;
+  }
+
+  .post-image {
+    width: auto;
+    max-height: 200px;
+    object-position: center;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 }
 
 
@@ -100,19 +121,19 @@
   }
 
   .info-text {
-    @apply font-merriweather text-secondary text-lg leading-7;
+    @apply font-montserrat text-secondary text-lg leading-7;
   }
 
   .body-text {
-    @apply font-crimson text-xl leading-normal;
+    @apply font-roboto leading-normal;
   }
 
   .nav-text {
-    @apply font-crimson font-normal text-xl leading-normal;
+    @apply font-roboto font-normal text-xl md:text-lg leading-normal;
   }
-  
+
   .profile-image {
-    @apply rounded-full border-2 border-white bg-white w-[10rem] h-[10rem] object-cover shadow-lg cursor-pointer;
+    @apply rounded-full border-2 border-white bg-white w-[7.5rem] h-[7.5rem] object-cover shadow-lg cursor-pointer;
     @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110;
   }
 
@@ -122,13 +143,15 @@
   }
 
   .header-text {
-    @apply font-merriweather font-bold md:text-3xl leading-normal py-6 text-2xl;
+    @apply font-montserrat font-bold md:text-3xl leading-normal py-6 text-2xl;
   }
+
   .text-container {
-    @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-crimson;
+    @apply rounded-3xl border items-center flex gap-2 justify-center py-[5px] px-[20px] text-xl font-roboto  whitespace-normal;
   }
+
   input[type='file'] {
-    @apply block;
+    @apply hidden;
   }
 }
 
@@ -148,6 +171,7 @@
 
 .hamburger {
   display: none;
+  z-index: 999;
 }
 
 .underline-blue {
@@ -170,6 +194,54 @@
   background: #E3FFE8;
 }
 
+.verification-code-input {
+  display: flex;
+  justify-content: center;
+}
+
+.verification-code-input input {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+@media  screen and (max-width: 420px) {
+  .verification-code-input input {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+.verification-code-input input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* custom.css for image expansion*/
+.blur-filter {
+  backdrop-filter: blur(5px);
+}
+
+
+/* Resources page loading spinner  */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
 
 
 @media (max-width: 1024px) {
@@ -180,8 +252,8 @@
     color: white;
     position: fixed;
     right: 1rem;
-    top: 5vh;
-    z-index: 10;
+    top: 2vh;
+    z-index: 999;
     background: white;
     border-radius: 5px;
   }

@@ -1,27 +1,48 @@
-import { NavBar, Footer, Actions } from "../components";
-import { blogPosts } from "../constants";
+import { NavBar, Footer } from "../components";
+import { motion } from "framer-motion";
+import { useAllBlogsQuery } from "../redux";
+
+import { Loader } from "../components";
+import { formatDateToString } from "../utils";
+import { useState } from "react";
 
 const BlogPage = () => {
+	// Use the useAllBlogsQuery hook to fetch all blogs
+	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
+
+	// Read more ability
+	const [readMore, setReadMore] = useState(false);
+	const handleSetReadMore = () => {
+		setReadMore(!readMore);
+	};
 	return (
-		<main>
+		<motion.main
+			initial={{ opacity: 0, x: 100 }}
+			animate={{ opacity: 1, x: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+		>
 			<NavBar />
 			<section className="padding w-full">
-				<h1 className="font-crimson text-primary text-2xl items-start mt-8">
+				<h1 className="font-roboto text-primary text-2xl items-start mt-8">
 					Recent Blog Posts
 				</h1>
 				<div className="flex flex-col gap-8 my-10">
-					{blogPosts.map((post) => (
-						<div key={post.id} className="mb-6">
+					{blogs?.map((blog) => {
+						const date = new Date(blog.createdAt);
+            const formattedDate = formatDateToString(date);
+
+						return (
+							<div id={blog._id} key={blog._id} className="mb-6">
 							<div className="flex md:flex-row flex-col justify-between">
 								<div className="flex flex-col gap-2">
-									<h2 className="text-black text-2xl md:text-3xl font-bold font-merriweather">
-										{post.title}
+									<h2 className="text-black text-2xl md:text-3xl font-bold font-montserrat">
+										{blog.title}
 									</h2>
 									<div className="flex space-x-2 gap-2.5 mt-2">
-										{post.tags.map((tag, index) => (
+										{blog.tags.map((tag, index) => (
 											<span
 												key={index}
-												className=" font-crimson px-3 py-1 bg-tertiary rounded justify-center items-center text-black text-center text-base font-normal"
+												className=" font-roboto px-3 py-1 bg-tertiary rounded justify-center items-center text-black text-center text-base font-normal"
 											>
 												{tag}
 											</span>
@@ -29,38 +50,66 @@ const BlogPage = () => {
 									</div>
 								</div>
 								<div className="grid gap-y-0 mt-4 text-right">
-									<p className="text-primary text-xl md:text-2xl font-bold font-crimson">
-										{post.author}
+									<p className="text-primary text-xl md:text-2xl font-bold font-roboto">
+										{blog.author}
 									</p>
-									<p className="text-xl text-black font-normal font-crimson my-2 md:my-4">
-										{post.date}
+									<p className="text-xl text-gray-700 font-normal font-roboto my-2 md:my-4">
+										{formattedDate}
 									</p>
 								</div>
 							</div>
-							<div className="flex flex-col md:flex-row rounded-lg mt-5 bg-tertiary opacity-[50px]">
-								<img
-									src={post.image}
-									alt="Blog Image"
-									className="rounded-lg"
-								/>
-								<div className="p-6">
-									<Actions
-										upvotes={post.upvotes}
-										downvotes={post.downvotes}
-										shares="5"
-										comments="10"
+							<div className="flex flex-col lg:flex-row rounded-lg mt-5 bg-tertiary opacity-[50px]">
+								<div className="lg:min-w-[500px] max-h-[700px] w-full lg:w-auto ">
+									<img
+										src={blog.coverImage}
+										alt="Blog Image"
+										className="rounded-lg max-h-[500px] lg:max-h-[700px] w-full lg:auto object-cover"
 									/>
-									<p className="body-text my-4">
-										{post.body}
-									</p>
+								</div>
+								<div className="p-5">
+									{readMore ? (
+										<p className="body-text my-button4">
+											{blog.content} {" "}
+											<button
+												className="text-primary font-bold pt-2 cursor-pointer"
+												onClick={handleSetReadMore}
+											>
+												{" "}
+												Hide
+											</button>
+										</p>
+									) : (
+										<p>
+											{blog.content.length > 400 ? (
+												<>
+													{blog.content.slice(0, 400)}
+													<button
+														onClick={
+															handleSetReadMore
+														}
+														className="text-primary font-bold cursor-pointer"
+													>
+														{" "}
+														...Read More
+													</button>
+												</>
+											) : (
+												blog.content
+											)}
+										</p>
+									)}
+
+									{/*  */}
 								</div>
 							</div>
 						</div>
-					))}
+						)
+					})}
 				</div>
 			</section>
+			{isFetching && <Loader />}
 			<Footer />
-		</main>
+		</motion.main>
 	);
 };
 

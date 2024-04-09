@@ -7,13 +7,34 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 		return {
       // Get All Posts Query
       allPosts: builder.query({
-        query() {
+        query(page, pageSize) {
           return {
-            url: `${POSTS_URL}/posts`,
+            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
             method: 'GET',
           };
         },
         providesTags: ['Post'], 
+      }),
+
+      // Get Paginated Posts Query
+      paginatedPosts: builder.query({
+        query({ page, pageSize }) {
+          return {
+            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Post'],
+      }),
+
+      // Get a Post Query
+      post: builder.query({
+        query({ postId }) {
+          return {
+            url: `${POSTS_URL}/posts/${postId}`,
+            method: 'GET',
+          };
+        },
       }),
 
       // Get User Posts Query
@@ -36,7 +57,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Update Post Query
@@ -48,7 +68,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Delete Post Query
@@ -60,7 +79,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Upvote Post Query
@@ -72,7 +90,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Downvote Post Query
@@ -84,7 +101,6 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             body: data,
           };
         },
-        invalidatesTags: ['Post'],
       }),
 
       // Get Post Comments Query
@@ -163,6 +179,8 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useAllPostsQuery,
+  usePostQuery,
+  usePaginatedPostsQuery,
   useUserPostsQuery,
   useCreatePostMutation,
   useUpdatePostMutation,

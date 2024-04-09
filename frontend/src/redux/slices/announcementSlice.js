@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const ANNOUCEMENTS_URL = "/api/v1/users";
+const ANNOUCEMENTS_URL = "/api/v1/";
 
 export const announcementsApiSlice = apiSlice.injectEndpoints({
 	endpoints(builder) {
@@ -9,7 +9,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			allAnnouncements: builder.query({
 				query() {
 					return {
-						url: `${ANNOUCEMENTS_URL}/announcements`,
+						url: `${ANNOUCEMENTS_URL}/users/announcements`,
 						method: "GET",
 					};
 				},
@@ -20,7 +20,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			userAnnouncements: builder.query({
 				query({ _id }) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/announcement/${_id}`,
+						url: `${ANNOUCEMENTS_URL}/users/announcement/${_id}`,
 						method: "GET",
 					};
 				},
@@ -31,19 +31,19 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			createAnnouncement: builder.mutation({
 				query(data) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/announcement`,
+						url: `${ANNOUCEMENTS_URL}/admin/announcement`,
 						method: "POST",
 						body: data,
 					};
 				},
-				invalidatesTags: ["Announcement"],
+			invalidatesTags: ["Announcement"],
 			}),
 
 			// Update Announcement Query
 			updateAnnouncement: builder.mutation({
 				query(data) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/announcement`,
+						url: `${ANNOUCEMENTS_URL}/admin/announcement`,
 						method: "PUT",
 						body: data,
 					};
@@ -53,11 +53,10 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 
 			// Delete Announcement Query
 			deleteAnnouncement: builder.mutation({
-				query(data) {
+				query(announcementId) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/announcement`,
+						url: `${ANNOUCEMENTS_URL}/admin/announcement/${announcementId}`,
 						method: "DELETE",
-						body: data,
 					};
 				},
 				invalidatesTags: ["Announcement"],
@@ -65,3 +64,11 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 		};
 	},
 });
+
+export const {
+	useAllAnnouncementsQuery,
+	useUserAnnouncementsQuery,
+	useCreateAnnouncementMutation,
+	useUpdateAnnouncementMutation,
+	useDeleteAnnouncementMutation,
+} = announcementsApiSlice;

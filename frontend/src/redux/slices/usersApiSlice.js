@@ -27,12 +27,69 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
+      // Check Student Email Query
+      checkStudentEmail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/check-student-email`,
+            method: 'POST',
+            body: data,
+          };
+        },
+      }),
+
+      // Verify Account Query
+      verifyAccount: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/verify-account`,
+            method: 'POST',
+            body: data,
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
+
+      // Send mail
+      sendMail: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/register-mail`,
+            method: 'POST',
+            body:data,
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
+
+      // Contact Us
+      contactUs: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/contact-us`,
+            method: 'POST',
+            body:data,
+          };
+        },
+      }),
+
       // Logout Query
       logout: builder.mutation({
         query() {
           return {
             url: `${USERS_URL}/logout`,
             method: 'POST',
+          };
+        },
+      }),
+
+      // Reset Password Query
+      resetPassword: builder.mutation({
+        query(data) {
+          return {
+            url: `${USERS_URL}/reset-password`,
+            method: 'PUT',
+            body: data,
           };
         },
       }),
@@ -72,31 +129,19 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['User'],
       }),
 
-      // Make a user admin
-      makeUserAdmin: builder.mutation({
-        query(data) {
+      // Get All Blogs Query
+      allBlogs: builder.query({
+        query() {
           return {
-            url: `${USERS_URL}/make-admin/${data.userId}`,
-            method: 'PUT',
-            body: data,
+            url: `${USERS_URL}/blogs`,
+            method: 'GET',
           };
         },
-        invalidatesTags: ['User'],
+        providesTags: ['Blog'],
       }),
-
-      // Remove admin privileges from a user
-      removeAdmin: builder.mutation({
-        query(data) {
-          return {
-            url: `${USERS_URL}/remove-admin/${data.userId}`,
-            method: 'PUT',
-            body: data,
-          };
-        },
-        invalidatesTags: ['User'],
-      }),
+      
     };
   },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useMakeUserAdminMutation, useRemoveAdminMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useGetUserQuery, useAllBlogsQuery, useVerifyAccountMutation, useSendMailMutation, useResetPasswordMutation, useContactUsMutation, useCheckStudentEmailMutation } = usersApiSlice;

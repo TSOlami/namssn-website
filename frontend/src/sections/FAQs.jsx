@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
 import { FAQ } from '../assets';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const FAQItem = ({ questionNumber, question, answer }) => {
   const [expanded, setExpanded] = useState(false);
@@ -11,9 +12,9 @@ const FAQItem = ({ questionNumber, question, answer }) => {
 
   return (
     <div className="flex flex-col cursor-pointer" onClick={toggleExpanded}>
-      <div className="flex flex-row justify-between items-center border-b-2">
-        <h2 className="text-lg font-normal font-merriweather">
-          <span className="text-3xl font-bold font-merriweather">{questionNumber}. </span>
+      <div className="flex flex-row justify-between items-center border-b-2 pb-2 lg:pb-0">
+        <h2 className="text-lg font-normal font-montserrat">
+          <span className="text-3xl font-bold font-montserrat">{questionNumber}. </span>
           {question}
         </h2>
         <button onClick={toggleExpanded}>
@@ -21,9 +22,17 @@ const FAQItem = ({ questionNumber, question, answer }) => {
         </button>
       </div>
       {expanded && (
-        <div className=" p-2 flex flex-row">
+        <AnimatePresence>
+        <motion.div 
+          initial={{ opacity: 0, height:0}}
+          animate={{ opacity: 1, height: "100%" }}
+          exit={{ opacity: 0}}
+          transition={{ duration: 0.8 }}
+
+        className=" p-2 flex flex-row">
           <p className="body-text">{answer}</p>
-        </div>
+        </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );
@@ -35,37 +44,37 @@ const FAQs = () => {
       <h1 className="header-text text-center max-w-xl mx-auto">
         Frequently Asked Questions
       </h1>
-      <div className="flex md:flex-row-reverse flex-col gap-10 pt-10 px-8 mx-auto">
+      <div className="flex md:flex-row-reverse flex-col gap-10 pt-10 md:px-8 mx-auto">
         <div className="lg:w-3/5 flex flex-col pt-8">
         <FAQItem
-      questionNumber={1}
-  question="What does NAMSSN stand for?"
-  answer="NAMSSN stands for the National Association of Mathematical Sciences Students of Nigeria."
-/>
+            questionNumber={1}
+            question="What does NAMSSN stand for?"
+            answer="NAMSSN stands for the National Association of Mathematical Sciences Students of Nigeria."
+          />
 
-<FAQItem
-  questionNumber={2}
-  question="Is this website affiliated with NAMSSN at the national level?"
-  answer="No, this website is specifically for the NAMSSN FUTMINNA chapter, which is based at the Federal University of Technology Minna."
-/>
+          <FAQItem
+            questionNumber={2}
+            question="Is this website affiliated with NAMSSN at the national level?"
+            answer="No, this website is specifically for the NAMSSN FUTMINNA chapter, which is based at the Federal University of Technology Minna."
+          />
 
-<FAQItem
-  questionNumber={3}
-  question="How can I become a member of NAMSSN FUTMINNA?"
-  answer="To become a member of NAMSSN FUTMINNA, you can visit our Membership page and follow the registration process outlined there."
-/>
+          <FAQItem
+            questionNumber={3}
+            question="How can I become a member of NAMSSN FUTMINNA?"
+            answer="To become a member of NAMSSN FUTMINNA, you can visit our Membership page and follow the registration process outlined there."
+          />
 
-<FAQItem
-  questionNumber={4}
-  question="What benefits do NAMSSN members receive?"
-  answer="NAMSSN members enjoy various benefits, including access to educational resources, participation in events, and networking opportunities with fellow mathematics enthusiasts."
-/>
+          <FAQItem
+            questionNumber={4}
+            question="What benefits do NAMSSN members receive?"
+            answer="NAMSSN members enjoy various benefits, including access to educational resources, participation in events, and networking opportunities with fellow mathematics enthusiasts."
+          />
 
-<FAQItem
-  questionNumber={5}
-  question="Can I contribute to the content on this website?"
-  answer="Yes, we welcome contributions from our members. If you have articles, blogs, or other content related to mathematics that you'd like to share, please contact our admin team for more information on how to contribute."
-/>
+          <FAQItem
+            questionNumber={5}
+            question="Can I contribute to the content on this website?"
+            answer="Yes, we welcome contributions from our members. If you have articles, blogs, or other content related to mathematics that you'd like to share, please contact our admin team for more information on how to contribute."
+          />
         </div>
         <div className="max-w-10 mx-auto">
           <img src={FAQ} alt="FAQ" className="w-full pt-8" />

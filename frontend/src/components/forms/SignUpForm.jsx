@@ -15,8 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import {FormErrors, InputField } from "../../components";
-import Loader from "../Loader";
-import { useRegisterMutation, setCredentials } from "../../redux";
+import { useRegisterMutation, useSendMailMutation, setCredentials } from "../../redux";
 
 const SignUpForm = () => {
   // Get user info from redux store
@@ -41,7 +40,11 @@ const SignUpForm = () => {
     }
   }, [navigate, userInfo]);
 
-  const [ register, { isLoading }] = useRegisterMutation();
+  const [ register, { isLoading } ] = useRegisterMutation();
+
+  const [ sendMail ] = useSendMailMutation();
+
+  const msg = "We're thrilled to have you as a part of the NAMSSN family at FUTMINNA! With your registration, you've unlocked a world of opportunities and resources. Get ready to connect with fellow students, access exclusive events, and explore exciting initiatives. Your journey with us begins now, and we're here to support your personal and professional growth. Stay updated with the latest news, activities, and opportunities within the NAMSSN community. Discover a platform where you can share your insights, experiences, and talents. Feel free to explore our website to learn more about our mission and the benefits of your membership. Remember, your voice matters, and we're here to amplify it within our community.Your commitment to NAMSSN will contribute to making a positive impact on our campus and beyond.";
 
 	// Formik and yup validation schema
 	const initialvalues = {
@@ -75,12 +78,22 @@ const SignUpForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-        const res = await register(values).unwrap();
+        const res = await toast.promise(register(values).unwrap(), {
+          pending: "Registering...",
+          success: "Registration successful. Welcome to NAMSSN (FUTMINNA)!",
+        });
+
         dispatch(setCredentials({...res}));
+        // Registration successful, now send the registration email
+        let { username, email } = res;
+        if (username && email) {
+          const msgWithUsername = `Hi ${username}! ${msg}`;
+          await sendMail({ username, userEmail: email, text: msgWithUsername }).unwrap();
+          return Promise.resolve(msg);
+        }
         navigate('/home');
-        toast.success('Registration successful. Welcome to NAMSSN (FUTMINNA)!');
       } catch (err) {
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
 		},
 	});
@@ -200,7 +213,7 @@ const SignUpForm = () => {
           placeholder="Confirm your password"
           autoComplete="new-password"
         />
-        {showPassword ? (
+        {showConfirmPassword ? (
           <FaRegEyeSlash
             className="absolute right-2 flex self-center justify-center"
             onClick={handleShowConfirmPassword}
@@ -216,14 +229,22 @@ const SignUpForm = () => {
         <FormErrors error={formik.errors.confirmPassword} />
       ) : null}
 
-      { isLoading && <Loader />}
-
-      <button
-        type="submit"
-        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
-      >
-        Sign Up
-      </button>
+      {isLoading ? (
+        <button
+          type="submit"
+          className="bg-primary text-white rounded-md py-2 mt-4"
+          disabled
+        >
+          Registering...
+        </button>
+      ) : (
+        <button
+          type="submit"
+          className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
+        >
+          Sign Up
+        </button>
+      )}
 
     <div className="text-right">
       Already have an account?{" "}

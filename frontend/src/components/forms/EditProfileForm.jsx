@@ -25,6 +25,8 @@ const EditProfileForm = ({ handleModal }) => {
   // Use the useSelector hook to access the userInfo object from the state
   const { userInfo } = useSelector((state) => state.auth);
 
+  let profilePicture = userInfo?.profilePicture || ProfileImg;
+
   // Use the useUpdateUserMutation hook to update the user's profile
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
@@ -47,8 +49,11 @@ const EditProfileForm = ({ handleModal }) => {
     level: Yup.string().required("Please select your level"),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    studentEmail: Yup.string().email('Invalid email format'),
-    matricNumber: Yup.string(),
+    matricNumber: Yup.string()
+    .matches(
+      /^20\d{2}\/1\/\d{5}PM$/,
+      'Invalid matric number format (e.g., 20XX/1/XXXXXPM)'
+    ),
     bio: Yup.string(),
 	});
   
@@ -58,14 +63,19 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          values = await Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
-          const res = await updateUser(values).unwrap();
+          let updatedValues = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
+          // Call the updateUser function to update the user's profile
+          const res = await toast.promise(updateUser(updatedValues).unwrap(), {
+            pending: 'Updating profile...',
+            success: 'Profile updated successfully',
+          });
+
+          // Dispatch the setCredentials action to update the userInfo object in the state
           dispatch(setCredentials({...res}));
-          navigate('/home');
-          console.log(values);
-          toast.success('Profile updated!');
+          navigate('/profile');
+          handleModal();
         } catch (err) {
-          toast.error(err?.data?.message || err?.error)
+          toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
         }
       },
 	});
@@ -75,6 +85,10 @@ const EditProfileForm = ({ handleModal }) => {
     const base64 = await convertToBase64(e.target.files[0]);
     setFile(base64);
   };
+
+  if (isLoading) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
   
   return (
     <div className="bg-white rounded-2xl p-4 w-96">
@@ -84,13 +98,13 @@ const EditProfileForm = ({ handleModal }) => {
           <FaXmark />
         </button>
       </div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-4">
-        <div className="scale-75 flex-row">
-          <label htmlFor="profile">
-          <img src={file || ProfileImg} alt="" className='profile-image'/>
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-2">
+        <div className="flex-row">
+        <label htmlFor="profile">
+          <img src={file || profilePicture || ProfileImg} alt="" className='profile-image m-2'/>
           </label>
 
-          <input onChange={onUpload} type="file" name="profile" id="profile" className="" />
+          <input onChange={onUpload} type="file" name="profile" id="profile" className="" style={{ display: 'none' }}/>
         </div>
         <div>
           <label htmlFor="name">Name</label>
@@ -105,7 +119,7 @@ const EditProfileForm = ({ handleModal }) => {
             value={formik.values.name}
           />
           {formik.touched.name && formik.errors.name ? (
-            <div>{formik.errors.name}</div>
+            <FormErrors error={formik.errors.name} />
           ) : null}
         </div>
         <label className="mt-2" htmlFor="level">
@@ -117,12 +131,12 @@ const EditProfileForm = ({ handleModal }) => {
         onChange={formik.handleChange("level")}
         onBlur={formik.handleBlur("level")}
         value={formik.values.level}
-        className="w-full border border-gray-300 rounded p-2"
+        className="w-full border border-gray-300 rounded p-2 m-0"
       >
         <option value="" disabled>
           Select your level
         </option>
-        {levelOptions.map((level) => (
+        {levelOptions?.map((level) => (
           <option key={level} value={level}>
             {level}
           </option>
@@ -167,24 +181,6 @@ const EditProfileForm = ({ handleModal }) => {
           ) : null}
         </div>
         <div>
-          <label htmlFor="studentEmail">Student Email</label>
-          <input
-            type="email"
-            name="studentEmail"
-            id="studentEmail"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.studentEmail}
-            className="border-2 rounded-lg border-gray-700 p-2 w-full"
-            placeholder="New student email"
-            autoComplete="email"
-          />
-          {formik.touched.studentEmail &&
-          formik.errors.studentEmail ? (
-            <FormErrors error={formik.errors.studentEmail} />
-          ) : null}
-        </div>
-        <div>
           <label htmlFor="matricNumber">Matric Number</label>
           <input
             type="text"
@@ -218,9 +214,6 @@ const EditProfileForm = ({ handleModal }) => {
           ) : null}
         </div>
         <div>
-
-          {isLoading && <Loader />}
-
           <button 
           type='submit'
           className="bg-primary text-white rounded-lg p-2 mt-2 w-full">

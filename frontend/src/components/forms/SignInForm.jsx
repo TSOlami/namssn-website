@@ -5,11 +5,10 @@ import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useLoginMutation, setCredentials } from '../../redux';
+import { useLoginMutation, useSendMailMutation, setCredentials } from '../../redux';
 import FormErrors from './FormErrors';
 import InputField from "../InputField";
 import { toast } from "react-toastify";
-import Loader from "../Loader";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +16,9 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [ login, { isLoading }]= useLoginMutation();
+  const [ login, { isLoading } ] = useLoginMutation();
+
+  const [sendMail] = useSendMailMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -34,9 +35,8 @@ const SignInForm = () => {
 	};
 	const validationSchema = Yup.object({
 		email: Yup.string()
-			.required("This field is required")
-			.min(5, "Must be 5 characters or more")
-			.max(30, "Too long"),
+			.email("Invalid email address")
+			.required("Email is required"),
 
 		password: Yup.string()
 			.required("This field is required")
@@ -47,12 +47,28 @@ const SignInForm = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-        const res = await login(values).unwrap();
+        const res = await toast.promise(login(values).unwrap(), {
+          pending: 'Logging in...',
+          success: "Log in successful, welcome back!",
+        });
+
         dispatch(setCredentials({...res}));
+        // Trigger sending the email after a successful login
+      const msg = "Welcome back! We're excited to have you back on board.";
+      const { email } = userInfo;
+      const subject = "You logged in!"
+
+      if (email) {
+        sendMail({ userEmail: email, text: msg, subject }).then((response) => {
+          if (response.error) {
+            console.error("Failed to send email after login.");
+            toast.error("Failed to send a welcome email. Please try again.");
+          }
+        });
+      }
         navigate('/home');
-        toast.success('Login successful, Welcome back!');
       } catch (err) {
-        toast.error(err?.data?.message || err?.error)
+        toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
       }
 		},
 	});
@@ -116,17 +132,25 @@ const SignInForm = () => {
       <FormErrors error={formik.errors.password} />
     ) : null}
 
-    { isLoading && <Loader />}
-
-    <div className="text-gray-500 text-right text-md">
+    <Link to="/forgot-password" className="text-gray-500 text-right text-md">
       Forgot Password?
-    </div>
-    <button
-      type="submit"
-      className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
-    >
-      Log In
-    </button>
+    </Link>
+    {isLoading ? (
+      <button
+        type="submit"
+        className="bg-gray-800 text-white rounded-md py-2 mt-4"
+        disabled
+      >
+        Logging in...
+      </button>
+    ) : (
+      <button
+        type="submit"
+        className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-10"
+      >
+        Log In
+      </button>
+    )}
 
     <div className="text-right">
       Don&rsquo;t have an account?{" "}

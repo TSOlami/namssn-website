@@ -9,15 +9,45 @@ import { useNavigate } from "react-router-dom";
 const Actions = ({
 	upvotes,
 	downvotes,
-	shares,
+	isUpvoted,
+	isDownvoted,
 	onUpvote,
 	onDownvote,
+	comments,
 	postId,
+	blogId
 }) => {
 	const navigate = useNavigate();
 	const routeToComments = () => {
 		navigate(`/comments/${postId}`);
 	};
+	const handleShare = async () => {
+    if (postId) {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/comments/${postId}`
+				});
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		} else {
+			try {
+				await navigator.share({
+					title: "Share post",
+					text: 'Check out this post!',
+					url: `/blog#${blogId}`
+				});
+			} catch (error) {
+				console.error('Error sharing:', error);
+			}
+		}
+    };
+	// Define upvotes and downvotes
+	upvotes = upvotes?.length;
+	downvotes = downvotes?.length;
+	comments = comments?.length;
 
 	// const [openComment, setOpencomment] = useState(false);
 	// const handleOpenComment = () => {
@@ -32,8 +62,12 @@ const Actions = ({
 						onClick={onUpvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidUpvote color="#17A1FA" />
-						<span>{upvotes} </span>
+						{isUpvoted ? (
+							<BiSolidUpvote color="#17A1FA" />
+						) : (
+							<BiSolidUpvote />
+						)}
+						<span>{upvotes} {" "} </span>
 					</button>
 				</span>
 				<span>Upvotes</span>
@@ -44,27 +78,35 @@ const Actions = ({
 						onClick={onDownvote}
 						className="flex flex-row items-center gap-1"
 					>
-						<BiSolidDownvote color="red" /> {downvotes}{" "}
+						{isDownvoted ? (
+							<BiSolidDownvote color="red" />
+						) : (
+							<BiSolidDownvote />
+						)}
+						<span>{downvotes}{" "} </span>
 					</button>
 				</span>
 				<span>Downvotes</span>
 			</div>
 
-			<div>
-				<span className="flex flex-row items-center gap-1">
-					<button
-						className="flex flex-row items-center gap-1"
-						onClick={routeToComments}
-					>
-						<BiComment />
-					</button>
-				</span>
-				<span>Comments</span>
-			</div>
+			{location.pathname !== "/blog" && (
+				<div>
+					<span className="flex flex-row items-center gap-1">
+						<button
+							className="flex flex-row items-center gap-1"
+							onClick={routeToComments}
+						>
+							<BiComment />
+							<span>{comments}{" "} </span>
+						</button>
+					</span>
+					<span>Comments</span>
+				</div>
+			)}
 
-			<div>
-				<span className="flex items-center gap-1">
-					<BiShareAlt /> {shares}
+			<div onClick={handleShare}>
+				<span className="flex items-center gap-1 cursor-pointer">
+					<BiShareAlt />
 				</span>
 				<span>Share</span>
 			</div>

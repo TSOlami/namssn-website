@@ -1,72 +1,168 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import InputField from "../InputField";
-import FormErrors from "./FormErrors";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { InputField, FormErrors } from "../../components";
+import { convertToBase64 } from "../../utils";
+import { toast } from "react-toastify";
+import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation, setEvents } from "../../redux";
 
-const EventForm = () => {
-	const SUPPORTED_FORMATS = [
-		"image/jpg",
-		"image/png",
-		"image/jpeg",
-		"image/gif",
-	];
+const EventForm = ({ selectedOption }) => {
+	// Use the useCreateEventMutation hook to create an event
+	const [createEvent, {isLoading: isCreating}] = useCreateEventMutation();
 
+	// Use the useUpdateEventMutation hook to update an event
+	const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
+
+	// Use the useDeleteEventMutation hook to delete an event
+	const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
+
+	// State to manage image preview
+  const [imagePreview, setImagePreview] = useState(selectedOption?.image || null);
+
+	// Use the useDispatch hook to dispatch actions
+	const dispatch = useDispatch();
+
+	// Create state to manage file upload
+	const [file, setFile] = useState();
+
+	// Define the initial values for the form fields
 	const initialValues = {
-		title: "",
-		description: "",
-		date: "",
-		time: "",
-		location: "",
-		image: null,
+		title: selectedOption?.title || "",
+		// description: selectedOption?.description || "",
+		location: selectedOption?.location || "",
+		date: selectedOption?.date || "",
 	};
 
 	const validationSchema = Yup.object({
 		title: Yup.string().required("Event title cannot be empty"),
-		description: Yup.string().required("Event description is required"),
 		date: Yup.date().required("Event date is required"),
-		time: Yup.string().required("Time is required"),
 		location: Yup.string().required("Event location is required"),
-		image: Yup.mixed()
-			.nullable()
-			.required("An event flyer is required")
-			.test(
-				"size",
-				"File size is too big",
-				(value) => value && value.size <= 1024 * 1024 // 5MB
-			)
-			.test(
-				"type",
-				"Invalid file format selection",
-				(value) =>
-					// console.log(value);
-					!value || (value && SUPPORTED_FORMATS.includes(value?.type))
-			),
 	});
 
 	const formik = useFormik({
 		initialValues: initialValues,
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			// Check if image is empty
+			if (file === undefined) {
+				toast.error("Please upload a valid event flyer");
+				return;
+			}
+			// Add the file to the form data and send to the server
+			try {
+				let updatedValues = Object.assign(values, { image: file });
+
+				if (selectedOption) {
+					// If editing an existing event, use the update mutation
+					const res = await toast.promise(updateEvent(selectedOption._id, updatedValues).unwrap(), {
+						pending: "Updating event...",
+						success: "Event updated successfully",
+					});
+					dispatch(setEvents({ ...res }));
+
+					// Reload the page after 5 seconds
+					setTimeout(() => {
+						window.location.reload();
+					}, 3000);
+				} else {
+					// If creating a new event, use the create mutation
+					const res = await toast.promise(createEvent(updatedValues).unwrap(), {
+						pending: "Creating event...",
+						success: "Event created successfully",
+					});
+					dispatch(setEvents({ ...res }));
+
+					// Reset form and clear uploaded image
+					formik.resetForm();
+					setFile(null);
+
+					// Reset the input element for file upload
+					const inputElement = document.getElementById("image");
+					if (inputElement) {
+						inputElement.value = null;
+					}
+				}
+				// Reload the page after 5 seconds
+				setTimeout(() => {
+					window.location.reload();
+				}, 3000);
+			} catch (error) {
+				toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
+			}
 		},
 	});
 
+	// File upload handler
+	const onUpload = async (e) => {
+		// Check file size, must be 2MB or less
+		const file = e.target.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+		if (file?.size > maxSize) {
+			toast.error("File size too large");
+
+			return;
+		}
+		// File size is okay, convert to base64
+		const base64 = await convertToBase64(e.target.files[0]);
+		// Update the file state
+		setFile(base64);
+		
+		// Update the image preview
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+	// Use useEffect to update form values when selectedOption changes
+  useEffect(() => {
+    formik.setValues({
+      title: selectedOption?.title || "",
+      location: selectedOption?.location || "",
+      date: selectedOption?.date || "",
+    });
+		setFile(selectedOption?.image || file || null);
+  }, [selectedOption]);
+
+	// Function to handle event deletion
+	const handleDelete = async () => {
+		try {
+			const res = await toast.promise(deleteEvent(selectedOption._id).unwrap(), {
+				pending: "Deleting event...",
+				success: "Event deleted successfully",
+			});
+			dispatch(setEvents({ ...res }));
+			formik.resetForm();
+			setFile(null);
+			// Reload the page after 5 seconds
+			setTimeout(() => {
+				window.location.reload();
+			}, 3000);
+		} catch (error) {
+			toast.error(error?.error?.response?.data?.message || error?.data?.message || error?.error)
+		}
+	}
+
+	
 	return (
-		<form className="flex flex-col justify-center p-5 md:px-10 h-full" onSubmit={formik.handleSubmit}>
+		<form
+		className="flex flex-col justify-center p-5 md:px-10 h-full"
+		onSubmit={formik.handleSubmit}
+		>
 			<label htmlFor="title">Event Title</label>
 			<InputField
 				type="text"
 				name="title"
 				id="title"
-				onChange={formik.handleChange("name")}
+				onBlur={formik.handleBlur("title")}
+				onChange={formik.handleChange("title")}
 				value={formik.values.title}
 				placeholder="Enter event title"
+
 			/>
 			{formik.touched.title && formik.errors.title ? (
 				<FormErrors error={formik.errors.title} />
 			) : null}
 
-			<label htmlFor="description" className="mt-5">Event Description</label>
+			{/* <label htmlFor="description" className="mt-5">Event Description</label>
 			<InputField
 				type="text"
 				name="description"
@@ -77,7 +173,7 @@ const EventForm = () => {
 			/>
 			{formik.touched.description && formik.errors.description ? (
 				<FormErrors error={formik.errors.description} />
-			) : null}
+			) : null} */}
 
 			<label htmlFor="location" className="mt-5">Event Location</label>
 			<InputField
@@ -104,23 +200,68 @@ const EventForm = () => {
 				<FormErrors error={formik.errors.date} />
 			) : null}
 
-			<label htmlFor="image" className="mt-5 cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">Add Event Flyer</label>
-			<input
-				type="file"
-				name="image"
-				id="image"
-				onChange={(event) => {
-					formik.setFieldValue("image", event.currentTarget.files[0]);
-				}}
-				className="p-5 bg-black text-white rounded-lg"
-			/>
-			{formik.touched.image && formik.errors.image ? (
-				<FormErrors error={formik.errors.image} />
-			) : null}
+			<div className="mt-5">
+				{selectedOption?.image ? (
+					<>
+						<img src={file || selectedOption.image} alt="Event Flyer" className="w-1/2" />
+						<label htmlFor="image" className="mt-2 cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">
+							Change Event Flyer
+						</label>
+						<input
+							onChange={onUpload}
+							type="file"
+							name="image"
+							id="image"
+							className="p-2 bg-black text-white rounded-lg"
+						/>
+					</>
+				) : (
+					<>
+					{imagePreview && (
+						<img src={imagePreview} alt="Event Flyer" className="w-1/2" />
+					)}
+					<label htmlFor="image" className="cursor-pointer border-2 w-fit p-2 text-white bg-black rounded-lg">
+						Add Event Flyer
+						<input
+							required
+							onChange={onUpload}
+							type="file"
+							name="image"
+							id="image"
+							className="hidden"
+						/>
+					</label>
+					</>
+					
+				)}
+			</div>
 
 			<div className="mt-5 flex flex-row gap-8 ml-auto">
-				<button type="button" className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300">Delete Event</button>
-				<button type="submit" className="bg-primary rounded-lg p-3 text-white hover:opacity-75">Save Event</button>
+				{isDeleting ? (
+					<button className="bg-red-500 rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
+						Deleting...
+					</button>
+				) : (
+					<button
+					type="button"
+					onClick={handleDelete}
+					className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
+					>
+					Delete Event
+					</button>
+				)}
+				{isUpdating || isCreating ? (
+					<button className="bg-primary rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
+						{isUpdating? "Updating..." : "Creating..."}
+					</button>
+				) : (
+					<button
+						type="submit"
+						className="bg-primary rounded-lg p-3 text-white hover:bg-primary-dark transition-all duration-300"
+					>
+						{selectedOption ? "Update Event" : "Create Event"}
+					</button>
+				)}
 			</div>
 		</form>
 	);

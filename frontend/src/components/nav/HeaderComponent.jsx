@@ -1,21 +1,41 @@
 import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Avatar } from "../../assets";
+import { useSelector } from "react-redux";
+import { ProfileImg } from "../../assets";
 import { useDispatch } from "react-redux";
 import { setNavOpen } from "../../redux/slices/navSlice";
+import { IoChevronBackSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
-const HeaderComponent = ({ title, url }) => {
+const HeaderComponent = ({ title, url, back }) => {
 	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
-		setSearch(e.target.value);
+		if (e.target.value.trim() !== "") {
+			setSearch(e.target.value);
+		} else if (e.target.value.trim() === "" && search.trim() !== "") {
+			setSearch(e.target.value);
+		}
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(search);
-		setSearch("");
+		if (search !== "") {
+			window.location.href = `/search?key=${search}&filter=all`;
+		}
 	};
+
+	// navigate back to previous page
+	const navigate = useNavigate();
+	const handleBack = () => {
+		navigate(-1);
+	};
+
+	// get user from redux
+	const { userInfo } = useSelector((state) => state.auth);
+
+	// get avatar from redux
+	const Avatar = userInfo?.profilePicture || ProfileImg;
 
 	// handle nav open with redux
 	const handleNavOpen = () => {
@@ -23,30 +43,50 @@ const HeaderComponent = ({ title, url }) => {
 	};
 
 	return (
-		<div className="flex flex-row md:justify-between items-center p-5 md:py-2 border-b-2 border-gray-300 ">
-			<h1 className="text-xl text-center w-full md:text-3xl">{title}</h1>
+		<div className="flex flex-row border-b-2 border-blue-700 justify-between w-[100%] items-center gap-2 p-5 md:py-2 drop-shadow-md pr-14 md:pr-5">
+			{back && (
+				<div
+					onClick={handleBack}
+					className="text-2xl p-2 pr-5 cursor-pointer"
+				>
+					<IoChevronBackSharp />
+				</div>
+			)}
 			<img
 				src={Avatar}
 				alt="avatar"
-				className="lg:hidden cursor-pointer"
+				className={location.pathname === '/home' ? "lg:hidden profile-image-small" : "lg:hidden profile-image-small mr-auto"}
 				onClick={handleNavOpen}
 			/>
+			{/* <h1 className="text-xl text-center w-full md:text-3xl">{title}</h1> */}
+			<div className="">
+				<span className="px-4  font-bold font-crimson sm:text-xl text-blue-900 text-xl">
+					{title.toUpperCase()}
+				</span>
+			</div>
 			{url && (
-				<form
-					action=""
-					onSubmit={handleSubmit}
-					className="hidden md:flex  relative"
-				>
-					<input
-						type="text"
-						placeholder="Search"
-						name="search"
-						value={search}
-						className="rounded-2xl border-gray-300 border-2 p-1 w-56 md:w-72 pl-10"
-						onChange={handleSearchChange}
-					/>
-					<FaMagnifyingGlass className="absolute left-2 flex self-center justify-center" />
-				</form>
+				<div className="items-center lg:flex">
+					<form
+						action=""
+						onSubmit={handleSubmit}
+						className="flex  relative"
+					>
+						<input
+							type="text"
+							placeholder="Search"
+							name="search"
+							value={search}
+							className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 max-w-[7em]  pl-3 pr-10"
+							onChange={handleSearchChange}
+						/>
+						<a
+							className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg"
+							onClick={handleSubmit}
+						>
+							<FaMagnifyingGlass />
+						</a>
+					</form>
+				</div>
 			)}
 		</div>
 	);
