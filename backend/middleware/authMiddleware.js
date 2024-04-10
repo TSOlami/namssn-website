@@ -103,18 +103,27 @@ const verifyUser = asyncHandler(async (req, res, next) => {
  * @param {Function} next - Express next function.
  */
 const otpStatusCheck = asyncHandler(async (req, res, next) => {
-  // Get the username from the request body
-  const { username } = req.body;
+  try {
+    // Get the username from the request body
+    const { username } = req.body;
 
-  // Fetch the user
-  const user = await User.findOne({ username });
+    // Fetch the user
+    const user = await User.findOne({ username });
+    console.log(user.otpGenerated, user.otpVerified)
 
-  // Check if the user has generated an OTP
-  if (user.otpGenerated && user.otpVerified) {
-    next();
+    // Check if the user has generated an OTP
+    if (user.otpGenerated && user.otpVerified) {
+      next();
+    } else {
+      // Return an error response if OTP is not generated or verified
+      return res.status(400).json({ message: "OTP not generated or verified" });
+    }
+  } catch (error) {
+    // Handle any errors that occur during OTP status check
+    console.error(error);
+    res.status(500).json({ message: 'Server error: Unable to check OTP status.' });
   }
-
-  return res.status(400).json({ message: "OTP not generated or verified" });
 });
+
 
 export { protect, isAdmin, verifyUser, otpStatusCheck }; // Export the middleware functions.

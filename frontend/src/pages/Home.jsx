@@ -36,7 +36,7 @@ const Home = () => {
   const { data: posts, isLoading: isLoadingPosts } = useAllPostsQuery(Number(page));
 
   // Use the useGetNotificationsQuery hook to get notifications from the API
-  const { data: notifications, isLoading: isLoadingNotis, error  } = useGetNotificationsQuery();
+  const { data: notifications, error  } = useGetNotificationsQuery();
 
   // Add a useEffect hook to check if a user is properly authenticated
   useEffect(() => {
@@ -45,7 +45,7 @@ const Home = () => {
       logutUser();
       // Dispatch the logout action
       dispatch(logout());
-      toast.error("Unauthorized, You might need to login again.");
+      toast.error("Sorry, You might need to login again.");
       navigate("/signin");
     }
   }, [error, dispatch, logutUser]);
@@ -125,15 +125,15 @@ const Home = () => {
     }
   };
 
-  // if (page === totalPages) {
-  //   setHasMore(false);
-  // }
-
   // State for managing modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  if (isLoadingPosts) {
+    return <Loader />; // Render the Loader while data is being fetched
+  }
 
   return (
     <motion.div
@@ -159,9 +159,6 @@ const Home = () => {
             removePost={(postId) => removePost(postId)}
           />
         ))}
-
-        {/* Loader */}
-        {isLoadingPosts || isLoadingNotis && <Loader />}
 
         {/* Paginate posts buttons */}
         {hasMore && (

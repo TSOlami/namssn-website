@@ -36,8 +36,9 @@ bot.on('message', (msg) => {
 //   }
 // });
 
-// Define the port number for the server, default to 5000 if not provided in the environment
-const port = process.env.PORT || 5000;
+// Define the port number for the server, default to 8080 if not provided in the environment
+const port = process.env.PORT || 8080;
+
 // ---------------- deployment-----------------------
 const __dirname1=path.resolve();
 if (process.env.NODE_ENV === 'production') {

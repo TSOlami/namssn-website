@@ -463,19 +463,23 @@ const deleteEvent = asyncHandler(async (req, res) => {
     throw new Error('Event not found');
   }
 
-  // Check if the user has permission to delete this event (e.g., they are the owner)
-  if (event.user.toString() !== req.user._id.toString()) {
+  // Check if the user has permission to delete this event (e.g., the user is an admin)
+  if (req.user.role !== 'admin') {
     res.status(401);
     throw new Error('Unauthorized to delete this event');
   }
 
   // Delete the event
-  await Event.deleteOne({ _id: eventId });
+  try {
+    await Event.deleteOne({ _id: eventId });
 
-  res.status(200).json({ message: 'Event deleted' });
+    res.status(200).json({ message: 'Event deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
-  // Save the new announcement to the database
 
 export {
   getAllPayments,

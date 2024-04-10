@@ -54,11 +54,12 @@ const AnnouncementContainer = () => {
   });
 
 	return (
-		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 xl:w-[360px]"}>
+		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 max-w-2xl"}>
 			<h1 className="text-3xl font-bold py-2 border-b-2 ">
 				Announcements
 			</h1>
 			{ isFetching && <Loader />}
+      {sortedKeys.length === 0 && <p>No announcements</p>}
 			{sortedKeys.map((level) => (
         <div className="bg-greyish rounded-[2rem] p-4 my-4" key={level}>
           <h2 className="border-b-2 text-xl font-bold py-3">

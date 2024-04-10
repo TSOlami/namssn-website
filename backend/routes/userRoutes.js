@@ -39,7 +39,7 @@ import {
 
 import { 
   createPost,
-	getAllPosts,
+	getPosts,
   getPostById,
 	getUserPosts,
   updatePost,
@@ -59,6 +59,17 @@ import {
 } from "../controllers/postController.js";
 import { registerMail, contactUs } from "../controllers/mailer.js";
 import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
+
+
+/**
+ * Health check route
+ * 
+ * @route GET /api/v1/users/health
+ * @access Public
+*/
+router.get("/health", (req, res) => {
+  res.send("API is running");
+});
 
 
 // Route for sending a welcome email
@@ -194,7 +205,7 @@ router.get('/events', getAllEvents);
  * @access Private 
  */
 router.route('/announcements')
-.get(protect, getAllAnnouncements);
+.get(getAllAnnouncements);
 
 // Route for getting all announcements by user
 router
@@ -215,7 +226,7 @@ router
 // Route for getting all posts
 router
 .route("/posts")
-.get(getAllPosts);
+.get(getPosts);
 
 // Route for getting a post by id
 router.get('/posts/:postId', protect, getPostById);

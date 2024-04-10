@@ -129,7 +129,7 @@
   }
 
   .nav-text {
-    @apply font-roboto font-normal text-xl leading-normal;
+    @apply font-roboto font-normal text-xl md:text-lg leading-normal;
   }
 
   .profile-image {
@@ -207,6 +207,14 @@
   border: 2px solid #ccc;
   border-radius: 5px;
   margin: 0 5px;
+}
+
+@media  screen and (max-width: 420px) {
+  .verification-code-input input {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
 
 .verification-code-input input:focus {
