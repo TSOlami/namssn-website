@@ -34,7 +34,7 @@ useEffect(() => {
         setIsLoading(true);
         if (filter && value) {
             try {
-                const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
+                const res = await axios.get(`http://localhost:5000/api/v1/users/search?filter=${filter}&value=${value}`);
                 if (res) {
                     setData(res.data); // set the fetched data to the state
                     setIsLoading(false);
