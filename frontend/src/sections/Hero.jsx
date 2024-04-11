@@ -11,7 +11,7 @@ const Hero = () => {
     <div className="relative lg:w-3/5 flex flex-col justify-center items-start w-full padding-x pt-28">
     <div className="text-container border-black">
       <span
-        className="inline-block font-roboto text-sm md:text-lg lg:text-xl xl:text-2xl"
+        className="inline-block font-roboto text-sm md:text-lg"
         aria-hidden
         >
         <Typewriter words={["Share", "Discuss", "Learn", "Grow"]} loop={true} cursor={true} />
