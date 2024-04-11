@@ -59,6 +59,7 @@ const AnnouncementContainer = () => {
 				Announcements
 			</h1>
 			{ isFetching && <Loader />}
+      {sortedKeys.length === 0 && <p>No announcements</p>}
 			{sortedKeys.map((level) => (
         <div className="bg-greyish rounded-[2rem] p-4 my-4" key={level}>
           <h2 className="border-b-2 text-xl font-bold py-3">

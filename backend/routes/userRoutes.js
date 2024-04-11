@@ -61,6 +61,17 @@ import { registerMail, contactUs } from "../controllers/mailer.js";
 import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
 
 
+/**
+ * Health check route
+ * 
+ * @route GET /api/v1/users/health
+ * @access Public
+*/
+router.get("/health", (req, res) => {
+  res.send("API is running");
+});
+
+
 // Route for sending a welcome email
 router.route('/register-mail').post(registerMail);
 /**

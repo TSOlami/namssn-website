@@ -28,7 +28,7 @@ const VerifyUserPass = () => {
 			});
 			
 			// Reset the countdown and update state to prevent frequent resending
-			setCountdown(120);
+			setCountdown(300);
 			setCanResendOTP(false);
 
 		} catch (err) {
