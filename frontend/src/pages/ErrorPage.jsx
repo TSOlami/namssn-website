@@ -4,6 +4,7 @@ import { motion, easeOut } from "framer-motion";
 
 const ErrorPage = () => {
 	return (
+		{/* Error page */}
 		<div className="w-full h-screen p-10 flex flex-col items-center justify-center">
 			<motion.div
 				initial={{ rotate: 360 }}
