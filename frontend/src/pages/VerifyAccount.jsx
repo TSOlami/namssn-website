@@ -39,7 +39,7 @@ const VerifyAccount = () => {
       setCanResendOTP(true);
     } finally {
       // Reset the countdown and update state to prevent frequent resending
-      setCountdown(120);
+      setCountdown(300);
     }
   };
 
