@@ -20,6 +20,8 @@ frontend/*.log
 backend/*.log
 
 # Editor directories and files
+coverage/*
+backend/coverage/*
 frontend/.vscode/*
 backend/.vscode/*
 frontend/.idea
@@ -36,6 +38,7 @@ frontend/*.sln
 backend/*.sln
 frontend/*.sw?
 backend/*.sw?
+readme-ai.md
 
 # pmpm lock files
 frontend/pnpm-lock.yaml
