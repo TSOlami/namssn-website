@@ -1,4 +1,6 @@
-import { Teejay, DrStrange, Timi, Slimany, Ifedimeji, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, Team15 } from "../assets";
+import { 
+	Teejay, DrStrange, Timi, Slimany, Ifedimeji, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, Team15, Temitope, Oluwayoose, Kolawole, Kelechi, Endaline, Ajamu, Abobade
+} from "../assets";
 
 export const navLinks = [
   { href: "/", label: "Home" },
@@ -63,11 +65,77 @@ export const teamMembers = [
     github: "https://www.behance.net/Ifedimejiomoniyi",
     website: "https://ifedimeji.netlify.app/",
   },
+  // New members for Executive2024
+  {
+    name: "Temitope Ayomide Abiodun",
+    role: "President",
+    image: Temitope,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/temitope.ayomide.92775?mibextid=ZbWKwL",
+    linkedin: "", // No LinkedIn provided
+    twitter: "https://x.com/Tembells_?t=HH1tZPKxTFYQYoR-e_QrPA&s=09",
+  },
+  {
+    name: "CHUKWUKA KELECHI IFEANYI",
+    role: "General Secretary",
+    image: Kelechi,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/kelechi.chukwuka.54?mibextid=ZbWKwL",
+    linkedin: "", // No LinkedIn provided
+    twitter: "", // No Twitter provided
+  },
+  {
+    name: "Ogunnusi Kolawole Raphael",
+    role: "Director of Welfare",
+    image: Kolawole,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/kolawole.ogunnusi.27?mibextid=ZbWKwL",
+    linkedin: "", // No LinkedIn provided
+    twitter: "", // No Twitter provided
+  },
+  {
+    name: "Ajamu Glory Oreoluwa",
+    role: "Director of Social",
+    image: Ajamu,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/glory.ajamu.7",
+    linkedin: "", // No LinkedIn provided
+    twitter: "https://x.com/Flez_Man?t=gQdXH0z6BGBxqC26WsHePQ&s=09",
+  },
+  {
+    name: "Chukwu Endaline Chidima",
+    role: "Treasurer",
+    image: Endaline,
+    team: "Executive2024",
+    facebook: "", // No Facebook provided
+    linkedin: "", // No LinkedIn provided
+    twitter: "", // No Twitter provided
+  },
+  {
+    name: "OLUWAYOOSE ISRAEL O.",
+    role: "Financial Secretary",
+    image: Oluwayoose,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/ola.isreal.520?mibextid=ZbWKwL",
+    linkedin: "https://www.linkedin.com/in/oluwayoose-israel-565bb729a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+    twitter: "https://x.com/Famous3364?t=A-UGMK4K_J-r004XyFT7lg&s=09",
+  },
+  {
+    name: "Abraham Oluwatoba Abobade",
+    role: "Auditor General",
+    image: Abobade,
+    team: "Executive2024",
+    facebook: "https://www.facebook.com/abraham.abobs",
+    linkedin: "https://www.linkedin.com/in/abraham-abobade",
+    twitter: "https://x.com/_abobs",
+  },
+
+//   Executive2023
   {
 		name: "Oluwasegun Abraham Ajeolu",
 		role: "President",
 		image: Team14,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com/in/abraham-oluwasegun?trk=contact-info",
     twitter: "https://twitter.com/",
@@ -76,7 +144,7 @@ export const teamMembers = [
 		name: "Muhammad Rabbiat",
 		role: "Vice President",
 		image: Team9,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -85,7 +153,7 @@ export const teamMembers = [
 		name: "Onyilo Jonathan Ojila",
 		role: "General Secretary",
 		image: Team12,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/jonathan.onyilo.9",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -94,7 +162,7 @@ export const teamMembers = [
 		name: "Benjamin Miracle C.",
 		role: "Financial Secretary",
 		image: Team7,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -103,7 +171,7 @@ export const teamMembers = [
 		name: "Obasi Goodness Chidera",
 		role: "Treasurer",
 		image: Team2,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -112,7 +180,7 @@ export const teamMembers = [
 		name: "Attaigu Peter Onimisi",
 		role: "Director Of Research & Academics I",
 		image: Team11,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com/in/attaigu-peter-3157791ba?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     twitter: "https://twitter.com/",
@@ -121,7 +189,7 @@ export const teamMembers = [
 		name: "Lamidi Bariu O.",
 		role: "Director Of Research II",
 		image: Team5,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/lamidi.bariuoj.plusmore?mibextid=ZbWKwL",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://www.twitter.com/@bariu_oj",
@@ -130,7 +198,7 @@ export const teamMembers = [
 		name: "Ogunnusi Kolalwole Rapheal",
 		role: "Director Of Socials",
 		image: Team1,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/kolawole.ogunnusi.27?mibextid=2JQ9oc",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -139,7 +207,7 @@ export const teamMembers = [
 		name: "Kayode Abdurasheed Olalekan",
 		role: "Director Of Sports",
 		image: Team6,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/KhayLhex?mibextid=LQQJ4d",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -148,7 +216,7 @@ export const teamMembers = [
 		name: "Oloyede Gbenga Gabriel",
 		role: "WelFare Director",
 		image: Team3,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/kolawole.ogunnusi.27?mibextid=2JQ9oc",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -157,7 +225,7 @@ export const teamMembers = [
 		name: "Ojile Joshua",
 		role: "Auditor General",
 		image: Team8,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://web.facebook.com/",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
@@ -167,7 +235,7 @@ export const teamMembers = [
 		name: "Akanmoye Emeka Daniel",
 		role: "PRO",
 		image: Team4,
-		team: "Executive",
+		team: "Executive2023",
 		facebook: "https://www.facebook.com/profile.php?id=100091822404435",
 		linkedin: "https://www.linkedin.com",
     twitter: "https://twitter.com/",
