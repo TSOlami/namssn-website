@@ -68,13 +68,33 @@ const AboutUsPage = () => {
 				<h1 className="text-2xl font-bold text-center p-5 pb-2">
 					NAMSSN Executives{" "}
 				</h1>
+
+				<h1 className="text-primary text-2xl font-bold p-5 pt-0 text-right lg:flex lg:items-center lg:justify-center lg:relative lg:left-[50%] lg:w-fit">
+					2023/2024 Session
+				</h1>
+
+				<div className="flex flex-row flex-wrap gap-5 items-center justify-center p-5 mb-10">
+					{teamMembers.filter((member) => member.team === "Executive2024").map((member, index) => (
+						<div key={index}>
+							<Team
+								name={member.name}
+								position={member.role}
+								image={member.image}
+								facebook={member.facebook}
+								twitter={member.twitter}
+								linkedin={member.linkedin}
+							/>
+						</div>
+					))}
+				</div>
+
 				<h1 className="text-primary text-2xl font-bold p-5 pt-0 text-right lg:flex lg:items-center lg:justify-center lg:relative lg:left-[50%] lg:w-fit">
 					2022/2023 Session
 				</h1>
 
 				<div className="flex flex-row flex-wrap gap-5 items-center justify-center p-5 mb-10">
 					{teamMembers
-						.filter((member) => member.team === "Executive")
+						.filter((member) => member.team === "Executive2023")
 						.map((member, index) => (
 							<div key={index}>
 								<Team
