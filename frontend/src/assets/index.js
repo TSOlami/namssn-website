@@ -60,5 +60,13 @@ import DrStrange from './images/Strange.jpg';
 import Slimany from './images/slimany.jpg';
 import Timi from './images/timi.jpeg';
 import Ifedimeji from './images/ifedimeji.jpg';
+import Temitope from './images/TemitopeAyomide.jpg';
+import Oluwayoose from './images/OluwayooseIsraelO.jpg';
+import Kolawole from './images/KolawoleOgunnusi.JPG';
+import Kelechi from './images/KelechiChukwuka.jpeg';
+import Endaline from './images/EndalineChukwu.JPG';
+import Ajamu from './images/AjamuGlory.jpg';
+import Abobade from './images/AbobadeAbraham.jpg';
 
-export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, GithubIcon, WebIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG, Error404, ForgotSVG, PaymentSVG, ResetPasswordSVG, Teejay, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, Team15, DrStrange, Slimany, Timi, Ifedimeji };
+
+export { NamssnLogo, SignInImage, SignUpImage, Wrapper, Hamburger, polygon, Upload, heroImage, Avatar, aboutIcon, arrow, FeesSVG, Bro, FAQ, contactUs, Ellipse1, Ellipse2, Copyright, FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, GithubIcon, WebIcon, MainEvent, EventImg, AboutImg, TeamImg, Group1, Rectangle15, Image2, Image5, Image6, Image7, Image3, Image4, MembersImg, ProfileImg, VerifyEmailSVG, Error404, ForgotSVG, PaymentSVG, ResetPasswordSVG, Teejay, Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8, Team9, Team11, Team12, Team13, Team14, Team15, DrStrange, Slimany, Timi, Ifedimeji, Temitope, Oluwayoose, Kolawole, Kelechi, Endaline, Ajamu, Abobade };
