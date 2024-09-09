@@ -62,9 +62,9 @@ import Timi from './images/timi.jpeg';
 import Ifedimeji from './images/ifedimeji.jpg';
 import Temitope from './images/TemitopeAyomide.jpg';
 import Oluwayoose from './images/OluwayooseIsraelO.jpg';
-import Kolawole from './images/KolawoleOgunnusi.JPG';
+import Kolawole from './images/KolawoleOgunnusi.jpg';
 import Kelechi from './images/KelechiChukwuka.jpeg';
-import Endaline from './images/EndalineChukwu.JPG';
+import Endaline from './images/EndalineChukwu.jpg';
 import Ajamu from './images/AjamuGlory.jpg';
 import Abobade from './images/AbobadeAbraham.jpg';
 
