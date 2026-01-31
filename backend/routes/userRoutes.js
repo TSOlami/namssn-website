@@ -59,6 +59,16 @@ import {
 } from "../controllers/postController.js";
 import { registerMail, contactUs } from "../controllers/mailer.js";
 import { protect, verifyUser, otpStatusCheck } from "../middleware/authMiddleware.js";
+import { 
+  validateRegistration, 
+  validateLogin, 
+  validatePost, 
+  validateComment,
+  sanitizeInput 
+} from "../middleware/validateMiddleware.js";
+
+// Apply sanitization to all routes
+router.use(sanitizeInput);
 
 
 /**
@@ -80,7 +90,7 @@ router.route('/register-mail').post(registerMail);
  * @route POST /api/v1/users/
  * @access Public
  */
-router.post('/', registerUser);
+router.post('/', validateRegistration, registerUser);
 
 /**
  * Authenticate a user.
@@ -88,7 +98,7 @@ router.post('/', registerUser);
  * @route POST /api/v1/users/auth
  * @access Public
  */
-router.post('/auth', authUser);
+router.post('/auth', validateLogin, authUser);
 
 /**
  * Verify a user account.
@@ -243,8 +253,8 @@ router.put('/posts/:postId/downvote', protect, downvotePost);
 // Route for creating, updating, and deleting a post
 router
 .route("/post")
-.post(protect, createPost)
-.put(protect, updatePost)
+.post(protect, validatePost, createPost)
+.put(protect, validatePost, updatePost)
 .delete(protect, deletePost);
 
 // Route for getting and deleting all notifications
@@ -276,11 +286,11 @@ router
  router
   .route('/posts/:postId/comments')
   .get(protect, getPostComments)
-  .post(protect, createPostComment);
+  .post(protect, validateComment, createPostComment);
 
 router
   .route('/posts/:postId/comments/:commentId')
-  .put(protect, updatePostComment)
+  .put(protect, validateComment, updatePostComment)
   .delete(protect, deletePostComment);
 
 // Route for upvoting a post comment

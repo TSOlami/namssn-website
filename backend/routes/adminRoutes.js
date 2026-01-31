@@ -5,6 +5,13 @@ const router = express.Router();
 
 // Import middleware for authentication and authorization.
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
+import { 
+  validateBlog, 
+  validateAnnouncement, 
+  validateEvent, 
+  validateCategory,
+  sanitizeInput 
+} from '../middleware/validateMiddleware.js';
 
 // Import controllers for admin operations.
 import {
@@ -34,6 +41,9 @@ import {
 } from '../controllers/adminController.js';
 import { mailNotice } from '../controllers/mailer.js';
 
+// Apply sanitization to all admin routes
+router.use(sanitizeInput);
+
 // Define admin routes and protect them with admin middleware
 
 // Make a user an admin
@@ -52,7 +62,7 @@ router.post('/payments/verify', protect, getPaymentStatus);
 //create, Edit and Delete payments
 router
 .route('/payment')
-.post(protect, isAdmin, createCategory)
+.post(protect, isAdmin, validateCategory, createCategory)
 .delete(protect, isAdmin, deleteCategory);
 
 // Send mail to all users
@@ -62,8 +72,8 @@ router.route('/notice-mail').post(protect, isAdmin, mailNotice);
 router
 .route('/blog')
 .get(protect, isAdmin, getUserBlogs)
-.post(protect, isAdmin, createBlog)
-.put(protect, isAdmin, updateBlog)
+.post(protect, isAdmin, validateBlog, createBlog)
+.put(protect, isAdmin, validateBlog, updateBlog)
 
 router
 .route('/blog/:blogId')
@@ -89,11 +99,11 @@ router
  */
   router
   .route('/events')
-  .post(protect, isAdmin, createEvent) // Create a new event
+  .post(protect, isAdmin, validateEvent, createEvent) // Create a new event
 
 router
   .route('/events/:eventId')
-  .put(protect, isAdmin, updateEvent) // Update an event
+  .put(protect, isAdmin, validateEvent, updateEvent) // Update an event
   .delete(protect, isAdmin, deleteEvent); // Delete an event
 
 // Get total number of users
