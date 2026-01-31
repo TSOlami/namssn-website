@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 import { verifyOTP } from "../../utils";
 import { useVerifyAccountMutation, useSendMailMutation, setCredentials } from "../../redux";
-import { Loader } from "../../components";
 
 const VerificationAccountInput = ({ codeLength }) => {
   // Use the useSelector hook to access the userInfo object from the state
@@ -107,15 +106,20 @@ const VerificationAccountInput = ({ codeLength }) => {
 
       <button
         className={
-          code.length < 6
+          code.length < 6 || isLoading
             ? "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5 opacity-50 cursor-not-allowed"
             : "p-3 px-4 rounded-md bg-primary text-white shadow-lg flex m-auto my-5"
         }
         onClick={handleSubmit}
+        disabled={code.length < 6 || isLoading}
       >
-        Enter and Continue
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            Verifying...
+          </span>
+        ) : 'Enter and Continue'}
       </button>
-      {isLoading && <Loader />}
     </div>
   );
 };

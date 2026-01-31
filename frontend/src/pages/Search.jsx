@@ -4,7 +4,7 @@ import { PostSearch, ResourceCard } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
-import Loader from "../components/Loader";
+import { UserListSkeleton, ResourceListSkeleton, PostListSkeleton } from "../components/skeletons";
 
 const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
 const Search = () => {
@@ -85,10 +85,6 @@ const options = [
     { value: 'posts', label: 'Posts' }
 ];
 
-if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
-}
-
 return (
         <div className="flex">
             <Sidebar />
@@ -96,6 +92,30 @@ return (
                 <div className="sticky top-[0.01%] z-[300] bg-white">
                     <HeaderComponent title="SEARCH" url={"Placeholder"} />
                 </div>
+                
+                {/* Show skeletons while loading */}
+                {isLoading && (
+                    <div className="p-4 space-y-6">
+                        {(filter === 'all' || filter === 'users') && (
+                            <div>
+                                <div className="h-6 bg-gray-200 rounded w-20 mb-4 animate-pulse" />
+                                <UserListSkeleton count={3} />
+                            </div>
+                        )}
+                        {(filter === 'all' || filter === 'resources') && (
+                            <div>
+                                <div className="h-6 bg-gray-200 rounded w-24 mb-4 animate-pulse" />
+                                <ResourceListSkeleton count={4} />
+                            </div>
+                        )}
+                        {(filter === 'all' || filter === 'posts') && (
+                            <div>
+                                <div className="h-6 bg-gray-200 rounded w-16 mb-4 animate-pulse" />
+                                <PostListSkeleton count={3} />
+                            </div>
+                        )}
+                    </div>
+                )}
                 <div className='sticky top-[14.5%] z-[300] mt-4 font-serif w-[200px] lg:hidden md:hidden'>
                     <Select onChange={handleChange} options={options} styles={customStyles} isSearchable={false} placeholder="Filter"/>
                 </div>
@@ -113,7 +133,7 @@ return (
                             Posts
                         </div>
                 </div>
-                {filter==='all' && data.users && data.users.length!==0 && <div className="ml-6 mt-8">
+                {!isLoading && filter==='all' && data.users && data.users.length!==0 && <div className="ml-6 mt-8">
                     <div className="mb-2 font-serif text-lg text-gray-400">
                         <span>Users</span>
                     </div>
@@ -124,7 +144,7 @@ return (
                         />
                     ))}
                 </div>}
-                {filter==='users' && data.users && data.users.length!==0 ? (<div className="ml-6 mt-8">
+                {!isLoading && filter==='users' && data.users && data.users.length!==0 ? (<div className="ml-6 mt-8">
                     <div className="mb-2 font-serif text-lg text-gray-400">
                         <span>Users</span>
                     </div>
@@ -139,7 +159,7 @@ return (
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching user </span></div>
                 </div>
                 )}
-                {filter==='all' && data.resources && data.resources.length!==0 && <div className="ml-6 mt-4">
+                {!isLoading && filter==='all' && data.resources && data.resources.length!==0 && <div className="ml-6 mt-4">
                     {<div className="font-serif text-lg text-gray-400">
                         <span>Resources</span>
                     </div>}
@@ -175,7 +195,7 @@ return (
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching resource </span></div>
                 </div>
                 )}
-                {filter==='all' && data.posts && data.posts.length!==0 && <div className="mt-4">
+                {!isLoading && filter==='all' && data.posts && data.posts.length!==0 && <div className="mt-4">
                 {<div className="mb-2 ml-6 font-serif text-lg text-gray-400">
                                 <span>Posts</span>
                     </div>}
@@ -263,8 +283,18 @@ return (
     )
 } else if(data===null) {
     return (
-        <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[50%] font-medium top-[40%]">
-            Loading...
+        <div className="flex">
+            <Sidebar />
+            <div className="flex w-[100%] flex-col">
+                <div className="sticky top-[0.01%] z-[300] bg-white">
+                    <HeaderComponent title="SEARCH" url={"Placeholder"} />
+                </div>
+                <div className="p-4 space-y-6">
+                    <UserListSkeleton count={2} />
+                    <ResourceListSkeleton count={3} />
+                    <PostListSkeleton count={2} />
+                </div>
+            </div>
         </div>
     )}
 };

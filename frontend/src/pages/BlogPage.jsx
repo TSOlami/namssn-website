@@ -1,8 +1,7 @@
 import { NavBar, Footer } from "../components";
 import { motion } from "framer-motion";
 import { useAllBlogsQuery } from "../redux";
-
-import { Loader } from "../components";
+import { BlogListSkeleton } from "../components/skeletons";
 import { formatDateToString } from "../utils";
 import { useState } from "react";
 
@@ -26,6 +25,11 @@ const BlogPage = () => {
 				<h1 className="font-roboto text-primary text-2xl items-start mt-8">
 					Recent Blog Posts
 				</h1>
+				{isFetching ? (
+					<div className="my-10">
+						<BlogListSkeleton count={3} />
+					</div>
+				) : (
 				<div className="flex flex-col gap-8 my-10">
 					{blogs?.map((blog) => {
 						const date = new Date(blog.createdAt);
@@ -106,8 +110,8 @@ const BlogPage = () => {
 						)
 					})}
 				</div>
+				)}
 			</section>
-			{isFetching && <Loader />}
 			<Footer />
 		</motion.main>
 	);

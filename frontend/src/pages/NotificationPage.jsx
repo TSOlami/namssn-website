@@ -11,8 +11,8 @@ import {
 	Notification,
 	Sidebar,
 	HeaderComponent,
-	Loader,
 } from "../components";
+import { NotificationListSkeleton } from "../components/skeletons";
 import {
 	useGetNotificationsQuery,
 	useClearNotificationsMutation,
@@ -79,7 +79,9 @@ const NotificationPage = () => {
 			<Sidebar />
 			<div className="w-full relative">
 				<HeaderComponent title="Notifications" />
-				{notifications?.length === 0 && !isLoading ? (
+				{isLoading ? (
+					<NotificationListSkeleton count={6} />
+				) : notifications?.length === 0 ? (
 					<div className="flex items-center justify-center text-lg w-full mt-20">
 						No notifications to display.
 					</div>
@@ -123,7 +125,6 @@ const NotificationPage = () => {
 				<div className="w-full h-20 md:hidden"></div>
 			</div>
 			<AnnouncementContainer />
-			{isLoading && <Loader />}
 			<BottomNav />
 		</motion.div>
 	);

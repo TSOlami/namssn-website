@@ -4,7 +4,7 @@ import { formatDateToTime } from "../utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import Loader from "../components/Loader";
+import { ResourceListSkeleton } from "../components/skeletons";
 import ErrorPage from "./ErrorPage";
 
 const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
@@ -42,7 +42,6 @@ const LevelResources = () => {
     }, []);
 
     const [value, setValue] = useState("")
-    const isLoading = true;
 
     const handleSearch = (e) => {
         setValue(e.target.value)
@@ -126,13 +125,17 @@ const LevelResources = () => {
         return (
             <div className="w-[100%] flex justify-between">
                 <Sidebar/>
-                {/* <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
-                    Fetching...
-                </div> */}
+                <div className="lg:w-[100%] sm:w-[100%] block">
+                    <div className="sticky top-[0.01%] z-[300] bg-white">
+                        <HeaderComponent title={`${level} Resources`} url={"Placeholder"}/>
+                    </div>
+                    <div className="p-4">
+                        <ResourceListSkeleton count={6} />
+                    </div>
+                </div>
                 <div className="w-[27%] sm:hidden md:block hidden lg:block">
                     <AnnouncementContainer />
                 </div>
-                {isLoading && <Loader />}
             </div>
             )
     }

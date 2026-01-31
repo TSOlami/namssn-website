@@ -4,10 +4,11 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 
 import { useGetUserQuery, useUserPostsQuery, useMakeUserAdminMutation, useRemoveAdminMutation } from '../redux';
-import { Loader, Post, Sidebar, AnnouncementContainer  } from '../components';
+import { Post, Sidebar, AnnouncementContainer } from '../components';
 import { ErrorPage } from '../pages';
 import { ProfileImg } from "../assets";
 import { toast } from 'react-toastify';
+import { ProfileSkeleton, PostListSkeleton } from '../components/skeletons';
 
 const UserProfile = () => {
   // Get the userId from the URL
@@ -83,17 +84,12 @@ const UserProfile = () => {
     }
   };
 
-  // Display loading indicator while data is being fetched
-  if (userLoading || postsLoading) {
-    return <Loader />;
-  }
-
-  // Display error message if user is not found
-  if (!user) {
+  // Display error message if user is not found (and not loading)
+  if (!userLoading && !user) {
     return <ErrorPage/>;
   }
+
   // Get user profile details that was fetched from the server
-  
   const username = user?.username;
   const bio = user?.bio;
   const isVerified = user?.isVerified;
@@ -103,6 +99,20 @@ const UserProfile = () => {
   const avatar = user?.profilePicture;
 
   const currentUserIsAdmin = currentUser?.role === 'admin';
+
+  // Show skeleton while loading
+  if (userLoading || postsLoading) {
+    return (
+      <div className="flex">
+        <Sidebar />
+        <div className='w-full min-w-[350px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]'>
+          <ProfileSkeleton />
+          <PostListSkeleton count={3} />
+        </div>
+        <AnnouncementContainer />
+      </div>
+    );
+  }
   
     return (
         <div className="flex">

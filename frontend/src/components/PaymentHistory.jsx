@@ -7,7 +7,8 @@ import { RecentPayments, PaymentVerificationForm } from ".";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux";
-import { Sidebar, AnnouncementContainer, Loader } from ".";
+import { Sidebar, AnnouncementContainer } from ".";
+import { ProfileSkeleton, PaymentListSkeleton } from "./skeletons";
 import { ProfileImg, Wrapper } from "../assets";
 import { motion } from "framer-motion";
 
@@ -168,6 +169,7 @@ const PaymentHistory = () => {
 					)}
 				</div>
 			</div>
+			)}
 			<AnnouncementContainer />
 		</motion.div>
 	);

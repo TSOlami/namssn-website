@@ -4,7 +4,6 @@ import axios from 'axios';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import Loader from "../Loader";
 import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
 
@@ -125,11 +124,21 @@ const FileForm = (props) => {
                         ) : null}
                     </div> 
                     <div className="flex justify-center mt-4">
-                        <button type="submit" className="font-roboto py-2 px-4 bg-blue-600 hover:bg-white  hover:border-blue-600 border-2 rounded-lg text-white hover:text-blue-600">Upload</button>
+                        <button 
+                          type="submit" 
+                          disabled={isLoading}
+                          className={`font-roboto py-2 px-4 bg-blue-600 hover:bg-white hover:border-blue-600 border-2 rounded-lg text-white hover:text-blue-600 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        >
+                          {isLoading ? (
+                            <span className="flex items-center gap-2">
+                              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Uploading...
+                            </span>
+                          ) : 'Upload'}
+                        </button>
                     </div>
                 </form>
                 <ToastContainer/>
-                {isLoading && <Loader />}
             </div>
         )
     }

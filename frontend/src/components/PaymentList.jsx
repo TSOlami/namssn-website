@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { HeaderComponent, Loader } from "../components";
+import { HeaderComponent } from "../components";
+import { PaymentListSkeleton } from "./skeletons";
 import { ErrorPage } from "../pages";
 
 const PaymentList = () => {
@@ -40,10 +41,6 @@ const PaymentList = () => {
     }
   }, [dispatch, payments, isLoading, isError]);
 
-  if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
-  }
-
 return (
   <div className="flex flex-row w-full">
     {/* <Sidebar /> */}
@@ -56,7 +53,7 @@ return (
             Payments to be Made
           </h1>
           {isLoading ? (
-            <Loader />
+            <PaymentListSkeleton count={5} />
           ) : isError ? (
             <ErrorPage />
           ) : !payments || !Array.isArray(payments) || payments?.length === 0 ? (

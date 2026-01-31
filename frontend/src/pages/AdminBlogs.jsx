@@ -8,9 +8,10 @@ import { FaRegPlusSquare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { FormErrors, Loader } from "../components";
+import { FormErrors } from "../components";
 import { convertToBase64 } from "../utils";
 import { useCreateBlogMutation, useAllBlogsQuery, useUpdateBlogMutation, useDeleteBlogMutation, setBlogs } from "../redux";
+import { BlogListSkeleton } from "../components/skeletons";
 
 const AdminBlogs = () => {
   // Use the useSelector hook to access the userInfo object from the state
@@ -140,7 +141,9 @@ const AdminBlogs = () => {
 						</div>
 
 						<div className="p-2 md:p-5">
-							{blogs?.map((blog) => (
+							{isFetching ? (
+								<BlogListSkeleton count={3} />
+							) : blogs?.map((blog) => (
 								<BlogCard 
                 key={blog._id} 
                 blog={blog}
@@ -229,7 +232,6 @@ const AdminBlogs = () => {
                 <FormErrors error={formik.errors.tags} />
               ) : null}
 						</form>
-                {isCreating || isFetching || isDeleting ? <Loader /> : null}
 						<button
 							onClick={handleShowBlogForm}
 							className="bg-black text-white p-2 rounded-lg px-4 flex ml-auto mr-[10vw]"

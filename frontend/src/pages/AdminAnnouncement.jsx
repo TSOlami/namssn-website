@@ -9,8 +9,8 @@ import {
   AdminAnnouncementCard,
   HeaderComponent,
   Sidebar,
-  Loader,
 } from "../components";
+import { AnnouncementListSkeleton } from "../components/skeletons";
 import {
   useCreateAnnouncementMutation,
   useAllAnnouncementsQuery,
@@ -209,10 +209,16 @@ const AdminAnnouncements = () => {
                 </div>
               )}
               <button
-                className="p-2 px-3 rounded-lg bg-black text-white"
+                className={`p-2 px-3 rounded-lg bg-black text-white ${isCreating ? 'opacity-70' : ''}`}
                 type="submit"
+                disabled={isCreating}
               >
-                Make Announcement
+                {isCreating ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Creating...
+                  </span>
+                ) : 'Make Announcement'}
               </button>
 
               {/* The other annoucements map inside input fields where they can be edited and deleted directly */}
@@ -263,7 +269,6 @@ const AdminAnnouncements = () => {
                 </div>
               ))}
             </form>
-            {isFetching || isCreating || (isDeleting && <Loader />)}
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { FaMoneyBillWave, FaXmark } from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FormErrors, Loader } from "..";
+import { FormErrors } from "..";
 import { useCreateCategoryMutation } from "../../redux";
 
 
@@ -54,10 +54,6 @@ const formik = useFormik({
   },
 });
 
-if (isLoading) {
-  return <Loader />; // Render the Loader while data is being fetched
-}
-  
 return (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col justify-center items-center">
     <div className="bg-white p-5 w-[400px] rounded-3xl">
@@ -127,9 +123,15 @@ return (
         ) : null}
         <button
           type="submit"
-          className="bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5"
+          disabled={isLoading}
+          className={`bg-black p-2 w-full text-white rounded-lg hover:bg-slate-700 my-5 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
         >
-          Add Payment Category
+          {isLoading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Creating...
+            </span>
+          ) : 'Add Payment Category'}
         </button>
       </form>
       <ToastContainer /> {/* Toast messages container */}

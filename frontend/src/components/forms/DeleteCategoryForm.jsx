@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaTrash, FaXmark} from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
-import { FormErrors, Loader } from "..";
+import { FormErrors } from "..";
 import { useDeleteCategoryMutation } from "../../redux";
 
 const DeleteCategoryForm = ({handleVerifyModal}) => {
@@ -55,10 +55,6 @@ const formik = useFormik({
   
   });
 
-  if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
-  }
-  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col justify-center items-center">
       <div className="bg-white p-5 w-[400px] rounded-3xl">
@@ -120,9 +116,15 @@ const formik = useFormik({
           
           <button
             type="submit"
-            className="bg-black text-white rounded-lg p-2 mt-5 hover:bg-slate-700"
+            disabled={isLoading}
+            className={`bg-black text-white rounded-lg p-2 mt-5 hover:bg-slate-700 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            Delete Payment Category
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Deleting...
+              </span>
+            ) : 'Delete Payment Category'}
           </button>
         </form>
       </div>

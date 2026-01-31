@@ -8,9 +8,10 @@ import {
 	HeaderComponent,
 	Post,
 	Sidebar,
+	PostComments,
 } from "../components";
 import { useCommentPostMutation, usePostCommentsQuery, usePostQuery } from "../redux";
-import { Loader, PostComments } from "../components";
+import { PostSkeleton, CommentListSkeleton } from "../components/skeletons";
 import { toast } from "react-toastify";
 
 const Comments = () => {
@@ -36,16 +37,6 @@ const Comments = () => {
 
 	// Use the usePostCommentsQuery hook to fetch comments for the post
 	const [commentText, setCommentText] = useState("");
-
-	// Loading indicator while data is being fetched
-	if (isCommentsLoading || isPostLoading) {
-		return <Loader />;
-	}
-
-	// Check if the post was found
-	if (!post) {
-		return <p className="text-center mt-28">This post is unavailable</p>;
-	}
 
 	// const { data: post } = usePostCommentsQuery(postId);
 	// Handle comment submission
@@ -76,12 +67,19 @@ const Comments = () => {
 
 			<div className="flex flex-col flex-1 relative">
 				<HeaderComponent title="Post" back/>
+				
+				{/* Post content or skeleton */}
 				<div className="w-full">
-					<Post
-						key={post?._id}
-						post={post}
-						// updatePostData={(postId, newPostData) => updatePostData(postId, newPostData)}
-					/>
+					{isPostLoading ? (
+						<PostSkeleton />
+					) : !post ? (
+						<p className="text-center mt-28">This post is unavailable</p>
+					) : (
+						<Post
+							key={post?._id}
+							post={post}
+						/>
+					)}
 				</div>
 
 				{/* Add comment */}
@@ -106,8 +104,11 @@ const Comments = () => {
 						<IoSend />
 					</div>
 				</div>
+				{/* Comments section with skeleton */}
 				<div className="pb-12">
-				{comments && comments?.length > 0 ? (
+				{isCommentsLoading ? (
+					<CommentListSkeleton count={4} />
+				) : comments && comments?.length > 0 ? (
 					comments?.map((comment) => {
 						return (
 							<PostComments

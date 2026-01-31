@@ -5,8 +5,8 @@ import {
 	EventForm,
 	HeaderComponent,
 	Sidebar,
-	Loader,
 } from "../components";
+import { EventListSkeleton } from "../components/skeletons";
 import { useDispatch } from "react-redux";
 import { useAllEventsQuery, setEvents } from "../redux";
 
@@ -56,7 +56,9 @@ const AdminEvents = () => {
 				<div className="w-full flex md:flex-row flex-col">
 					{/* Events section */}
 					<div className="flex-1 md:block hidden">
-						{events?.map((event, index) => (
+						{isFetching ? (
+							<EventListSkeleton count={3} />
+						) : events?.map((event, index) => (
 							<AdminEventsCard
 								key={index}
 								id={event._id}
@@ -104,8 +106,6 @@ const AdminEvents = () => {
 						/>
 					</div>
 					{/* End of event form */}
-
-					{ isFetching && <Loader />}
 				</div>
 			</div>
 		</motion.div>

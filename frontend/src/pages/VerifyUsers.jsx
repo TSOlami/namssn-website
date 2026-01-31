@@ -1,5 +1,6 @@
 // import { FaSearch } from "react-icons/fa";
-import { HeaderComponent, Sidebar, UsersCard, Loader } from "../components";
+import { HeaderComponent, Sidebar, UsersCard } from "../components";
+import { UserListSkeleton } from "../components/skeletons";
 
 import { useGetAllUsersQuery } from "../redux";
 
@@ -39,13 +40,13 @@ const VerifyUsers = () => {
 				</h2>
 
 				<div>
-				{sortedUsers && sortedUsers.slice(0, 100).map((user, index) => (
+				{isLoading ? (
+					<UserListSkeleton count={10} />
+				) : sortedUsers && sortedUsers.slice(0, 100).map((user, index) => (
 					<UsersCard key={index} index={index} name={user.name} username={user.username} points={user.points} />
 				))}
 				</div>
 			</div>
-			{/* Loader */}
-			{isLoading && <Loader />}
 		</div>
 	);
 };

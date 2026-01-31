@@ -1,15 +1,12 @@
-import { NavBar, Footer, Loader } from "../components";
+import { NavBar, Footer } from "../components";
 import Event from "../components/Event";
 import { motion } from "framer-motion";
+import { EventListSkeleton } from "../components/skeletons";
 
 import { useAllEventsQuery } from "../redux";
 
 const EventsPage = () => {
 	const { data, isLoading } = useAllEventsQuery();
-
-	if (isLoading) {
-		return <Loader />;
-	}
 
 	return (
 		<motion.main
@@ -24,7 +21,11 @@ const EventsPage = () => {
 						Upcoming Events
 					</h1>
 				</div>
-				{data && data.length > 0 ? (
+				{isLoading ? (
+					<div className="py-10">
+						<EventListSkeleton count={4} />
+					</div>
+				) : data && data.length > 0 ? (
 					<div className="flex flex-row flex-wrap gap-5 justify-center py-10">
 					{data?.map((event, index) => (
 							<Event

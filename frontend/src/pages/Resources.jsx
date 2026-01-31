@@ -9,7 +9,7 @@ import { ResourceCard } from "../components";
 import store from "../redux/store/store";
 import { formatDateToTime } from "../utils";
 import axios from "axios";
-import Loader from '../components/Loader'
+import { ResourcePageSkeleton } from '../components/skeletons';
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
 
@@ -79,13 +79,15 @@ const Resources = () => {
         return (
         <div className="w-[100%] flex justify-between">
             <Sidebar/>
-            {/* <div className="text-xl font-roboto text-gray-300 w-[100%] fixed left-[40%] font-medium top-[40%]">
-                Fetching...
-            </div> */}
+            <div className="lg:w-[65%] sm:w-[100%] block">
+                <div className="sticky top-[0.01%] z-[300] bg-white w-[100%]">
+                    <HeaderComponent title="RESOURCES" url={"Placeholder"}/>
+                </div>
+                <ResourcePageSkeleton />
+            </div>
             <div className="w-[27%] sm:hidden md:block hidden lg:block">
                 <AnnouncementContainer />
             </div>
-            {isLoading && <Loader />}
         </div>
         )
     } else if(data && data.length !== 0 && data !== "error") {

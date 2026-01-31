@@ -10,7 +10,6 @@ import { ProfileImg } from "../../assets";
 import InputField from '../InputField';
 import FormErrors from './FormErrors';
 import { useUpdateUserMutation, setCredentials } from '../../redux';
-import { Loader } from '../../components';
 import { convertToBase64 } from '../../utils';
 
 const EditProfileForm = ({ handleModal }) => {
@@ -86,10 +85,6 @@ const EditProfileForm = ({ handleModal }) => {
     setFile(base64);
   };
 
-  if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
-  }
-  
   return (
     <div className="bg-white rounded-2xl p-4 w-96">
       <div className="flex flex-row justify-between items-center">
@@ -216,8 +211,14 @@ const EditProfileForm = ({ handleModal }) => {
         <div>
           <button 
           type='submit'
-          className="bg-primary text-white rounded-lg p-2 mt-2 w-full">
-            Save
+          disabled={isLoading}
+          className={`bg-primary text-white rounded-lg p-2 mt-2 w-full ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Saving...
+              </span>
+            ) : 'Save'}
           </button>
         </div>
       </form>

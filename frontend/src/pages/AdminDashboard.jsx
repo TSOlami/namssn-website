@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AdminCard, RecentPayments, Sidebar, Loader } from "../components";
+import { AdminCard, RecentPayments, Sidebar } from "../components";
 import { HeaderComponent, SendMailModal } from "../components";
+import { AdminCardSkeleton, PaymentListSkeleton, TableSkeleton } from "../components/skeletons";
 import { MembersImg } from "../assets";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
@@ -48,9 +49,12 @@ const AdminDashboard = () => {
 			dispatch(setPayments(allpayments));
 		}
 	}, [dispatch, allpayments]);
-	if (Loading) {
-		return <Loader />;
-	}
+
+	// Check if any data is still loading
+	const isLoadingStats = !totalPayments && !totalUsers && !totalBlogs && !totalEvents && !totalAnnouncements;
+	const isLoadingUsers = !users;
+	const isLoadingPayments = !allpayments;
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -63,45 +67,57 @@ const AdminDashboard = () => {
 				<HeaderComponent title="Dashboard" />
 				<div>
 					<div className="flex flex-row gap-4 md:justify-between justify-center flex-wrap p-5">
-						<AdminCard
-							title="Total Payments"
-							amount={totalPayments}
-							card="payment"
-							bg="orangish"
-							route="/admin/payment"
-						/>
+						{isLoadingStats ? (
+							<>
+								<AdminCardSkeleton />
+								<AdminCardSkeleton />
+								<AdminCardSkeleton />
+								<AdminCardSkeleton />
+								<AdminCardSkeleton />
+							</>
+						) : (
+							<>
+								<AdminCard
+									title="Total Payments"
+									amount={totalPayments}
+									card="payment"
+									bg="orangish"
+									route="/admin/payment"
+								/>
 
-						<AdminCard
-							title="Blogs"
-							amount={totalBlogs}
-							card="blog"
-							bg="blueish"
-							route="/admin/blogs"
-						/>
+								<AdminCard
+									title="Blogs"
+									amount={totalBlogs}
+									card="blog"
+									bg="blueish"
+									route="/admin/blogs"
+								/>
 
-						<AdminCard
-							title="Events"
-							amount={totalEvents}
-							card="events"
-							bg="reddish"
-							route="/admin/events"
-						/>
+								<AdminCard
+									title="Events"
+									amount={totalEvents}
+									card="events"
+									bg="reddish"
+									route="/admin/events"
+								/>
 
-						<AdminCard
-							title="Announcements"
-							amount={totalAnnouncements}
-							card="announcements"
-							bg="greenish"
-							route="/admin/announcements"
-						/>
+								<AdminCard
+									title="Announcements"
+									amount={totalAnnouncements}
+									card="announcements"
+									bg="greenish"
+									route="/admin/announcements"
+								/>
 
-						<AdminCard
-							title={"Users"}
-							amount={totalUsers}
-							card="users"
-							bg="bg-purple-100"
-							route="/admin/users"
-						/>
+								<AdminCard
+									title={"Users"}
+									amount={totalUsers}
+									card="users"
+									bg="bg-purple-100"
+									route="/admin/users"
+								/>
+							</>
+						)}
 					</div>
 				</div>
 				<div className="p-5 flex flex-row flex-wrap gap-4 items-center justify-center lg:justify-normal">
@@ -143,48 +159,52 @@ const AdminDashboard = () => {
 
 						{/* Table */}
 						<div>
-							<table className="min-w-full shadow-md rounded-lg overflow-hidden">
-								<thead className="">
-									<tr>
-										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
-											NO
-										</th>
-										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
-											Name
-										</th>
-										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
-											Reputations
-										</th>
-										<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700"></th>
-									</tr>
-								</thead>
-								<tbody>
-									{sortedUsers &&
-										sortedUsers
-											.slice(0, 6)
-											.map((account, index) => (
-												<tr key={index}>
-													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-														{index + 1}
-													</td>
-													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-														{account.name}
-													</td>
-													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-														{account.points}
-													</td>
-													<td className="px-2 md:px-4 py-2 whitespace-nowrap">
-														<Link
-															to={`/profile/${account._id}`}
-															className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
-														>
-															View
-														</Link>
-													</td>
-												</tr>
-											))}
-								</tbody>
-							</table>
+							{isLoadingUsers ? (
+								<TableSkeleton rows={6} columns={4} />
+							) : (
+								<table className="min-w-full shadow-md rounded-lg overflow-hidden">
+									<thead className="">
+										<tr>
+											<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
+												NO
+											</th>
+											<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
+												Name
+											</th>
+											<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700">
+												Reputations
+											</th>
+											<th className="px-2 md:px-4 py-2 text-left font-semibold text-gray-700"></th>
+										</tr>
+									</thead>
+									<tbody>
+										{sortedUsers &&
+											sortedUsers
+												.slice(0, 6)
+												.map((account, index) => (
+													<tr key={index}>
+														<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+															{index + 1}
+														</td>
+														<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+															{account.name}
+														</td>
+														<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+															{account.points}
+														</td>
+														<td className="px-2 md:px-4 py-2 whitespace-nowrap">
+															<Link
+																to={`/profile/${account._id}`}
+																className="ml-5 bg-primary px-2 md:px-4 rounded-md text-white"
+															>
+																View
+															</Link>
+														</td>
+													</tr>
+												))}
+									</tbody>
+								</table>
+							)}
 						</div>
 					</div>
 				</div>
@@ -242,7 +262,9 @@ const AdminDashboard = () => {
 					))}
 				</div> */}
 				<div>
-					{allpayments && allpayments?.length === 0 ? (
+					{isLoadingPayments ? (
+						<PaymentListSkeleton count={5} />
+					) : allpayments && allpayments?.length === 0 ? (
 						<div className="text-center mt-28 p-4 text-gray-500">
 							No payments to display.
 						</div>
@@ -253,9 +275,9 @@ const AdminDashboard = () => {
 								email={payment.user?.email}
 								matricNo={payment.user?.matricNumber}
 								createdAt={payment.createdAt}
-								amount={payment.category.amount} // Access category.amount
-								reference={payment.transactionReference} // Access transactionReference
-								category={payment.category.name} // Access category.name
+								amount={payment.category?.amount}
+								reference={payment.transactionReference}
+								category={payment.category?.name}
 							/>
 						))
 					)}

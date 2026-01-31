@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-
-import { Loader } from "../../components"
 import { useContactUsMutation } from "../../redux";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -104,9 +102,15 @@ const ContactForm = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="button-2"
+            disabled={isLoading}
+            className={`button-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            Send Message
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Sending...
+              </span>
+            ) : 'Send Message'}
           </button>
         </div>
       </form>

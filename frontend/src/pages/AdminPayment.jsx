@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Sidebar,  AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, Loader, PaymentVerificationForm} from "../components";
+import { Sidebar, AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, PaymentVerificationForm } from "../components";
 import { FaCheck } from "react-icons/fa6";
-import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments} from '../redux'; // 
+import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments } from '../redux';
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
+import { PaymentListSkeleton } from "../components/skeletons";
 
 const AdminPayment = () => {
    
@@ -72,10 +73,7 @@ const AdminPayment = () => {
       dispatch(setPayments(allpayments));
     }
   }, [dispatch, allpayments]);
-  if (Loading) {
-		return <Loader />;
-	}
-  
+
 	return (
 		<motion.div 			
     initial={{ opacity: 0, x: 100 }}
@@ -177,7 +175,9 @@ const AdminPayment = () => {
 
             <HeaderComponent title="Recent Payment Details" url={"placeholder"}/>
             <div>
-					{allpayments && allpayments?.length === 0 ? (
+					{Loading ? (
+						<PaymentListSkeleton count={5} />
+					) : allpayments && allpayments?.length === 0 ? (
 						<div className="text-center mt-28 p-4 text-gray-500">
 							No payments to display.
 						</div>
@@ -188,9 +188,9 @@ const AdminPayment = () => {
 								email={payment.user?.email}
 								matricNo={payment.user?.matricNumber}
 								createdAt={payment.createdAt}
-								amount={payment.category.amount} // Access category.amount
-								reference={payment.transactionReference} // Access transactionReference
-								category={payment.category.name} // Access category.name
+								amount={payment.category?.amount}
+								reference={payment.transactionReference}
+								category={payment.category?.name}
 							/>
 						))
 					)}

@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAllAnnouncementsQuery } from "../redux";
 import Announcement from "./Announcement";
-import { Loader } from "../components";
+import { AnnouncementListSkeleton } from "./skeletons";
 
 const AnnouncementContainer = () => {
 	const location = useLocation();
@@ -58,9 +58,9 @@ const AnnouncementContainer = () => {
 			<h1 className="text-3xl font-bold py-2 border-b-2 ">
 				Announcements
 			</h1>
-			{ isFetching && <Loader />}
-      {sortedKeys.length === 0 && <p>No announcements</p>}
-			{sortedKeys.map((level) => (
+			{isFetching && <AnnouncementListSkeleton count={3} />}
+      {!isFetching && sortedKeys.length === 0 && <p>No announcements</p>}
+			{!isFetching && sortedKeys.map((level) => (
         <div className="bg-greyish rounded-[2rem] p-4 my-4" key={level}>
           <h2 className="border-b-2 text-xl font-bold py-3">
             {level} {level !== "General" && "Level"} Announcements

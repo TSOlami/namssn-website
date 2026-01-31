@@ -10,9 +10,9 @@ import {
 	Post,
 	Sidebar,
 	AnnouncementContainer,
-	Loader,
 	VerifyAccountForm,
 } from "../components";
+import { ProfileSkeleton, PostListSkeleton } from "../components/skeletons";
 import { ProfileImg } from "../assets";
 import {
 	useUserPostsQuery,
@@ -102,11 +102,6 @@ const Profile = () => {
 		setIsVerifyModalOpen(!isVerifyModalOpen);
 	};
 
-	// Display loading indicator while data is being fetched
-	if (isLoading) {
-		return <Loader />;
-	}
-
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -115,6 +110,12 @@ const Profile = () => {
 			className="flex flex-row"
 		>
 			<Sidebar />
+			{isLoading ? (
+				<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+					<ProfileSkeleton />
+					<PostListSkeleton count={2} />
+				</div>
+			) : (
 			<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 				<div className="p-3 pl-6 flex flex-col">
 					<span className="font-semibold text-black text-lg">
@@ -199,6 +200,7 @@ const Profile = () => {
 					)}
 				</div>
 			</div>
+			)}
 			<AnnouncementContainer />
 
 			{/* modal */}

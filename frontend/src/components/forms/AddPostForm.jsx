@@ -6,7 +6,7 @@ import { FaRegImages } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import { FormErrors, Loader } from "../../components";
+import { FormErrors } from "../../components";
 import { useCreatePostMutation } from "../../redux";
 import { convertToBase64 } from "../../utils";
 
@@ -74,10 +74,6 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
     setImages([]);
   };
 
-  if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
-  }
-
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -125,13 +121,19 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
               </div>
               <button
                 type="submit"
+                disabled={isLoading || formik.values.text === ""}
                 className={
-                  formik.values.text === ""
+                  formik.values.text === "" || isLoading
                     ? "bg-primary text-white px-5 py-2 rounded-lg disabled pointer-events-none opacity-70"
                     : "bg-primary text-white px-5 py-2 rounded-lg"
                 }
               >
-                Post
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Posting...
+                  </span>
+                ) : 'Post'}
               </button>
             </div>
             {file ? (
