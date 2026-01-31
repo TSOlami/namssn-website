@@ -109,7 +109,6 @@ const otpStatusCheck = asyncHandler(async (req, res, next) => {
 
     // Fetch the user
     const user = await User.findOne({ username });
-    console.log(user.otpGenerated, user.otpVerified)
 
     // Check if the user has generated an OTP
     if (user.otpGenerated && user.otpVerified) {
