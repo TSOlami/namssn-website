@@ -30,15 +30,13 @@ const blogSchema = mongoose.Schema(
     upvotes: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to users who upvoted the post
-        default: 0
+        ref: 'User', // Reference to users who upvoted the blog
       },
     ],
     downvotes: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to users who downvoted the post
-        default: 0
+        ref: 'User', // Reference to users who downvoted the blog
       },
     ],
   },
@@ -46,6 +44,11 @@ const blogSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Add indexes for frequently queried fields
+blogSchema.index({ user: 1 });
+blogSchema.index({ createdAt: -1 });
+blogSchema.index({ tags: 1 });
 
 const Blog = mongoose.model('Blog', blogSchema);
 

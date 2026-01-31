@@ -47,6 +47,11 @@ const postSchema = mongoose.Schema(
   }
 );
 
+// Add indexes for frequently queried fields
+postSchema.index({ user: 1 });
+postSchema.index({ createdAt: -1 });
+postSchema.index({ user: 1, createdAt: -1 });
+
 /**
  * Represents a post in the database.
  */

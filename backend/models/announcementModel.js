@@ -26,6 +26,11 @@ const announcementSchema = mongoose.Schema(
 	}
 );
 
+// Add indexes for frequently queried fields
+announcementSchema.index({ user: 1 });
+announcementSchema.index({ level: 1 });
+announcementSchema.index({ createdAt: -1 });
+
 const Announcement = mongoose.model("Announcement", announcementSchema);
 
 export default Announcement;

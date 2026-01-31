@@ -92,6 +92,14 @@ const userSchema = mongoose.Schema(
   }
 );
 
+// Add indexes for frequently queried fields
+userSchema.index({ email: 1 });
+userSchema.index({ username: 1 });
+userSchema.index({ level: 1 });
+userSchema.index({ studentEmail: 1 });
+userSchema.index({ role: 1 });
+userSchema.index({ createdAt: -1 });
+
 // Middleware to hash the password before saving it to the database.
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {

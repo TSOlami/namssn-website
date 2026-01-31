@@ -44,6 +44,12 @@ const notificationSchema = mongoose.Schema({
 	}
 );
 
+// Add indexes for frequently queried fields
+notificationSchema.index({ user: 1 });
+notificationSchema.index({ user: 1, seen: 1 });
+notificationSchema.index({ createdAt: -1 });
+notificationSchema.index({ user: 1, createdAt: -1 });
+
 const Notification = mongoose.model("Notification", notificationSchema);
 
 export default Notification;

@@ -23,6 +23,12 @@ const paymentSchema = mongoose.Schema(
   }
 );
 
+// Add indexes for frequently queried fields
+paymentSchema.index({ user: 1 });
+paymentSchema.index({ category: 1 });
+paymentSchema.index({ createdAt: -1 });
+paymentSchema.index({ user: 1, createdAt: -1 });
+
 const Payment = mongoose.model('Payment', paymentSchema);
 
 export default Payment;
