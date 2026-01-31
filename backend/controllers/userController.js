@@ -15,6 +15,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import axios from 'axios';
 import getTelFile from '../utils/botUtils/getTelFile.js';
+import { sendOTPEmail } from '../utils/emailService.js';
 
 
 // @desc	Authenticate user/set token
@@ -195,30 +196,42 @@ const verifyAccount = asyncHandler(async (req, res) => {
 // Route GET /api/v1/users/generateOTP
 // Access Public
 const generateOTP = asyncHandler(async (req, res) => {
-try {
-  const { username } = req.params;
-  const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+  try {
+    const { username } = req.params;
+    
+    // Find the user first
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 
-  // Save the OTP to the database
-  await UserOTPVerification.create({
-    username,
-    otp,
-    expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
-  });
+    // Save the OTP to the database
+    await UserOTPVerification.create({
+      username,
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
+    });
 
-  // Create a session for the user
-  const user = await User.findOne({ username });
+    // Set otpGenerated to true
+    user.otpGenerated = true;
+    await user.save();
 
-  // Set otpGenerated to true
-  user.otpGenerated = true;
-  await user.save();
-
-  let code = otp;
-
-  res.status(201).json({ code });
-} catch (error) {
-  res.status(400).json({ error });
-}
+    // Send OTP via email directly from the server (secure approach)
+    try {
+      await sendOTPEmail(user.email, username, otp);
+      res.status(201).json({ message: 'OTP sent to your email successfully' });
+    } catch (emailError) {
+      // If email fails, still return success but log the error
+      console.error('Failed to send OTP email:', emailError);
+      res.status(201).json({ message: 'OTP generated. Please check your email.' });
+    }
+  } catch (error) {
+    console.error('OTP generation error:', error);
+    res.status(400).json({ message: 'Failed to generate OTP' });
+  }
 });
 
 
@@ -284,13 +297,15 @@ const resendOTP = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: 'Username is required' });
     }
 
-    // Check for existing OTPs
-    const otpRecord = await UserOTPVerification.findOne({ username }).sort({ createdAt: -1 });
-
-    if (otpRecord) {
-      // Delete the existing OTP record
-      await UserOTPVerification.deleteMany({ username });
+    // Find the user
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    // Check for existing OTPs and delete them
+    await UserOTPVerification.deleteMany({ username });
 
     // Generate a new OTP
     const otp = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
@@ -302,13 +317,17 @@ const resendOTP = asyncHandler(async (req, res) => {
       expiresAt: Date.now() + 5 * 60 * 1000, // OTP expires in 5 minutes
     });
 
-    // Return the OTP to the frontend as a response code
-
-    let code = otp;
-
-    res.status(201).json({ code });
+    // Send OTP via email directly from the server (secure approach)
+    try {
+      await sendOTPEmail(user.email, username, otp);
+      res.status(201).json({ message: 'OTP resent to your email successfully' });
+    } catch (emailError) {
+      console.error('Failed to resend OTP email:', emailError);
+      res.status(201).json({ message: 'OTP generated. Please check your email.' });
+    }
   } catch (error) {
-    res.status(500).json({ error });
+    console.error('Resend OTP error:', error);
+    res.status(500).json({ message: 'Failed to resend OTP' });
   }
 });
 
@@ -512,7 +531,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.level = req.body.level || user.level;
     user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.studentEmail = req.body.studentEmail || user.studentEmail;
-    user.matricNumber = req.body.matricNumber || user.matricNumber;
     user.bio = req.body.bio || user.bio;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
 
@@ -553,7 +571,13 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
     // ...
 
     // Remove the user from the database
-    await user.remove();
+    await User.deleteOne({ _id: user._id });
+
+    // Clear the JWT cookie
+    res.cookie('jwt', '', {
+      httpOnly: true,
+      expires: new Date(0)
+    });
 
     // Respond with a success message
     res.status(200).json({ message: 'User account deleted successfully' });
