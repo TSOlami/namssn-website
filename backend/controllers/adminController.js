@@ -258,10 +258,10 @@ const deleteCategory = asyncHandler(async (req, res) => {
       // Step 2: Handle the case where no matching category is found
       return res.status(404).json({ message: 'Category not found' });
     }
-    const categoryId = category._id
+    const categoryId = category._id;
 
     // Step 3: If the category is found, remove it
-    await Category.deleteOne(categoryId)
+    await Category.deleteOne({ _id: categoryId });
 
     // Step 4: Handle success response
     return res.status(200).json({ message: 'Category deleted successfully' });

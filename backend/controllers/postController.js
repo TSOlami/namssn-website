@@ -195,8 +195,8 @@ const deletePost = asyncHandler(async (req, res) => {
 	  res.status(404);
 	  throw new Error('Post not found');
 	}
-	// Check if the user who made the request is the owner of the post, or if they are an admin (you can define an admin role as needed)
-	if (post.user.toString() === req.user._id.toString() || req.user.isAdmin) {
+	// Check if the user who made the request is the owner of the post, or if they are an admin
+	if (post.user.toString() === req.user._id.toString() || req.user.role === 'admin') {
 	  // If the user is the owner of the post or an admin, delete the post
 	  await Post.deleteOne({ _id: postId });
 	  res.status(200).json({ message: 'success' });
@@ -466,7 +466,7 @@ const updatePostComment = asyncHandler(async (req, res) => {
 	comment.text = text;
   
 	// Save the updated comment to the database
-	const updatedComment = await PostComment.save();
+	const updatedComment = await comment.save();
   
 	res.status(200).json({
     message: "success",
