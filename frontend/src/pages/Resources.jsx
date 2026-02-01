@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
 	HeaderComponent,
 	AnnouncementContainer,
@@ -6,19 +7,17 @@ import {
 } from "../components";
 import { Sidebar } from "../components";
 import { ResourceCard } from "../components";
-import store from "../redux/store/store";
 import { formatDateToTime } from "../utils";
 import axios from "axios";
 import { ResourcePageSkeleton } from '../components/skeletons';
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
+import { getApiUrl, getResourcesUrl } from "../config/api";
 
-
-const state = store.getState();
-const userInfo = state?.auth?.userInfo;
 const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
-const get_url = import.meta.env.VITE_RESOURCES_URL
+
 const Resources = () => {
+    const userInfo = useSelector((state) => state.auth?.userInfo);
     const [data, setData] = useState(null);
     const [isPopUpVisible, setPopUpVisible] = useState(false);
     const [dropDown1, setDropDown1] = useState(1);
@@ -44,16 +43,13 @@ const Resources = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(get_url);
-                if (res) {
-                    setData(res.data); // set the fetched data to the state
-                }
+                const res = await axios.get(getApiUrl("/api/v1/users/resources"));
+                if (res) setData(res.data);
             } catch (err) {
-                // set the value of data to "error" is an error occured
-                setData("error")
+                setData("error");
             }
         };
-        fetchData(); // call the fetchData function
+        fetchData();
     }, []);
 
     const toggleDropDown1 = () => {
@@ -90,8 +86,10 @@ const Resources = () => {
             </div>
         </div>
         )
-    } else if(data && data.length !== 0 && data !== "error") {
-        // create a list of files for all levels
+    }
+    const isDataObject = data && typeof data === 'object' && !Array.isArray(data) && data !== "error";
+    const hasData = data && data !== "error" && (Array.isArray(data) ? data.length > 0 : isDataObject && Object.keys(data).length > 0);
+    if (hasData && isDataObject) {
         const level1FileList = data['100 Level'] ? data['100 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level2FileList = data['200 Level'] ? data['200 Level'].map(obj => Object.keys(obj)[0]) : null;
         const level3FileList = data['300 Level'] ? data['300 Level'].map(obj => Object.keys(obj)[0]) : null;
@@ -135,18 +133,22 @@ const Resources = () => {
                                 {dropDown1 === -1 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
                             </div>
                             {dropDown1===-1 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                    {level1FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['100 Level'][index][file]['title'] + '+' + data['100 Level'][index][file]['botToken']} description={data['100 Level'][index][file]['description']}
-                                        uploaderUsername = {data['100 Level'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['100 Level'][index][file]['uploaderId']}
-                                        title = {data['100 Level'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['100 Level'][index][file]['date']))}
-                                        semester = {data['100 Level'][index][file]['semester']}
-                                        course = {data['100 Level'][index][file]['course']}
-                                        isLarge={data['100 Level'][index][file]['isLarge']}
+                                    {level1FileList.map((file, index) => {
+                                        const item = data['100 Level']?.[index]?.[file];
+                                        const base = getResourcesUrl().replace(/\/$/, '');
+                                        const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                        return (
+                                        <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                        uploaderUsername={item?.uploaderUsername}
+                                        uploaderId={item?.uploaderId}
+                                        title={item?.title}
+                                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                        semester={item?.semester}
+                                        course={item?.course}
+                                        isLarge={item?.isLarge}
                                         fileUrl2={file}
                                         />
-                                    ))}
+                                    );})}
                                 </div>}
                                 {level1FileList.length > 4 && dropDown1===-1 && (
                                 <Link to="/resources/100%20Level">
@@ -159,18 +161,22 @@ const Resources = () => {
                                 {dropDown2 === -2 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
                             </div>
                             {dropDown2===-2 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                    {level2FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['200 Level'][index][file]['title'] + '+' + data['200 Level'][index][file]['botToken']} description={data['200 Level'][index][file]['description']}
-                                        uploaderUsername = {data['200 Level'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['200 Level'][index][file]['uploaderId']}
-                                        title = {data['200 Level'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['200 Level'][index][file]['date']))}
-                                        semester = {data['200 Level'][index][file]['semester']}
-                                        course = {data['200 Level'][index][file]['course']}
-                                        isLarge={data['200 Level'][index][file]['isLarge']}
+                                    {level2FileList.map((file, index) => {
+                                        const item = data['200 Level']?.[index]?.[file];
+                                        const base = getResourcesUrl().replace(/\/$/, '');
+                                        const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                        return (
+                                        <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                        uploaderUsername={item?.uploaderUsername}
+                                        uploaderId={item?.uploaderId}
+                                        title={item?.title}
+                                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                        semester={item?.semester}
+                                        course={item?.course}
+                                        isLarge={item?.isLarge}
                                         fileUrl2={file}
                                         />
-                                    ))}
+                                    );})}
                                 </div>}
                                 {level2FileList.length > 4 && dropDown2===-2 && (
                                 <Link to="/resources/200%20Level">
@@ -184,14 +190,14 @@ const Resources = () => {
                             </div>
                             {dropDown3===-3 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
                                     {level3FileList.map((file, index) => ( 
-                                        <ResourceCard  key={index} fileUrl={get_url + '/' + file + '+' + data['300 Level'][index][file]['title'] + '+' + data['300 Level'][index][file]['botToken']} description={data['300 Level'][index][file]['description']}
-                                        uploaderUsername = {data['300 Level'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['300 Level'][index][file]['uploaderId']}
-                                        title = {data['300 Level'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['300 Level'][index][file]['date']))}
-                                        semester = {data['300 Level'][index][file]['semester']}
-                                        course = {data['300 Level'][index][file]['course']}
-                                        isLarge={data['300 Level'][index][file]['isLarge']}
+                                        <ResourceCard  key={index} fileUrl={`${getResourcesUrl().replace(/\/$/, '')}/${file}+${encodeURIComponent(data['300 Level']?.[index]?.[file]?.title ?? '')}`} description={data['300 Level']?.[index]?.[file]?.description}
+                                        uploaderUsername={data['300 Level']?.[index]?.[file]?.uploaderUsername}
+                                        uploaderId={data['300 Level']?.[index]?.[file]?.uploaderId}
+                                        title={data['300 Level']?.[index]?.[file]?.title}
+                                        date={data['300 Level']?.[index]?.[file]?.date ? formatDateToTime(new Date(data['300 Level'][index][file].date)) : ''}
+                                        semester={data['300 Level']?.[index]?.[file]?.semester}
+                                        course={data['300 Level']?.[index]?.[file]?.course}
+                                        isLarge={data['300 Level']?.[index]?.[file]?.isLarge}
                                         fileUrl2={file}
                                         />
                                     ))}
@@ -207,18 +213,22 @@ const Resources = () => {
                                 {dropDown4 === -4 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
                             </div>
                             {dropDown4===-4 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                    {level4FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['400 Level'][index][file]['title'] + '+' + data['400 Level'][index][file]['botToken']} description={data['400 Level'][index][file]['description']}
-                                        uploaderUsername = {data['400 Level'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['400 Level'][index][file]['uploaderId']}
-                                        title = {data['400 Level'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['400 Level'][index][file]['date']))}
-                                        semester = {data['400 Level'][index][file]['semester']}
-                                        course = {data['400 Level'][index][file]['course']}
-                                        isLarge={data['400 Level'][index][file]['isLarge']}
+                                    {level4FileList.map((file, index) => {
+                                        const item = data['400 Level']?.[index]?.[file];
+                                        const base = getResourcesUrl().replace(/\/$/, '');
+                                        const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                        return (
+                                        <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                        uploaderUsername={item?.uploaderUsername}
+                                        uploaderId={item?.uploaderId}
+                                        title={item?.title}
+                                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                        semester={item?.semester}
+                                        course={item?.course}
+                                        isLarge={item?.isLarge}
                                         fileUrl2={file}
                                         />
-                                    ))}
+                                    );})}
                                 </div>}
                                     {level4FileList.length > 4 && dropDown4===-4 && (
                                     <Link to="/resources/400%20Level">
@@ -231,18 +241,22 @@ const Resources = () => {
                                 {dropDown5 === -5 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
                             </div>
                             {dropDown5===-5 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                    {level5FileList.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['500 Level'][index][file]['title'] + '+' + data['500 Level'][index][file]['botToken']} description={data['500 Level'][index][file]['description']}
-                                        uploaderUsername = {data['500 Level'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['500 Level'][index][file]['uploaderId']}
-                                        title = {data['500 Level'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['500 Level'][index][file]['date']))}
-                                        semester = {data['500 Level'][index][file]['semester']}
-                                        course = {data['500 Level'][index][file]['course']}
-                                        isLarge={data['500 Level'][index][file]['isLarge']}
+                                    {level5FileList.map((file, index) => {
+                                        const item = data['500 Level']?.[index]?.[file];
+                                        const base = getResourcesUrl().replace(/\/$/, '');
+                                        const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                        return (
+                                        <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                        uploaderUsername={item?.uploaderUsername}
+                                        uploaderId={item?.uploaderId}
+                                        title={item?.title}
+                                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                        semester={item?.semester}
+                                        course={item?.course}
+                                        isLarge={item?.isLarge}
                                         fileUrl2={file}
                                         />
-                                    ))}
+                                    );})}
                                 </div>}
                                 {level5FileList.length > 4 && dropDown5===-5 && (
                                 <Link to="/resources/500%20Level">
@@ -255,16 +269,20 @@ const Resources = () => {
                                 {dropDown6 === -6 ? (<BiCaretUp color="#40aaca"/>) : (<BiCaretDown color="#fff"/>)}
                             </div>
                             {dropDown6===-6 && <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                                    {telegram.map((file, index) => ( 
-                                        <ResourceCard key={index} fileUrl={get_url + '/' + file + '+' + data['N/A'][index][file]['title']} description={data['N/A'][index][file]['description']}
-                                        uploaderUsername = {data['N/A'][index][file]['uploaderUsername']}
-                                        uploaderId = {data['N/A'][index][file]['uploaderId']}
-                                        title = {data['N/A'][index][file]['title']}
-                                        date = {formatDateToTime(new Date(data['N/A'][index][file]['date']))}
-                                        semester = {data['N/A'][index][file]['semester']}
-                                        course = {data['N/A'][index][file]['course']}
+                                    {telegram.map((file, index) => {
+                                        const item = data['N/A']?.[index]?.[file];
+                                        const base = getResourcesUrl().replace(/\/$/, '');
+                                        const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                        return (
+                                        <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                        uploaderUsername={item?.uploaderUsername}
+                                        uploaderId={item?.uploaderId}
+                                        title={item?.title}
+                                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                        semester={item?.semester}
+                                        course={item?.course}
                                         />
-                                    ))}
+                                    );})}
                                 </div>}
                                 {telegram.length > 4 && dropDown6===-6 && (
                                 <Link to="/resources/telegram">
@@ -286,7 +304,7 @@ const Resources = () => {
                 </div>
             </div>  
         );
-        } else if(data && data.length===0) {
+    } else if (data && data !== "error" && !hasData) {
             return (
             <div className="flex">
                 <Sidebar/>

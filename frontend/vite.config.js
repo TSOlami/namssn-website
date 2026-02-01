@@ -1,40 +1,32 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
+const raw = process.env.VITE_REACT_APP_API_URL;
+const API_TARGET = typeof raw === "string" && raw ? (raw.endsWith("/") ? raw.slice(0, -1) : raw) : "https://api-namssn-futminna.onrender.com";
+
 export default defineConfig({
 	plugins: [react()],
-	
 	server: {
 		port: 3000,
 		proxy: {
 			"/api/v1": {
-				target: "https://api-namssn-futminna.onrender.com/",
+				target: API_TARGET,
 				changeOrigin: true,
 			},
 		},
 	},
-
-	// Build optimizations
 	build: {
-		// Generate source maps for debugging (disable in production for smaller bundles)
 		sourcemap: false,
-		
-		// Minification settings
-		minify: 'terser',
+		minify: "terser",
 		terserOptions: {
 			compress: {
-				drop_console: true, // Remove console.log in production
+				drop_console: true,
 				drop_debugger: true,
 			},
 		},
-		
-		// Chunk splitting strategy
 		rollupOptions: {
 			output: {
-				// Manual chunk splitting for optimal caching
 				manualChunks: {
-					// Vendor chunks - cached separately
 					'vendor-react': ['react', 'react-dom', 'react-router-dom'],
 					'vendor-redux': ['@reduxjs/toolkit', 'react-redux'],
 					'vendor-ui': ['framer-motion', 'react-icons', 'react-toastify'],
@@ -58,19 +50,13 @@ export default defineConfig({
 						'./src/pages/VerifyUsers',
 					],
 				},
-				
-				// Cleaner chunk file names
 				chunkFileNames: 'assets/js/[name]-[hash].js',
 				entryFileNames: 'assets/js/[name]-[hash].js',
 				assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
 			},
 		},
-		
-		// Chunk size warning limit (in KB)
 		chunkSizeWarningLimit: 500,
 	},
-
-	// Optimize dependencies
 	optimizeDeps: {
 		include: [
 			'react',
@@ -81,8 +67,6 @@ export default defineConfig({
 			'framer-motion',
 		],
 	},
-
-	// Test configuration
 	test: {
 		globals: true,
 		environment: "happy-dom",
