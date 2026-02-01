@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Sidebar, HeaderComponent } from "../components";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { Sidebar, HeaderComponent, ConfirmDialog } from "../components";
 import {
   useAdminGetCoursesQuery,
   useCreateCourseMutation,
@@ -15,7 +16,19 @@ const AdminETest = () => {
   const [code, setCode] = useState("");
   const [title, setTitle] = useState("");
   const [level, setLevel] = useState("100");
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [courseSearch, setCourseSearch] = useState("");
   const { data: courses, isLoading } = useAdminGetCoursesQuery();
+  const filteredCourses = useMemo(() => {
+    if (!courseSearch.trim()) return courses ?? [];
+    const q = courseSearch.trim().toLowerCase();
+    return (courses ?? []).filter(
+      (c) =>
+        c.code?.toLowerCase().includes(q) ||
+        c.title?.toLowerCase().includes(q) ||
+        String(c.level).toLowerCase().includes(q)
+    );
+  }, [courses, courseSearch]);
   const [createCourse, { isLoading: isCreating }] = useCreateCourseMutation();
   const [deleteCourse] = useDeleteCourseMutation();
 
@@ -32,10 +45,15 @@ const AdminETest = () => {
     }
   };
 
-  const handleDelete = async (courseId, courseCode) => {
-    if (!window.confirm(`Delete course ${courseCode}? This will delete all tests and questions.`)) return;
+  const handleDeleteClick = (courseId, courseCode) => {
+    setDeleteConfirm({ courseId, courseCode });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm) return;
     try {
-      await deleteCourse(courseId).unwrap();
+      await deleteCourse(deleteConfirm.courseId).unwrap();
+      setDeleteConfirm(null);
     } catch (err) {
       alert(err?.data?.message || "Failed to delete");
     }
@@ -102,11 +120,28 @@ const AdminETest = () => {
           </div>
 
           <h3 className="font-semibold text-lg mb-3">Courses</h3>
+          {courses && courses.length > 0 && (
+            <div className="mb-3">
+              <div className="relative max-w-sm">
+                <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={courseSearch}
+                  onChange={(e) => setCourseSearch(e.target.value)}
+                  placeholder="Search courses by code or title..."
+                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                />
+              </div>
+            </div>
+          )}
           {isLoading ? (
             <ETestCourseListSkeleton count={4} />
           ) : courses && courses.length > 0 ? (
             <div className="flex flex-wrap gap-4">
-              {courses.map((course) => (
+              {filteredCourses.length === 0 ? (
+                <p className="text-gray-500 py-4 w-full">No courses match &quot;{courseSearch.trim()}&quot;.</p>
+              ) : (
+                filteredCourses.map((course) => (
                 <div
                   key={course._id}
                   className="bg-white rounded-xl shadow-md p-4 w-full max-w-[280px] border border-gray-100 flex flex-col gap-2"
@@ -123,20 +158,29 @@ const AdminETest = () => {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => handleDelete(course._id, course.code)}
+                      onClick={() => handleDeleteClick(course._id, course.code)}
                       className="px-3 py-1.5 bg-red-100 text-red-700 text-sm rounded-lg hover:bg-red-200"
                     >
                       Delete
                     </button>
                   </div>
                 </div>
-              ))}
+              )))
+            }
             </div>
           ) : (
             <p className="text-gray-500">No courses yet. Add one above.</p>
           )}
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete course?"
+        message={deleteConfirm ? `Delete course ${deleteConfirm.courseCode}? This will delete all tests and questions. This cannot be undone.` : ""}
+        confirmLabel="Delete"
+      />
     </motion.div>
   );
 };

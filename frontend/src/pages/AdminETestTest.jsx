@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Sidebar, HeaderComponent, ConfirmDialog } from "../components";
@@ -11,6 +11,7 @@ import {
   useReorderQuestionMutation,
   useDeleteQuestionMutation,
   useBulkAddQuestionsMutation,
+  useExtractQuestionsFromPdfMutation,
 } from "../redux/slices/adminApiSlice";
 import { motion } from "framer-motion";
 import {
@@ -19,6 +20,8 @@ import {
   FaPen,
   FaTrashCan,
   FaFileImport,
+  FaFilePdf,
+  FaCopy,
   FaPlus,
   FaMagnifyingGlass,
 } from "react-icons/fa6";
@@ -46,7 +49,15 @@ export default function AdminETestTest() {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showAdvancedImport, setShowAdvancedImport] = useState(false);
+  const [showPdfImport, setShowPdfImport] = useState(false);
+  const [extractedRawText, setExtractedRawText] = useState("");
+  const [extractedQuestions, setExtractedQuestions] = useState([]);
+  const [extractionErrors, setExtractionErrors] = useState([]);
+  const [extractionNote, setExtractionNote] = useState("");
+  const [extractedTextFromApi, setExtractedTextFromApi] = useState(false);
+  const [editingExtractedIndex, setEditingExtractedIndex] = useState(null);
   const [questionSearch, setQuestionSearch] = useState("");
+  const extractedTextAreaRef = useRef(null);
 
   const { data: tests } = useAdminGetTestsByCourseQuery(courseId, {
     skip: !courseId,
@@ -70,6 +81,8 @@ export default function AdminETestTest() {
   const [deleteQuestion] = useDeleteQuestionMutation();
   const [bulkAddQuestions, { isLoading: isBulkAdding }] =
     useBulkAddQuestionsMutation();
+  const [extractQuestionsFromPdf, { isLoading: isExtractingPdf }] =
+    useExtractQuestionsFromPdfMutation();
 
   const filteredQuestions = useMemo(() => {
     if (!questionSearch.trim()) return questions;
@@ -192,6 +205,80 @@ export default function AdminETestTest() {
       toast.success(`Added ${result?.count ?? parsed.length} question(s).`);
       setBulkJson("");
       setShowBulkPreview(false);
+    } catch (err) {
+      toast.error(err?.data?.message ?? "Failed to add questions");
+    }
+  };
+
+  const handlePdfFileSelect = async (e) => {
+    const file = e?.target?.files?.[0];
+    if (!file) return;
+    if (!file.type?.includes("pdf")) {
+      toast.error("Please select a PDF file.");
+      return;
+    }
+    try {
+      const data = await extractQuestionsFromPdf(file).unwrap();
+      const raw = (data.rawText ?? "").trim();
+      setExtractedRawText(raw);
+      setExtractedTextFromApi(raw.length > 0);
+      setExtractedQuestions(data.questions ?? []);
+      setExtractionErrors(data.errors ?? []);
+      setExtractionNote((data.extractionNote ?? "").trim());
+      if (raw) {
+        toast.success("Text extracted. Copy from the box below into the question fields above.");
+        setTimeout(() => extractedTextAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+      } else if (data.extractionNote) {
+        toast.info("No text in PDF. You can paste text below if you copied it from the PDF in another app.");
+        setTimeout(() => extractedTextAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+      }
+      if ((data.questions ?? []).length > 0) {
+        toast.info(`We also detected ${(data.questions ?? []).length} question(s) — you can add them in one go below, or copy-paste from the text.`);
+      }
+    } catch (err) {
+      toast.error(err?.data?.message ?? "Failed to extract from PDF");
+    }
+    e.target.value = "";
+  };
+
+  const handleCopyAllExtractedText = () => {
+    if (!extractedRawText) return;
+    navigator.clipboard.writeText(extractedRawText).then(
+      () => toast.success("Copied to clipboard. Paste into the question fields above."),
+      () => toast.error("Could not copy")
+    );
+  };
+
+  const handleUpdateExtractedQuestion = (index, payload) => {
+    setExtractedQuestions((prev) =>
+      prev.map((q, i) => (i === index ? { ...q, ...payload } : q))
+    );
+    setEditingExtractedIndex(null);
+  };
+
+  const handleRemoveExtractedQuestion = (index) => {
+    setExtractedQuestions((prev) => prev.filter((_, i) => i !== index));
+    if (editingExtractedIndex === index) setEditingExtractedIndex(null);
+    else if (editingExtractedIndex != null && editingExtractedIndex > index) {
+      setEditingExtractedIndex((i) => i - 1);
+    }
+  };
+
+  const handleConfirmPdfQuestions = async () => {
+    if (!testId || extractedQuestions.length === 0) {
+      toast.warning("No questions to add.");
+      return;
+    }
+    try {
+      const result = await bulkAddQuestions({
+        testId,
+        questions: extractedQuestions,
+      }).unwrap();
+      toast.success(`Added ${result?.count ?? extractedQuestions.length} question(s) from PDF.`);
+      setExtractedQuestions([]);
+      setExtractionErrors([]);
+      setExtractionNote("");
+      setShowPdfImport(false);
     } catch (err) {
       toast.error(err?.data?.message ?? "Failed to add questions");
     }
@@ -366,6 +453,157 @@ export default function AdminETestTest() {
                   </li>
                 ))}
               </ul>
+            )}
+          </section>
+
+          <section className="bg-white rounded-xl shadow-md p-5 border border-gray-100 mb-6">
+            <button
+              type="button"
+              onClick={() => setShowPdfImport((v) => !v)}
+              className="flex items-center gap-2 w-full text-left text-sm text-gray-600 hover:text-gray-900"
+            >
+              <FaFilePdf className="w-4 h-4 flex-shrink-0" />
+              <span className="font-medium">
+                {showPdfImport ? "Hide PDF import" : "Import from PDF"}
+              </span>
+            </button>
+            {showPdfImport && (
+              <div className="mt-4 pt-4 border-t border-gray-200" ref={extractedTextAreaRef}>
+                <p className="text-sm text-gray-600 mb-3">
+                  Upload a PDF — we extract all text into one box. Copy and paste into the question fields above (no retyping).
+                </p>
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <input
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    onChange={handlePdfFileSelect}
+                    className="hidden"
+                    id="pdf-upload"
+                    disabled={isExtractingPdf}
+                  />
+                  <label
+                    htmlFor={isExtractingPdf ? undefined : "pdf-upload"}
+                    className={`inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm rounded-lg cursor-pointer ${isExtractingPdf ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"}`}
+                  >
+                    <FaFilePdf className="w-4 h-4" />
+                    {isExtractingPdf ? "Extracting…" : "Choose PDF"}
+                  </label>
+                </div>
+
+                <div className="mb-4">
+                  {extractionNote && (
+                    <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                      {extractionNote}
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      {extractedRawText
+                        ? "Extracted text — copy and paste into question fields above"
+                        : "Text box — paste here if your PDF had no extractable text (e.g. image-only)"}
+                    </label>
+                    {extractedRawText && (
+                      <button
+                        type="button"
+                        onClick={handleCopyAllExtractedText}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
+                      >
+                        <FaCopy className="w-4 h-4" />
+                        Copy all
+                      </button>
+                    )}
+                  </div>
+                  <textarea
+                    readOnly={extractedTextFromApi}
+                    value={extractedRawText}
+                    onChange={(e) => !extractedTextFromApi && setExtractedRawText(e.target.value)}
+                    className="w-full min-h-[220px] max-h-[400px] p-3 text-sm font-mono border border-gray-300 rounded-lg bg-gray-50 resize-y focus:ring-2 focus:ring-primary/30 focus:border-primary disabled:bg-gray-100"
+                    placeholder={extractionNote ? "Paste text here (e.g. after copying from the PDF in Adobe Reader or another app)." : "Text will appear here after you upload a PDF, or paste here for image-only PDFs."}
+                    aria-label="Extracted or pasted PDF text for copy-paste"
+                  />
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    {extractedRawText
+                      ? "Select any part of the text above and copy (Ctrl+C / Cmd+C), then paste into the question text or option fields when adding a question."
+                      : "For image-only PDFs: open the PDF in another app, select and copy the text, then paste it above. You can then copy from here into the question fields."}
+                  </p>
+                </div>
+
+                {extractionErrors.length > 0 && (
+                  <div className="mb-3 p-3 bg-amber-50 rounded-lg text-sm text-amber-800">
+                    <p className="font-medium mb-1">Parser notes:</p>
+                    <ul className="list-disc list-inside space-y-0.5">
+                      {extractionErrors.slice(0, 5).map((msg, i) => (
+                        <li key={i}>{msg}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {extractedQuestions.length > 0 && (
+                  <>
+                    <h4 className="text-sm font-medium text-gray-700 mb-2 mt-4">
+                      Detected questions (optional) — add in one go or keep copy-pasting from the text above
+                    </h4>
+                    {editingExtractedIndex !== null && extractedQuestions[editingExtractedIndex] && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="bg-amber-50 rounded-xl p-5 border border-amber-200 mb-4"
+                      >
+                        <h4 className="font-medium text-gray-800 mb-3">Edit question {editingExtractedIndex + 1}</h4>
+                        <QuestionForm
+                          question={extractedQuestions[editingExtractedIndex]}
+                          onSubmit={(payload) => handleUpdateExtractedQuestion(editingExtractedIndex, payload)}
+                          onCancel={() => setEditingExtractedIndex(null)}
+                          isSubmitting={false}
+                        />
+                      </motion.div>
+                    )}
+                    <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
+                      {extractedQuestions.map((q, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start justify-between gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <span className="text-sm font-medium text-gray-500 mr-2">{index + 1}.</span>
+                            <span className="text-gray-900">{q.text?.slice(0, 55)}{(q.text?.length ?? 0) > 55 ? "…" : ""}</span>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Correct: {(q.options?.[q.correctIndex] ?? "—").slice(0, 30)}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 flex-shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setEditingExtractedIndex(index)}
+                              className="p-2 rounded-lg hover:bg-gray-200 text-gray-600"
+                              aria-label="Edit"
+                            >
+                              <FaPen className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveExtractedQuestion(index)}
+                              className="p-2 rounded-lg hover:bg-red-50 text-red-600"
+                              aria-label="Remove"
+                            >
+                              <FaTrashCan className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleConfirmPdfQuestions}
+                      disabled={isBulkAdding}
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-50"
+                    >
+                      {isBulkAdding ? "Adding…" : "Add detected questions to test"}
+                    </button>
+                  </>
+                )}
+              </div>
             )}
           </section>
 

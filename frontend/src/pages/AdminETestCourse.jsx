@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { toast } from "react-toastify";
 import { Sidebar, HeaderComponent } from "../components";
 import {
   useAdminGetTestsByCourseQuery,
@@ -19,8 +21,20 @@ const AdminETestCourse = () => {
   const [isPublished, setIsPublished] = useState(false);
   const [bulkJson, setBulkJson] = useState("");
   const [selectedTestId, setSelectedTestId] = useState("");
+  const [showBulkImport, setShowBulkImport] = useState(false);
+  const [testSearch, setTestSearch] = useState("");
 
   const { data: tests, isLoading } = useAdminGetTestsByCourseQuery(courseId, { skip: !courseId });
+  const filteredTests = useMemo(() => {
+    if (!testSearch.trim()) return tests ?? [];
+    const q = testSearch.trim().toLowerCase();
+    return (tests ?? []).filter(
+      (t) =>
+        t.title?.toLowerCase().includes(q) ||
+        t.semester?.toLowerCase().includes(q) ||
+        t.year?.toLowerCase().includes(q)
+    );
+  }, [tests, testSearch]);
   const [createTest, { isLoading: isCreating }] = useCreateTestMutation();
   const [updateTest] = useUpdateTestMutation();
   const [bulkAddQuestions, { isLoading: isAddingQuestions }] = useBulkAddQuestionsMutation();
@@ -43,7 +57,7 @@ const AdminETestCourse = () => {
       setTimeLimitMinutes(30);
       setIsPublished(false);
     } catch (err) {
-      alert(err?.data?.message || "Failed to create test");
+      toast.error(err?.data?.message || "Failed to create test");
     }
   };
 
@@ -58,27 +72,28 @@ const AdminETestCourse = () => {
   const handleBulkAdd = async (e) => {
     e.preventDefault();
     if (!selectedTestId || !bulkJson.trim()) {
-      alert("Select a test and paste questions JSON.");
+      toast.warning("Select a test and paste questions JSON.");
       return;
     }
     let questions;
     try {
       questions = JSON.parse(bulkJson);
     } catch {
-      alert("Invalid JSON. Use format: [{ \"text\": \"...\", \"options\": [\"A\", \"B\", \"C\", \"D\"], \"correctIndex\": 0 }]");
+      toast.error("Invalid JSON. Use format: [{ \"text\": \"...\", \"options\": [\"A\", \"B\", \"C\", \"D\"], \"correctIndex\": 0 }]");
       return;
     }
     if (!Array.isArray(questions) || questions.length === 0) {
-      alert("Questions must be a non-empty array.");
+      toast.error("Questions must be a non-empty array.");
       return;
     }
     try {
-      await bulkAddQuestions({ testId: selectedTestId, questions }).unwrap();
+      const result = await bulkAddQuestions({ testId: selectedTestId, questions }).unwrap();
+      const count = result?.count ?? questions.length;
+      toast.success(`Added ${count} question(s).`);
       setBulkJson("");
       setSelectedTestId("");
-      alert(`Added ${questions.length} question(s).`);
     } catch (err) {
-      alert(err?.data?.message || "Failed to add questions");
+      toast.error(err?.data?.message || "Failed to add questions");
     }
   };
 
@@ -161,11 +176,28 @@ const AdminETestCourse = () => {
           </div>
 
           <h3 className="font-semibold text-lg mb-3">Tests</h3>
+          {tests && tests.length > 0 && (
+            <div className="mb-3">
+              <div className="relative max-w-sm">
+                <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={testSearch}
+                  onChange={(e) => setTestSearch(e.target.value)}
+                  placeholder="Search tests by title, semester, year..."
+                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                />
+              </div>
+            </div>
+          )}
           {isLoading ? (
             <ETestCourseListSkeleton count={3} />
           ) : tests && tests.length > 0 ? (
             <div className="space-y-3 mb-8">
-              {tests.map((test) => (
+              {filteredTests.length === 0 ? (
+                <p className="text-gray-500 py-4">No tests match &quot;{testSearch.trim()}&quot;.</p>
+              ) : (
+                filteredTests.map((test) => (
                 <div
                   key={test._id}
                   className="bg-white rounded-xl shadow-md p-4 border border-gray-100 flex flex-wrap items-center justify-between gap-2"
@@ -179,6 +211,12 @@ const AdminETestCourse = () => {
                     </p>
                   </div>
                   <div className="flex gap-2">
+                    <Link
+                      to={`/admin/e-test/course/${courseId}/test/${test._id}`}
+                      className="px-3 py-1.5 text-sm rounded-lg bg-primary text-white hover:opacity-90"
+                    >
+                      Manage questions
+                    </Link>
                     <button
                       type="button"
                       onClick={() => handlePublishToggle(test)}
@@ -188,42 +226,53 @@ const AdminETestCourse = () => {
                     </button>
                   </div>
                 </div>
-              ))}
+              )))
+            }
             </div>
           ) : (
             <p className="text-gray-500 mb-6">No tests yet. Add one above.</p>
           )}
 
           <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100">
-            <h3 className="font-semibold text-lg mb-3">Bulk add questions</h3>
-            <p className="text-sm text-gray-500 mb-2">
-              Paste a JSON array. Each item: <code className="bg-gray-100 px-1 rounded">{"{ \"text\": \"Question?\", \"options\": [\"A\", \"B\", \"C\", \"D\"], \"correctIndex\": 0, \"explanation\": \"optional\" }"}</code>
-            </p>
-            <select
-              value={selectedTestId}
-              onChange={(e) => setSelectedTestId(e.target.value)}
-              className="border rounded-lg px-3 py-2 mb-3 w-full max-w-xs"
-            >
-              <option value="">Select test</option>
-              {(tests || []).map((t) => (
-                <option key={t._id} value={t._id}>{t.title}</option>
-              ))}
-            </select>
-            <textarea
-              value={bulkJson}
-              onChange={(e) => setBulkJson(e.target.value)}
-              placeholder='[{"text":"What is 2+2?","options":["3","4","5"],"correctIndex":1}]'
-              rows={8}
-              className="border rounded-lg px-3 py-2 w-full font-mono text-sm"
-            />
             <button
               type="button"
-              onClick={handleBulkAdd}
-              disabled={isAddingQuestions || !selectedTestId || !bulkJson.trim()}
-              className="mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-50"
+              onClick={() => setShowBulkImport((v) => !v)}
+              className="text-sm text-gray-600 hover:text-gray-900 font-medium"
             >
-              {isAddingQuestions ? "Adding…" : "Add questions"}
+              {showBulkImport ? "Hide advanced" : "Advanced: Bulk add from JSON"}
             </button>
+            {showBulkImport && (
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-sm text-gray-500 mb-2">
+                  For developers: paste a JSON array. Each item: <code className="bg-gray-100 px-1 rounded text-xs">{"{ \"text\": \"...\", \"options\": [\"A\",\"B\",\"C\",\"D\"], \"correctIndex\": 0 }"}</code>
+                </p>
+                <select
+                  value={selectedTestId}
+                  onChange={(e) => setSelectedTestId(e.target.value)}
+                  className="border rounded-lg px-3 py-2 mb-3 w-full max-w-xs"
+                >
+                  <option value="">Select test</option>
+                  {(tests || []).map((t) => (
+                    <option key={t._id} value={t._id}>{t.title}</option>
+                  ))}
+                </select>
+                <textarea
+                  value={bulkJson}
+                  onChange={(e) => setBulkJson(e.target.value)}
+                  placeholder='[{"text":"What is 2+2?","options":["3","4","5"],"correctIndex":1}]'
+                  rows={6}
+                  className="border rounded-lg px-3 py-2 w-full font-mono text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={handleBulkAdd}
+                  disabled={isAddingQuestions || !selectedTestId || !bulkJson.trim()}
+                  className="mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-50"
+                >
+                  {isAddingQuestions ? "Adding…" : "Add questions from JSON"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

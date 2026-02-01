@@ -6,6 +6,7 @@ import Test from '../models/testModel.js';
 import Question from '../models/questionModel.js';
 import TestAttempt from '../models/testAttemptModel.js';
 import { extractQuestionsFromText } from '../utils/etestUtils/extractQuestionsFromText.js';
+import { ocrPdfWithTesseract } from '../utils/etestUtils/ocrPdfWithTesseract.js';
 
 const require = createRequire(import.meta.url);
 const pdfParse = require('pdf-parse');
@@ -223,11 +224,6 @@ const bulkAddQuestions = asyncHandler(async (req, res) => {
   res.status(201).json({ count: inserted.length, questions: inserted });
 });
 
-/**
- * Extract questions from uploaded PDF.
- * POST /api/v1/admin/etest/extract-questions
- * Multipart: file field "pdf"
- */
 const extractQuestionsFromPdf = asyncHandler(async (req, res) => {
   const file = req.files?.pdf;
   if (!file) {
@@ -239,24 +235,37 @@ const extractQuestionsFromPdf = asyncHandler(async (req, res) => {
     throw new Error('File must be a PDF.');
   }
   const buffer = file.data ?? file;
+  const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
   let rawText;
   try {
-    const data = await pdfParse(buffer);
+    const data = await pdfParse(buf);
     rawText = data?.text ?? '';
   } catch (err) {
     console.error('PDF parse error:', err);
     res.status(400);
-    throw new Error('Could not read PDF. Ensure the file is a valid, non-image PDF.');
+    throw new Error('Could not read PDF. Ensure the file is a valid PDF.');
   }
+  let usedOcr = false;
   if (!rawText?.trim()) {
-    res.status(400);
-    throw new Error('No text could be extracted from the PDF (e.g. image-only PDF).');
+    const ocrText = await ocrPdfWithTesseract(buf);
+    if (ocrText?.trim()) {
+      rawText = ocrText;
+      usedOcr = true;
+    } else {
+      return res.status(200).json({
+        questions: [],
+        errors: undefined,
+        rawText: '',
+        extractionNote: 'No text could be extracted (e.g. scanned/image-only PDF). Copy the text from the PDF in another app (e.g. Adobe Reader) and paste it in the box below.',
+      });
+    }
   }
   const { questions, errors } = extractQuestionsFromText(rawText);
   res.status(200).json({
     questions,
     errors: errors.length ? errors : undefined,
-    rawTextPreview: rawText.slice(0, 500),
+    rawText,
+    extractionNote: usedOcr ? 'Text was extracted using free OCR (scanned PDF).' : undefined,
   });
 });
 
