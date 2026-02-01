@@ -36,29 +36,39 @@ const AnnouncementContainer = () => {
 		return { groupedAnnouncements: grouped, sortedKeys: keys };
 	}, [announcements, userLevel]);
 
+	const isFullPage = location.pathname === "/announcements";
+	const containerClass = isFullPage
+		? "border-gray-300 p-4 flex flex-col mb-6 max-w-4xl mx-auto w-full min-h-screen"
+		: "bg-gray-200 border-gray-300 p-4 md:flex flex-col gap-1 hidden mb-4 max-w-xl";
+	const scrollAreaClass = isFullPage
+		? "announcement-scroll flex-1 min-h-0 overflow-y-auto flex flex-col gap-1"
+		: "announcement-scroll max-h-[70vh] overflow-y-auto flex flex-col gap-1";
+
 	return (
-		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 max-w-xl"}>
-			<h1 className="text-3xl font-bold py-2 border-b-2 ">
+		<div className={containerClass}>
+			<h1 className="text-3xl font-bold py-2 border-b-2 flex-shrink-0">
 				Announcements
 			</h1>
-			{isFetching && <AnnouncementListSkeleton count={3} />}
-      {!isFetching && sortedKeys.length === 0 && <p>No announcements</p>}
-			{!isFetching && sortedKeys.map((level) => (
-        <div className="bg-greyish rounded-[2rem] p-4 my-4" key={level}>
-          <h2 className="border-b-2 text-xl font-bold py-3">
-            {level} {level !== "General" && "Level"} Announcements
-          </h2>
-          {groupedAnnouncements[level]?.map((announcement) => (
-            <Announcement
-              key={announcement?._id}
-              name={announcement?.user?.name}
-              text={announcement?.text}
-              isVerified={announcement?.user?.isVerified}
-              createdAt={announcement?.createdAt}
-            />
-          ))}
-        </div>
-      ))}
+			<div className={scrollAreaClass}>
+				{isFetching && <AnnouncementListSkeleton count={3} />}
+				{!isFetching && sortedKeys.length === 0 && <p>No announcements</p>}
+				{!isFetching && sortedKeys.map((level) => (
+					<div className="bg-greyish rounded-[2rem] p-4 my-4" key={level}>
+						<h2 className="border-b-2 text-xl font-bold py-3">
+							{level} {level !== "General" && "Level"} Announcements
+						</h2>
+						{groupedAnnouncements[level]?.map((announcement) => (
+							<Announcement
+								key={announcement?._id}
+								name={announcement?.user?.name}
+								text={announcement?.text}
+								isVerified={announcement?.user?.isVerified}
+								createdAt={announcement?.createdAt}
+							/>
+						))}
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };

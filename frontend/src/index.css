@@ -91,6 +91,15 @@
 }
 
 
+/* Hide scrollbar in announcement section (still scrollable) */
+.announcement-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.announcement-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 @layer utilities {
   .padding {
     @apply sm:px-16 px-8 sm:py-24 py-12;
@@ -125,7 +134,7 @@
   }
 
   .body-text {
-    @apply font-roboto leading-normal;
+    @apply font-roboto leading-normal text-sm sm:text-base;
   }
 
   .nav-text {
@@ -169,9 +178,38 @@
   border: 2px solid #17A1FA66;
 }
 
+/* Legacy class - NavBar uses .navbar-hamburger */
 .hamburger {
   display: none;
   z-index: 999;
+}
+
+/* In-header hamburger (mobile): no border, in-flow */
+.navbar-hamburger {
+  cursor: pointer;
+  outline: none;
+}
+
+.navbar-hamburger .bar {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  margin: 4px auto;
+  transition: all 0.3s ease-in-out;
+  background-color: #1f2937;
+  border-radius: 1px;
+}
+
+.navbar-hamburger.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-hamburger.active .bar:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.navbar-hamburger.active .bar:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
 }
 
 .underline-blue {
@@ -244,40 +282,41 @@
 }
 
 
+/* Sidebar hamburger (logged-in mobile): visible and positioned in header area */
 @media (max-width: 1024px) {
   .hamburger {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 10px;
-    color: white;
     position: fixed;
     right: 1rem;
-    top: 2vh;
+    top: 1rem;
     z-index: 999;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
     background: white;
-    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
-
-  .bar {
+  .hamburger .bar {
     display: block;
-    width: 25px;
-    height: 3px;
-    margin: 5px auto;
-    -webkit-transition: all 0.3s ease-in-out;
+    width: 22px;
+    height: 2.5px;
+    margin: 4px auto;
     transition: all 0.3s ease-in-out;
-    background-color: #17A1FA;
+    background-color: #1f2937;
+    border-radius: 1px;
   }
-
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
   }
-
   .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+    transform: translateY(6.5px) rotate(45deg);
   }
-
   .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+    transform: translateY(-6.5px) rotate(-45deg);
   }
-
 }
