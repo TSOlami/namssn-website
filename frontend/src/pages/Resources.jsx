@@ -65,7 +65,7 @@ const Resources = () => {
                 </div>
                 <ResourcePageSkeleton />
             </div>
-            <div className="w-[27%] sm:hidden md:block hidden lg:block">
+            <div className="flex-shrink-0 sm:hidden md:block hidden lg:block">
                 <AnnouncementContainer />
             </div>
         </div>
@@ -93,7 +93,7 @@ const Resources = () => {
                             <BiSolidUpvote color="#fff"/>
                             </button>
                         </div>
-                        <div className="w-[27%] sm:hidden bg-slate-800 md:hidden hidden lg:block">
+                        <div className="flex-shrink-0 sm:hidden bg-slate-800 md:hidden hidden lg:block">
                             <AnnouncementContainer />
                         </div>
                         <div className="fixed z-1 bottom-[7em] left-[10%] md:left-[15em] lg:left-[20em] w-[100%] md:w-[50%]">
@@ -279,7 +279,7 @@ const Resources = () => {
                         </button>
                         
                     </div>
-                    <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:hidden hidden bg-gray-200 lg:block": " w-[25%] sm:hidden bg-gray-200 md:hidden hidden lg:block"}>
+                    <div className="flex-shrink-0 sm:hidden md:hidden hidden bg-gray-200 lg:block">
                         <AnnouncementContainer />
                     </div>
                 </div>
@@ -300,7 +300,7 @@ const Resources = () => {
                     <BiSolidUpvote color="#fff"/>
                     </button>
                 </div>
-                <div className={isPopUpVisible ? "blur-[2px] pointer-events-none w-[35%] sm:hidden md:block hidden lg:block bg-gray-200": "w-[35%] bg-gray-200 sm:hidden md:block hidden lg:block"}>
+                <div className="flex-shrink-0 bg-gray-200 sm:hidden md:block hidden lg:block">
                     <AnnouncementContainer />
                 </div>
                 <div className="fixed z-1 bottom-[10em] left-[10%] md:left-[15em] lg:left-[20em] w-[100%] md:w-[50%]">
@@ -316,9 +316,9 @@ const Resources = () => {
                     <div><span>Unable to fetch resources</span></div>
                     <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload</span></div>
                 </div>
-                <div className="w-[27%] sm:hidden bg-slate-800 md:hidden hidden lg:block">
-                    <AnnouncementContainer />
-                </div>
+<div className="flex-shrink-0 sm:hidden bg-slate-800 md:hidden hidden lg:block">
+                <AnnouncementContainer />
+            </div>
             </div>
         )
     }

@@ -88,7 +88,7 @@ const LevelResources = () => {
                     <div><span>Unable to fetch resources.</span></div>
                     <div><span>Click <span onClick={handleReload} className="text-green-500 cursor-pointer  hover:text-green-300">here</span> to reload.</span></div>
                 </div>
-                <div className="w-[27%] sm:hidden md:hidden hidden lg:block">
+                <div className="flex-shrink-0 sm:hidden md:hidden hidden lg:block">
                     <AnnouncementContainer />
                 </div>
             </div>
@@ -105,7 +105,7 @@ const LevelResources = () => {
                         <ResourceListSkeleton count={6} />
                     </div>
                 </div>
-                <div className="w-[27%] sm:hidden md:block hidden lg:block">
+                <div className="flex-shrink-0 sm:hidden md:block hidden lg:block">
                     <AnnouncementContainer />
                 </div>
             </div>
