@@ -9,6 +9,7 @@ export const etestApiSlice = apiSlice.injectEndpoints({
         query(params = {}) {
           const searchParams = new URLSearchParams();
           if (params.level) searchParams.set('level', params.level);
+          if (params.search && params.search.trim()) searchParams.set('search', params.search.trim());
           const qs = searchParams.toString();
           return {
             url: `${USERS_URL}/etest/courses${qs ? `?${qs}` : ''}`,

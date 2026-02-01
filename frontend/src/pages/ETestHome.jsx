@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Sidebar, HeaderComponent, AnnouncementContainer } from "../components";
 import { useGetCoursesQuery, useGetUserAttemptsQuery } from "../redux/slices/etestSlice";
 import { ETestCourseListSkeleton } from "../components/skeletons";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 
 const LEVELS = ["100", "200", "300", "400", "500"];
 const TAB_COURSES = "courses";
@@ -23,13 +24,24 @@ const formatTimeSpent = (seconds) => {
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
 };
 
+const DEBOUNCE_MS = 300;
+
 const ETestHome = () => {
   const [levelFilter, setLevelFilter] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [activeTab, setActiveTab] = useState(TAB_COURSES);
   const { userInfo } = useSelector((state) => state.auth);
-  const { data: courses, isLoading } = useGetCoursesQuery(
-    levelFilter ? { level: levelFilter } : {}
-  );
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchInput.trim()), DEBOUNCE_MS);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  const queryParams = {};
+  if (levelFilter) queryParams.level = levelFilter;
+  if (debouncedSearch) queryParams.search = debouncedSearch;
+  const { data: courses, isLoading } = useGetCoursesQuery(queryParams);
   const { data: attempts = [], isLoading: attemptsLoading } = useGetUserAttemptsQuery(undefined, {
     skip: !userInfo,
   });
@@ -75,8 +87,29 @@ const ETestHome = () => {
                 className="space-y-6"
               >
                 <p className="text-gray-600 font-serif">
-                  Practice with past questions. Select a level and choose a course to start.
+                  Practice with past questions. Search or filter by level, then choose a course.
                 </p>
+                <div className="relative">
+                  <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="search"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="Search by course code or title"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-gray-900 placeholder:text-gray-400"
+                    aria-label="Search courses"
+                  />
+                  {searchInput && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchInput("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded"
+                      aria-label="Clear search"
+                    >
+                      <FaXmark className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -118,8 +151,24 @@ const ETestHome = () => {
                   </div>
                 ) : (
                   <div className="text-center py-16 text-gray-500 font-serif bg-white rounded-xl border border-gray-100 p-8">
-                    <p>No courses available yet.</p>
-                    <p className="text-sm mt-2">Check back later or try another level.</p>
+                    {debouncedSearch || levelFilter ? (
+                      <>
+                        <p>No courses match your search.</p>
+                        <p className="text-sm mt-2">Try a different term or level.</p>
+                        <button
+                          type="button"
+                          onClick={() => { setSearchInput(""); setLevelFilter(""); }}
+                          className="mt-4 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:opacity-90"
+                        >
+                          Clear filters
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p>No courses available yet.</p>
+                        <p className="text-sm mt-2">Check back later or try another level.</p>
+                      </>
+                    )}
                   </div>
                 )}
               </motion.div>

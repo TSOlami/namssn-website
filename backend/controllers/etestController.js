@@ -4,13 +4,15 @@ import Test from '../models/testModel.js';
 import Question from '../models/questionModel.js';
 import TestAttempt from '../models/testAttemptModel.js';
 
-/**
- * Get all courses (optionally filter by level).
- * GET /api/v1/users/etest/courses?level=100
- */
 const getCourses = asyncHandler(async (req, res) => {
-  const { level } = req.query;
+  const { level, search: searchParam } = req.query;
   const filter = level && ['100', '200', '300', '400', '500'].includes(level) ? { level } : {};
+  const search = (searchParam || req.query.q || '').trim().slice(0, 100);
+  if (search) {
+    const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(escaped, 'i');
+    filter.$or = [{ code: re }, { title: re }];
+  }
   const courses = await Course.find(filter).sort({ code: 1 });
   res.status(200).json(courses);
 });
