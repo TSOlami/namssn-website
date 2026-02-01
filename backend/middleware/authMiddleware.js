@@ -12,8 +12,13 @@ import User from '../models/userModel.js'; // Import the User model for querying
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  // Extract the JWT token from the request cookies.
-  token = req.cookies.jwt;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.slice(7);
+  }
+  if (!token) {
+    token = req.cookies.jwt;
+  }
 
   if (token) {
     try {

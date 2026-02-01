@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const ANNOUCEMENTS_URL = "/api/v1/";
+const ANNOUNCEMENTS_URL = "/api/v1/users";
 
 export const announcementsApiSlice = apiSlice.injectEndpoints({
 	endpoints(builder) {
@@ -9,7 +9,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			allAnnouncements: builder.query({
 				query() {
 					return {
-						url: `${ANNOUCEMENTS_URL}/users/announcements`,
+						url: `${ANNOUNCEMENTS_URL}/announcements`,
 						method: "GET",
 					};
 				},
@@ -20,7 +20,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			userAnnouncements: builder.query({
 				query({ _id }) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/users/announcement/${_id}`,
+						url: `${ANNOUNCEMENTS_URL}/announcement/${_id}`,
 						method: "GET",
 					};
 				},
@@ -31,7 +31,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			createAnnouncement: builder.mutation({
 				query(data) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/admin/announcement`,
+						url: "/api/v1/admin/announcement",
 						method: "POST",
 						body: data,
 					};
@@ -43,7 +43,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			updateAnnouncement: builder.mutation({
 				query(data) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/admin/announcement`,
+						url: "/api/v1/admin/announcement",
 						method: "PUT",
 						body: data,
 					};
@@ -55,7 +55,7 @@ export const announcementsApiSlice = apiSlice.injectEndpoints({
 			deleteAnnouncement: builder.mutation({
 				query(announcementId) {
 					return {
-						url: `${ANNOUCEMENTS_URL}/admin/announcement/${announcementId}`,
+						url: `/api/v1/admin/announcement/${announcementId}`,
 						method: "DELETE",
 					};
 				},

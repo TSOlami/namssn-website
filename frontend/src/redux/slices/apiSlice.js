@@ -6,6 +6,13 @@ const API_BASE = (import.meta.env.VITE_REACT_APP_API_URL ?? '').replace(/\/$/, '
 const baseQuery = fetchBaseQuery({
 	baseUrl: API_BASE,
 	credentials: 'include',
+	prepareHeaders: (headers, { getState }) => {
+		const token = getState().auth?.userInfo?.token;
+		if (token) {
+			headers.set('Authorization', `Bearer ${token}`);
+		}
+		return headers;
+	},
 });
 
 const baseQueryWithBlockedHandling = async (args, api, extraOptions) => {
