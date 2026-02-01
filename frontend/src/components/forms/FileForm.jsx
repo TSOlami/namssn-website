@@ -22,7 +22,7 @@ const FileForm = (props) => {
     useEffect(() => {
     }, [inputValue]);
     const [selectedOption1, setSelectedOption1] = useState("100 Level");
-    const [selectedOption2, setSelectedOption2] = useState("option1");
+    const [selectedOption2] = useState("option1");
     const handleSelectChange1 = (e) => {
         setSelectedOption1(e.target.value);
         };

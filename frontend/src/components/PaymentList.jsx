@@ -32,7 +32,7 @@ const PaymentList = () => {
       toast.error("Sorry, You might need to login again.");
       navigate("/signin");
     }
-  }, [error, dispatch, logutUser]);
+  }, [error, dispatch, logutUser, navigate]);
 
   useEffect(() => {
     if (!isLoading && !isError && Array.isArray(payments)) {

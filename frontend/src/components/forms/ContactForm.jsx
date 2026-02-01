@@ -32,7 +32,11 @@ const ContactForm = () => {
   };
 
   if (isLoading) {
-    return <Loader />; // Render the Loader while data is being fetched
+    return (
+      <div className="max-w-2xl mx-auto py-16 text-center text-gray-500">
+        Sending…
+      </div>
+    );
   }
   
   return (

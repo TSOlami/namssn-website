@@ -77,7 +77,7 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
+        <div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
           <div className="bg-white rounded-lg w-[90%] max-w-[600px] h-[600px]">
             <div className="flex justify-between items-center p-5 border-b border-gray-200">
               <div className="text-2xl font-bold">Create Post</div>

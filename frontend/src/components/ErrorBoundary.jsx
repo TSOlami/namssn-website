@@ -74,7 +74,7 @@ class ErrorBoundary extends Component {
             </p>
 
             {/* Show error details in development */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {typeof import.meta !== 'undefined' && import.meta.env?.DEV && this.state.error && (
               <div className="mb-8 text-left bg-red-50 border border-red-200 rounded-lg p-4">
                 <p className="text-sm font-medium text-red-800 mb-2">
                   Error Details:

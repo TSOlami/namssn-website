@@ -2,34 +2,21 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { InputField, FormErrors } from "../../components";
+import { InputField, FormErrors, ConfirmDialog } from "../../components";
 import { convertToBase64 } from "../../utils";
 import { toast } from "react-toastify";
 import { useCreateEventMutation, useUpdateEventMutation, useDeleteEventMutation, setEvents } from "../../redux";
 
 const EventForm = ({ selectedOption }) => {
-	// Use the useCreateEventMutation hook to create an event
 	const [createEvent, {isLoading: isCreating}] = useCreateEventMutation();
-
-	// Use the useUpdateEventMutation hook to update an event
 	const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
-
-	// Use the useDeleteEventMutation hook to delete an event
 	const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
-
-	// State to manage image preview
   const [imagePreview, setImagePreview] = useState(selectedOption?.image || null);
-
-	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
-
-	// Create state to manage file upload
 	const [file, setFile] = useState();
-
-	// Define the initial values for the form fields
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const initialValues = {
 		title: selectedOption?.title || "",
-		// description: selectedOption?.description || "",
 		location: selectedOption?.location || "",
 		date: selectedOption?.date || "",
 	};
@@ -119,10 +106,10 @@ const EventForm = ({ selectedOption }) => {
       location: selectedOption?.location || "",
       date: selectedOption?.date || "",
     });
-		setFile(selectedOption?.image || file || null);
+		setFile((prev) => selectedOption?.image || prev || null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- formik omitted to avoid re-run loops
   }, [selectedOption]);
 
-	// Function to handle event deletion
 	const handleDelete = async () => {
 		try {
 			const res = await toast.promise(deleteEvent(selectedOption._id).unwrap(), {
@@ -132,7 +119,6 @@ const EventForm = ({ selectedOption }) => {
 			dispatch(setEvents({ ...res }));
 			formik.resetForm();
 			setFile(null);
-			// Reload the page after 5 seconds
 			setTimeout(() => {
 				window.location.reload();
 			}, 3000);
@@ -244,12 +230,20 @@ const EventForm = ({ selectedOption }) => {
 				) : (
 					<button
 					type="button"
-					onClick={handleDelete}
+					onClick={() => setShowDeleteConfirm(true)}
 					className="p-3 border-2 rounded-lg border-red-600 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
 					>
 					Delete Event
 					</button>
 				)}
+			<ConfirmDialog
+				isOpen={showDeleteConfirm}
+				onClose={() => setShowDeleteConfirm(false)}
+				onConfirm={handleDelete}
+				title="Delete event?"
+				message="This event will be permanently deleted. This cannot be undone."
+				confirmLabel="Delete Event"
+			/>
 				{isUpdating || isCreating ? (
 					<button className="bg-primary rounded-lg p-3 text-white opacity-50 cursor-not-allowed" disabled>
 						{isUpdating? "Updating..." : "Creating..."}
