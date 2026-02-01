@@ -65,15 +65,21 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         },
       }),
 
-      // Get all users
+      // Get all users (paginated, searchable)
       getAllUsers: builder.query({
-        query() {
+        query({ page = 1, limit = 10, search = '' } = {}) {
+          const params = new URLSearchParams();
+          if (page) params.set('page', page);
+          if (limit) params.set('limit', limit);
+          if (search && search.trim()) params.set('search', search.trim());
+          const qs = params.toString();
           return {
-            url: `${ADMIN_URL}/all-users`,
+            url: `${ADMIN_URL}/all-users${qs ? `?${qs}` : ''}`,
             method: 'GET',
           };
         },
-        providesTags: ['User'],
+        providesTags: (result, error, arg) =>
+          result ? [{ type: 'User', id: `list-${arg?.page ?? 1}-${arg?.search ?? ''}` }] : ['User'],
       }),
 
       // Send mail to all users
@@ -83,6 +89,17 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             url: `${ADMIN_URL}/notice-mail`,
             method: 'POST',
             body: data,
+          };
+        },
+      }),
+
+      // Send personal mail to a single user
+      sendUserMail: builder.mutation({
+        query({ userId, subject, text }) {
+          return {
+            url: `${ADMIN_URL}/send-user-mail`,
+            method: 'POST',
+            body: { userId, subject, text },
           };
         },
       }),
@@ -212,15 +229,21 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         providesTags: ['Event'],
       }),
 
-      // Get all payments
+      // Get all payments (paginated, searchable)
       getAllPayments: builder.query({
-        query() {
+        query({ page = 1, limit = 10, search = '' } = {}) {
+          const params = new URLSearchParams();
+          if (page) params.set('page', page);
+          if (limit) params.set('limit', limit);
+          if (search && search.trim()) params.set('search', search.trim());
+          const qs = params.toString();
           return {
-            url: `${ADMIN_URL}/all-payments`,
+            url: `${ADMIN_URL}/all-payments${qs ? `?${qs}` : ''}`,
             method: 'GET',
           };
         },
-        providesTags: ['Payment'],
+        providesTags: (result, error, arg) =>
+          result ? [{ type: 'Payment', id: `list-${arg?.page ?? 1}-${arg?.search ?? ''}` }] : ['Payment'],
       }),
 
       // E-Test admin
@@ -358,6 +381,7 @@ export const {
   useDeleteEventMutation,
   useGetAllUsersQuery,
   useMailNoticeMutation,
+  useSendUserMailMutation,
   useAdminGetCoursesQuery,
   useCreateCourseMutation,
   useUpdateCourseMutation,

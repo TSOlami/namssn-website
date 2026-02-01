@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HeaderComponent, Sidebar } from "../components";
 import { UserListSkeleton, TableSkeleton } from "../components/skeletons";
@@ -11,9 +11,30 @@ import {
 } from "../redux";
 import { toast } from "react-toastify";
 import { ConfirmDialog } from "../components";
+import { FaMagnifyingGlass, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+
+const PAGE_SIZE = 10;
+const DEBOUNCE_MS = 300;
 
 const AdminUsers = () => {
-	const { data: users, isLoading } = useGetAllUsersQuery();
+	const [page, setPage] = useState(1);
+	const [limit] = useState(PAGE_SIZE);
+	const [searchInput, setSearchInput] = useState("");
+	const [debouncedSearch, setDebouncedSearch] = useState("");
+
+	useEffect(() => {
+		const t = setTimeout(() => setDebouncedSearch(searchInput.trim()), DEBOUNCE_MS);
+		return () => clearTimeout(t);
+	}, [searchInput]);
+
+	const { data, isLoading } = useGetAllUsersQuery({
+		page,
+		limit,
+		search: debouncedSearch,
+	});
+	const users = data?.data ?? [];
+	const total = data?.total ?? 0;
+	const totalPages = data?.totalPages ?? 1;
 	const [makeAdmin] = useMakeUserAdminMutation();
 	const [removeAdmin] = useRemoveAdminMutation();
 	const [blockUserMutation] = useBlockUserMutation();
@@ -115,6 +136,21 @@ const AdminUsers = () => {
 					<p className="text-sm text-gray-600 mb-4">
 						Blocked users cannot sign in. Only non-admin users can be blocked.
 					</p>
+					<div className="flex flex-wrap items-center gap-3 mb-4">
+						<div className="relative flex-1 min-w-[200px] max-w-sm">
+							<FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+							<input
+								type="text"
+								placeholder="Search by name, username, or email..."
+								value={searchInput}
+								onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
+								className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+							/>
+						</div>
+						<div className="text-sm text-gray-600">
+							{total} user{total !== 1 ? "s" : ""} total
+						</div>
+					</div>
 					{isLoading ? (
 						<TableSkeleton rows={10} columns={6} />
 					) : users?.length === 0 ? (
@@ -134,7 +170,7 @@ const AdminUsers = () => {
 							<tbody className="divide-y divide-gray-200">
 								{users?.map((user, index) => (
 									<tr key={user._id} className="bg-white hover:bg-gray-50">
-										<td className="px-3 py-2 text-sm">{index + 1}</td>
+										<td className="px-3 py-2 text-sm">{(page - 1) * limit + index + 1}</td>
 										<td className="px-3 py-2 text-sm font-medium">{user.name ?? "—"}</td>
 										<td className="px-3 py-2 text-sm">{user.username ?? "—"}</td>
 										<td className="px-3 py-2">
@@ -152,7 +188,7 @@ const AdminUsers = () => {
 										<td className="px-3 py-2">
 											<div className="flex flex-wrap gap-1">
 												<Link
-													to={`/profile/${user._id}`}
+													to={`/admin/users/${user._id}`}
 													className="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300"
 												>
 													View
@@ -193,6 +229,31 @@ const AdminUsers = () => {
 								))}
 							</tbody>
 						</table>
+					)}
+					{!isLoading && total > 0 && (
+						<div className="flex flex-wrap items-center justify-between gap-2 mt-4">
+							<p className="text-sm text-gray-600">
+								Page {page} of {totalPages}
+							</p>
+							<div className="flex items-center gap-2">
+								<button
+									type="button"
+									onClick={() => setPage((p) => Math.max(1, p - 1))}
+									disabled={page <= 1}
+									className="p-2 rounded-lg border border-gray-300 bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+								>
+									<FaChevronLeft className="text-gray-600" />
+								</button>
+								<button
+									type="button"
+									onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+									disabled={page >= totalPages}
+									className="p-2 rounded-lg border border-gray-300 bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+								>
+									<FaChevronRight className="text-gray-600" />
+								</button>
+							</div>
+						</div>
 					)}
 				</div>
 			</div>
