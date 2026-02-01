@@ -10,7 +10,6 @@ const resourceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    // A description or additional information about the resource.
     description: {
       type: String,
     },
@@ -24,7 +23,6 @@ const resourceSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    // The path or URL to the resource file.
     fileUrl: {
       type: String,
     },
@@ -47,14 +45,11 @@ const resourceSchema = mongoose.Schema(
     },
   },
   {
-    // Automatically generate createdAt and updatedAt timestamps.
     timestamps: true,
+    toJSON: { transform: (doc, ret) => { delete ret.botToken; return ret; } },
   }
 );
 
-/**
- * Represents a resource in the database.
- */
 const Resource = mongoose.model('Resource', resourceSchema);
 
 export default Resource;

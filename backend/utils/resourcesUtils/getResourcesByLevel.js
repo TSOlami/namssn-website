@@ -1,9 +1,8 @@
 import Resource from '../../models/resourceModel.js';
 
 const getResourcesByLevel = async (level) => {
-    // gets all the resources for a specified level
     try {
-        const resource = await Resource.find({level: level}).sort({ updatedAt: -1 });
+        const resource = await Resource.find({ level }).sort({ updatedAt: -1 }).select('-botToken');
         if (resource) {
             console.log("Resource found")
         } else {

@@ -1,9 +1,8 @@
 import Resource from '../../models/resourceModel.js';
 
-// returns all resources
 const getAllResources = async () => {
     try {
-        const allResources = await Resource.find();
+        const allResources = await Resource.find().select('-botToken');
         return allResources;
     } catch (err) {
         console.log("An error occcurred. Unable to fetch resources", err);

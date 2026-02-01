@@ -25,7 +25,6 @@ const getResources = async (req, res) => {
     const resources = [level1Resources, level2Resources, level3Resources, level4Resources, level5Resources, telegram];
     const formattedResponse = {}
     for (let i=0; i<resources.length; i++) {
-      //  creates a list of dict with 'filename' as the key and 'details' as the value
       if (resources[i].length !== 0) {
         const formattedResources = await createFileList(resources[i])
         let level = '';
@@ -41,7 +40,7 @@ const getResources = async (req, res) => {
     return formattedResponse;
   } catch (err) {
     console.log("An error occurred while retrieving files", err);
-    throw err; // Throw the error to be caught by the calling function
+    throw err;
   }
 }
 
@@ -55,7 +54,6 @@ const postResource = async (req, res) => {
   const filename = file.name;
 
   try {
-    // check if the file has no data
     if (!file.data || !file.data.buffer || file.data.buffer.length === 0) {
       return res.status(400).send('Invalid file data.');
     }
@@ -74,24 +72,21 @@ const postResource = async (req, res) => {
       },
     });
     if (res) {
-      // console.log(res.data)
       let isLarge = false;
       let fileUrl = res?.data?.result?.document?.file_id
-      // check if the size of the file is > 20mb
       if (file.size > 19900000) {
         isLarge = true;
         const chatId2 = chatId.slice(4, chatId.length)
         const message_id = res?.data?.result?.message_id;
         fileUrl = `https://t.me/c/${chatId2}/${message_id}`
       }
-      // upload the details to the database
       const response = await uploadResource(filename, description, userId, uploaderName, fileUrl, semester, isLarge=isLarge, course, bot_token);
       if (response) {
         const formattedResponse = {[fileUrl]: {
         uploaderUsername: response[2], title: filename,
-        description: description, date: date, 
+        description: description, date: date,
         semester: semester, course: course,
-        isLarge: isLarge, botToken: bot_token,
+        isLarge: isLarge,
         }}
         return formattedResponse;
       }
@@ -102,7 +97,6 @@ const postResource = async (req, res) => {
   }
 };
 
-// gets the resources for a specified level
 const getSpecifiedResources = async (level) => {
   try {
     if (level === 'telegram') {
@@ -126,7 +120,6 @@ const deleteResource = async (req, res) => {
   const fileUrl = req.params.filename.split('+')[0];
   const senderId = req.body._id;
   const resourceId = await checkUploader(fileUrl, senderId);
-  // check if the sender is an admin or the uploader
   if (resourceId || (req.user && req.user.role === 'admin')) {
     await removeResource(resourceId, senderId)
     return ("Access Approved");
