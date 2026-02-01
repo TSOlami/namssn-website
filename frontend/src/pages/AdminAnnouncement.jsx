@@ -9,8 +9,8 @@ import {
   AdminAnnouncementCard,
   HeaderComponent,
   Sidebar,
+  ConfirmDialog,
 } from "../components";
-import { AnnouncementListSkeleton } from "../components/skeletons";
 import {
   useCreateAnnouncementMutation,
   useAllAnnouncementsQuery,
@@ -19,36 +19,22 @@ import {
 } from "../redux";
 
 const AdminAnnouncements = () => {
-  // Fetch all announcements
-  const { data: announcements, isLoading: isFetching } =
-    useAllAnnouncementsQuery();
-
-  // Create the createAnnouncement mutation
+  const { data: announcements } = useAllAnnouncementsQuery();
   const [createAnnouncement, { isLoading: isCreating }] =
     useCreateAnnouncementMutation();
-
-  // Create the deleteAnnouncement mutation
-  const [deleteAnnouncement, { isLoading: isDeleting }] =
-    useDeleteAnnouncementMutation();
-
-  // Create a dispatch function
+  const [deleteAnnouncement] = useDeleteAnnouncementMutation();
   const dispatch = useDispatch();
-
-  // Define the initial values for the form fields
   const initialValues = {
     text: "",
   };
-
-  // Define a state variable to track the selected "level"
   const [selectedLevel, setSelectedLevel] = useState("Non-Student");
+  const [announcementToDelete, setAnnouncementToDelete] = useState(null);
 
-  // manage selected state in the select dropdown
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedLevel(selectedValue);
   };
 
-  // Define a Yup validation schema for the form fields
   const validationSchema = Yup.object({
     text: Yup.string().required("Text is required"),
   });
@@ -77,28 +63,16 @@ const AdminAnnouncements = () => {
     }
   };
 
-  // Define a function to handle announcement text changes
   const handleAnnouncementChange = (e, index) => {
     const { value } = e.target;
-    // Clone the announcements array and update the text of the edited announcement
     const updatedAnnouncements = [...announcements];
     updatedAnnouncements[index] = {
       ...updatedAnnouncements[index],
       text: value,
     };
-    // Update the state with the new announcements
-    // dispatch(updateAnnouncement(updatedAnnouncements));
   };
 
-  // Handler for "Edit" button
-  // const handleEditClick = (announcement) => {
-  //   // Handle the edit logic for the announcement
-  //   console.log("Edit announcement:", announcement);
-  // };
-
-  // Handler for "Delete" button
   const handleDeleteClick = async (announcement) => {
-    // Handle the delete logic for the announcement
     const res = await toast.promise(
       deleteAnnouncement(announcement._id).unwrap(),
       {
@@ -107,12 +81,9 @@ const AdminAnnouncements = () => {
         error: "An error occurred while deleting the announcement"
       }
     );
-    // Dispatch the setAnnouncement action
     dispatch(setAnnouncements(res));
-    // Show a success toast
   };
 
-  // Use the useFormik hook to manage the form state
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -221,7 +192,6 @@ const AdminAnnouncements = () => {
                 ) : 'Make Announcement'}
               </button>
 
-              {/* The other annoucements map inside input fields where they can be edited and deleted directly */}
               <h3 className="text-xl font-semibold pt-8">
                 Announcements
               </h3>
@@ -243,24 +213,11 @@ const AdminAnnouncements = () => {
                     }
                   />
                   <div className="flex flex-row gap-5 ml-auto">
-                    {/* <button
-                      type="button"
-                      className="p-2 px-3 rounded-lg bg-black text-white"
-                      onClick={() =>
-                        handleEditClick(
-                          announcement
-                        )
-                      }
-                    >
-                      Edit
-                    </button> */}
                     <button
                       type="button"
                       className="p-2 px-3 rounded-lg bg-red-500 text-white"
                       onClick={() =>
-                        handleDeleteClick(
-                          announcement
-                        )
+                        setAnnouncementToDelete(announcement)
                       }
                     >
                       Delete
@@ -272,6 +229,14 @@ const AdminAnnouncements = () => {
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={!!announcementToDelete}
+        onClose={() => setAnnouncementToDelete(null)}
+        onConfirm={() => announcementToDelete && handleDeleteClick(announcementToDelete)}
+        title="Delete announcement?"
+        message="This announcement will be permanently deleted. This cannot be undone."
+        confirmLabel="Delete"
+      />
     </motion.div>
   );
 };

@@ -33,7 +33,7 @@ const AdminDashboard = () => {
 	const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
 
 	const dispatch = useDispatch();
-	const { data: allpayments, Loading } = useGetAllPaymentsQuery({
+	const { data: allpayments } = useGetAllPaymentsQuery({
 		select: {
 			category: 1,
 			user: 1,

@@ -45,7 +45,7 @@ const NotificationPage = () => {
       toast.error("Sorry, You might need to login again.");
       navigate("/signin");
     }
-  }, [error, dispatch, logutUser]);
+  }, [error, dispatch, logutUser, navigate]);
 
 	// Use the hook to clear notifications from the backend
 	const [clearNotifications] = useClearNotificationsMutation();

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sidebar, AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, PaymentVerificationForm } from "../components";
+import { Sidebar, AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, PaymentVerificationForm, ConfirmDialog } from "../components";
 import { FaCheck } from "react-icons/fa6";
 import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments } from '../redux';
 import { motion } from "framer-motion";
@@ -10,16 +10,21 @@ const AdminPayment = () => {
    
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
   const [verificationResult, setVerificationResult] = useState(null);
-   
-  // Manage modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const handleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
-  // Manage verify modal state
 	const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+	const [showDeletePaymentConfirm, setShowDeletePaymentConfirm] = useState(false);
 	const handleVerifyModal = () => {
 		setIsVerifyModalOpen(!isVerifyModalOpen);
+	};
+	const handleDeletePaymentClick = () => {
+		setShowDeletePaymentConfirm(true);
+	};
+	const handleConfirmDeletePayment = () => {
+		setShowDeletePaymentConfirm(false);
+		handleVerifyModal();
 	};
 
   const dispatch = useDispatch();
@@ -42,18 +47,15 @@ const AdminPayment = () => {
 
 			if (response.data) {
 				if (response.data.status === "success") {
-					// Payment verification was successful
 					const { amount, method } = response.data;
 					setVerificationResult({ success: true, amount, method });
 				} else if (response.data.status === "failed") {
-					// Payment verification failed
 					setVerificationResult({
 						success: false,
 						error: "Payment not yet made Transaction verification failed.",
 					});
 				}
 			} else {
-				// Handle verification failure
 				setVerificationResult({
 					success: false,
 					error: "Failed to verify payment.",
@@ -138,10 +140,8 @@ const AdminPayment = () => {
 							</div>
 						</div>
 
-
-            {/* Delete and Edit payment button */}
             <div className="p-5 py-10 ">
-              <button className="bg-red-600 text-white p-2 rounded-md" onClick={handleVerifyModal} >Delete Payment</button>
+              <button className="bg-red-600 text-white p-2 rounded-md" onClick={handleDeletePaymentClick} >Delete Payment</button>
             </div>
             <div className="p-5">
 					<PaymentVerificationForm
@@ -171,8 +171,6 @@ const AdminPayment = () => {
 					) : null}
 				</div>
 
-            {/* Payment details table */}
-
             <HeaderComponent title="Recent Payment Details" url={"placeholder"}/>
             <div>
 					{Loading ? (
@@ -199,17 +197,25 @@ const AdminPayment = () => {
 				</div>
         {/* modal */}
 			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
 					<AddCategoryForm handleModal={handleModal} />
 				</div>
 			)}
 
-      {/* verify modal */}
 			{isVerifyModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
 					<DeleteCategoryForm handleVerifyModal={handleVerifyModal} />
 				</div>
 			)}
+
+			<ConfirmDialog
+				isOpen={showDeletePaymentConfirm}
+				onClose={() => setShowDeletePaymentConfirm(false)}
+				onConfirm={handleConfirmDeletePayment}
+				title="Delete payment category?"
+				message="You are about to open the form to delete a payment category. This action cannot be undone. Continue?"
+				confirmLabel="Continue"
+			/>
 		</motion.div>
       
 		

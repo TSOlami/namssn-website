@@ -56,7 +56,7 @@ const Profile = () => {
       toast.error("Sorry, You might need to login again.");
       navigate("/signin");
     }
-  }, [error, dispatch, logutUser]);
+  }, [error, dispatch, logutUser, navigate]);
 	
 	// State for managing posts
 	const [postData, setPostData] = useState([]);
@@ -205,14 +205,14 @@ const Profile = () => {
 
 			{/* modal */}
 			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
 					<EditProfileForm handleModal={handleModal} />
 				</div>
 			)}
 
 			{/* verify modal */}
 			{isVerifyModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
 					<VerifyAccountForm handleVerifyModal={handleVerifyModal} />
 				</div>
 			)}

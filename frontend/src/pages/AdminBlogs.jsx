@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { BlogCard, HeaderComponent, Sidebar } from "../components";
+import { BlogCard, HeaderComponent, Sidebar, ConfirmDialog } from "../components";
 import { motion } from "framer-motion";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -14,42 +14,26 @@ import { useCreateBlogMutation, useAllBlogsQuery, useUpdateBlogMutation, useDele
 import { BlogListSkeleton } from "../components/skeletons";
 
 const AdminBlogs = () => {
-  // Use the useSelector hook to access the userInfo object from the state
   const { userInfo } = useSelector((state) => state.auth);
-
   const author = userInfo?.name;
-	// Use the useDispatch hook to dispatch actions
 	const dispatch = useDispatch();
-
-	// Use the useCreateBlogMutation hook to create a new blog post
 	const [createBlog, { isLoading: isCreating }] = useCreateBlogMutation();
-
-	// Use the useAllBlogsQuery hook to fetch all blogs
 	const { data: blogs, isLoading: isFetching } = useAllBlogsQuery();
-
-  // Use the useUpdateBlogMutation hook to update a blog post
-  // const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
-
-  // Use the useDeleteBlogMutation hook to delete a blog post
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
 
 	const [showAddBlogForm, setShowBlogForm] = useState(false);
+	const [blogToDelete, setBlogToDelete] = useState(null);
 	const handleShowBlogForm = () => {
 		setShowBlogForm(!showAddBlogForm);
 	};
 
-	// Define initial values for formik
 	const initialValues = {
 		title: "",
 		content: "",
     tags: [],
     author: author,
 	};
-
-	// Define file state
 	const [file, setFile] = useState();
-
-	// Define validation schema for formik
 	const validationSchema = Yup.object({
 		title: Yup.string().required("Required"),
 		content: Yup.string().required("Required"),
@@ -58,7 +42,6 @@ const AdminBlogs = () => {
     .required("Required"),
 	});
 
-	// Create a formik instance
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
@@ -89,7 +72,7 @@ const AdminBlogs = () => {
   };
 
   const handleDeleteBlog = async (blog) => {
-    // Delete the blog post
+    if (!blog) return;
     try {
       const blogId = blog._id;
       await toast.promise(deleteBlog(blogId).unwrap(), {
@@ -101,12 +84,12 @@ const AdminBlogs = () => {
 					},
 				},
 			});
+      setBlogToDelete(null);
     } catch (err) {
 			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
     }
   };
 
-	// File upload handler
 	const onUpload = async e => {
 		const base64 = await convertToBase64(e.target.files[0]);
 		setFile(base64);
@@ -148,13 +131,20 @@ const AdminBlogs = () => {
                 key={blog._id} 
                 blog={blog}
                 editBlog={() => handleEditBlog(blog)}
-                deleteBlog={() => handleDeleteBlog(blog)} />
+                deleteBlog={() => setBlogToDelete(blog)} />
 							))}
 						</div>
 					</div>
 				)}
 
-				{/* Add blog form */}
+				<ConfirmDialog
+					isOpen={!!blogToDelete}
+					onClose={() => setBlogToDelete(null)}
+					onConfirm={() => blogToDelete && handleDeleteBlog(blogToDelete)}
+					title="Delete blog post?"
+					message="This blog post will be permanently deleted. This cannot be undone."
+					confirmLabel="Delete Post"
+				/>
 
 				{showAddBlogForm ? (
 					<div className="flex items-center flex-col justify-center w-full px-5">
@@ -220,7 +210,6 @@ const AdminBlogs = () => {
                 name="tags"
                 id="tags"
                 onChange={(e) => {
-                  // Split the comma-separated string into an array of tags
                   formik.setFieldValue("tags", e.target.value.split(',').map(tag => tag.trim()));
                 }}
                 onBlur={formik.handleBlur("tags")}

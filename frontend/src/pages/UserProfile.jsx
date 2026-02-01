@@ -4,48 +4,33 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 
 import { useGetUserQuery, useUserPostsQuery, useMakeUserAdminMutation, useRemoveAdminMutation } from '../redux';
-import { Post, Sidebar, AnnouncementContainer } from '../components';
+import { Post, Sidebar, AnnouncementContainer, ConfirmDialog } from '../components';
 import { ErrorPage } from '../pages';
 import { ProfileImg } from "../assets";
 import { toast } from 'react-toastify';
 import { ProfileSkeleton, PostListSkeleton } from '../components/skeletons';
 
 const UserProfile = () => {
-  // Get the userId from the URL
     const { userId } = useParams();
-
-  // Get the current user from the redux store
   const currentUser = useSelector((state) => state.auth.userInfo);
-
-  // Fetch user profile details from the server
   const { data: user, isLoading: userLoading  } = useGetUserQuery({ _id: userId });
-
-  // Get user name from the user object
   const name = user?.name;
-
-  // Fetch user posts from the server
   const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
-
-  // Set state for managing posts
   const [postData, setPostData] = useState([]);
+  const [showRemoveAdminConfirm, setShowRemoveAdminConfirm] = useState(false);
 
-  // Use useEffect to set posts after component mounts
   useEffect(() => {
     if (userPosts) {
       setPostData(userPosts);
     }
   }, [userPosts]);
 
-  // Function to update the post data when a vote is cast
   const updatePostData = (postId, newPostData) => {
     setPostData((prevData) => {
       const postIndex = prevData.findIndex((post) => post._id === postId);
-  
       if (postIndex === -1) {
-        // If the post doesn't exist in the array, add it
         return [...prevData, newPostData];
       } else {
-        // If the post already exists, update it
         return prevData.map((post, index) =>
           index === postIndex ? newPostData : post
         );
@@ -53,18 +38,13 @@ const UserProfile = () => {
     });
   };
 
-  // Function to remove a post from the post data
   const removePost = (postId) => {
     setPostData((prevData) => prevData.filter((post) => post._id !== postId));
   };
 
-  // Make user admin
   const [makeUserAdmin] = useMakeUserAdminMutation();
-
-  // Remove admin
   const [removeAdmin] = useRemoveAdminMutation();
 
-  // Handle make user admin
   const handleMakeUserAdmin = async () => {
     try {
       await makeUserAdmin(userId).unwrap();
@@ -84,12 +64,10 @@ const UserProfile = () => {
     }
   };
 
-  // Display error message if user is not found (and not loading)
   if (!userLoading && !user) {
     return <ErrorPage/>;
   }
 
-  // Get user profile details that was fetched from the server
   const username = user?.username;
   const bio = user?.bio;
   const isVerified = user?.isVerified;
@@ -123,13 +101,12 @@ const UserProfile = () => {
                     <span className="font-semibold text-lg">{name}</span>
                     <span>{noOfPosts} posts</span>
                 </div>
-                {/* profile image and cover image */}
                 <div className="w-full h-32 bg-primary z-[-1]"></div>
                 <div className="flex flex-row justify-between items-center relative top-[-25px] my-[-30px] p-3 pl-6 z-[0]">
                     <img src={avatar || ProfileImg} alt="" className="profile-image"/>
                     {currentUserIsAdmin && (
                         isAdmin ? (
-                        <button onClick={handleRemoveAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
+                        <button onClick={() => setShowRemoveAdminConfirm(true)} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
                             Remove Admin
                         </button>
                         ) : (
@@ -172,6 +149,14 @@ const UserProfile = () => {
                 )}
               </div>
             </div>
+            <ConfirmDialog
+              isOpen={showRemoveAdminConfirm}
+              onClose={() => setShowRemoveAdminConfirm(false)}
+              onConfirm={handleRemoveAdmin}
+              title="Remove admin?"
+              message={`Remove admin privileges from ${name || 'this user'}? They will no longer have admin access.`}
+              confirmLabel="Remove Admin"
+            />
             <AnnouncementContainer />
         </div>
     );

@@ -12,16 +12,10 @@ import { useAllEventsQuery, setEvents } from "../redux";
 
 
 const AdminEvents = () => {
-	// Fetch all announcements
 	const { data: events, isLoading: isFetching } = useAllEventsQuery();
-
-	// State to manage selected event
 	const [selectedEvent, setSelectedEvent] = useState(null);
-
-	// Create a dispatch function
 	const dispatch = useDispatch();
 
-	// Handle data fetching and state updates
 	useEffect(() => {
 		if (events) {
 			dispatch(setEvents(events));
@@ -54,7 +48,6 @@ const AdminEvents = () => {
 			<div className="w-full flex flex-col">
 				<HeaderComponent title="Events" back/>
 				<div className="w-full flex md:flex-row flex-col">
-					{/* Events section */}
 					<div className="flex-1 md:block hidden">
 						{isFetching ? (
 							<EventListSkeleton count={3} />
@@ -89,7 +82,6 @@ const AdminEvents = () => {
 							<option value="" disabled>
               Select an event or create a new one
               </option>
-							{/* Add an option for creating a new event */}
 							<option value="createNewEvent">Create New Event</option>
 							{events?.map((event, index) => (
 								<option value={event._id} key={index}>
@@ -99,13 +91,11 @@ const AdminEvents = () => {
 						</select>
 					</div>
 
-					{/*Event form */}
 					<div className="flex-1 w-full border-gray-300 border-l-2 h-full">
 						<EventForm
 							selectedOption={selectedEvent}
 						/>
 					</div>
-					{/* End of event form */}
 				</div>
 			</div>
 		</motion.div>
