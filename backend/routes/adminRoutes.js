@@ -40,6 +40,20 @@ import {
   getTotalPayments,  
 } from '../controllers/adminController.js';
 import { mailNotice } from '../controllers/mailer.js';
+import {
+  createCourse,
+  updateCourse,
+  deleteCourse,
+  createTest,
+  updateTest,
+  deleteTest,
+  addQuestion,
+  bulkAddQuestions,
+  updateQuestion,
+  deleteQuestion,
+  adminGetCourses,
+  adminGetTestsByCourse,
+} from '../controllers/etestAdminController.js';
 
 // Apply sanitization to all admin routes
 router.use(sanitizeInput);
@@ -123,5 +137,21 @@ router.route('/total-events').get(protect, isAdmin, getTotalEvents);
 
 // Get total number of payments
 router.route('/total-payments').get(protect, isAdmin, getTotalPayments);
+
+/**
+ * E-Test (Past Questions) admin routes.
+ */
+router.get('/etest/courses', protect, isAdmin, adminGetCourses);
+router.post('/etest/courses', protect, isAdmin, createCourse);
+router.put('/etest/courses/:courseId', protect, isAdmin, updateCourse);
+router.delete('/etest/courses/:courseId', protect, isAdmin, deleteCourse);
+router.get('/etest/courses/:courseId/tests', protect, isAdmin, adminGetTestsByCourse);
+router.post('/etest/courses/:courseId/tests', protect, isAdmin, createTest);
+router.put('/etest/tests/:testId', protect, isAdmin, updateTest);
+router.delete('/etest/tests/:testId', protect, isAdmin, deleteTest);
+router.post('/etest/tests/:testId/questions', protect, isAdmin, addQuestion);
+router.post('/etest/tests/:testId/questions/bulk', protect, isAdmin, bulkAddQuestions);
+router.put('/etest/questions/:questionId', protect, isAdmin, updateQuestion);
+router.delete('/etest/questions/:questionId', protect, isAdmin, deleteQuestion);
 
 export default router;
