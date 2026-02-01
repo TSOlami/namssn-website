@@ -40,6 +40,9 @@ frontend/*.sw?
 backend/*.sw?
 readme-ai.md
 
+# Local scripts (not for version control)
+commit-features.ps1
+
 # pmpm lock files
 frontend/pnpm-lock.yaml
 backend/pnpm-lock.yaml
