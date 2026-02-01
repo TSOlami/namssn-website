@@ -5,15 +5,36 @@ const POSTS_URL = '/api/v1/users';
 export const postsApiSlice = apiSlice.injectEndpoints({
 	endpoints(builder) {
 		return {
-      // Get All Posts Query
+      // Get All Posts Query (arg: number = page, or { page, sort?: 'recent'|'recommended' })
       allPosts: builder.query({
-        query(page, pageSize = 10) {
+        query(arg) {
+          const page = typeof arg === 'object' ? arg?.page : arg;
+          const sort = typeof arg === 'object' ? (arg?.sort ?? 'recommended') : 'recommended';
+          const pageSize = 10;
+          const params = new URLSearchParams({ page: page ?? 1, pageSize });
+          if (sort) params.set('sort', sort);
           return {
-            url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
+            url: `${POSTS_URL}/posts?${params}`,
             method: 'GET',
           };
         },
         providesTags: ['Post'],
+      }),
+
+      // Combined feed (posts + unreadNotificationsCount) - one round trip for Home
+      getFeed: builder.query({
+        query(arg) {
+          const page = typeof arg === 'object' ? arg?.page : arg;
+          const sort = typeof arg === 'object' ? (arg?.sort ?? 'recommended') : 'recommended';
+          const pageSize = 10;
+          const params = new URLSearchParams({ page: page ?? 1, pageSize });
+          if (sort) params.set('sort', sort);
+          return {
+            url: `${POSTS_URL}/feed?${params}`,
+            method: 'GET',
+          };
+        },
+        providesTags: ['Post', 'Notification'],
       }),
 
       // Get Paginated Posts Query
@@ -179,6 +200,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useAllPostsQuery,
+  useGetFeedQuery,
   usePostQuery,
   usePaginatedPostsQuery,
   useUserPostsQuery,

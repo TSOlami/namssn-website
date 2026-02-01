@@ -15,7 +15,8 @@ import {
   InfiniteScrollSentinel,
 } from "../components";
 import { PostListSkeleton } from "../components/skeletons";
-import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications, logout, useLogoutMutation } from "../redux";
+import { useGetFeedQuery, setCurrentPage, setUnreadNotificationsCount, logout, useLogoutMutation } from "../redux";
+import { apiSlice } from "../redux/slices/apiSlice";
 
 const Home = () => {
   const page = useSelector((state) => state.auth.currentPage);
@@ -23,8 +24,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [logutUser] = useLogoutMutation();
   const [postData, setPostData] = useState([]);
-  const { data: posts, isLoading: isLoadingPosts } = useAllPostsQuery(Number(page));
-  const { data: notifications, error } = useGetNotificationsQuery();
+  const { data: feed, isLoading: isLoadingPosts, error } = useGetFeedQuery({ page: Number(page), sort: 'recommended' });
+  const posts = feed ? { page: feed.page, totalPages: feed.totalPages, posts: feed.posts } : null;
 
   useEffect(() => {
     if (error?.status === 401) {
@@ -36,10 +37,10 @@ const Home = () => {
   }, [error, dispatch, logutUser, navigate]);
 
   useEffect(() => {
-    if (notifications) {
-      dispatch(setNotifications(notifications));
+    if (feed?.unreadNotificationsCount !== undefined) {
+      dispatch(setUnreadNotificationsCount(feed.unreadNotificationsCount));
     }
-  }, [notifications, dispatch]);
+  }, [feed?.unreadNotificationsCount, dispatch]);
 
   const [hasMore, setHasMore] = useState(true);
   const [isgettingMorePosts, setIsGettingMorePosts] = useState(false);
@@ -66,6 +67,12 @@ const Home = () => {
   }, [posts]);
 
   const totalPages = posts?.totalPages;
+
+  // Prefetch next page when current feed is loaded to speed up infinite scroll
+  useEffect(() => {
+    if (!feed || !totalPages || page >= totalPages) return;
+    dispatch(apiSlice.util.prefetch('getFeed', { page: page + 1, sort: 'recommended' }));
+  }, [feed, page, totalPages, dispatch]);
 
   const appendNewPost = (newPostData) => {
     setPostData((prevData) => [newPostData, ...prevData]);
@@ -144,7 +151,8 @@ const Home = () => {
 
         <div
           onClick={handleModalOpen}
-          className="fixed bottom-20 sm:bottom-16 text-3xl right-[7vw] md:right-[10vw] lg:right-[30vw] p-5 rounded-full text-white bg-primary cursor-pointer"
+          className="fixed bottom-20 sm:bottom-16 right-4 md:right-[10vw] lg:right-[30vw] w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full text-white bg-primary cursor-pointer shadow-lg hover:opacity-90 text-xl sm:text-2xl"
+          aria-label="Add post"
         >
           <BsPlusLg />
         </div>

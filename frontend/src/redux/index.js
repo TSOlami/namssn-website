@@ -1,4 +1,4 @@
-import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, logout } from "./slices/authSlice";
+import { setCredentials, setPosts, setAnnouncements, setPayments, setCategories, setBlogs, setCurrentPage, setEvents, setNotifications, setUnreadNotificationsCount, logout } from "./slices/authSlice";
 import { 
 	useLoginMutation,
 	useLogoutMutation,
@@ -22,6 +22,8 @@ import {
 	useGetAllUsersQuery,
 	useMakeUserAdminMutation,
 	useRemoveAdminMutation,
+	useBlockUserMutation,
+	useUnblockUserMutation,
 	useGetAllPaymentsQuery,
 	useCreateBlogMutation,
 	useUpdateBlogMutation,
@@ -33,6 +35,7 @@ import {
 } from './slices/adminApiSlice';
 import { 
 	useAllPostsQuery,
+	useGetFeedQuery,
 	usePostQuery,
 	usePaginatedPostsQuery,
 	useUserPostsQuery,
@@ -81,6 +84,12 @@ import {
 } from './slices/eventSlice';
 
 import {
+	useGetResourcesQuery,
+	useGetResourcesByLevelQuery,
+	useSearchQuery,
+} from './slices/resourceSlice';
+
+import {
 	useGetNotificationsQuery,
 	useDeleteNotificationMutation,
 	useMarkNotificationsAsSeenMutation,
@@ -96,6 +105,7 @@ export {
 		useResetPasswordMutation,
 		useGetUserQuery,
 		useAllPostsQuery,
+		useGetFeedQuery,
 		usePostQuery,
 		usePaginatedPostsQuery,
 		useUserPostsQuery,
@@ -131,6 +141,8 @@ export {
 	useUserPaymentsQuery,
 	useMakeUserAdminMutation,
 	useRemoveAdminMutation,
+	useBlockUserMutation,
+	useUnblockUserMutation,
 	useCreateAnnouncementMutation,
 	useAllAnnouncementsQuery,
 	useUserAnnouncementsQuery,
@@ -141,6 +153,9 @@ export {
 	useUpdateEventMutation,
 	useDeleteEventMutation,
 	useVerifyAccountMutation,
+	useGetResourcesQuery,
+	useGetResourcesByLevelQuery,
+	useSearchQuery,
 	useGetTotalUsersQuery,
 	useGetTotalPostsQuery,
 	useGetTotalAnnouncementsQuery,
@@ -164,5 +179,6 @@ export {
 	setCurrentPage,
 	setEvents,
   setNotifications,
+	setUnreadNotificationsCount,
 	logout,
  }
