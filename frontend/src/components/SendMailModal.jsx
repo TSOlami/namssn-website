@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { Modal } from "../components";
+import { Modal, Select } from "../components";
 import { useMailNoticeMutation } from "../redux";
 
 const SendMailModal = ({ isOpen, onClose }) => {
@@ -30,15 +30,15 @@ const SendMailModal = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Send Mail">
 			<div className="mb-4 mx-12">
-        <label className="block text-sm font-medium text-gray-700">Select Email Type</label>
-        <select
+        <Select
+          label="Select Email Type"
           value={sendTo}
           onChange={(e) => setSendTo(e.target.value)}
-          className="mt-1 p-2 w-full border rounded-md"
-        >
-          <option value="email">Users Regular Email</option>
-          <option value="studentEmail">Verified Student Email</option>
-        </select>
+          options={[
+            { value: "email", label: "Users Regular Email" },
+            { value: "studentEmail", label: "Verified Student Email" },
+          ]}
+        />
       </div>
       <div className="mb-4 mx-12">
         <label className="block text-sm font-medium text-gray-700">Subject</label>
@@ -61,19 +61,19 @@ const SendMailModal = ({ isOpen, onClose }) => {
         />
       </div>
       <div className="mb-4 mx-12">
-        <label className="block text-sm font-medium text-gray-700">Select Level</label>
-        <select
+        <Select
+          label="Select Level"
           value={selectedLevel}
           onChange={(e) => setSelectedLevel(e.target.value)}
-          className="mt-1 p-2 w-full border rounded-md"
-        >
-          <option value="100">Level 100</option>
-          <option value="200">Level 200</option>
-          <option value="300">Level 300</option>
-          <option value="400">Level 400</option>
-          <option value="500">Level 500</option>
-          <option value="all">All Levels</option>
-        </select>
+          options={[
+            { value: "100", label: "Level 100" },
+            { value: "200", label: "Level 200" },
+            { value: "300", label: "Level 300" },
+            { value: "400", label: "Level 400" },
+            { value: "500", label: "Level 500" },
+            { value: "all", label: "All Levels" },
+          ]}
+        />
       </div>
       <button onClick={handleSendMail} className="bg-primary text-white p-2 rounded-md">
         Send Mail
