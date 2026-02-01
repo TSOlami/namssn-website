@@ -32,8 +32,8 @@ const Notification = ({
 			// Mark the notification as seen
 			markNotificationsAsSeen(notificationId);
 
-			// Navigate to the post page	
-			navigate(`/comments/${post}`);
+			// Navigate to home feed
+			navigate('/home');
 		} 
 	};
 

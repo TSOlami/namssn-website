@@ -15,11 +15,17 @@ const Actions = ({
 	onDownvote,
 	comments,
 	postId,
-	blogId
+	blogId,
+	onToggleComments,
+	isCommentsExpanded = false,
 }) => {
 	const navigate = useNavigate();
-	const routeToComments = () => {
-		navigate(`/comments/${postId}`);
+	const handleCommentClick = () => {
+		if (onToggleComments) {
+			onToggleComments();
+		} else {
+			navigate('/home');
+		}
 	};
 	const handleShare = async () => {
     if (postId) {
@@ -27,7 +33,7 @@ const Actions = ({
 				await navigator.share({
 					title: "Share post",
 					text: 'Check out this post!',
-					url: `/comments/${postId}`
+					url: `${window.location.origin}/home`
 				});
 			} catch (error) {
 				console.error('Error sharing:', error);
@@ -44,16 +50,10 @@ const Actions = ({
 			}
 		}
     };
-	// Define upvotes and downvotes
 	upvotes = upvotes?.length;
 	downvotes = downvotes?.length;
 	comments = comments?.length;
 
-	// const [openComment, setOpencomment] = useState(false);
-	// const handleOpenComment = () => {
-	// 	setOpencomment(!openComment);
-	// };
-	// const location = useLocation();
 	return (
 		<div className="py-4 flex flex-row justify-between gap-5 pr-4 items-center">
 			<div>
@@ -93,8 +93,8 @@ const Actions = ({
 				<div>
 					<span className="flex flex-row items-center gap-1">
 						<button
-							className="flex flex-row items-center gap-1"
-							onClick={routeToComments}
+							className={`flex flex-row items-center gap-1 ${isCommentsExpanded ? "text-primary" : ""}`}
+							onClick={handleCommentClick}
 						>
 							<BiComment />
 							<span>{comments}{" "} </span>
@@ -111,27 +111,6 @@ const Actions = ({
 				<span>Share</span>
 			</div>
 
-			{/* {location.pathname !== `/comments/${postId}` && (
-				<div>
-					<span className="flex flex-row items-center gap-1">
-						<button
-							className="flex flex-row items-center gap-1"
-							onClick={routeToComments}
-						>
-							<BiComment /> {comments}
-						</button>
-					</span>
-					<span>Comments</span>
-				</div>
-			)}
-			{location.pathname !== `/comments/${postId}` && (
-				<div>
-					<span className="flex items-center gap-1">
-						<BiShareAlt /> {shares}
-					</span>
-					<span>Share</span>
-				</div>
-			)} */}
 		</div>
 	);
 };

@@ -21,7 +21,7 @@ const CommentActions = ({
             await navigator.share({
                 title: "Share comment",
                 text: 'Check out this comment!',
-                url: `/comments/${postId}`
+                url: `${window.location.origin}/home`
             });
         } catch (error) {
             console.error('Error sharing:', error);

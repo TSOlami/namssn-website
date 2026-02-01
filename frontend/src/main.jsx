@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { 
@@ -33,7 +34,6 @@ const Profile = lazy(() => import('./pages/Profile'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
 const NotificationPage = lazy(() => import('./pages/NotificationPage'));
 const AnnouncementMobile = lazy(() => import('./pages/AnnouncementMobile'));
-const Comments = lazy(() => import('./pages/Comments'));
 const Search = lazy(() => import('./pages/Search'));
 
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
@@ -57,15 +57,15 @@ const AdminEvents = lazy(() => import('./pages/AdminEvents'));
 const AdminAnnouncement = lazy(() => import('./pages/AdminAnnouncement'));
 const AdminBlogs = lazy(() => import('./pages/AdminBlogs'));
 const VerifyUsers = lazy(() => import('./pages/VerifyUsers'));
+const AdminUsers = lazy(() => import('./pages/AdminUsers'));
 const AdminETest = lazy(() => import('./pages/AdminETest'));
 const AdminETestCourse = lazy(() => import('./pages/AdminETestCourse'));
+const AdminETestTest = lazy(() => import('./pages/AdminETestTest'));
 
 const VerifyAccount = lazy(() => import('./pages/VerifyAccount'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 
-// ============================================================
 // SUSPENSE WRAPPER - Shows loading indicator during lazy load
-// ============================================================
 const SuspenseWrapper = ({ children }) => (
   <Suspense fallback={<PageLoader />}>
     {children}
@@ -281,15 +281,7 @@ const router = createBrowserRouter(
           } 
         />
         <Route 
-          path="/comments/:postId" 
-          element={
-            <SuspenseWrapper>
-              <Comments />
-            </SuspenseWrapper>
-          } 
-        />
-        <Route 
-          path="/search" 
+          path="/search"
           element={
             <SuspenseWrapper>
               <Search />
@@ -332,7 +324,7 @@ const router = createBrowserRouter(
           path="/admin/users" 
           element={
             <SuspenseWrapper>
-              <VerifyUsers />
+              <AdminUsers />
             </SuspenseWrapper>
           } 
         />
@@ -357,6 +349,14 @@ const router = createBrowserRouter(
           element={
             <SuspenseWrapper>
               <AdminETestCourse />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/admin/e-test/course/:courseId/test/:testId" 
+          element={
+            <SuspenseWrapper>
+              <AdminETestTest />
             </SuspenseWrapper>
           } 
         />

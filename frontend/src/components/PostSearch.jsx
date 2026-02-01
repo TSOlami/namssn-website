@@ -14,6 +14,7 @@ import {
 	useDeletePostMutation,
 } from "../redux";
 import { ProfileImg } from "../assets";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const PostSearch = ({
 	upvotes,
@@ -28,7 +29,12 @@ const PostSearch = ({
 	u_id,
 	postId,
 }) => {
+	const userInfo = useSelector((state) => state.auth.userInfo);
+	const userId = userInfo?._id;
+	const role = userInfo?.role;
 	const [openOptions, setopenOptions] = useState(false);
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+	const canDelete = userId && (role === "admin" || userId === u_id);
 
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
@@ -55,31 +61,21 @@ const PostSearch = ({
 		}
 		handleOpenOptions();
 	};
-	// Get the user ID from the redux store
 	const { _id: userId } = useSelector((state) => state.auth.userInfo);
-
-	// Add a state to keep track of the upvote and downvote status
 	const [isUpvoted, setIsUpvoted] = useState(false);
 	const [isDownvoted, setIsDownvoted] = useState(false);
-
-	// Add the upvote and downvote mutations
 	const [upvotePost] = useUpvotePostMutation();
 	const [downvotePost] = useDownvotePostMutation();
-
-	// Create a data object to pass user details to the mutation
 	const data = {
 		user: { _id: userId },
 	};
 
-	// Function to handle the upvote action
 	const handleUpvote = async () => {
-		// Add logic to prevent the user from upvoting and downvoting at the same time
 		if (isDownvoted) {
 			setIsDownvoted(false);
 		}
 
 		try {
-			// Perform the upvote logic to send an API call to the server
 			const response = toast.promise(upvotePost({ postId, data }).unwrap(), {
 				pending: "Upvoting post...",
 				success: "Post upvoted successfully",
@@ -87,19 +83,14 @@ const PostSearch = ({
 			});
 
 			if (response.message === "success") {
-				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
-			} else {
-				// console.error('Upvote failed:', response);
 			}
-		} catch (error) {
-			// console.error('Upvote failed:', error);
+		} catch {
+			/* ignore */
 		}
 	};
 
-	// Function to handle the downvote action
 	const handleDownvote = async () => {
-		// Add logic to prevent the user from upvoting and downvoting at the same time
 		if (isUpvoted) {
 			setIsUpvoted(false);
 		}
@@ -143,7 +134,6 @@ const PostSearch = ({
 					<div className="flex flex-row gap-2 lg:gap-2 items-center w-full relative">
 						<Link to={`/profile/${u_id}`}>
 							{" "}
-							{/* Wrap the user's name in a Link */}
 							<span className="font-medium flex flex-row items-center gap-2">
 								<span className="font-semibold">{name?.length > 10 ? (
 									<span>{name.slice(0, 10)}... </span>
@@ -164,26 +154,39 @@ const PostSearch = ({
 							{formatDateToTime(date)}
 						</span>
 
-						<span
-							className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
-							onClick={handleOpenOptions}
-						>
-							<div className="cursor-pointer">
-								<PiDotsThreeOutlineVerticalFill />
-							</div>
-						</span>
-						{openOptions && (
-							<button
-								onClick={handleDeletePost}
-								className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2"
-							>
-								<MdDelete /> <span>Delete Post</span>
-							</button>
+						{canDelete && (
+							<>
+								<span
+									className="pi-dots-icon absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
+									onClick={(e) => { e.stopPropagation(); handleOpenOptions(); }}
+								>
+									<div className="cursor-pointer">
+										<PiDotsThreeOutlineVerticalFill />
+									</div>
+								</span>
+								{openOptions && (
+									<div className="options-menu absolute right-0 top-10 z-20">
+										<button
+											onClick={() => setShowDeleteConfirm(true)}
+											className="text-red-500 p-2 shadow-lg rounded-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[120px] hover:bg-gray-50"
+										>
+											<MdDelete /> <span>Delete Post</span>
+										</button>
+									</div>
+								)}
+							</>
 						)}
 					</div>
+					<ConfirmDialog
+						isOpen={showDeleteConfirm}
+						onClose={() => setShowDeleteConfirm(false)}
+						onConfirm={() => { handleOpenOptions(); handleDeletePost(); }}
+						title="Delete post?"
+						message="This post will be permanently deleted. This cannot be undone."
+						confirmLabel="Delete Post"
+					/>
 
-					{/* Post content goes here */}
-					<div className="body-text " onClick={routeToComments}>
+					<div className="body-text " onClick={routeToPost}>
 						{text}
 						{image && (
 							<div className="post-image-container pt-2">
@@ -195,8 +198,6 @@ const PostSearch = ({
 							</div>
 						)}
 					</div>
-
-					{/* Post actions */}
 
 					<Actions
 						upvotes={upvotes}
