@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "description": "NAMSSN website frontend (React + Vite). When this folder is the project root (e.g. Vercel), only this package.json is used—all production dependencies must be listed here.",
+  "engines": {
+    "node": ">=18.0.0 <21.0.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
