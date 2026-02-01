@@ -53,6 +53,7 @@ const AnswerReview = lazy(() => import('./pages/AnswerReview'));
 // Admin Pages - Only loaded for admins
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminPayment = lazy(() => import('./pages/AdminPayment'));
+const AdminUserView = lazy(() => import('./pages/AdminUserView'));
 const AdminEvents = lazy(() => import('./pages/AdminEvents'));
 const AdminAnnouncement = lazy(() => import('./pages/AdminAnnouncement'));
 const AdminBlogs = lazy(() => import('./pages/AdminBlogs'));
@@ -325,6 +326,14 @@ const router = createBrowserRouter(
           element={
             <SuspenseWrapper>
               <AdminUsers />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/admin/users/:userId" 
+          element={
+            <SuspenseWrapper>
+              <AdminUserView />
             </SuspenseWrapper>
           } 
         />
