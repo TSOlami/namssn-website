@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Sidebar, HeaderComponent, ConfirmDialog } from "../components";
+import { Sidebar, HeaderComponent, ConfirmDialog, Select } from "../components";
 import {
   useAdminGetCoursesQuery,
   useCreateCourseMutation,
@@ -98,16 +98,12 @@ const AdminETest = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Level</label>
-                <select
+                <Select
+                  label="Level"
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
-                  className="border rounded-lg px-3 py-2"
-                >
-                  {LEVELS.map((l) => (
-                    <option key={l} value={l}>{l} Level</option>
-                  ))}
-                </select>
+                  options={LEVELS.map((l) => ({ value: l, label: `${l} Level` }))}
+                />
               </div>
               <button
                 type="submit"

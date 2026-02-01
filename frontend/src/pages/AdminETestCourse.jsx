@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { Sidebar, HeaderComponent } from "../components";
+import { Sidebar, HeaderComponent, Select } from "../components";
 import {
   useAdminGetTestsByCourseQuery,
   useCreateTestMutation,
@@ -246,16 +246,13 @@ const AdminETestCourse = () => {
                 <p className="text-sm text-gray-500 mb-2">
                   For developers: paste a JSON array. Each item: <code className="bg-gray-100 px-1 rounded text-xs">{"{ \"text\": \"...\", \"options\": [\"A\",\"B\",\"C\",\"D\"], \"correctIndex\": 0 }"}</code>
                 </p>
-                <select
+                <Select
                   value={selectedTestId}
                   onChange={(e) => setSelectedTestId(e.target.value)}
-                  className="border rounded-lg px-3 py-2 mb-3 w-full max-w-xs"
-                >
-                  <option value="">Select test</option>
-                  {(tests || []).map((t) => (
-                    <option key={t._id} value={t._id}>{t.title}</option>
-                  ))}
-                </select>
+                  placeholder="Select test"
+                  options={(tests || []).map((t) => ({ value: t._id, label: t.title }))}
+                  className="mb-3 max-w-xs"
+                />
                 <textarea
                   value={bulkJson}
                   onChange={(e) => setBulkJson(e.target.value)}
