@@ -161,3 +161,49 @@ export const mailNotice = asyncHandler(async (req, res) => {
   console.log("Emails sent successfully!");
   res.status(200).json({ msg: 'Emails sent successfully!' });
 });
+
+/**
+ * POST /api/v1/admin/send-user-mail
+ * @desc Send a personal email to a single user (admin only)
+ * @access Private (admin)
+ */
+export const sendUserMail = asyncHandler(async (req, res) => {
+  const { userId, subject, text } = req.body;
+
+  if (!userId || !subject || !text) {
+    res.status(400).json({ message: 'userId, subject and text are required' });
+    return;
+  }
+
+  const user = await User.findById(userId).select('name email studentEmail');
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const userEmail = user.studentEmail || user.email;
+  if (!userEmail) {
+    res.status(400).json({ message: 'User has no email on file' });
+    return;
+  }
+
+  const email = {
+    body: {
+      name: user.name,
+      intro: text,
+      outro: 'Need help, or have questions? Just reply to this email.',
+    },
+  };
+
+  const emailBody = await MailGenerator.generate(email);
+  const message = {
+    from: process.env.EMAIL,
+    to: userEmail,
+    subject: subject.trim(),
+    html: emailBody,
+  };
+
+  await transporter.sendMail(message);
+  console.log('Personal email sent to:', userEmail);
+  res.status(200).json({ msg: 'Email sent successfully!' });
+});
