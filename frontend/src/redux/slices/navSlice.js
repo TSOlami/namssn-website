@@ -9,7 +9,7 @@ const navSlice = createSlice({
   name: "nav",
   initialState,
   reducers: {
-    setNavOpen(state, action) {
+    setNavOpen(state) {
       state.navOpen = !state.navOpen;
     },
   },

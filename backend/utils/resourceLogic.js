@@ -65,7 +65,6 @@ const postResource = async (req, res) => {
     form.append('caption', description );
     form.append('document', fileBlob, filename);
 
-    // Make the API request using axios
     const res = await axios.post(`https://api.telegram.org/bot${bot_token}/sendDocument`, form, {
       headers: {
         'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
