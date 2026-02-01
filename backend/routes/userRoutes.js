@@ -48,6 +48,7 @@ import {
 import { 
   createPost,
 	getPosts,
+  getFeed,
   getPostById,
 	getUserPosts,
   updatePost,
@@ -245,6 +246,9 @@ router
 router
 .route("/posts")
 .get(getPosts);
+
+// Combined feed (posts + unread notifications count) - reduces round trips
+router.get("/feed", protect, getFeed);
 
 // Route for getting a post by id
 router.get('/posts/:postId', protect, getPostById);

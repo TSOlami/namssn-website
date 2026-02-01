@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
@@ -45,6 +46,9 @@ function createServer() {
 
   // Apply general rate limiting to all requests
   app.use(generalLimiter);
+
+  // Compress JSON and other responses (gzip) to reduce payload over the wire
+  app.use(compression());
 
   // Middleware setup
   app.use(express.json({ limit: '10mb' })); // Parse JSON request bodies

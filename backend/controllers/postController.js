@@ -38,44 +38,98 @@ const createPost = asyncHandler(async (req, res) => {
 	res.status(201).json(savedPost);
   });
   
-// @desc Get all posts and sort by timestamp
-// Route GET /api/v1/user/posts
+// @desc Get all posts; optional sort: "recent" (default) or "recommended" (by engagement)
+// Route GET /api/v1/users/posts?page=1&pageSize=10&sort=recommended
 // Access Public
 const getPosts = asyncHandler(async (req, res) => {
-	// Extract pagination parameters from the request query, with default values if not provided
 	const page = Math.max(1, parseInt(req.query.page, 10) || 1);
 	const pageSize = Math.min(50, Math.max(1, parseInt(req.query.pageSize, 10) || 10));
-
-	// Calculate the number of documents to skip to get the next page
+	const sortMode = (req.query.sort === 'recommended') ? 'recommended' : 'recent';
 	const skip = (page - 1) * pageSize;
 
 	try {
-		// Fetch posts and total count in parallel for better performance
-		// List endpoint does NOT populate comments; frontend fetches comments per post when expanded
-		const [posts, totalCount] = await Promise.all([
-			Post.find()
+		let posts;
+		const totalCount = await Post.countDocuments();
+
+		if (sortMode === 'recommended') {
+			// Simple recommendation: sort by engagement (upvotes - downvotes) then by recency
+			posts = await Post.aggregate([
+				{ $addFields: { engagementScore: { $subtract: [{ $size: { $ifNull: ['$upvotes', []] } }, { $size: { $ifNull: ['$downvotes', []] } }] } } },
+				{ $sort: { engagementScore: -1, createdAt: -1 } },
+				{ $skip: skip },
+				{ $limit: pageSize },
+				{ $lookup: { from: 'users', localField: 'user', foreignField: '_id', as: 'userDoc', pipeline: [{ $project: { password: 0 } }] } },
+				{ $unwind: '$userDoc' },
+				{ $set: { user: '$userDoc' } },
+				{ $project: { userDoc: 0, engagementScore: 0 } },
+			]);
+		} else {
+			posts = await Post.find()
 				.populate('user', '-password')
 				.sort({ createdAt: -1 })
 				.skip(skip)
 				.limit(pageSize)
-				.lean(),
-			Post.countDocuments(),
-		]);
+				.lean();
+		}
 
 		const totalPages = Math.ceil(totalCount / pageSize);
+		res.status(200).json({ page, pageSize, totalPages, totalCount, posts });
+	} catch (error) {
+		console.error('Error fetching posts:', error);
+		res.status(500).json({ message: 'Server error while fetching posts.' });
+	}
+});
 
-		const response = {
+// @desc Get feed (posts + unread notifications count) in one request. Reduces round trips when frontend/backend on different servers.
+// Route GET /api/v1/users/feed?page=1&pageSize=10&sort=recommended
+// Access Private (Requires authentication)
+const getFeed = asyncHandler(async (req, res) => {
+	const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+	const pageSize = Math.min(50, Math.max(1, parseInt(req.query.pageSize, 10) || 10));
+	const sortMode = (req.query.sort === 'recommended') ? 'recommended' : 'recent';
+	const skip = (page - 1) * pageSize;
+
+	try {
+		const totalCount = await Post.countDocuments();
+
+		let posts;
+		if (sortMode === 'recommended') {
+			posts = await Post.aggregate([
+				{ $addFields: { engagementScore: { $subtract: [{ $size: { $ifNull: ['$upvotes', []] } }, { $size: { $ifNull: ['$downvotes', []] } }] } } },
+				{ $sort: { engagementScore: -1, createdAt: -1 } },
+				{ $skip: skip },
+				{ $limit: pageSize },
+				{ $lookup: { from: 'users', localField: 'user', foreignField: '_id', as: 'userDoc', pipeline: [{ $project: { password: 0 } }] } },
+				{ $unwind: '$userDoc' },
+				{ $set: { user: '$userDoc' } },
+				{ $project: { userDoc: 0, engagementScore: 0 } },
+			]);
+		} else {
+			posts = await Post.find()
+				.sort({ createdAt: -1 })
+				.skip(skip)
+				.limit(pageSize)
+				.populate('user', '-password')
+				.lean();
+		}
+
+		const unreadNotificationsCount = await Notification.countDocuments({
+			user: req.user._id,
+			seen: false,
+		});
+
+		const totalPages = Math.ceil(totalCount / pageSize);
+		res.status(200).json({
 			page,
 			pageSize,
 			totalPages,
 			totalCount,
 			posts,
-		};
-
-		res.status(200).json(response);
+			unreadNotificationsCount,
+		});
 	} catch (error) {
-		console.error('Error fetching posts:', error);
-		res.status(500).json({ message: 'Server error while fetching posts.' });
+		console.error('Error fetching feed:', error);
+		res.status(500).json({ message: 'Server error while fetching feed.' });
 	}
 });
 
@@ -781,4 +835,4 @@ const clearNotifications = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPost, getPosts, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
+export { createPost, getPosts, getFeed, getPostById, getUserPosts, updatePost, deletePost, upvotePost, downvotePost, getPostComments, createPostComment, updatePostComment, deletePostComment, upvoteComment, downvoteComment, getNotifications, markNotificationsAsSeen, deleteNotification, clearNotifications };
