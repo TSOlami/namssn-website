@@ -1,20 +1,16 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
-import store from "../redux/store/store";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { HiDotsVertical } from "react-icons/hi";
 import { FaFileLines } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
-import { useEffect, useRef } from "react";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { getResourcesUrl } from "../config/api";
 
-const state = store.getState();
-const userInfo = state?.auth?.userInfo;
-const isAdmin = userInfo?.role;
-const resourcesUrl = import.meta.env.VITE_RESOURCES_URL;
 const ResourceCard = ({
   uploaderUsername,
   uploaderId,
@@ -27,12 +23,15 @@ const ResourceCard = ({
   isLarge,
   fileUrl2,
 }) => {
+  const userInfo = useSelector((state) => state.auth?.userInfo);
+  const isAdmin = userInfo?.role;
+
   let cardbg = 'bg-blue-300';
   if (isLarge === true) {
     cardbg = 'bg-yellow-300';
   }
   const cardClass =
-  `cursor-pointer flex flex-col justify-center items-center rounded-[10px] ${cardbg} p-2 sm:w-15 h-[150px] w-[150px]`;
+  `cursor-pointer flex flex-col justify-center items-center rounded-[10px] ${cardbg} p-2 min-w-[140px] h-[150px] w-[150px]`;
 
   const handleShare = async () => {
         try {
@@ -49,7 +48,6 @@ const ResourceCard = ({
         }
     };
 
-  // manage state for the delete options button
   const [openOptions, setOpenOptions] = useState(false);
   const handleSetOpenOptions = () => {
     setOpenOptions(!openOptions);
@@ -61,7 +59,6 @@ const ResourceCard = ({
     setShowDetails(!showDetails);
   };
 
-  // controls clickaway action for 3 dots options
   const buttonRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -76,24 +73,26 @@ const ResourceCard = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [openOptions]);
 
-  const viewFile = async (fileUrl) => {
-    console.log(fileUrl)
+  const viewFile = (url) => {
+    const targetUrl = url ?? fileUrl2 ?? fileUrl;
+    if (!targetUrl) {
+      toast.error("File link unavailable");
+      return;
+    }
     const w = window.open();
-    w.location = fileUrl;
+    w.location = targetUrl;
   };
   
   const downloadFile = async (fileUrl) => {
     try {
-      console.log(fileUrl)
       const downloadWindow = window.open(fileUrl);
   
       if (!downloadWindow) {
         throw new Error('Popup blocked. Please allow popups and try again.');
       }
   
-      // Resolve the promise immediately after opening the new window
       toast.promise(
         Promise.resolve(fileUrl),
         { pending: 'Downloading file...', success: 'File downloaded successfully' }
@@ -105,7 +104,6 @@ const ResourceCard = ({
   };
 
   const handleFileDelete = async (fileUrl) => {	
-    console.log(fileUrl)
     handleSetOpenOptions();
     await toast.promise(axios
       .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
@@ -126,13 +124,13 @@ const ResourceCard = ({
 
   const handleNewDelete = (e) => {
     e.stopPropagation();
+    const base = getResourcesUrl().replace(/\/$/, '');
     if (isLarge === true) {
-      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F')
-      handleFileDelete(resourcesUrl+'/'+newFileUrl);
+      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F');
+      handleFileDelete(`${base}/${newFileUrl}`);
     } else {
       handleFileDelete(fileUrl);
     }
-    
   };
 
   const smStyle = "text-sm text-gray-400 font-serif";
@@ -184,9 +182,18 @@ const ResourceCard = ({
         </div>
         <div className="flex justify-around gap-10 pt-2 -4">
           {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
-          {isLarge===false ? (<Link to={`/resources/preview/${title}`} state={fileUrl}> 
-            <MdPreview  className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
-          </Link>) : (<MdPreview  onClick={() => viewFile(fileUrl2)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
+          {isLarge===false ? (
+            <Link
+              to={fileUrl && typeof fileUrl === 'string' && title != null && title !== ''
+                ? `/resources/preview/${encodeURIComponent(title)}?fileUrl=${encodeURIComponent(
+                    fileUrl.startsWith('http') ? fileUrl : (typeof window !== 'undefined' ? window.location.origin + (fileUrl.startsWith('/') ? fileUrl : '/' + fileUrl) : fileUrl)
+                  )}`
+                : '#'}
+              state={fileUrl}
+            >
+              <MdPreview className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>
+            </Link>
+          ) : (<MdPreview onClick={() => viewFile(fileUrl2)} className="drop-shadow-lg w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
         </div>
       </div>
       {(showDetails && openOptions) && (

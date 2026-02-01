@@ -1,51 +1,49 @@
-import Select from 'react-select'
+import Select from 'react-select';
 import { useEffect, useState } from "react";
 import { PostSearch, ResourceCard } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
 import axios from "axios";
 import { formatDateToTime } from "../utils";
 import { UserListSkeleton, ResourceListSkeleton, PostListSkeleton } from "../components/skeletons";
+import { getApiUrl, getResourcesUrl } from "../config/api";
 
-const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
 const Search = () => {
-const [value, setValue] = useState('');
-const [filter, setFilter] = useState('')
-const [data, setData] = useState(null)
-const [isLoading, setIsLoading] = useState(true)
+  const [value, setValue] = useState('');
+  const [filter, setFilter] = useState('');
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const queryValue = params.get('key');
-    if (queryValue) {
-        setValue(queryValue); // set the search value
-    }
-}, []);
+    if (queryValue) setValue(queryValue);
+  }, []);
 
-useEffect(() => {
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const filterValue = params.get('filter');
-    if (filterValue) {
-        setFilter(filterValue); // set the filter value
-    }
-}, []);
+    if (filterValue) setFilter(filterValue);
+  }, []);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-        setIsLoading(true);
-        if (filter && value) {
-            try {
-                const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/search?filter=${filter}&value=${value}`);
-                if (res) {
-                    setData(res.data); // set the fetched data to the state
-                    setIsLoading(false);
-                }
-            } catch (err) {
-                setData("error")
+      if (!filter || !value) {
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const res = await axios.get(getApiUrl(`/api/v1/users/search?filter=${filter}&value=${value}`));
+            if (res) {
+                setData(res.data);
                 setIsLoading(false);
             }
+        } catch (err) {
+            setData("error");
+            setIsLoading(false);
         }
     };
-    fetchData(); // call the fetchData function
+    fetchData();
 }, [filter, value]);
 
 const handleClick = (val) => {
@@ -59,11 +57,8 @@ const handleReload = () => {
 const borderStyle = "border-b-[2px] border-blue-400"
 const unselectBorderStyle = "border-b-[1px] border-gray-400"
     
-if (data && data !== "error" && Object.keys(data).length !==0) {
-    let fileUrls = []
-    if (data.resources) {
-        fileUrls = [...new Set(data.resources.flatMap(obj => Object.keys(obj)))] // a list of file urls
-    }
+if (data && data !== "error" && Object.keys(data).length !== 0) {
+    const resources = Array.isArray(data?.resources) ? data.resources : [];
 
 const handleChange = (val) => {
     localStorage.setItem('selectedFilter', val.value)
@@ -74,7 +69,7 @@ const customStyles = {
     option: (provided, state) => ({
         ...provided,
         borderLeft: state.value===selectedFilter ? '2px solid blue' : '',
-        color: state.isSelected ? 'blue' : 'black', // Change the color based on selection
+        color: state.isSelected ? 'blue' : 'black',
         font: 'serif',
     }),
     };
@@ -88,12 +83,11 @@ const options = [
 return (
         <div className="flex">
             <Sidebar />
-            <div className="flex flex-col sm:w-full md:w-80%">
+            <div className="flex flex-col sm:w-full md:w-[80%]">
                 <div className="sticky top-[0.01%] z-[300] bg-white">
                     <HeaderComponent title="SEARCH" url={"Placeholder"} />
                 </div>
                 
-                {/* Show skeletons while loading */}
                 {isLoading && (
                     <div className="p-4 space-y-6">
                         {(filter === 'all' || filter === 'users') && (
@@ -159,38 +153,54 @@ return (
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching user </span></div>
                 </div>
                 )}
-                {!isLoading && filter==='all' && data.resources && data.resources.length!==0 && <div className="ml-6 mt-4">
-                    {<div className="font-serif text-lg text-gray-400">
+                {!isLoading && filter==='all' && resources.length > 0 && <div className="ml-6 mt-4">
+                    <div className="font-serif text-lg text-gray-400">
                         <span>Resources</span>
-                    </div>}
+                    </div>
                     <div className="lg:px-[0.3em] flex flex-wrap gap-4 justify-around">
-                    {data.resources && filter==='all' && data.resources.map((resource, index) => (
-                        <ResourceCard key={index} fileUrl={base_url + fileUrls[index]} description={resource[fileUrls[index]]['description']}
-                        uploaderUsername = {resource[fileUrls[index]]['uploaderUsername']}
-                        title = {resource[fileUrls[index]]['title']}
-                        date = {formatDateToTime(new Date(resource[fileUrls[index]]['date']))}
-                        semester = {resource[fileUrls[index]]['level']}
-                        course = {resource[fileUrls[index]]['course']}
+                    {resources.map((resource, index) => {
+                        const fileKey = Object.keys(resource || {})[0];
+                        const item = fileKey ? resource?.[fileKey] : null;
+                        if (!fileKey || !item) return null;
+                        const base = (getResourcesUrl() ?? '/api/v1/users/resources/').replace(/\/$/, '');
+                        const isLarge = item?.isLarge ?? false;
+                        const fileUrl = isLarge ? fileKey : `${base}/${fileKey}+${encodeURIComponent(item?.title ?? '')}`;
+                        const fileUrl2 = isLarge ? fileKey : undefined;
+                        return (
+                        <ResourceCard key={index} fileUrl={fileUrl} fileUrl2={fileUrl2} description={item?.description}
+                        uploaderUsername={item?.uploaderUsername} uploaderId={item?.uploaderId}
+                        title={item?.title ?? fileKey ?? "resource"}
+                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                        semester={item?.semester ?? item?.level} course={item?.course} isLarge={isLarge}
                         />
-                    ))}
+                        );
+                    })}
                     </div>
                 </div>}
-                {filter==='resources' && data.resources && data.resources.length!==0  ? (<div className="ml-6 mt-4">
-                    {<div className="font-serif text-lg text-gray-400">
+                {!isLoading && filter==='resources' && resources.length > 0 ? (<div className="ml-6 mt-4">
+                    <div className="font-serif text-lg text-gray-400">
                         <span>Resources</span>
-                    </div>}
-                    <div className="lg:px-[0.3em]  flex flex-wrap gap-4 justify-around">
-                    {data.resources && filter==='resources' && data.resources.map((resource, index) => (
-                        <ResourceCard key={index} fileUrl={base_url + fileUrls[index]} description={resource[fileUrls[index]]['description']}
-                        uploaderUsername = {resource[fileUrls[index]]['uploaderUsername']}
-                        title = {resource[fileUrls[index]]['title']}
-                        date = {formatDateToTime(new Date(resource[fileUrls[index]]['date']))}
-                        semester = {resource[fileUrls[index]]['level']}
-                        course = {resource[fileUrls[index]]['course']}
-                        />
-                    ))}
                     </div>
-                </div>) : filter==='resources' && (
+                    <div className="lg:px-[0.3em] flex flex-wrap gap-4 justify-around">
+                    {resources.map((resource, index) => {
+                        const fileKey = Object.keys(resource || {})[0];
+                        const item = fileKey ? resource?.[fileKey] : null;
+                        if (!fileKey || !item) return null;
+                        const base = (getResourcesUrl() ?? '/api/v1/users/resources/').replace(/\/$/, '');
+                        const isLarge = item?.isLarge ?? false;
+                        const fileUrl = isLarge ? fileKey : `${base}/${fileKey}+${encodeURIComponent(item?.title ?? '')}`;
+                        const fileUrl2 = isLarge ? fileKey : undefined;
+                        return (
+                        <ResourceCard key={index} fileUrl={fileUrl} fileUrl2={fileUrl2} description={item?.description}
+                        uploaderUsername={item?.uploaderUsername} uploaderId={item?.uploaderId}
+                        title={item?.title ?? fileKey ?? "resource"}
+                        date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                        semester={item?.semester ?? item?.level} course={item?.course} isLarge={isLarge}
+                        />
+                        );
+                    })}
+                    </div>
+                </div>) : !isLoading && filter==='resources' && (
                 <div className="flex flex-col items-center relative top-[13em]">
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching resource </span></div>
                 </div>

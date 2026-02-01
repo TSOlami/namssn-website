@@ -1,12 +1,21 @@
-import { useParams, useLocation } from "react-router-dom";
-import DocViewer, {DocViewerRenderers} from "@cyntler/react-doc-viewer";
-
+import { useParams, useLocation, useSearchParams } from "react-router-dom";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 const FilePreview = () => {
     const { title } = useParams();
     const location = useLocation();
-    const fileUrl  = location.state;
-    console.log(fileUrl)
+    const [searchParams] = useSearchParams();
+    const fileUrlFromQuery = searchParams.get("fileUrl");
+    const fileUrl = fileUrlFromQuery ? decodeURIComponent(fileUrlFromQuery) : location.state;
+
+    if (!fileUrl || typeof fileUrl !== "string") {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center text-gray-600">
+                <p>Preview unavailable: file link is missing. Open the resource from the same tab or use the download button.</p>
+            </div>
+        );
+    }
+
     const docs = [
         {
             uri: fileUrl,
@@ -38,9 +47,9 @@ const FilePreview = () => {
             fileType: "ppt",
             fileName: title 
         }
-    ]
-    const ext = title.split('.')[title.split('.').length - 1].toLowerCase()
-    console.log(ext)
+    ];
+    const safeTitle = title && typeof title === "string" ? title : "resource";
+    const ext = (safeTitle.split(".").pop() || "").toLowerCase();
     switch (ext) {
         case 'pdf':
             return (
