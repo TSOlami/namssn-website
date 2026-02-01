@@ -12,6 +12,7 @@ import {
   HeaderComponent,
   BottomNav,
   AddPostForm,
+  InfiniteScrollSentinel,
 } from "../components";
 import { PostListSkeleton } from "../components/skeletons";
 import { useAllPostsQuery, setCurrentPage, useGetNotificationsQuery, setNotifications, logout, useLogoutMutation } from "../redux";
@@ -111,7 +112,7 @@ const Home = () => {
 
         {!isLoadingPosts && postData?.map((post, index) => (
           <Post
-            key={index}
+            key={post._id ?? index}
             post={post}
             updatePostData={(postId, newPostData) =>
               updatePostData(postId, newPostData)
@@ -120,24 +121,18 @@ const Home = () => {
           />
         ))}
 
-        {hasMore && (
-          <div className="flex m-auto pb-12 md:pb-0">
-            {isLoadingPosts || isgettingMorePosts ? (
-              <button
-              disabled={true}
-              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white cursor-not-allowed"
-              >
-               Loading...
-            </button>) : (
-              <button
-              onClick={() => getNextPosts(page)}
-              className="text-primary p-2 px-4 border-2 w-fit m-2 hover:rounded-md hover:bg-primary hover:text-white"
-            >
-              Load More posts 
-            </button>
-              )}  
-        </div>
+        {isgettingMorePosts && (
+          <div className="flex justify-center py-4">
+            <span className="text-sm text-gray-500">Loading more posts...</span>
+          </div>
         )}
+
+        <InfiniteScrollSentinel
+          onLoadMore={() => getNextPosts(page)}
+          hasNextPage={hasMore}
+          isLoadingMore={isgettingMorePosts}
+          className="h-6 w-full pb-12 md:pb-0"
+        />
 
         <div
           onClick={handleModalOpen}
