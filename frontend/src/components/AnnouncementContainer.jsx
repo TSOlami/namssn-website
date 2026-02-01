@@ -39,10 +39,10 @@ const AnnouncementContainer = () => {
 	const isFullPage = location.pathname === "/announcements";
 	const containerClass = isFullPage
 		? "border-gray-300 p-4 flex flex-col mb-6 max-w-4xl mx-auto w-full min-h-screen"
-		: "w-[320px] flex-shrink-0 bg-gray-200 border-gray-300 p-4 md:flex flex-col gap-1 hidden mb-4";
+		: "w-[320px] min-h-screen flex-shrink-0 bg-gray-200 border-gray-300 p-4 md:flex flex-col gap-1 hidden mb-4";
 	const scrollAreaClass = isFullPage
 		? "announcement-scroll flex-1 min-h-0 overflow-y-auto flex flex-col gap-1"
-		: "announcement-scroll max-h-[70vh] overflow-y-auto flex flex-col gap-1";
+		: "announcement-scroll flex-1 min-h-0 overflow-y-auto flex flex-col gap-1";
 
 	return (
 		<div className={containerClass}>
