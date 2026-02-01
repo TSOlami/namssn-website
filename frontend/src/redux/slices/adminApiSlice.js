@@ -221,6 +221,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         query: (courseId) => ({ url: `${ADMIN_URL}/etest/courses/${courseId}/tests`, method: 'GET' }),
         providesTags: (_, __, courseId) => [{ type: 'ETest', id: `admin-course-${courseId}` }],
       }),
+      getQuestionsByTest: builder.query({
+        query: (testId) => ({ url: `${ADMIN_URL}/etest/tests/${testId}/questions`, method: 'GET' }),
+        providesTags: (_, __, testId) => ['ETest', { type: 'ETest', id: `questions-${testId}` }],
+      }),
       createTest: builder.mutation({
         query: ({ courseId, ...body }) => ({
           url: `${ADMIN_URL}/etest/courses/${courseId}/tests`,
@@ -242,6 +246,57 @@ export const adminApiSlice = apiSlice.injectEndpoints({
           url: `${ADMIN_URL}/etest/tests/${testId}/questions/bulk`,
           method: 'POST',
           body: { questions },
+        }),
+        invalidatesTags: ['ETest'],
+      }),
+      addQuestion: builder.mutation({
+        query: ({ testId, ...body }) => ({
+          url: `${ADMIN_URL}/etest/tests/${testId}/questions`,
+          method: 'POST',
+          body,
+        }),
+        invalidatesTags: ['ETest'],
+      }),
+      updateQuestion: builder.mutation({
+        query: ({ questionId, ...body }) => ({
+          url: `${ADMIN_URL}/etest/questions/${questionId}`,
+          method: 'PUT',
+          body,
+        }),
+        invalidatesTags: ['ETest'],
+      }),
+      reorderQuestion: builder.mutation({
+        query: ({ questionId, direction }) => ({
+          url: `${ADMIN_URL}/etest/questions/${questionId}/reorder`,
+          method: 'POST',
+          body: { direction },
+        }),
+        async onQueryStarted({ testId, questionId, direction }, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            adminApiSlice.util.updateQueryData('getQuestionsByTest', testId, (draft) => {
+              const idx = draft.findIndex((q) => q._id === questionId);
+              if (idx < 0) return;
+              const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+              if (swapIdx < 0 || swapIdx >= draft.length) return;
+              [draft[idx], draft[swapIdx]] = [draft[swapIdx], draft[idx]];
+            })
+          );
+          try {
+            const { data } = await queryFulfilled;
+            if (data?.questions?.length) {
+              dispatch(
+                adminApiSlice.util.updateQueryData('getQuestionsByTest', testId, () => data.questions)
+              );
+            }
+          } catch {
+            patchResult.undo();
+          }
+        },
+      }),
+      deleteQuestion: builder.mutation({
+        query: (questionId) => ({
+          url: `${ADMIN_URL}/etest/questions/${questionId}`,
+          method: 'DELETE',
         }),
         invalidatesTags: ['ETest'],
       }),
@@ -276,4 +331,9 @@ export const {
   useUpdateTestMutation,
   useDeleteTestMutation,
   useBulkAddQuestionsMutation,
+  useGetQuestionsByTestQuery,
+  useAddQuestionMutation,
+  useUpdateQuestionMutation,
+  useReorderQuestionMutation,
+  useDeleteQuestionMutation,
 } = adminApiSlice;
