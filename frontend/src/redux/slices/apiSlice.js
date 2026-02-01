@@ -17,6 +17,15 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithBlockedHandling = async (args, api, extraOptions) => {
 	const result = await baseQuery(args, api, extraOptions);
+	if (result.error?.status === 401) {
+		const url = typeof args === 'string' ? args : args?.url ?? '';
+		const isLoginOrRegister = url.includes('/auth') || (url.endsWith('/users') && typeof args === 'object' && args.method === 'POST');
+		if (!isLoginOrRegister) {
+			api.dispatch(logout());
+			window.location.replace('/signin?session=expired');
+		}
+		return result;
+	}
 	if (result.error?.status === 403) {
 		const message = result.error?.data?.message ?? '';
 		if (typeof message === 'string' && message.toLowerCase().includes('blocked')) {
@@ -31,9 +40,8 @@ export const apiSlice = createApi({
 	baseQuery: baseQueryWithBlockedHandling,
 	tagTypes: ['User', 'Post', 'Blog', 'Payment', 'Resource', 'Announcement', 'Event', 'Notification', 'ETest'],
 	endpoints: (builder) => ({}),
-	// Redux caching: keep data longer, refetch less often
-	keepUnusedDataFor: 300, // 5 min – cache survives 5 min after last subscriber
-	refetchOnMountOrArgChange: 60, // refetch on mount only if data older than 60s
+	keepUnusedDataFor: 300,
+	refetchOnMountOrArgChange: 60,
 	refetchOnFocus: false,
 	refetchOnReconnect: true,
 });

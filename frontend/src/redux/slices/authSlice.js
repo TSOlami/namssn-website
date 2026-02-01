@@ -1,32 +1,38 @@
 /* eslint-disable no-unused-vars */
-// import produce from 'immer';
 import { createSlice } from '@reduxjs/toolkit';
 
-// Helper function to get items from local storage
-const getLocalStorageItem = (key) => {
+const getStoredUserProfile = () => {
 	try {
-		const item = localStorage.getItem(key);
-		return item ? JSON.parse(item) : null;
-	} catch (error) {
-		console.error('Error retrieving item from local storage:', error);
+		let item = localStorage.getItem('userProfile');
+		if (item) return JSON.parse(item);
+		item = localStorage.getItem('userInfo');
+		if (item) {
+			const parsed = JSON.parse(item);
+			const { token, ...profile } = parsed;
+			localStorage.setItem('userProfile', JSON.stringify(profile));
+			localStorage.removeItem('userInfo');
+			return profile;
+		}
+		return null;
+	} catch {
 		return null;
 	}
-  };
+};
 
 export const initialState = {
-	userInfo: getLocalStorageItem('userInfo') || null,
-  posts: getLocalStorageItem('userPosts') || null,
-  announcements: getLocalStorageItem('userAnnouncements') || null,
-  payments: getLocalStorageItem('userPayments') || null,
-  category: getLocalStorageItem('userCategories') || null,
-  blog: getLocalStorageItem('userBlogs') || null,
-  events: getLocalStorageItem('userEvents') || null,
-  notification: getLocalStorageItem('userNotifications') || null,
-  unreadNotificationsCount: null,
-  currentPage: 1,
-  pageSize: 2,
-  details: {}
-}
+	userInfo: getStoredUserProfile() || null,
+	posts: null,
+	announcements: null,
+	payments: null,
+	category: null,
+	blog: null,
+	events: null,
+	notification: null,
+	unreadNotificationsCount: null,
+	currentPage: 1,
+	pageSize: 2,
+	details: {},
+};
 
 const authSlice = createSlice({
 	name : 'auth',
@@ -34,9 +40,11 @@ const authSlice = createSlice({
 	reducers: {
 		setCredentials(state, action) {
 			state.userInfo = { ...state.userInfo, ...action.payload };
-			localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+			// Persist profile only for display after refresh; never persist token (XSS-safe).
+			const { token, ...profile } = state.userInfo;
+			localStorage.setItem('userProfile', JSON.stringify(profile));
 		},
-    logout: (state, action) => {
+    logout: (state) => {
       state.userInfo = null;
       state.posts = null;
       state.announcements = null;
@@ -44,45 +52,34 @@ const authSlice = createSlice({
       state.category = null;
       state.notification = null;
       state.unreadNotificationsCount = null;
-      localStorage.removeItem('userInfo');
-      localStorage.removeItem('userPosts');
-      localStorage.removeItem('userAnnouncements');
-      localStorage.removeItem('userPayments');
-      localStorage.removeItem('userCategories');
-      localStorage.removeItem('userNotifications');
+      localStorage.removeItem('userProfile');
+      ['userInfo', 'userPosts', 'userAnnouncements', 'userPayments', 'userCategories', 'userBlogs', 'userEvents', 'userNotifications'].forEach((k) => localStorage.removeItem(k));
     },
     setPosts(state, action) {
       state.posts = action.payload;
-      localStorage.setItem('userPosts', JSON.stringify(action.payload));
     },
     setAnnouncements(state, action) {
       state.announcements = action.payload;
-      localStorage.setItem('userAnnouncements', JSON.stringify(action.payload));
     },
-    setPayments(state, action){
+    setPayments(state, action) {
       state.payments = action.payload;
-      localStorage.setItem('userPayments', JSON.stringify(action.payload));
     },
-    setCategories(state, action){
-      state.category =action.payload;
-      localStorage.setItem('userCategories', JSON.stringify(action.payload));
+    setCategories(state, action) {
+      state.category = action.payload;
     },
-    setBlogs(state, action){
-      state.blog =action.payload;
-      localStorage.setItem('userBlogs', JSON.stringify(action.payload));
+    setBlogs(state, action) {
+      state.blog = action.payload;
     },
-    setCurrentPage(state, action){
+    setCurrentPage(state, action) {
       state.currentPage = action.payload;
     },
-    setEvents(state, action){
+    setEvents(state, action) {
       state.events = action.payload;
-      localStorage.setItem('userEvents', JSON.stringify(action.payload));
     },
-    setNotifications(state, action){
+    setNotifications(state, action) {
       state.notification = action.payload;
-      const count = Array.isArray(action.payload) ? action.payload.filter(n => !n?.seen).length : null;
+      const count = Array.isArray(action.payload) ? action.payload.filter((n) => !n?.seen).length : null;
       if (count !== null) state.unreadNotificationsCount = count;
-      localStorage.setItem('userNotifications', JSON.stringify(action.payload));
     },
     setUnreadNotificationsCount(state, action){
       state.unreadNotificationsCount = action.payload;

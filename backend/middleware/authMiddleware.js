@@ -1,14 +1,7 @@
-import jwt from 'jsonwebtoken'; // Import the 'jsonwebtoken' library for working with JSON Web Tokens (JWTs).
-import asyncHandler from 'express-async-handler'; // Import the 'express-async-handler' library for handling asynchronous errors.
-import User from '../models/userModel.js'; // Import the User model for querying user data from the database.
+import jwt from 'jsonwebtoken';
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
 
-/**
- * Middleware to protect routes by verifying JWT tokens.
- *
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @param {Function} next - Express next function.
- */
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -44,17 +37,10 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-/**
- * Middleware to check if the user is an admin.
- *
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @param {Function} next - Express next function.
- */
 const isAdmin = asyncHandler(async (req, res, next) => {
  try {
    if (req.user && req.user.role === 'admin') {
-     return next(); // User is an admin, continue with the request
+     return next();
    } else {
      res.status(403).json({ message: 'Access denied: Admin privileges required.' });
    }
@@ -63,34 +49,19 @@ const isAdmin = asyncHandler(async (req, res, next) => {
  }
 });
 
-/**
- * Middleware to verify a user
- * 
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @param {Function} next - Express next function.
- */
 const verifyUser = asyncHandler(async (req, res, next) => {
   try {
     let username;
-    
     if (req.method === "GET") {
-      // For GET requests, check the req.params
       username = req.params.username || req.query.username;
     } else if (req.method === "POST" || req.method === "PUT") {
-      // For POST requests, check the req.body
       username = req.body.username;
-
     } else {
-      // Handle other request methods if needed
       return res.status(400).json({ message: "Unsupported request method" });
     }
-    
     if (!username) {
       return res.status(400).json({ message: "Missing username in the request" });
     }
-
-    // Check if the user exists
     let userExists = await User.findOne({ username });
 
     if (!userExists) {
@@ -134,4 +105,4 @@ const otpStatusCheck = asyncHandler(async (req, res, next) => {
 });
 
 
-export { protect, isAdmin, verifyUser, otpStatusCheck }; // Export the middleware functions.
+export { protect, isAdmin, verifyUser, otpStatusCheck };
