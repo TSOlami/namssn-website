@@ -42,6 +42,7 @@ const authUser = asyncHandler(async (req, res) => {
       isVerified: user.isVerified,
       points: user.points,
       profilePicture: user.profilePicture,
+      coverPhoto: user.coverPhoto,
       posts: user.posts,
       blogs: user.blogs,
       payments: user.payments,
@@ -57,7 +58,7 @@ const authUser = asyncHandler(async (req, res) => {
 // Route	post  /api/v1/users
 // access	Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, email, password, role, level, profilePicture } = req.body;
+  const { name, username, email, password, role, level, profilePicture, coverPhoto } = req.body;
   // Check if email or username already exists
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
@@ -79,6 +80,7 @@ const registerUser = asyncHandler(async (req, res) => {
     role: userRole,
     level,
     profilePicture,
+    coverPhoto,
   });
   if (user) {
     const token = generateToken(res, user._id);
@@ -93,6 +95,7 @@ const registerUser = asyncHandler(async (req, res) => {
       isVerified: user.isVerified,
       points: user.points,
       profilePicture: user.profilePicture,
+      coverPhoto: user.coverPhoto,
       bio: user.bio,
       posts: user.posts,
       blogs: user.blogs,
@@ -455,10 +458,12 @@ const getUserById = asyncHandler(async (req, res) => {
       isBlocked: user.isBlocked,
       points: user.points,
       profilePicture: user.profilePicture,
+      coverPhoto: user.coverPhoto,
       posts: user.posts,
       blogs: user.blogs,
       payments: user.payments,
       resources: user.resources,
+      createdAt: user.createdAt,
     });
   } else {
     res.status(404);
@@ -535,6 +540,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.studentEmail = req.body.studentEmail || user.studentEmail;
     user.bio = req.body.bio || user.bio;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
+    user.coverPhoto = req.body.coverPhoto !== undefined ? req.body.coverPhoto : user.coverPhoto;
 
     const updatedUser = await user.save();
 
@@ -551,6 +557,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       isVerified: updatedUser.isVerified,
       points: updatedUser.points,
       profilePicture: updatedUser.profilePicture,
+      coverPhoto: updatedUser.coverPhoto,
       posts: updatedUser.posts,
       blogs: updatedUser.blogs,
       payments: updatedUser.payments,
