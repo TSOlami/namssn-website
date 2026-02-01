@@ -1,17 +1,15 @@
 import Select from 'react-select';
 import { useEffect, useState } from "react";
-import { PostSearch, ResourceCard } from "../components";
+import { Post, ResourceCard } from "../components";
 import { HeaderComponent, Sidebar, UserCard } from "../components";
-import axios from "axios";
 import { formatDateToTime } from "../utils";
 import { UserListSkeleton, ResourceListSkeleton, PostListSkeleton } from "../components/skeletons";
-import { getApiUrl, getResourcesUrl } from "../config/api";
+import { getResourcesUrl } from "../config/api";
+import { useSearchQuery } from "../redux";
 
 const Search = () => {
   const [value, setValue] = useState('');
   const [filter, setFilter] = useState('');
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -25,39 +23,19 @@ const Search = () => {
     if (filterValue) setFilter(filterValue);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!filter || !value) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const res = await axios.get(getApiUrl(`/api/v1/users/search?filter=${filter}&value=${value}`));
-            if (res) {
-                setData(res.data);
-                setIsLoading(false);
-            }
-        } catch (err) {
-            setData("error");
-            setIsLoading(false);
-        }
-    };
-    fetchData();
-}, [filter, value]);
+  const skip = !filter || !value;
+  const { data, isLoading, isError, refetch } = useSearchQuery({ filter, value }, { skip });
 
-const handleClick = (val) => {
-    window.location.href = `/search?key=${value}&filter=${val}`
-}
+  const handleClick = (val) => {
+    window.location.href = `/search?key=${value}&filter=${val}`;
+  };
 
-const handleReload = () => {
-    window.location.reload();
-}
+  const handleReload = () => refetch();
 
 const borderStyle = "border-b-[2px] border-blue-400"
 const unselectBorderStyle = "border-b-[1px] border-gray-400"
     
-if (data && data !== "error" && Object.keys(data).length !== 0) {
+if (data && !isError && Object.keys(data).length !== 0) {
     const resources = Array.isArray(data?.resources) ? data.resources : [];
 
 const handleChange = (val) => {
@@ -138,7 +116,7 @@ return (
                         />
                     ))}
                 </div>}
-                {!isLoading && filter==='users' && data.users && data.users.length!==0 ? (<div className="ml-6 mt-8">
+                {!isLoading && !isError && filter==='users' && data?.users && data.users.length!==0 ? (<div className="ml-6 mt-8">
                     <div className="mb-2 font-serif text-lg text-gray-400">
                         <span>Users</span>
                     </div>
@@ -177,7 +155,7 @@ return (
                     })}
                     </div>
                 </div>}
-                {!isLoading && filter==='resources' && resources.length > 0 ? (<div className="ml-6 mt-4">
+                {!isLoading && !isError && filter==='resources' && resources.length > 0 ? (<div className="ml-6 mt-4">
                     <div className="font-serif text-lg text-gray-400">
                         <span>Resources</span>
                     </div>
@@ -205,26 +183,16 @@ return (
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching resource </span></div>
                 </div>
                 )}
-                {!isLoading && filter==='all' && data.posts && data.posts.length!==0 && <div className="mt-4">
+                {!isLoading && !isError && filter==='all' && data?.posts && data.posts.length!==0 && <div className="mt-4">
                 {<div className="mb-2 ml-6 font-serif text-lg text-gray-400">
                                 <span>Posts</span>
                     </div>}
-                    {data.posts && filter==='all' && data.posts.map((post, index) => (
-                    <PostSearch
-                        key={index}
-                        upvotes={post?.upvotes}
-                        downvotes={post?.downvotes}
-                        comments={post?.comments}
-                        isVerified={post?.user?.isVerified}
-                        text={post?.text}
-                        name={post?.user?.name}
-                        username={post?.user?.username}
-                        avatar={post?.user?.profilePicture}
-                        createdAt={post?.createdAt}
-                        updatedAt={post?.updatedAt}
-                        u_id={post?.user?._id}
-                        postId={post?._id}
-                        image={post?.image}
+                    {data.posts && filter==='all' && data.posts.map((post) => (
+                    <Post
+                        key={post?._id}
+                        post={post}
+                        updatePostData={() => {}}
+                        removePost={() => {}}
                     />
                 ))}
                 </div>}
@@ -232,25 +200,15 @@ return (
                 {<div className="mb-2 ml-6 font-serif text-lg text-gray-400">
                                 <span>Posts</span>
                     </div>}
-                    {data.posts && filter==='posts' && data.posts.map((post, index) => (
-                    <PostSearch
-                        key={index}
-                        upvotes={post?.upvotes?.length}
-                        downvotes={post?.downvotes?.length}
-                        comments={post?.comments?.length}
-                        isVerified={post?.user?.isVerified}
-                        text={post?.text}
-                        name={post?.user?.name}
-                        username={post?.user?.username}
-                        avatar={post?.user?.profilePicture}
-                        createdAt={post?.createdAt}
-                        updatedAt={post?.updatedAt}
-                        u_id={post?.user?._id}
-                        postId={post?._id}
-                        image={post?.image}
+                    {data.posts && filter==='posts' && data.posts.map((post) => (
+                    <Post
+                        key={post?._id}
+                        post={post}
+                        updatePostData={() => {}}
+                        removePost={() => {}}
                     />
                 ))}
-                </div>) : filter==='posts' && (
+                </div>) : !isLoading && !isError && filter==='posts' && (
                 <div className="flex flex-col items-center relative top-[13em]">
                     <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching post </span></div>
                 </div>
@@ -262,21 +220,7 @@ return (
         </div>
     )
     
-} else if(data && Object.keys(data).length===0) {
-    return (
-        <div className="flex">
-            <Sidebar />
-            <div className="flex w-[100%] flex-col">
-                <div className="sticky top-[0.01%] z-[300] bg-white">
-                        <HeaderComponent title="SEARCH" url={"Placeholder"} />
-                </div>
-                <div className="flex flex-col items-center relative top-[15em]">
-                    <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching result </span></div>
-                </div>
-            </div>
-        </div>
-    )
-} else if (data === "error") {
+} else if (isError) {
     return (
         <div className="flex">
             <Sidebar/>
@@ -291,7 +235,21 @@ return (
             </div>
         </div>
     )
-} else if(data===null) {
+} else if (data && Object.keys(data).length === 0) {
+    return (
+        <div className="flex">
+            <Sidebar />
+            <div className="flex w-[100%] flex-col">
+                <div className="sticky top-[0.01%] z-[300] bg-white">
+                        <HeaderComponent title="SEARCH" url={"Placeholder"} />
+                </div>
+                <div className="flex flex-col items-center relative top-[15em]">
+                    <div><span className="font-serif sm:text-md lg:text-lg text-gray-400"> No matching result </span></div>
+                </div>
+            </div>
+        </div>
+    )
+} else {
     return (
         <div className="flex">
             <Sidebar />
