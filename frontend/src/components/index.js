@@ -12,7 +12,8 @@ import Notification from './Notification';
 import Actions from './Actions';
 import AdminCard from './AdminCard';
 import FormErrors from '../components/forms/FormErrors'
-import InputField from './InputField'
+import InputField from './InputField';
+import Select from './Select';
 import HeaderComponent from './nav/HeaderComponent';
 import ResourceCard from './ResourceCard';
 import FileForm from './forms/FileForm';
@@ -45,9 +46,10 @@ import Team from './Team';
 import TechTeam from './TechTeam';
 import Modal from './Modal';
 import SendMailModal from './SendMailModal';
+import SendPersonalMailModal from './SendPersonalMailModal';
 import ErrorBoundary from './ErrorBoundary';
 import PageLoader, { SkeletonCard, SkeletonList, InlineLoader } from './PageLoader';
 import { InfiniteScrollSentinel } from './InfiniteScrollSentinel';
 import { ConfirmDialog } from './ConfirmDialog';
 
-export {UserCard, VerifyCodeInput, ShareButton, PostSearch, ResourceSearch, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm, PaymentVerificationForm, BlogCard, VerificationAccountInput, Team, TechTeam, Modal, SendMailModal, ConfirmDialog, ErrorBoundary, PageLoader, SkeletonCard, SkeletonList, InlineLoader, InfiniteScrollSentinel, Skeletons };
+export {UserCard, VerifyCodeInput, ShareButton, PostSearch, ResourceSearch, EditProfileForm, AddPostForm, FileForm, ResourceCard, HeaderComponent, FormErrors, InputField, Select, NavBar, Footer, SignInForm, SignUpForm, Payment, Button, Sidebar, Post, AnnouncementContainer, BottomNav, Notification, Actions, AdminCard, PostComments, RecentPayments, AdminEventsCard, EventForm, AdminAnnouncementCard, UsersCard, CommentActions, PaymentDetails, AddCategoryForm, DeleteCategoryForm, PaymentList, VerificationCodeInput, PaymentHistory, VerifyAccountForm, PaymentVerificationForm, BlogCard, VerificationAccountInput, Team, TechTeam, Modal, SendMailModal, SendPersonalMailModal, ConfirmDialog, ErrorBoundary, PageLoader, SkeletonCard, SkeletonList, InlineLoader, InfiniteScrollSentinel, Skeletons };

@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { BiUpload } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
-
+import Select from "../Select";
 
 const post_url = import.meta.env.VITE_RESOURCES_URL
 
@@ -78,14 +78,20 @@ const FileForm = (props) => {
                         <FaXmark/>
                     </button>
                     <div>
-                        <span className={textStyle}> Level</span>
-                        <select value={selectedOption1} onChange={handleSelectChange1} name="dropdown1" className="font-roboto text-gray-300 block w-[80%] mt-1 p-2 border border-gray-400 rounded-md  focus:ring focus:ring-blue-200 focus:outline-none">
-                            <option value="100 Level" className="text-black font-roboto text-lg">Year 1 </option>
-                            <option value="200 Level" className="text-black font-roboto text-lg">Year 2 </option>
-                            <option value="300 Level" className="text-black font-roboto text-lg">Year 3 </option>
-                            <option value="400 Level" className="text-black font-roboto text-lg">Year 4 </option>
-                            <option value="500 Level" className="text-black font-roboto text-lg">Year 5 </option>
-                        </select>
+                        <Select
+                            label="Level"
+                            value={selectedOption1}
+                            onChange={handleSelectChange1}
+                            name="dropdown1"
+                            options={[
+                                { value: "100 Level", label: "Year 1" },
+                                { value: "200 Level", label: "Year 2" },
+                                { value: "300 Level", label: "Year 3" },
+                                { value: "400 Level", label: "Year 4" },
+                                { value: "500 Level", label: "Year 5" },
+                            ]}
+                            className="w-[80%]"
+                        />
                     </div>
                     <div className="flex flex-col mt-2 h-[7em]">
                         <span className={textStyle}> File Description </span>

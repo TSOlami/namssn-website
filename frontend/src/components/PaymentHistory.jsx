@@ -18,6 +18,7 @@ const PaymentHistory = () => {
 	const mail = userInfo?.email;
 	const matric = userInfo?.matricNumber;
 	const profileImage = userInfo?.profilePicture;
+	const coverPhoto = userInfo?.coverPhoto;
 	const [verificationResult, setVerificationResult] = useState(null);
 	const [verifyUserPayments] = useVerifyUserPaymentsMutation();
 	const dispatch = useDispatch();
@@ -82,7 +83,13 @@ const PaymentHistory = () => {
 					</span>
 				</div>
 				{/* profile image and cover image */}
-				<div className="w-full h-32 bg-primary z-[-1]"></div>
+				{coverPhoto ? (
+					<div className="w-full h-32 z-[-1] overflow-hidden">
+						<img src={coverPhoto} alt="Cover" className="w-full h-full object-cover" />
+					</div>
+				) : (
+					<div className="w-full h-32 bg-primary z-[-1]"></div>
+				)}
 				<div className="flex flex-row justify-between items-center relative top-[-30px] my-[-30px] p-3 pl-6 z-[0]">
 					<img
 						src={profileImage || ProfileImg}

@@ -15,6 +15,7 @@ import { convertToBase64 } from '../../utils';
 const EditProfileForm = ({ handleModal }) => {
 
   const [file, setFile] = useState();
+  const [coverFile, setCoverFile] = useState();
   // Use the useDispatch hook to dispatch actions 
   const dispatch = useDispatch();
 
@@ -25,6 +26,7 @@ const EditProfileForm = ({ handleModal }) => {
   const { userInfo } = useSelector((state) => state.auth);
 
   let profilePicture = userInfo?.profilePicture || ProfileImg;
+  const coverPhoto = userInfo?.coverPhoto;
 
   // Use the useUpdateUserMutation hook to update the user's profile
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -62,7 +64,10 @@ const EditProfileForm = ({ handleModal }) => {
       validationSchema,
       onSubmit: async (values) => {
         try {
-          let updatedValues = Object.assign(values, { profilePicture: file || userInfo?.profilePicture });
+          let updatedValues = Object.assign(values, {
+            profilePicture: file || userInfo?.profilePicture,
+          });
+          if (coverFile !== undefined) updatedValues.coverPhoto = coverFile || '';
           // Call the updateUser function to update the user's profile
           const res = await toast.promise(updateUser(updatedValues).unwrap(), {
             pending: 'Updating profile...',
@@ -85,8 +90,15 @@ const EditProfileForm = ({ handleModal }) => {
     setFile(base64);
   };
 
+  const onCoverUpload = async e => {
+    const base64 = await convertToBase64(e.target.files[0]);
+    setCoverFile(base64);
+  };
+
+  const coverPreview = coverFile || coverPhoto;
+
   return (
-    <div className="bg-white rounded-2xl p-4 w-96">
+    <div className="bg-white rounded-2xl p-4 w-96 max-w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto">
       <div className="flex flex-row justify-between items-center">
         <span className="font-semibold text-lg">Update Your Profile</span>
         <button onClick={handleModal} className="text-xl text-gray-700 hover:bg-black hover:text-white p-2 rounded-md">
@@ -94,12 +106,43 @@ const EditProfileForm = ({ handleModal }) => {
         </button>
       </div>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2 mx-2 mt-2">
-        <div className="flex-row">
-        <label htmlFor="profile">
-          <img src={file || profilePicture || ProfileImg} alt="" className='profile-image m-2'/>
+        {/* Cover photo — click the button to upload cover only */}
+        <div className="space-y-1.5 -mx-2">
+          <span className="text-sm font-medium text-gray-700 block">Cover photo</span>
+          <div className="rounded-lg overflow-hidden border border-gray-200 bg-gray-100 h-24">
+            {coverPreview ? (
+              <img src={coverPreview} alt="Cover preview" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                No cover photo
+              </div>
+            )}
+          </div>
+          <label htmlFor="cover" className="inline-block">
+            <span className="text-sm px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-gray-700 cursor-pointer hover:bg-gray-50">
+              {coverPhoto || coverFile ? "Change cover photo" : "Add cover photo"}
+            </span>
+            <input onChange={onCoverUpload} type="file" accept="image/*" name="cover" id="cover" className="sr-only" />
           </label>
-
-          <input onChange={onUpload} type="file" name="profile" id="profile" className="" style={{ display: 'none' }}/>
+        </div>
+        {/* Profile picture — click the button to upload profile pic only */}
+        <div className="space-y-1.5">
+          <span className="text-sm font-medium text-gray-700 block">Profile picture</span>
+          <div className="flex items-center gap-3">
+            <div className="rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100 w-20 h-20 flex-shrink-0">
+              <img
+                src={file || profilePicture || ProfileImg}
+                alt="Profile preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <label htmlFor="profile" className="inline-block">
+              <span className="text-sm px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-gray-700 cursor-pointer hover:bg-gray-50">
+                {(profilePicture || file) ? "Change profile picture" : "Add profile picture"}
+              </span>
+              <input onChange={onUpload} type="file" accept="image/*" name="profile" id="profile" className="sr-only" />
+            </label>
+          </div>
         </div>
         <div>
           <label htmlFor="name">Name</label>
@@ -117,30 +160,17 @@ const EditProfileForm = ({ handleModal }) => {
             <FormErrors error={formik.errors.name} />
           ) : null}
         </div>
-        <label className="mt-2" htmlFor="level">
-        Level
-      </label>
-      <select
-        name="level"
-        id="level"
-        onChange={formik.handleChange("level")}
-        onBlur={formik.handleBlur("level")}
-        value={formik.values.level}
-        className="w-full border border-gray-300 rounded p-2 m-0"
-      >
-        <option value="" disabled>
-          Select your level
-        </option>
-        {levelOptions?.map((level) => (
-          <option key={level} value={level}>
-            {level}
-          </option>
-        ))}
-      </select>
-
-      {formik.touched.level && formik.errors.level ? (
-        <FormErrors error={formik.errors.level} />
-      ) : null}
+        <Select
+          label="Level"
+          name="level"
+          id="level"
+          options={levelOptions}
+          value={formik.values.level}
+          onChange={formik.handleChange("level")}
+          onBlur={formik.handleBlur("level")}
+          placeholder="Select your level"
+          error={formik.touched.level && formik.errors.level ? formik.errors.level : undefined}
+        />
         <div>
           <label htmlFor="username">Username</label>
           <InputField
