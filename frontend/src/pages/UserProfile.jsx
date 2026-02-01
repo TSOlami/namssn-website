@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FaCircleCheck } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 
-import { useGetUserQuery, useUserPostsQuery, useMakeUserAdminMutation, useRemoveAdminMutation } from '../redux';
+import { useGetUserQuery, useUserPostsQuery, useMakeUserAdminMutation, useRemoveAdminMutation, useBlockUserMutation, useUnblockUserMutation } from '../redux';
 import { Post, Sidebar, AnnouncementContainer, ConfirmDialog } from '../components';
 import { ErrorPage } from '../pages';
 import { ProfileImg } from "../assets";
@@ -13,11 +13,13 @@ import { ProfileSkeleton, PostListSkeleton } from '../components/skeletons';
 const UserProfile = () => {
     const { userId } = useParams();
   const currentUser = useSelector((state) => state.auth.userInfo);
-  const { data: user, isLoading: userLoading  } = useGetUserQuery({ _id: userId });
+  const { data: user, isLoading: userLoading, refetch: refetchUser } = useGetUserQuery({ _id: userId });
   const name = user?.name;
   const { data: userPosts, isLoading: postsLoading  } = useUserPostsQuery({ _id: userId });
   const [postData, setPostData] = useState([]);
   const [showRemoveAdminConfirm, setShowRemoveAdminConfirm] = useState(false);
+  const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+  const [showUnblockConfirm, setShowUnblockConfirm] = useState(false);
 
   useEffect(() => {
     if (userPosts) {
@@ -44,6 +46,30 @@ const UserProfile = () => {
 
   const [makeUserAdmin] = useMakeUserAdminMutation();
   const [removeAdmin] = useRemoveAdminMutation();
+  const [blockUserMutation] = useBlockUserMutation();
+  const [unblockUserMutation] = useUnblockUserMutation();
+
+  const handleBlockUser = async () => {
+    try {
+      await blockUserMutation(userId).unwrap();
+      toast.success(`${name} has been blocked.`);
+      refetchUser();
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to block user.");
+    }
+    setShowBlockConfirm(false);
+  };
+
+  const handleUnblockUser = async () => {
+    try {
+      await unblockUserMutation(userId).unwrap();
+      toast.success(`${name} has been unblocked.`);
+      refetchUser();
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to unblock user.");
+    }
+    setShowUnblockConfirm(false);
+  };
 
   const handleMakeUserAdmin = async () => {
     try {
@@ -77,6 +103,7 @@ const UserProfile = () => {
   const avatar = user?.profilePicture;
 
   const currentUserIsAdmin = currentUser?.role === 'admin';
+  const isBlocked = user?.isBlocked;
 
   // Show skeleton while loading
   if (userLoading || postsLoading) {
@@ -102,18 +129,31 @@ const UserProfile = () => {
                     <span>{noOfPosts} posts</span>
                 </div>
                 <div className="w-full h-32 bg-primary z-[-1]"></div>
-                <div className="flex flex-row justify-between items-center relative top-[-25px] my-[-30px] p-3 pl-6 z-[0]">
+                <div className="flex flex-row justify-between items-center relative top-[-25px] my-[-30px] p-3 pl-6 z-[0] flex-wrap gap-2">
                     <img src={avatar || ProfileImg} alt="" className="profile-image"/>
-                    {currentUserIsAdmin && (
-                        isAdmin ? (
-                        <button onClick={() => setShowRemoveAdminConfirm(true)} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
+                    {currentUserIsAdmin && currentUser?._id !== userId && (
+                      <>
+                        {isAdmin ? (
+                          <button onClick={() => setShowRemoveAdminConfirm(true)} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
                             Remove Admin
-                        </button>
+                          </button>
                         ) : (
-                        <button onClick={handleMakeUserAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
-                            Make Admin
-                        </button>
-                        )
+                          <>
+                            {isBlocked ? (
+                              <button onClick={() => setShowUnblockConfirm(true)} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none ml-auto mr-2">
+                                Unblock
+                              </button>
+                            ) : (
+                              <button onClick={() => setShowBlockConfirm(true)} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-red-500 hover:border-none ml-auto mr-2">
+                                Block user
+                              </button>
+                            )}
+                            <button onClick={handleMakeUserAdmin} className="border-2 rounded-2xl border-gray-700 p-1 px-3 hover:text-white hover:bg-green-500 hover:border-none mr-2">
+                              Make Admin
+                            </button>
+                          </>
+                        )}
+                      </>
                     )}
                 </div>
                 <div className="flex flex-col text-sm p-3 pl-6">
@@ -156,6 +196,22 @@ const UserProfile = () => {
               title="Remove admin?"
               message={`Remove admin privileges from ${name || 'this user'}? They will no longer have admin access.`}
               confirmLabel="Remove Admin"
+            />
+            <ConfirmDialog
+              isOpen={showBlockConfirm}
+              onClose={() => setShowBlockConfirm(false)}
+              onConfirm={handleBlockUser}
+              title="Block user?"
+              message={`${name || 'This user'} will not be able to sign in or use the app until unblocked.`}
+              confirmLabel="Block"
+            />
+            <ConfirmDialog
+              isOpen={showUnblockConfirm}
+              onClose={() => setShowUnblockConfirm(false)}
+              onConfirm={handleUnblockUser}
+              title="Unblock user?"
+              message={`${name || 'This user'} will be able to sign in and use the app again.`}
+              confirmLabel="Unblock"
             />
             <AnnouncementContainer />
         </div>

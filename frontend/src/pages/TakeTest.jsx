@@ -74,7 +74,7 @@ const TakeTest = () => {
         className="flex flex-row"
       >
         <Sidebar />
-        <div className="w-full p-8">
+        <div className="flex-1 min-w-0 w-full p-8">
           <div className="text-red-600">
             Failed to load test. It may not exist or is not published.
           </div>
@@ -86,7 +86,6 @@ const TakeTest = () => {
             Back to E-Test
           </button>
         </div>
-        <AnnouncementContainer />
       </motion.div>
     );
   }
@@ -99,7 +98,7 @@ const TakeTest = () => {
         className="flex flex-row"
       >
         <Sidebar />
-        <div className="w-full p-8">
+        <div className="flex-1 min-w-0 w-full p-8">
           <div className="h-8 bg-gray-200 rounded w-48 animate-pulse mb-4" />
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -124,8 +123,8 @@ const TakeTest = () => {
       className="flex flex-row"
     >
       <Sidebar />
-      <div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
-        <div className="sticky top-[0.01%] z-[300] bg-white w-full border-b flex flex-wrap items-center justify-between gap-2 p-4">
+      <div className="flex-1 min-w-0 w-full min-h-screen flex flex-col">
+        <div className="sticky top-0 z-[300] bg-white border-b flex flex-wrap items-center justify-between gap-2 p-4 w-full">
           <HeaderComponent title={test.title || "E-Test"} url="Placeholder" />
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">

@@ -4,7 +4,7 @@ import { IoSend } from "react-icons/io5";
 import Actions from "./Actions";
 import PostComments from "./PostComments";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdBlock } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import {
 	usePostCommentsQuery,
 	useCommentPostMutation,
 	setPosts,
+	useBlockUserMutation,
 } from "../redux";
 import { ProfileImg } from "../assets";
 import { toast } from "react-toastify";
@@ -27,6 +28,7 @@ import { ConfirmDialog } from "./ConfirmDialog";
 const Post = ({ post, updatePostData, removePost }) => {
 	const [openOptions, setopenOptions] = useState(false);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+	const [showBlockConfirm, setShowBlockConfirm] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
@@ -100,6 +102,21 @@ const Post = ({ post, updatePostData, removePost }) => {
 
 	const dispatch = useDispatch();
 	const [deletePost] = useDeletePostMutation();
+	const [blockUserMutation] = useBlockUserMutation();
+
+	const handleBlockUser = async () => {
+		if (!u_id) return;
+		try {
+			await blockUserMutation(u_id).unwrap();
+			toast.success("User has been blocked.");
+			removePost(postId);
+		} catch (err) {
+			toast.error(err?.data?.message || "Failed to block user.");
+		}
+		setShowBlockConfirm(false);
+		setopenOptions(false);
+	};
+
 	const handleDeletePost = async () => {
 		try {
 			const response = await toast.promise(
@@ -241,13 +258,23 @@ const Post = ({ post, updatePostData, removePost }) => {
 								</div>
 							</span>
 							{openOptions && (
-								<div className="options-menu absolute right-0 top-10 z-20">
-									<button
-										onClick={() => setShowDeleteConfirm(true)}
-										className="text-red-500 p-2 shadow-lg rounded-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[120px] hover:bg-gray-50"
-									>
-										<MdDelete /> <span>Delete Post</span>
-									</button>
+								<div className="options-menu absolute right-0 top-10 z-20 flex flex-col">
+									{role === "admin" && u_id !== userId && (
+										<button
+											onClick={() => setShowBlockConfirm(true)}
+											className="text-red-600 p-2 shadow-lg rounded-t-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[120px] hover:bg-gray-50"
+										>
+											<MdBlock /> <span>Block user</span>
+										</button>
+									)}
+									{(role === "admin" || userId === u_id) && (
+										<button
+											onClick={() => setShowDeleteConfirm(true)}
+											className="text-red-500 p-2 shadow-lg rounded-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[120px] hover:bg-gray-50"
+										>
+											<MdDelete /> <span>Delete Post</span>
+										</button>
+									)}
 								</div>
 							)}
 						</>
@@ -259,6 +286,14 @@ const Post = ({ post, updatePostData, removePost }) => {
 					title="Delete post?"
 					message="This post will be permanently deleted. This cannot be undone."
 					confirmLabel="Delete Post"
+				/>
+				<ConfirmDialog
+					isOpen={showBlockConfirm}
+					onClose={() => setShowBlockConfirm(false)}
+					onConfirm={handleBlockUser}
+					title="Block user?"
+					message={`${name || "This user"} will not be able to sign in or use the app until unblocked.`}
+					confirmLabel="Block"
 				/>
 				</div>
 

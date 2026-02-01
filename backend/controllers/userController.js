@@ -441,7 +441,6 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(userId);
 
   if (user) {
-    // Return the user data
     res.status(200).json({
       _id: user._id,
       name: user.name,
@@ -453,6 +452,7 @@ const getUserById = asyncHandler(async (req, res) => {
       role: user.role,
       level: user.level,
       isVerified: user.isVerified,
+      isBlocked: user.isBlocked,
       points: user.points,
       profilePicture: user.profilePicture,
       posts: user.posts,
