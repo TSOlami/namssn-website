@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Sidebar, HeaderComponent, AnnouncementContainer } from "../components";
+import { Sidebar, HeaderComponent } from "../components";
 import {
   useGetTestByIdQuery,
   useSubmitAttemptMutation,
@@ -107,7 +107,6 @@ const TakeTest = () => {
             ))}
           </div>
         </div>
-        <AnnouncementContainer />
       </motion.div>
     );
   }
@@ -188,7 +187,6 @@ const TakeTest = () => {
           )}
         </div>
       </div>
-      <AnnouncementContainer />
     </motion.div>
   );
 };

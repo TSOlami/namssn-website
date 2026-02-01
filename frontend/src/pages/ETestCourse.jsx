@@ -53,11 +53,6 @@ const ETestCourse = () => {
                   <h3 className="font-semibold text-lg text-gray-900">
                     {test.title}
                   </h3>
-                  {(test.semester || test.year) && (
-                    <p className="text-sm text-gray-500 mt-1">
-                      {[test.semester, test.year].filter(Boolean).join(" · ")}
-                    </p>
-                  )}
                   {test.timeLimitMinutes && (
                     <p className="text-sm text-gray-500 mt-1">
                       {test.timeLimitMinutes} min
