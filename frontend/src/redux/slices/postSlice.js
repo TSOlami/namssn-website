@@ -7,13 +7,13 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 		return {
       // Get All Posts Query
       allPosts: builder.query({
-        query(page, pageSize) {
+        query(page, pageSize = 10) {
           return {
             url: `${POSTS_URL}/posts?page=${page}&pageSize=${pageSize}`,
             method: 'GET',
           };
         },
-        providesTags: ['Post'], 
+        providesTags: ['Post'],
       }),
 
       // Get Paginated Posts Query

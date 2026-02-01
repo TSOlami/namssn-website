@@ -33,7 +33,7 @@ const Home = () => {
       toast.error("Sorry, You might need to login again.");
       navigate("/signin");
     }
-  }, [error, dispatch, logutUser]);
+  }, [error, dispatch, logutUser, navigate]);
 
   useEffect(() => {
     if (notifications) {
@@ -44,13 +44,25 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isgettingMorePosts, setIsGettingMorePosts] = useState(false);
 
+  // Reset to page 1 when entering Home so feed always starts from the top
   useEffect(() => {
-    if (posts) {
-      const postIds = new Set(postData.map(post => post._id));
-      const newPosts = posts.posts.filter(post => !postIds.has(post._id));
-      setPostData((prevData) => [...prevData, ...newPosts]);
-      setIsGettingMorePosts(false);
+    dispatch(setCurrentPage(1));
+    setHasMore(true);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!posts) return;
+    const currentPage = posts.page;
+    if (currentPage === 1) {
+      setPostData(posts.posts ?? []);
+    } else {
+      setPostData((prevData) => {
+        const postIds = new Set(prevData.map((post) => post._id));
+        const newPosts = (posts.posts ?? []).filter((post) => !postIds.has(post._id));
+        return [...prevData, ...newPosts];
+      });
     }
+    setIsGettingMorePosts(false);
   }, [posts]);
 
   const totalPages = posts?.totalPages;
@@ -121,11 +133,7 @@ const Home = () => {
           />
         ))}
 
-        {isgettingMorePosts && (
-          <div className="flex justify-center py-4">
-            <span className="text-sm text-gray-500">Loading more posts...</span>
-          </div>
-        )}
+        {isgettingMorePosts && <PostListSkeleton count={2} />}
 
         <InfiniteScrollSentinel
           onLoadMore={() => getNextPosts(page)}
