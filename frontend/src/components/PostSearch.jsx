@@ -2,7 +2,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import Actions from "./Actions";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -40,11 +40,6 @@ const PostSearch = ({
 		setopenOptions(!openOptions);
 	};
 
-	const navigate = useNavigate();
-	const routeToComments = () => {
-		navigate(`/comments/${postId}`);
-	};
-
 	const date = new Date(createdAt);
 
 	// Post deletion
@@ -61,7 +56,6 @@ const PostSearch = ({
 		}
 		handleOpenOptions();
 	};
-	const { _id: userId } = useSelector((state) => state.auth.userInfo);
 	const [isUpvoted, setIsUpvoted] = useState(false);
 	const [isDownvoted, setIsDownvoted] = useState(false);
 	const [upvotePost] = useUpvotePostMutation();
@@ -186,7 +180,7 @@ const PostSearch = ({
 						confirmLabel="Delete Post"
 					/>
 
-					<div className="body-text " onClick={routeToPost}>
+					<div className="body-text">
 						{text}
 						{image && (
 							<div className="post-image-container pt-2">

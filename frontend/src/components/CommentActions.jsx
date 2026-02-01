@@ -70,27 +70,6 @@ const CommentActions = ({
 				<span>Share</span>
 			</div>
 
-			{/* {location.pathname !== `/comments/${postId}` && (
-				<div>
-					<span className="flex flex-row items-center gap-1">
-						<button
-							className="flex flex-row items-center gap-1"
-							onClick={routeToComments}
-						>
-							<BiComment /> {comments}
-						</button>
-					</span>
-					<span>Comments</span>
-				</div>
-			)}
-			{location.pathname !== `/comments/${postId}` && (
-				<div>
-					<span className="flex items-center gap-1">
-						<BiShareAlt /> {shares}
-					</span>
-					<span>Share</span>
-				</div>
-			)} */}
 		</div>
 	);
 };

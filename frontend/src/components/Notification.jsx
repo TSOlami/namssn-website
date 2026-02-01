@@ -21,7 +21,7 @@ const Notification = ({
 	createdAt,
 	seen,
 }) => {
-	// Use this to navigate to the post page or comment page
+	// Navigate to home feed when opening a post notification
 	const navigate = useNavigate();
 
 	// Use this to mark the notification as seen
