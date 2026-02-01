@@ -7,96 +7,78 @@ import { navLinks } from "../../constants";
 
 const NavBar = () => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
-	const handleNavOpen = useCallback(() => {
-    setIsNavOpen((prevIsNavOpen) => !prevIsNavOpen);
-  }, []);
 
-	useEffect(() => {
-		const hamburger = document.querySelector(".hamburger");
-
-		hamburger.addEventListener("click", handleNavOpen);
-
-		return () => {
-			hamburger.removeEventListener("click", handleNavOpen);
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isNavOpen]);
+	const toggleNav = useCallback(() => {
+		setIsNavOpen((prev) => !prev);
+	}, []);
 
 	useEffect(() => {
 		const handleOutsideClick = (event) => {
-			// Check if the click target is outside the navbar
 			if (
 				isNavOpen &&
-				event.target.closest(".navbar") === null &&
-				event.target.closest(".hamburger") === null
+				!event.target.closest(".navbar") &&
+				!event.target.closest(".navbar-mobile-panel") &&
+				!event.target.closest(".navbar-hamburger")
 			) {
-				// Close the navbar
-				handleNavOpen();
+				toggleNav();
 			}
 		};
-	
-		// Add event listener to the document body
 		document.body.addEventListener("click", handleOutsideClick);
-	
+		return () => document.body.removeEventListener("click", handleOutsideClick);
+	}, [isNavOpen, toggleNav]);
+
+	useEffect(() => {
+		document.body.style.overflow = isNavOpen ? "hidden" : "";
 		return () => {
-			// Remove event listener when the component unmounts
-			document.body.removeEventListener("click", handleOutsideClick);
+			document.body.style.overflow = "";
 		};
-	}, [isNavOpen, handleNavOpen]);
-	
-	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+	}, [isNavOpen]);
 
 	return (
-		<header className="px-[10px] my-4 mx-2 w-full fixed top-[-16px] z-[200]">
-			{/* Namssn logo, absolute code, avoid abeg */}
-			<div>
-				<div className="flex flex-row items-center absolute lg:hidden bg-white w-full">
-					<Link to="/">
-						<img src={NamssnLogo} alt="Logo" className="logo pt-3"/>
-					</Link>
-					<span className="logo-text py-[2px]">NAMSSN</span>
-				</div>
-			</div>
+		<header className="navbar fixed left-0 right-0 top-0 z-[200] w-full bg-white shadow-sm">
+			{/* Main header bar: logo | desktop nav | buttons | hamburger (mobile) */}
+			<div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-3 md:px-6 lg:px-8">
+				{/* Logo - always visible */}
+				<Link
+					to="/"
+					className="logo-container flex shrink-0 items-center gap-2 pt-1"
+					onClick={() => isNavOpen && toggleNav()}
+				>
+					<img src={NamssnLogo} alt="Logo" className="logo h-12 w-12 md:h-14 md:w-14" />
+					<span className="logo-text text-lg font-bold md:text-xl">NAMSSN</span>
+				</Link>
 
-			{/* Navbar */}
-			<nav
-				className={
-					isNavOpen
-						? "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-full lg:h-auto z-10 fixed left-0 w-[315px] lg:static lg:w-auto transition-all duration-400"
-						: "bg-white flex flex-col lg:flex-row lg:justify-between md:items-center h-full lg:h-auto z-10 fixed left-[-100%] w-[315px] lg:static lg:w-auto transition-all duration-400"
-				}
-			>
-				<div className="logo-container pt-2">
-					<Link to="/">
-						<img src={NamssnLogo} alt="Logo" className="logo" />
-					</Link>
-					<span className="logo-text py-[2px]">NAMSSN</span>
-				</div>
-				<ul className="flex-1 flex justify-center lg:justify-evenly items-center ml-6 gap-10 lg:gap-3 flex-col lg:flex-row">
-				{navLinks?.map((item) => (
-					<li key={item.label}>
-						{item.label === "Contact Us" ? (
-							<ScrollToSectionLink
-								to="contact"
-								spy={true}
-								smooth={true}
-								offset={-100}
-								duration={500}
-								closeNavbar={handleNavOpen}
-								className="nav-text hover:underline transition-all font-montserrat"
-							>
-								{item.label}
-							</ScrollToSectionLink>
-						) : (
-							<Link to={item.href} className="nav-text hover:underline transition-all font-montserrat">
-								{item.label}
-							</Link>
-						)}
-					</li>
-				))}
-				</ul>
+				{/* Desktop nav links - hidden on mobile */}
+				<nav className="hidden flex-1 justify-center lg:flex">
+					<ul className="flex items-center justify-evenly gap-4 xl:gap-6">
+						{navLinks?.map((item) => (
+							<li key={item.label}>
+								{item.label === "Contact Us" ? (
+									<ScrollToSectionLink
+										to="contact"
+										spy={true}
+										smooth={true}
+										offset={-100}
+										duration={500}
+										className="nav-text font-montserrat transition-all hover:underline"
+									>
+										{item.label}
+									</ScrollToSectionLink>
+								) : (
+									<Link
+										to={item.href}
+										className="nav-text font-montserrat transition-all hover:underline"
+									>
+										{item.label}
+									</Link>
+								)}
+							</li>
+						))}
+					</ul>
+				</nav>
 
-				<div className="pb-14 lg:pl-5 lg:p-0 gap-4 flex mx-4 items-center justify-center">
+				{/* Desktop Sign Up / Log In - hidden on mobile */}
+				<div className="hidden items-center gap-3 lg:flex lg:shrink-0">
 					<Link to="/signup" className="button-1">
 						Sign Up
 					</Link>
@@ -104,12 +86,83 @@ const NavBar = () => {
 						Log In
 					</Link>
 				</div>
-			</nav>
 
-			<div className={isNavOpen ? "hamburger active" : "hamburger"}>
-				<span className="bar side"></span>
-				<span className="bar side"></span>
-				<span className="bar side"></span>
+				{/* Hamburger - only on mobile, inside header, no border */}
+				<button
+					type="button"
+					aria-label="Toggle menu"
+					aria-expanded={isNavOpen}
+					onClick={toggleNav}
+					className={`navbar-hamburger flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg transition-colors hover:bg-gray-100 lg:hidden ${isNavOpen ? "active" : ""}`}
+				>
+					<span className="bar" />
+					<span className="bar" />
+					<span className="bar" />
+				</button>
+			</div>
+
+			{/* Mobile menu overlay + panel (below header z-index so hamburger stays clickable) */}
+			<div
+				className={`fixed inset-0 z-[199] lg:hidden ${isNavOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+				aria-hidden={!isNavOpen}
+			>
+				{/* Backdrop */}
+				<button
+					type="button"
+					aria-label="Close menu"
+					className={`absolute inset-0 bg-black/30 transition-opacity duration-300 ${isNavOpen ? "opacity-100" : "opacity-0"}`}
+					onClick={toggleNav}
+				/>
+				{/* Slide-in panel */}
+				<aside
+					className={`navbar-mobile-panel absolute left-0 top-0 flex h-full w-[min(300px,85vw)] flex-col bg-white shadow-xl transition-transform duration-300 ease-out lg:hidden ${isNavOpen ? "translate-x-0" : "-translate-x-full"}`}
+				>
+					<div className="flex flex-1 flex-col overflow-y-auto px-4 pt-6 pb-6">
+						<ul className="flex flex-col gap-1">
+							{navLinks?.map((item) => (
+								<li key={item.label}>
+									{item.label === "Contact Us" ? (
+										<ScrollToSectionLink
+											to="contact"
+											spy={true}
+											smooth={true}
+											offset={-100}
+											duration={500}
+											closeNavbar={toggleNav}
+											className="nav-text block rounded-lg px-4 py-3 font-montserrat transition-colors hover:bg-gray-100 hover:underline"
+										>
+											{item.label}
+										</ScrollToSectionLink>
+									) : (
+										<Link
+											to={item.href}
+											onClick={toggleNav}
+											className="nav-text block rounded-lg px-4 py-3 font-montserrat transition-colors hover:bg-gray-100 hover:underline"
+										>
+											{item.label}
+										</Link>
+									)}
+								</li>
+							))}
+						</ul>
+						<div className="mt-6 flex flex-col gap-3 border-t border-gray-200 pt-6">
+							<Link
+								to="/signup"
+								onClick={toggleNav}
+								className="button-1 w-full justify-center"
+							>
+								Sign Up
+							</Link>
+							<Link
+								to="/signin"
+								onClick={toggleNav}
+								className="button-2 w-full justify-center"
+							>
+								Log In
+							</Link>
+						</div>
+					</div>
+				</aside>
 			</div>
 		</header>
 	);
