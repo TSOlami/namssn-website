@@ -42,58 +42,41 @@ const createPost = asyncHandler(async (req, res) => {
 // Route GET /api/v1/user/posts
 // Access Public
 const getPosts = asyncHandler(async (req, res) => {
-	// Start the timer
-  console.time('getPosts');
-
 	// Extract pagination parameters from the request query, with default values if not provided
-	const page = parseInt(req.query.page) || 1;
-	const pageSize = parseInt(req.query.pageSize) || 10; // Set a default page size
+	const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+	const pageSize = Math.min(50, Math.max(1, parseInt(req.query.pageSize, 10) || 10));
 
 	// Calculate the number of documents to skip to get the next page
 	const skip = (page - 1) * pageSize;
 
 	try {
-    // Fetch posts with pagination and sort by timestamp in descending order
-    const posts = await Post.find()
-      .populate({
-        path: 'comments',
-        model: 'PostComment',
-        populate: {
-          path: 'user',
-          model: 'User',
-          select: '-password',
-        },
-      })
-      .populate({
-        path: 'user',
-        select: '-password',
-      })
-      .sort({ createdAt: -1 }) // Sort by timestamp in descending order (latest posts first)
-      .skip(skip)
-      .limit(pageSize)
-			.lean();
+		// Fetch posts and total count in parallel for better performance
+		// List endpoint does NOT populate comments; frontend fetches comments per post when expanded
+		const [posts, totalCount] = await Promise.all([
+			Post.find()
+				.populate('user', '-password')
+				.sort({ createdAt: -1 })
+				.skip(skip)
+				.limit(pageSize)
+				.lean(),
+			Post.countDocuments(),
+		]);
 
-    // Count all posts (to determine if there are more pages)
-    const totalCount = await Post.countDocuments();
+		const totalPages = Math.ceil(totalCount / pageSize);
 
-    const totalPages = Math.ceil(totalCount / pageSize);
+		const response = {
+			page,
+			pageSize,
+			totalPages,
+			totalCount,
+			posts,
+		};
 
-    // Response object
-    const response = {
-      page,
-      pageSize,
-      totalPages,
-      totalCount,
-      posts,
-    };
-
-		// Stop the timer and log the time elapsed for this request
-		console.timeEnd('getPosts');
-    res.status(200).json(response);
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    res.status(500).json({ message: 'Server error while fetching posts.' });
-  }
+		res.status(200).json(response);
+	} catch (error) {
+		console.error('Error fetching posts:', error);
+		res.status(500).json({ message: 'Server error while fetching posts.' });
+	}
 });
 
 // @desc Get a post by ID
