@@ -1,8 +1,14 @@
 import asyncHandler from 'express-async-handler';
+import { createRequire } from 'module';
+import mongoose from 'mongoose';
 import Course from '../models/courseModel.js';
 import Test from '../models/testModel.js';
 import Question from '../models/questionModel.js';
 import TestAttempt from '../models/testAttemptModel.js';
+import { extractQuestionsFromText } from '../utils/etestUtils/extractQuestionsFromText.js';
+
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
 
 /**
  * Create a course.
@@ -128,6 +134,21 @@ const deleteTest = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Get all questions for a test (admin).
+ * GET /api/v1/admin/etest/tests/:testId/questions
+ */
+const getQuestionsByTest = asyncHandler(async (req, res) => {
+  const { testId } = req.params;
+  const test = await Test.findById(testId);
+  if (!test) {
+    res.status(404);
+    throw new Error('Test not found');
+  }
+  const questions = await Question.find({ test: testId }).sort({ order: 1 }).lean();
+  res.status(200).json(questions);
+});
+
+/**
  * Add a single question.
  * POST /api/v1/admin/etest/tests/:testId/questions
  * Body: { order?, text, options: string[], correctIndex, explanation? }
@@ -203,6 +224,43 @@ const bulkAddQuestions = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Extract questions from uploaded PDF.
+ * POST /api/v1/admin/etest/extract-questions
+ * Multipart: file field "pdf"
+ */
+const extractQuestionsFromPdf = asyncHandler(async (req, res) => {
+  const file = req.files?.pdf;
+  if (!file) {
+    res.status(400);
+    throw new Error('No PDF file uploaded. Use form field "pdf".');
+  }
+  if (!file.mimetype?.includes('pdf') && !file.name?.toLowerCase().endsWith('.pdf')) {
+    res.status(400);
+    throw new Error('File must be a PDF.');
+  }
+  const buffer = file.data ?? file;
+  let rawText;
+  try {
+    const data = await pdfParse(buffer);
+    rawText = data?.text ?? '';
+  } catch (err) {
+    console.error('PDF parse error:', err);
+    res.status(400);
+    throw new Error('Could not read PDF. Ensure the file is a valid, non-image PDF.');
+  }
+  if (!rawText?.trim()) {
+    res.status(400);
+    throw new Error('No text could be extracted from the PDF (e.g. image-only PDF).');
+  }
+  const { questions, errors } = extractQuestionsFromText(rawText);
+  res.status(200).json({
+    questions,
+    errors: errors.length ? errors : undefined,
+    rawTextPreview: rawText.slice(0, 500),
+  });
+});
+
+/**
  * Update a question.
  * PUT /api/v1/admin/etest/questions/:questionId
  */
@@ -217,6 +275,42 @@ const updateQuestion = asyncHandler(async (req, res) => {
     throw new Error('Question not found');
   }
   res.status(200).json(question);
+});
+
+/**
+ * Reorder a question (swap with neighbour). Single request, atomic swap.
+ * POST /api/v1/admin/etest/questions/:questionId/reorder
+ * Body: { direction: 'up' | 'down' }
+ */
+const reorderQuestion = asyncHandler(async (req, res) => {
+  const { questionId } = req.params;
+  const { direction } = req.body;
+  if (direction !== 'up' && direction !== 'down') {
+    res.status(400);
+    throw new Error('direction must be "up" or "down"');
+  }
+  const question = await Question.findById(questionId).select('test order').lean();
+  if (!question) {
+    res.status(404);
+    throw new Error('Question not found');
+  }
+  const testId = question.test;
+  const questions = await Question.find({ test: testId }).sort({ order: 1 }).select('_id order').lean();
+  const idx = questions.findIndex((q) => q._id.toString() === questionId);
+  if (idx < 0) return;
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= questions.length) {
+    res.status(400);
+    throw new Error('Cannot move further in that direction');
+  }
+  const orderA = questions[idx].order;
+  const orderB = questions[swapIdx].order;
+  await Question.bulkWrite([
+    { updateOne: { filter: { _id: questions[idx]._id }, update: { $set: { order: orderB } } } },
+    { updateOne: { filter: { _id: questions[swapIdx]._id }, update: { $set: { order: orderA } } } },
+  ]);
+  const updated = await Question.find({ test: testId }).sort({ order: 1 }).lean();
+  res.status(200).json({ questions: updated });
 });
 
 /**
@@ -255,13 +349,18 @@ const adminGetCourses = asyncHandler(async (req, res) => {
  * GET /api/v1/admin/etest/courses/:courseId/tests
  */
 const adminGetTestsByCourse = asyncHandler(async (req, res) => {
-  const tests = await Test.find({ course: req.params.courseId })
-    .populate('course', 'code title level')
-    .sort({ year: -1, semester: 1 })
-    .lean();
-  const questionCounts = await Question.aggregate([
-    { $match: { test: { $in: tests.map((t) => t._id) } } },
-    { $group: { _id: '$test', count: { $sum: 1 } } },
+  const courseId = req.params.courseId;
+  const [tests, questionCounts] = await Promise.all([
+    Test.find({ course: courseId })
+      .populate('course', 'code title level')
+      .sort({ year: -1, semester: 1 })
+      .lean(),
+    Question.aggregate([
+      { $lookup: { from: 'tests', localField: 'test', foreignField: '_id', as: 'testDoc' } },
+      { $unwind: '$testDoc' },
+      { $match: { 'testDoc.course': new mongoose.Types.ObjectId(courseId) } },
+      { $group: { _id: '$test', count: { $sum: 1 } } },
+    ]),
   ]);
   const qMap = Object.fromEntries(questionCounts.map((q) => [q._id.toString(), q.count]));
   const withCounts = tests.map((t) => ({
@@ -278,9 +377,12 @@ export {
   createTest,
   updateTest,
   deleteTest,
+  getQuestionsByTest,
   addQuestion,
   bulkAddQuestions,
+  extractQuestionsFromPdf,
   updateQuestion,
+  reorderQuestion,
   deleteQuestion,
   adminGetCourses,
   adminGetTestsByCourse,

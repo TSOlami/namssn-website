@@ -50,7 +50,10 @@ import {
   addQuestion,
   bulkAddQuestions,
   updateQuestion,
+  reorderQuestion,
   deleteQuestion,
+  getQuestionsByTest,
+  extractQuestionsFromPdf,
   adminGetCourses,
   adminGetTestsByCourse,
 } from '../controllers/etestAdminController.js';
@@ -149,9 +152,12 @@ router.get('/etest/courses/:courseId/tests', protect, isAdmin, adminGetTestsByCo
 router.post('/etest/courses/:courseId/tests', protect, isAdmin, createTest);
 router.put('/etest/tests/:testId', protect, isAdmin, updateTest);
 router.delete('/etest/tests/:testId', protect, isAdmin, deleteTest);
+router.get('/etest/tests/:testId/questions', protect, isAdmin, getQuestionsByTest);
 router.post('/etest/tests/:testId/questions', protect, isAdmin, addQuestion);
 router.post('/etest/tests/:testId/questions/bulk', protect, isAdmin, bulkAddQuestions);
+router.post('/etest/extract-questions', protect, isAdmin, extractQuestionsFromPdf);
 router.put('/etest/questions/:questionId', protect, isAdmin, updateQuestion);
+router.post('/etest/questions/:questionId/reorder', protect, isAdmin, reorderQuestion);
 router.delete('/etest/questions/:questionId', protect, isAdmin, deleteQuestion);
 
 export default router;
