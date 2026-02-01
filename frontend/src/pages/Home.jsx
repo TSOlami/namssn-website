@@ -71,7 +71,7 @@ const Home = () => {
   // Prefetch next page when current feed is loaded to speed up infinite scroll
   useEffect(() => {
     if (!feed || !totalPages || page >= totalPages) return;
-    dispatch(apiSlice.util.prefetch('getFeed', { page: page + 1, sort: 'recommended' }));
+    dispatch(apiSlice.util.prefetch('getFeed', { page: page + 1, sort: 'recommended' }, {}));
   }, [feed, page, totalPages, dispatch]);
 
   const appendNewPost = (newPostData) => {
