@@ -59,12 +59,40 @@ const getTotalAnnouncements = asyncHandler(async (req, res) => {
 });
 
 
-// @desc Get all users
-// Route GET /api/v1/admin/users
+// @desc Get all users (paginated, searchable)
+// Route GET /api/v1/admin/all-users?page=1&limit=10&search=...
 // Access Private (only accessible to admin users)
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).select('-password'); // Exclude the password field from the returned data
-  res.status(200).json(users);
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const search = (req.query.search || '').trim();
+
+  const filter = {};
+  if (search) {
+    const regex = { $regex: search, $options: 'i' };
+    filter.$or = [
+      { name: regex },
+      { username: regex },
+      { email: regex },
+    ];
+  }
+
+  const total = await User.countDocuments(filter);
+  const users = await User.find(filter)
+    .select('-password')
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean();
+
+  const totalPages = Math.ceil(total / limit);
+  res.status(200).json({
+    data: users,
+    total,
+    page,
+    limit,
+    totalPages,
+  });
 });
 
 
@@ -318,23 +346,92 @@ const getPaymentStatus = asyncHandler(async (req, res) => {
 });
 
 
-// @desc Get all payments for all users
-// Route GET /api/v1/admin/payments
+// @desc Get all payments for all users (paginated, searchable)
+// Route GET /api/v1/admin/all-payments?page=1&limit=10&search=...
 // Access Private (only accessible to admin users)
 const getAllPayments = asyncHandler(async (req, res) => {
-  try {
-    // Fetch all payment records from the payment model, populate 'user' and 'category', and sort by createdAt in descending order
-    const allPayments = await Payment.find()
-      .populate('user', '-password')
-      .populate('category')
-      .sort({ createdAt: -1 });
-      
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const search = (req.query.search || '').trim();
 
-    res.status(200).json(allPayments);
-  } catch (error) {
-    // Handle any errors that occur during the process
-    res.status(500).json({ error: 'Internal server error' });
+  const pipeline = [
+    { $sort: { createdAt: -1 } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'userDoc',
+      },
+    },
+    { $unwind: { path: '$userDoc', preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: '_id',
+        as: 'categoryDoc',
+      },
+    },
+    { $unwind: { path: '$categoryDoc', preserveNullAndEmptyArrays: true } },
+  ];
+
+  if (search) {
+    const regex = { $regex: search, $options: 'i' };
+    pipeline.push({
+      $match: {
+        $or: [
+          { transactionReference: regex },
+          { 'userDoc.email': regex },
+          { 'userDoc.matricNumber': regex },
+          { 'userDoc.name': regex },
+          { 'categoryDoc.name': regex },
+        ],
+      },
+    });
   }
+
+  pipeline.push({
+    $facet: {
+      total: [{ $count: 'total' }],
+      data: [
+        { $skip: (page - 1) * limit },
+        { $limit: limit },
+        {
+          $project: {
+            _id: 1,
+            transactionReference: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            user: {
+              _id: '$userDoc._id',
+              name: '$userDoc.name',
+              email: '$userDoc.email',
+              matricNumber: '$userDoc.matricNumber',
+            },
+            category: {
+              _id: '$categoryDoc._id',
+              name: '$categoryDoc.name',
+              amount: '$categoryDoc.amount',
+            },
+          },
+        },
+      ],
+    },
+  });
+
+  const [result] = await Payment.aggregate(pipeline);
+  const total = result?.total?.[0]?.total ?? 0;
+  const data = result?.data ?? [];
+  const totalPages = Math.ceil(total / limit);
+
+  res.status(200).json({
+    data,
+    total,
+    page,
+    limit,
+    totalPages,
+  });
 });
 
 

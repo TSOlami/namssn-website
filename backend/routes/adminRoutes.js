@@ -41,7 +41,7 @@ import {
   getTotalEvents,
   getTotalPayments,  
 } from '../controllers/adminController.js';
-import { mailNotice } from '../controllers/mailer.js';
+import { mailNotice, sendUserMail } from '../controllers/mailer.js';
 import {
   createCourse,
   updateCourse,
@@ -90,6 +90,9 @@ router
 
 // Send mail to all users
 router.route('/notice-mail').post(protect, isAdmin, mailNotice);
+
+// Send personal mail to a single user
+router.route('/send-user-mail').post(protect, isAdmin, sendUserMail);
 
 // Get, create, update and delete user blogs
 router

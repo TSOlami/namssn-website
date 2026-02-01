@@ -36,6 +36,9 @@ const userSchema = mongoose.Schema(
     profilePicture: {
       type: String, // Path or URL to the profile picture
     },
+    coverPhoto: {
+      type: String, // Path or URL to the cover/banner image
+    },
     bio: {
       type: String,
     },
