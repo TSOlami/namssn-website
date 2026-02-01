@@ -28,25 +28,20 @@ const Post = ({ post, updatePostData, removePost }) => {
   // Close options menu when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      // Check if the click target is outside the options menu
       if (
         openOptions &&
         event.target.closest(".options-menu") === null &&
         event.target.closest(".pi-dots-icon") === null
       ) {
-        // Close the options menu
         setopenOptions(false);
       }
     };
 
-    // Add event listener to the document body
     document.body.addEventListener("click", handleOutsideClick);
-
     return () => {
-      // Remove event listener when the component unmounts
       document.body.removeEventListener("click", handleOutsideClick);
     };
-  }, []);
+  }, [openOptions]);
 
 	// Get the post details from the props
 	const postId = post?._id;

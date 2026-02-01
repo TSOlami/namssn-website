@@ -1,11 +1,3 @@
-/**
- * Skeleton Loaders - Content-aware loading placeholders
- * Each skeleton matches the exact layout of its corresponding component
- */
-
-// ============================================================
-// POST SKELETON - Matches the Post component layout
-// ============================================================
 export const PostSkeleton = () => (
   <div className="border-b-2 border-gray-300 p-2 pr-1 flex flex-row gap-1 sm:gap-2 h-fit min-w-[350px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px] animate-pulse">
     {/* Avatar */}
@@ -389,6 +381,34 @@ export const HomePageSkeleton = () => (
 // ============================================================
 // ADMIN DASHBOARD SKELETON - Complete admin layout
 // ============================================================
+// ============================================================
+// E-TEST SKELETONS - Course cards and test list
+// ============================================================
+export const ETestCourseCardSkeleton = () => (
+  <div className="animate-pulse bg-white rounded-xl shadow-md p-5 w-full max-w-[320px] min-h-[100px]">
+    <div className="h-6 bg-gray-200 rounded w-24 mb-3" />
+    <div className="h-5 bg-gray-200 rounded w-3/4 mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-1/2" />
+  </div>
+);
+
+export const ETestCourseListSkeleton = ({ count = 6 }) => (
+  <div className="flex flex-wrap gap-4 justify-around p-4">
+    {Array.from({ length: count }).map((_, i) => (
+      <ETestCourseCardSkeleton key={i} />
+    ))}
+  </div>
+);
+
+export const ETestPageSkeleton = () => (
+  <div className="w-full">
+    <div className="sticky top-[0.01%] z-[300] bg-white w-full p-4 border-b">
+      <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+    </div>
+    <ETestCourseListSkeleton count={6} />
+  </div>
+);
+
 export const AdminDashboardSkeleton = () => (
   <div className="w-full">
     {/* Header */}

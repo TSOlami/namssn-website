@@ -30,16 +30,14 @@ const AdminDashboard = () => {
 
 	const [isSendMailModalOpen, setIsSendMailModalOpen] = useState(false);
 
-	// Sort users by points in descending order
 	const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
 
 	const dispatch = useDispatch();
 	const { data: allpayments, Loading } = useGetAllPaymentsQuery({
 		select: {
-			category: 1, // Only select the category field for population
+			category: 1,
 			user: 1,
 			transactionReference: 1,
-			// Add other fields you need
 		},
 		populate: ["category", "user"],
 	});
@@ -50,7 +48,6 @@ const AdminDashboard = () => {
 		}
 	}, [dispatch, allpayments]);
 
-	// Check if any data is still loading
 	const isLoadingStats = !totalPayments && !totalUsers && !totalBlogs && !totalEvents && !totalAnnouncements;
 	const isLoadingUsers = !users;
 	const isLoadingPayments = !allpayments;
@@ -115,6 +112,14 @@ const AdminDashboard = () => {
 									card="users"
 									bg="bg-purple-100"
 									route="/admin/users"
+								/>
+
+								<AdminCard
+									title="E-Test"
+									amount="Manage"
+									card="users"
+									bg="bg-slate-100"
+									route="/admin/e-test"
 								/>
 							</>
 						)}

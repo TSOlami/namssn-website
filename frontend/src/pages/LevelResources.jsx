@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { HeaderComponent, ResourceCard, Sidebar, AnnouncementContainer } from "../components";
 import { formatDateToTime } from "../utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { ResourceListSkeleton } from "../components/skeletons";
 import ErrorPage from "./ErrorPage";
+import { getApiUrl, getResourcesUrl } from "../config/api";
 
-const base_url = "https://api-namssn-futminna.onrender.com/api/v1/users/resources/";
-const routes = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
+const ROUTES = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
 const LevelResources = () => {
     const {level} = useParams()
@@ -17,7 +17,7 @@ const LevelResources = () => {
         modifiedString = 'telegram'
     }
 
-    if (!routes.includes(level)) {
+    if (!ROUTES.includes(level)) {
         return (
             <div>
                 <ErrorPage/>
@@ -25,67 +25,54 @@ const LevelResources = () => {
             )
     }
     const [data, setData] = useState(null)
-    const [tempData, setTempData] = useState(null)
+    const [value, setValue] = useState("")
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://api-namssn-futminna.onrender.com/api/v1/users/${modifiedString}/resources/`);
+                const res = await axios.get(getApiUrl(`/api/v1/users/${encodeURIComponent(modifiedString)}/resources/`));
                 if (res) {
-                    setData(res.data); // set the fetched data to the state
-                    setTempData(res.data)
+                    setData(res.data);
                 }
             } catch (err) {
-                setData("error")
+                setData("error");
             }
         };
-        fetchData(); // call the fetchData function
-    }, []);
-
-    const [value, setValue] = useState("")
+        fetchData();
+    }, [modifiedString]);
 
     const handleSearch = (e) => {
         setValue(e.target.value)
     }
 
-    useEffect(() => {
-            if (value === '' && tempData) {
-                // if value is an empty string
-                setData(tempData)
-            } else if (value !== '') {
-                // if value is not an empty string
-                if (data && data.length !== 0) {
-                    const myfileList = data.map(obj => Object.keys(obj)[0]); // a list of file names
-                    const newData = [];
-                    myfileList.map((file, index) => {
-                        if (data[index][file]['title'] && data[index][file]['title'].toLowerCase().includes(value.toLowerCase())) {
-                           newData.push({[file]: data[index][file]})
-                            setData(newData)
-                        };
-                    });
-                }
-            }
-        }, [value]);
+    const displayedData = useMemo(() => {
+        if (!data || data === "error" || !Array.isArray(data)) return data;
+        if (!value.trim()) return data;
+        const lower = value.toLowerCase();
+        return data.filter((obj) => {
+            const file = Object.keys(obj)[0];
+            const item = obj[file];
+            return item?.title && item.title.toLowerCase().includes(lower);
+        });
+    }, [data, value]);
 
-        const handleReload = () => {
-            // reloads the page
-            window.location.reload();
-        }
+    const handleReload = () => window.location.reload();
     
-    if (data && data !== "error") {
-        const fileList = data.map(obj => Object.keys(obj)[0])
+    if (displayedData && displayedData !== "error") {
+        const fileList = displayedData.map(obj => Object.keys(obj)[0])
         return (
             <div className="flex">
                 <Sidebar/>
-                <div className="lg:w-[100%%] sm:w-[100%] block">
+                <div className="lg:w-full sm:w-[100%] block">
                     <div className="sticky top-[0.01%] z-[300] bg-white">
                         <HeaderComponent title={`${level} Resources`} url={"Placeholder"}/>
                     </div>
                     <div>
                         <div className="mb-4 flex justify-between">
                         </div>
-                        <div className="sticky bg-white ring-2 border-2 z-[500] pl-4 pr-4 top-[15%] md:top-[13%] left-[33%] border-gray-300 rounded-xl w-[50%]">
-                            <div className="absolute  h-[100%] flex ">
-                            <FaMagnifyingGlass  className="mt-1"/>
+                        <div className="sticky bg-white ring-2 border-2 z-[500] left-4 right-4 md:left-[33%] md:right-auto w-[calc(100%-2rem)] md:w-[50%] pl-4 pr-4 top-[15%] md:top-[13%] border-gray-300 rounded-xl">
+                            <div className="absolute h-[100%] flex pointer-events-none">
+                            <FaMagnifyingGlass className="mt-1"/>
                             </div>
                             <input
                                 type='input' placeholder="Search here"
@@ -94,15 +81,20 @@ const LevelResources = () => {
                             />
                         </div>
                         <div className="px-[1em] md:px-[2em] lg:px-[0.3em] pt-4 flex flex-wrap gap-4 justify-around">
-                            {fileList.map((file, index) => ( 
-                                <ResourceCard key={index} fileUrl={base_url + file + '+' + data[index][file]['title']} description={data[index][file]['description']}
-                                uploaderUsername = {data[index][file]['uploaderUsername']}
-                                title = {data[index][file]['title']}
-                                date = {formatDateToTime(new Date(data[index][file]['date']))}
-                                semester = {data[index][file]['semester']}
-                                course = {data[index][file]['course']}
+                            {fileList.map((file, index) => {
+                                const baseUrl = getResourcesUrl();
+                                const item = displayedData[index]?.[file];
+                                const base = baseUrl.replace(/\/$/, '');
+                                const fileUrl = item ? `${base}/${file}+${encodeURIComponent(item.title ?? '')}` : `${base}/${file}`;
+                                return (
+                                <ResourceCard key={index} fileUrl={fileUrl} description={item?.description}
+                                uploaderUsername={item?.uploaderUsername}
+                                title={item?.title}
+                                date={item?.date ? formatDateToTime(new Date(item.date)) : ''}
+                                semester={item?.semester}
+                                course={item?.course}
                                 />
-                            ))}
+                            );})}
                         </div>
                 </div>
                 </div>

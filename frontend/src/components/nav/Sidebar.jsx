@@ -8,6 +8,7 @@ import {
 	FaPerson,
 	FaArrowRightFromBracket,
 	FaCircleCheck,
+	FaPenToSquare,
 } from "react-icons/fa6";
 // import { useEffect, useState } from "react";
 import { ProfileImg } from "../../assets";
@@ -198,6 +199,16 @@ const Sidebar = () => {
 							>
 								<FaGraduationCap />
 								<span>Learning Resources</span>
+							</Link>
+						</li>
+						<li>
+							<Link
+								onClick={handleCloseNav}
+								to="/e-test"
+								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
+							>
+								<FaPenToSquare />
+								<span>E-Test</span>
 							</Link>
 						</li>
 						<li>

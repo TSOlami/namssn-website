@@ -15,12 +15,6 @@ import { ErrorBoundary } from "./components";
 import PageLoader from './components/PageLoader';
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
-// ============================================================
-// LAZY LOADED PAGES - Code Splitting for Better Performance
-// Each page is loaded only when the user navigates to it
-// ============================================================
-
-// Public Pages - Loaded on demand
 const Landing = lazy(() => import('./pages/Landing'));
 const SignIn = lazy(() => import('./pages/Signin'));
 const SignUp = lazy(() => import('./pages/Signup'));
@@ -30,12 +24,10 @@ const AboutUsPage = lazy(() => import('./pages/AboutUsPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
-// Auth Flow Pages
 const ForgotPage = lazy(() => import('./pages/ForgotPage'));
 const VerifyUserPass = lazy(() => import('./pages/VerifyUserPass'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 
-// Protected Pages - User Dashboard
 const Home = lazy(() => import('./pages/Home'));
 const Profile = lazy(() => import('./pages/Profile'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
@@ -44,7 +36,6 @@ const AnnouncementMobile = lazy(() => import('./pages/AnnouncementMobile'));
 const Comments = lazy(() => import('./pages/Comments'));
 const Search = lazy(() => import('./pages/Search'));
 
-// Payment Pages
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const Payment = lazy(() => import('./components/Payment'));
 const PaymentHistory = lazy(() => import('./components/PaymentHistory'));
@@ -54,6 +45,11 @@ const Resources = lazy(() => import('./pages/Resources'));
 const LevelResources = lazy(() => import('./pages/LevelResources'));
 const FilePreview = lazy(() => import('./pages/FilePreview'));
 
+const ETestHome = lazy(() => import('./pages/ETestHome'));
+const ETestCourse = lazy(() => import('./pages/ETestCourse'));
+const TakeTest = lazy(() => import('./pages/TakeTest'));
+const AnswerReview = lazy(() => import('./pages/AnswerReview'));
+
 // Admin Pages - Only loaded for admins
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminPayment = lazy(() => import('./pages/AdminPayment'));
@@ -61,8 +57,9 @@ const AdminEvents = lazy(() => import('./pages/AdminEvents'));
 const AdminAnnouncement = lazy(() => import('./pages/AdminAnnouncement'));
 const AdminBlogs = lazy(() => import('./pages/AdminBlogs'));
 const VerifyUsers = lazy(() => import('./pages/VerifyUsers'));
+const AdminETest = lazy(() => import('./pages/AdminETest'));
+const AdminETestCourse = lazy(() => import('./pages/AdminETestCourse'));
 
-// Verification Pages
 const VerifyAccount = lazy(() => import('./pages/VerifyAccount'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 
@@ -75,13 +72,9 @@ const SuspenseWrapper = ({ children }) => (
   </Suspense>
 );
 
-// ============================================================
-// ROUTER CONFIGURATION - With Code Splitting
-// ============================================================
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      {/* Public Routes */}
       <Route 
         index 
         element={
@@ -138,9 +131,7 @@ const router = createBrowserRouter(
           </SuspenseWrapper>
         } 
       />
-      
-      {/* Auth Flow Routes */}
-      <Route 
+      <Route
         path="/forgot-password" 
         element={
           <SuspenseWrapper>
@@ -165,7 +156,6 @@ const router = createBrowserRouter(
         } 
       />
 
-      {/* Protected Routes - Requires Authentication */}
       <Route element={<ProtectedRoutes />}>
         <Route 
           path="/home" 
@@ -176,7 +166,6 @@ const router = createBrowserRouter(
           } 
         />
         
-        {/* Payment Routes */}
         <Route 
           path="/payments" 
           element={
@@ -201,8 +190,6 @@ const router = createBrowserRouter(
             </SuspenseWrapper>
           } 
         />
-
-        {/* Resource Routes */}
         <Route 
           path="/resources" 
           element={
@@ -224,6 +211,38 @@ const router = createBrowserRouter(
           element={
             <SuspenseWrapper>
               <FilePreview />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/e-test" 
+          element={
+            <SuspenseWrapper>
+              <ETestHome />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/e-test/course/:courseId" 
+          element={
+            <SuspenseWrapper>
+              <ETestCourse />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/e-test/take/:testId" 
+          element={
+            <SuspenseWrapper>
+              <TakeTest />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/e-test/attempt/:attemptId" 
+          element={
+            <SuspenseWrapper>
+              <AnswerReview />
             </SuspenseWrapper>
           } 
         />
@@ -277,8 +296,6 @@ const router = createBrowserRouter(
             </SuspenseWrapper>
           } 
         />
-
-        {/* Admin Routes */}
         <Route 
           path="/admin" 
           element={
@@ -327,8 +344,22 @@ const router = createBrowserRouter(
             </SuspenseWrapper>
           } 
         />
-
-        {/* Verification Routes */}
+        <Route 
+          path="/admin/e-test" 
+          element={
+            <SuspenseWrapper>
+              <AdminETest />
+            </SuspenseWrapper>
+          } 
+        />
+        <Route 
+          path="/admin/e-test/course/:courseId" 
+          element={
+            <SuspenseWrapper>
+              <AdminETestCourse />
+            </SuspenseWrapper>
+          } 
+        />
         <Route 
           path="/verify-account/:studentEmail" 
           element={
@@ -347,7 +378,6 @@ const router = createBrowserRouter(
         />
       </Route>
 
-      {/* 404 - Error Page */}
       <Route 
         path="*" 
         element={
@@ -360,9 +390,6 @@ const router = createBrowserRouter(
   )
 );
 
-// ============================================================
-// RENDER APPLICATION
-// ============================================================
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <React.StrictMode>

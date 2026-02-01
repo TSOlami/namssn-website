@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAllAnnouncementsQuery } from "../redux";
@@ -6,55 +7,37 @@ import { AnnouncementListSkeleton } from "./skeletons";
 
 const AnnouncementContainer = () => {
 	const location = useLocation();
-	// Use the useAllAnnouncementsQuery hook to get all announcements
 	const { data: announcements, isLoading: isFetching } =
 		useAllAnnouncementsQuery();
-
-	// Use the useSelector hook to access redux store state
 	const { userInfo } = useSelector((state) => state.auth);
-
-	// Create a variable to store the user's level
 	const userLevel = userInfo?.level;
 
-	// Create an object to group announcements by level
-	const groupedAnnouncements = {
-		"General": [],
-		// [userLevel]: [],
-	};
-
-	if (announcements) {
-    announcements.forEach((announcement) => {
-      const level = announcement.level;
-      if ((userLevel && level === userLevel)) {
-        if (!groupedAnnouncements[level]) {
-          groupedAnnouncements[level] = [];
-        }
-        groupedAnnouncements[level].push(announcement);
-      } else if (level === "Non-Student") {
-        // Add "Non-Student" announcements to the "General" section
-        groupedAnnouncements["General"].push(announcement);
-      }
-    });
-  }
-
-  // Sort announcements within each group by createdAt in descending order
-  for (const level in groupedAnnouncements) {
-    groupedAnnouncements[level].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  }
-  
-  // Get the keys and sort them, with "General" first
-  const sortedKeys = Object.keys(groupedAnnouncements).sort((a, b) => {
-    if (a === "General") {
-      return -1;
-    }
-    if (b === "General") {
-      return 1;
-    }
-    return a.localeCompare(b);
-  });
+	const { groupedAnnouncements, sortedKeys } = useMemo(() => {
+		const grouped = { General: [] };
+		if (announcements) {
+			announcements.forEach((announcement) => {
+				const level = announcement.level;
+				if (userLevel && level === userLevel) {
+					if (!grouped[level]) grouped[level] = [];
+					grouped[level].push(announcement);
+				} else if (level === "Non-Student") {
+					grouped["General"].push(announcement);
+				}
+			});
+		}
+		for (const level in grouped) {
+			grouped[level].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+		}
+		const keys = Object.keys(grouped).sort((a, b) => {
+			if (a === "General") return -1;
+			if (b === "General") return 1;
+			return a.localeCompare(b);
+		});
+		return { groupedAnnouncements: grouped, sortedKeys: keys };
+	}, [announcements, userLevel]);
 
 	return (
-		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 max-w-2xl"}>
+		<div className={location.pathname === '/announcements' ? "border-gray-300  p-4 md:flex flex-col gap-1 mb-6" : "bg-gray-200 border-gray-300  p-4 md:flex flex-col gap-1 hidden mb-4 max-w-xl"}>
 			<h1 className="text-3xl font-bold py-2 border-b-2 ">
 				Announcements
 			</h1>

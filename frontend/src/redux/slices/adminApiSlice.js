@@ -199,6 +199,52 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         },
         providesTags: ['Payment'],
       }),
+
+      // E-Test admin
+      adminGetCourses: builder.query({
+        query: () => ({ url: `${ADMIN_URL}/etest/courses`, method: 'GET' }),
+        providesTags: ['ETest'],
+      }),
+      createCourse: builder.mutation({
+        query: (body) => ({ url: `${ADMIN_URL}/etest/courses`, method: 'POST', body }),
+        invalidatesTags: ['ETest'],
+      }),
+      updateCourse: builder.mutation({
+        query: ({ courseId, ...body }) => ({ url: `${ADMIN_URL}/etest/courses/${courseId}`, method: 'PUT', body }),
+        invalidatesTags: ['ETest'],
+      }),
+      deleteCourse: builder.mutation({
+        query: (courseId) => ({ url: `${ADMIN_URL}/etest/courses/${courseId}`, method: 'DELETE' }),
+        invalidatesTags: ['ETest'],
+      }),
+      adminGetTestsByCourse: builder.query({
+        query: (courseId) => ({ url: `${ADMIN_URL}/etest/courses/${courseId}/tests`, method: 'GET' }),
+        providesTags: (_, __, courseId) => [{ type: 'ETest', id: `admin-course-${courseId}` }],
+      }),
+      createTest: builder.mutation({
+        query: ({ courseId, ...body }) => ({
+          url: `${ADMIN_URL}/etest/courses/${courseId}/tests`,
+          method: 'POST',
+          body,
+        }),
+        invalidatesTags: ['ETest'],
+      }),
+      updateTest: builder.mutation({
+        query: ({ testId, ...body }) => ({ url: `${ADMIN_URL}/etest/tests/${testId}`, method: 'PUT', body }),
+        invalidatesTags: ['ETest'],
+      }),
+      deleteTest: builder.mutation({
+        query: (testId) => ({ url: `${ADMIN_URL}/etest/tests/${testId}`, method: 'DELETE' }),
+        invalidatesTags: ['ETest'],
+      }),
+      bulkAddQuestions: builder.mutation({
+        query: ({ testId, questions }) => ({
+          url: `${ADMIN_URL}/etest/tests/${testId}/questions/bulk`,
+          method: 'POST',
+          body: { questions },
+        }),
+        invalidatesTags: ['ETest'],
+      }),
     }
   }
 });
@@ -221,4 +267,13 @@ export const {
   useDeleteEventMutation,
   useGetAllUsersQuery,
   useMailNoticeMutation,
+  useAdminGetCoursesQuery,
+  useCreateCourseMutation,
+  useUpdateCourseMutation,
+  useDeleteCourseMutation,
+  useAdminGetTestsByCourseQuery,
+  useCreateTestMutation,
+  useUpdateTestMutation,
+  useDeleteTestMutation,
+  useBulkAddQuestionsMutation,
 } = adminApiSlice;

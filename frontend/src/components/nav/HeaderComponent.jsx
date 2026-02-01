@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileImg } from "../../assets";
 import { useDispatch } from "react-redux";
 import { setNavOpen } from "../../redux/slices/navSlice";
 import { IoChevronBackSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 
 const HeaderComponent = ({ title, url, back }) => {
 	const dispatch = useDispatch();
+	const location = useLocation();
+	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const handleSearchChange = (e) => {
 		e.preventDefault();
@@ -25,8 +27,6 @@ const HeaderComponent = ({ title, url, back }) => {
 		}
 	};
 
-	// navigate back to previous page
-	const navigate = useNavigate();
 	const handleBack = () => {
 		navigate(-1);
 	};
