@@ -12,37 +12,32 @@ import adminRoutes from '../routes/adminRoutes.js';
 import { notFound, errorHandler } from '../middleware/errormiddleware.js';
 
 function createServer() {
-  // Create an Express application
   const app = express();
 
-  // Security middleware - Helmet helps secure Express apps by setting various HTTP headers
   app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginEmbedderPolicy: false,
   }));
 
-  // Rate limiting - Protect against brute force attacks
   const generalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 100,
     message: { message: 'Too many requests from this IP, please try again after 15 minutes' },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    standardHeaders: true,
+    legacyHeaders: false,
   });
 
-  // Stricter rate limiting for authentication routes
   const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Limit each IP to 10 auth requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 10,
     message: { message: 'Too many authentication attempts, please try again after 15 minutes' },
     standardHeaders: true,
     legacyHeaders: false,
   });
 
-  // OTP rate limiting - Prevent OTP abuse
   const otpLimiter = rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    max: 3, // Limit each IP to 3 OTP requests per windowMs
+    windowMs: 5 * 60 * 1000,
+    max: 3,
     message: { message: 'Too many OTP requests, please try again after 5 minutes' },
     standardHeaders: true,
     legacyHeaders: false,
@@ -72,7 +67,6 @@ function createServer() {
   
   const apiVersion = process.env.API_VERSION || 'v1';
 
-  // Apply stricter rate limiting to auth and OTP routes
   app.use(`/api/${apiVersion}/users/auth`, authLimiter);
   app.use(`/api/${apiVersion}/users/generate-otp`, otpLimiter);
   app.use(`/api/${apiVersion}/users/resend-otp`, otpLimiter);
@@ -84,10 +78,7 @@ function createServer() {
   app.use(notFound);
   app.use(errorHandler);
 
-  // Health check endpoint
   app.get('/health', (req, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
-
-  // Define a route for the root URL '/'
   app.get('/', (req, res) => res.send('Server is ready'));
 
   return app;

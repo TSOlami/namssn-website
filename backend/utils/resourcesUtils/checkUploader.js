@@ -1,6 +1,5 @@
 import getResource from "./getResource.js"
 
-// check the uploader of a resource
 const checkUploader = async (fileUrl, senderId) => {
     try {
         console.log(fileUrl, senderId)

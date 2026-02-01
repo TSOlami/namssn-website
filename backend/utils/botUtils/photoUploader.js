@@ -5,7 +5,6 @@ dotenv.config();
 const bot_id = process.env.BOT_ID;
 const photoUploader = (msg) => {
     const chatId = msg?.chat?.id;
-    // console.log(msg?.photo)
     const photos = msg?.photo;
     const photo = photos[photos.length - 1]  
     const fileName = "Image.jpg"; 

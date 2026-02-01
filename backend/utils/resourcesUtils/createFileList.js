@@ -1,4 +1,3 @@
-// creates a formatted list of files and their details
 const createFileList = async (response) => {
     const fileList = [];
     for (const resource of response) {
@@ -16,8 +15,7 @@ const createFileList = async (response) => {
               date: formattedDate,
               semester: resource.level,
               isLarge: resource.isLarge,
-              course: resource.course,
-              botToken: resource.botToken
+              course: resource.course
             }
           };
           fileList.push(fileDetails);

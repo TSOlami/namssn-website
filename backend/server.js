@@ -6,13 +6,11 @@ import photoUploader from './utils/botUtils/photoUploader.js';
 dotenv.config();
 
 import connectDb from './config/db.js';
-// Note: Database connection moved to app.listen to ensure single connection
 import path from 'path'
 import createServer from './utils/server.js';
 
 const app = createServer();
 
-// Telegram Bot Configuration - Only initialize if token is provided and not in test mode
 let bot = null;
 const ENABLE_TELEGRAM_BOT = process.env.ENABLE_TELEGRAM_BOT !== 'false';
 let bot_token = process.env.BOT_TOKEN;
@@ -36,7 +34,6 @@ if (ENABLE_TELEGRAM_BOT && bot_token && bot_token !== 'your_bot_token_here') {
 
     bot.on('polling_error', (error) => {
       console.error('Telegram Bot polling error:', error.code, error.message);
-      // Don't crash the server on bot errors
     });
 
     console.log('Telegram Bot initialized successfully');
@@ -79,15 +76,14 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running');
   });
 }
-//-------------deployment--------------
 
 app.listen(port, async () => {
   try {
-    await connectDb(); // Wait for the database connection to be established
+    await connectDb();
     console.log('Database connection successful');
   } catch (error) {
     console.error('Database connection error:', error);
-    process.exit(1); // Exit the application if the database connection fails
+    process.exit(1);
   }
 
   console.log(`Server is started on port ${port}`);

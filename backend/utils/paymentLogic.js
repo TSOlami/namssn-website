@@ -1,4 +1,3 @@
-// Import necessary modules
 import axios from 'axios';
 import Payment from '../models/paymentModel.js';
 import Category from '../models/categoryModel.js';
@@ -20,11 +19,11 @@ const initiatePayment = async (req, res) => {
         ,
         {
           email,
-          amount: amount * 100, // Convert amount to kobo
+          amount: amount * 100,
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`, // Replace with your actual secret key
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
           },
         }
       );
@@ -60,7 +59,6 @@ const verifyPayments = async (req, res) => {
   const { transactionReference } = req.body; // Assuming the reference number is sent in the request body
 
   try {
-    // Make a request to Paystack's verify endpoint
     const verifyResponse = await axios.get(
       `${process.env.PAYSTACK_VERIFY_URL}/${transactionReference}`,
       {
@@ -83,11 +81,9 @@ const verifyPayments = async (req, res) => {
       amount: paymentAmount,
       method: paymentMethod,
     };
-    // console.log(verificationResult)
 
     res.status(200).json(verificationResult);
   } catch (error) {
-    // console.error('Error verifying payment:', error);
     res.status(500).json({
       reference: transactionReference,
       status: 'error',

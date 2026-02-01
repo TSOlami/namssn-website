@@ -686,7 +686,6 @@ const getSpecifiedLevelResources = asyncHandler(async (req, res) => {
   try {
     const allResources = await getSpecifiedResources(level)
     if (allResources) {
-      // console.log(allResources)
       res.json(allResources)
     }
   } catch (err) {

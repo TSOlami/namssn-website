@@ -1,7 +1,6 @@
 import Resource from '../../models/resourceModel.js';
 import User from '../../models/userModel.js';
 
-// uploads a resource to the database
 const uploadResource = async (filename, description, userId, uploaderName, fileUrl, level, isLarge, course, bot_token) => {
     try {
         const newResource = new Resource({
@@ -17,8 +16,8 @@ const uploadResource = async (filename, description, userId, uploaderName, fileU
         });
         const savedResource = await newResource.save();        
         const updatedUser = await User.findOneAndUpdate(
-            { _id: userId.toString() }, // Find the user by their unique identifier
-            { $push: { resources: savedResource._id } }, // The updated information for the user
+            { _id: userId.toString() },
+            { $push: { resources: savedResource._id } },
             { new: true }
         );
         const date = savedResource.updatedAt;

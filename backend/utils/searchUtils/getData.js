@@ -17,14 +17,12 @@ const getData = async (value, filter) => {
             const formattedResources = await createFileList(resources);
             data['resources'] = formattedResources
         }
-        // console.log(data)
         return data
     } else {
         switch (filter) {
             case 'users':
                 const users = await searchUsers(value);
                 data['users'] = users;
-                // console.log(data)
                 break;
             case 'resources':
                 const resources = await searchResources(value);
