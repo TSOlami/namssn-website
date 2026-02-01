@@ -26,31 +26,26 @@ const AdminDashboard = () => {
 	const { data: totalEvents } = useGetTotalEventsQuery();
 	const { data: totalAnnouncements } = useGetTotalAnnouncementsQuery();
 
-	const { data: users } = useGetAllUsersQuery();
+	const { data: usersResponse } = useGetAllUsersQuery({ page: 1, limit: 20 });
+	const users = usersResponse?.data ?? [];
 
 	const [isSendMailModalOpen, setIsSendMailModalOpen] = useState(false);
 
-	const sortedUsers = users && [...users].sort((a, b) => b.points - a.points);
+	const sortedUsers = users.length ? [...users].sort((a, b) => (b.points ?? 0) - (a.points ?? 0)) : [];
 
 	const dispatch = useDispatch();
-	const { data: allpayments } = useGetAllPaymentsQuery({
-		select: {
-			category: 1,
-			user: 1,
-			transactionReference: 1,
-		},
-		populate: ["category", "user"],
-	});
+	const { data: paymentsResponse } = useGetAllPaymentsQuery({ page: 1, limit: 10 });
+	const allpayments = paymentsResponse?.data ?? [];
 
 	useEffect(() => {
-		if (allpayments) {
+		if (allpayments.length) {
 			dispatch(setPayments(allpayments));
 		}
 	}, [dispatch, allpayments]);
 
 	const isLoadingStats = !totalPayments && !totalUsers && !totalBlogs && !totalEvents && !totalAnnouncements;
-	const isLoadingUsers = !users;
-	const isLoadingPayments = !allpayments;
+	const isLoadingUsers = !usersResponse;
+	const isLoadingPayments = !paymentsResponse;
 
 	return (
 		<motion.div
@@ -160,7 +155,7 @@ const AdminDashboard = () => {
 
 					{/* respected card */}
 					<div className="bg-green-100 w-fit p-4 rounded-xl">
-						<h2>Top Respected Accounts</h2>
+						<h2>Top Respected Users</h2>
 
 						{/* Table */}
 						<div>

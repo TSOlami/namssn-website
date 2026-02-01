@@ -10,6 +10,7 @@ import {
   HeaderComponent,
   Sidebar,
   ConfirmDialog,
+  Select,
 } from "../components";
 import {
   useCreateAnnouncementMutation,
@@ -142,21 +143,19 @@ const AdminAnnouncements = () => {
           </div>
 
           <div className="flex flex-col m-auto w-full items-center md:hidden">
-            <select
-              name=""
-              id=""
-              className="bg-black text-white w-[50%] p-2 rounded-lg"
+            <Select
+              value={selectedLevel}
               onChange={handleSelectChange}
-            >
-              <option value="Non-Student">
-                General Announcements
-              </option>
-              <option value="100">100L Announcements</option>
-              <option value="200">200L Announcements</option>
-              <option value="300">300L Announcements</option>
-              <option value="400">400L Announcements</option>
-              <option value="500">500L Announcements</option>
-            </select>
+              options={[
+                { value: "Non-Student", label: "General Announcements" },
+                { value: "100", label: "100L Announcements" },
+                { value: "200", label: "200L Announcements" },
+                { value: "300", label: "300L Announcements" },
+                { value: "400", label: "400L Announcements" },
+                { value: "500", label: "500L Announcements" },
+              ]}
+              className="w-[50%]"
+            />
           </div>
 
           <div className="flex-1 border-l-2 border-l-gray-300">

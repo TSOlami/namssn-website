@@ -30,6 +30,7 @@ const Profile = () => {
 	const isVerified = userInfo?.isVerified;
 	const points = userInfo?.points;
 	const profileImage = userInfo?.profilePicture;
+	const coverPhoto = userInfo?.coverPhoto;
 
 	// Fetch number of posts from redux store
 	const noOfPosts = userInfo?.posts?.length;
@@ -140,8 +141,14 @@ const Profile = () => {
             </span>
           </div>
         )}
-				{/* profile image and cover image */}
-				<div className="w-full h-32 bg-primary z-[-1]"></div>
+				{/* profile image and cover image — cover photo replaces blue bar when set */}
+				{coverPhoto && coverPhoto.trim() ? (
+					<div className="w-full h-32 z-[-1] overflow-hidden bg-gray-100">
+						<img src={coverPhoto} alt="Cover" className="w-full h-full object-cover" />
+					</div>
+				) : (
+					<div className="w-full h-32 bg-primary z-[-1]"></div>
+				)}
 				<div className="flex flex-row justify-between items-center relative top-[-40px] my-[-30px] p-3 pl-6 z-[0]">
 					<img
 						src={profileImage || ProfileImg}
@@ -205,7 +212,7 @@ const Profile = () => {
 
 			{/* modal */}
 			{isModalOpen && (
-				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center">
+				<div className="fixed inset-0 z-[10000] bg-black/50 flex justify-center items-center p-4 overflow-y-auto">
 					<EditProfileForm handleModal={handleModal} />
 				</div>
 			)}

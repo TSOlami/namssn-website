@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { Sidebar, AddCategoryForm, DeleteCategoryForm, HeaderComponent, PaymentDetails, RecentPayments, PaymentVerificationForm, ConfirmDialog } from "../components";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaMagnifyingGlass, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useAllPaymentsQuery, useVerifyPaymentsMutation, useGetAllPaymentsQuery, setPayments } from '../redux';
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { PaymentListSkeleton } from "../components/skeletons";
 
+const PAGE_SIZE = 10;
+const DEBOUNCE_MS = 300;
+
 const AdminPayment = () => {
-   
   const { data: payments, isLoading, isError } = useAllPaymentsQuery();
   const [verificationResult, setVerificationResult] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,18 +29,25 @@ const AdminPayment = () => {
 		handleVerifyModal();
 	};
 
+	const [page, setPage] = useState(1);
+	const [limit] = useState(PAGE_SIZE);
+	const [searchInput, setSearchInput] = useState("");
+	const [debouncedSearch, setDebouncedSearch] = useState("");
+
+	useEffect(() => {
+		const t = setTimeout(() => setDebouncedSearch(searchInput.trim()), DEBOUNCE_MS);
+		return () => clearTimeout(t);
+	}, [searchInput]);
+
   const dispatch = useDispatch();
-  const { data: allpayments, Loading } = useGetAllPaymentsQuery(
-    {
-      select: {
-        category: 1, // Only select the category field for population
-        user: 1,
-        transactionReference: 1,
-        // Add other fields you need
-      },
-      populate: ["category", "user"],
-    }
-  );
+  const { data: paymentsResponse, isLoading: Loading } = useGetAllPaymentsQuery({
+    page,
+    limit,
+    search: debouncedSearch,
+  });
+  const allpayments = paymentsResponse?.data ?? [];
+  const total = paymentsResponse?.total ?? 0;
+  const totalPages = paymentsResponse?.totalPages ?? 1;
 
   const [verifyUserPayments] = useVerifyPaymentsMutation();
   const handlePaymentVerification = async (transactionReference) => {
@@ -172,6 +181,21 @@ const AdminPayment = () => {
 				</div>
 
             <HeaderComponent title="Recent Payment Details" url={"placeholder"}/>
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+							<div className="relative flex-1 min-w-[180px] max-w-sm">
+								<FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+								<input
+									type="text"
+									placeholder="Search by reference, email, matric, category..."
+									value={searchInput}
+									onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
+									className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+								/>
+							</div>
+							<div className="text-sm text-gray-600">
+								{total} payment{total !== 1 ? "s" : ""} total
+							</div>
+						</div>
             <div>
 					{Loading ? (
 						<PaymentListSkeleton count={5} />
@@ -193,6 +217,31 @@ const AdminPayment = () => {
 						))
 					)}
 				</div>
+						{!Loading && total > 0 && (
+							<div className="flex flex-wrap items-center justify-between gap-2 mt-4">
+								<p className="text-sm text-gray-600">
+									Page {page} of {totalPages}
+								</p>
+								<div className="flex items-center gap-2">
+									<button
+										type="button"
+										onClick={() => setPage((p) => Math.max(1, p - 1))}
+										disabled={page <= 1}
+										className="p-2 rounded-lg border border-gray-300 bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+									>
+										<FaChevronLeft className="text-gray-600" />
+									</button>
+									<button
+										type="button"
+										onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+										disabled={page >= totalPages}
+										className="p-2 rounded-lg border border-gray-300 bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+									>
+										<FaChevronRight className="text-gray-600" />
+									</button>
+								</div>
+							</div>
+						)}
 					</div>
 				</div>
         {/* modal */}

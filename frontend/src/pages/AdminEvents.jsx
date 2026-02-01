@@ -5,6 +5,7 @@ import {
 	EventForm,
 	HeaderComponent,
 	Sidebar,
+	Select,
 } from "../components";
 import { EventListSkeleton } from "../components/skeletons";
 import { useDispatch } from "react-redux";
@@ -73,22 +74,16 @@ const AdminEvents = () => {
 					</div>
 
 					<div className="flex flex-col m-auto w-full items-center md:hidden">
-						<select
-							name=""
-							id=""
-							className="bg-black text-white w-[50%] p-2 rounded-lg"
+						<Select
+							value={selectedEvent?._id ?? ""}
 							onChange={handleSelectChange}
-						>
-							<option value="" disabled>
-              Select an event or create a new one
-              </option>
-							<option value="createNewEvent">Create New Event</option>
-							{events?.map((event, index) => (
-								<option value={event._id} key={index}>
-									{event.title}
-								</option>
-							))}
-						</select>
+							placeholder="Select an event or create a new one"
+							options={[
+								{ value: "createNewEvent", label: "Create New Event" },
+								...(events || []).map((e) => ({ value: e._id, label: e.title })),
+							]}
+							className="w-[50%]"
+						/>
 					</div>
 
 					<div className="flex-1 w-full border-gray-300 border-l-2 h-full">
