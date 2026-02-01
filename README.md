@@ -22,8 +22,8 @@ Stay connected with us, and subscribe for more updates. Thank you for visiting t
 
 </h3>
 
-<div padding: 20px;">
-  <h1 color: #2f4f4f;">Explore the Tech Stack</h1>
+<div style="padding: 20px;">
+  <h1 style="color: #2f4f4f;">Explore the Tech Stack</h1>
 
   <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
     <div>
@@ -94,7 +94,9 @@ Discover the key features that empower our platform:
 
 - **Announcement Management:** Stay informed with departmental announcements categorized by date and department. Receive notifications for new updates.
 
-- **Learning Resources:** Access a repository of departmental course materials, resources, and documents. Categorize and manage resources efficiently.
+- **Learning Resources:** Access a repository of departmental course materials, resources, and documents by level. Categorize and manage resources efficiently.
+
+- **E-Test (Past Questions & Practice):** Take timed past-question tests by course, get instant scores, and review answers with explanations—all tailored to FUTMINNA courses.
 
 - **User-Admin Communication:** Foster communication between students and departmental admins through messaging, appointment scheduling, and discussion forums.
 
@@ -205,51 +207,6 @@ Discover the key features that empower our platform:
 
 </details>
 
-<details closed><summary>Routes</summary>
-
-| File                                                                                                | Summary                   |
-| ---                                                                                                 | ---                       |
-| [adminRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/adminRoutes.js) | Defines routes and handlers for administrative functions. |
-| [userRoutes.js](https://github.com/TSOlami/namssn-website/blob/main/backend/routes/userRoutes.js)   | Contains routes and controllers for user-related operations. |
-
-</details>
-
-<details closed><summary>Config</summary>
-
-| File                                                                              | Summary                   |
-| ---                                                                               | ---                       |
-| [db.js](https://github.com/TSOlami/namssn-website/blob/main/backend/config/db.js) | Handles database configuration and connections. |
-
-</details>
-
-<details closed><summary>Controllers</summary>
-
-| File                                                                                                             | Summary                   |
-| ---                                                                                                              | ---                       |
-| [userController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/userController.js)   | Contains controller functions for user-related actions. |
-| [adminController.js](https://github.com/TSOlami/namssn-website/blob/main/backend/controllers/adminController.js) | Includes controller methods for administrative operations. |
-
-</details>
-
-<details closed><summary>Utils</summary>
-
-| File                                                                                                   | Summary                   |
-| ---                                                                                                    | ---                       |
-| [generateToken.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/generateToken.js) | Provides utility functions for generating authentication tokens. |
-| [paymentback.js](https://github.com/TSOlami/namssn-website/blob/main/backend/utils/paymentback.js)     | Utility functions related to payment processing. |
-
-</details>
-
-<details closed><summary>Middleware</summary>
-
-| File                                                                                                            | Summary                   |
-| ---                                                                                                             | ---                       |
-| [authMiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/authMiddleware.js)   | Middleware for handling user authentication and authorization. |
-| [errormiddleware.js](https://github.com/TSOlami/namssn-website/blob/main/backend/middleware/errormiddleware.js) | Middleware for handling and formatting errors in the application. |
-
-</details>
-
-
 <details closed><summary>Models</summary>
 
 | File                                                                                                    | Summary                   |
@@ -283,18 +240,18 @@ Discover the key features that empower our platform:
 | [App.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/App.jsx)     | Main component that represents the application. |
 | [index.css](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/index.css) | CSS file for the frontend. |
 | [main.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/main.jsx)   | Main entry point for the frontend. |
-| [store.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/store.js)   | Redux store configuration for state management. |
+| [store.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/redux/store/store.js)   | Redux store configuration for state management. |
 | [data.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/data.js)     | Data source or API endpoints for the frontend. |
 
 </details>
 
 <details closed><summary>Slices</summary>
 
-| File                                                                                                         | Summary                   |
-| ---                                                                                                          | ---                       |
-| [usersApiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/usersApiSlice.js) | Redux slice for managing user-related data. |
-| [authSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/authSlice.js)         | Redux slice for handling authentication. |
-| [apiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/slices/apiSlice.js)           | Redux slice for managing API-related data. |
+| File                                                                                                                         | Summary                   |
+| ---                                                                                                                          | ---                       |
+| [usersApiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/redux/slices/usersApiSlice.js) | Redux slice for managing user-related data. |
+| [authSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/redux/slices/authSlice.js)         | Redux slice for handling authentication. |
+| [apiSlice.js](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/redux/slices/apiSlice.js)           | Redux slice for managing API-related data. |
 
 </details>
 
@@ -330,7 +287,6 @@ Discover the key features that empower our platform:
 | [AnnouncementContainer.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AnnouncementContainer.jsx) | Component for managing announcements. |
 | [Announcement.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Announcement.jsx)                   | Component for individual announcements. |
 | [AdminCard.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/AdminCard.jsx)                         | Component for administrative cards. |
-| [Report.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Report.jsx)                               | Component for reports. |
 | [Button.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Button.jsx)                               | Component for buttons. |
 | [Post.jsx](https://github.com/TSOlami/namssn-website/blob/main/frontend/src/components/Post.jsx)                                   | Component for displaying posts. |
 
