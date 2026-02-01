@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Image4, Image6 } from "../assets";
 import { motion } from "framer-motion";
 
@@ -23,14 +24,12 @@ const Features = () => {
 					>
 						<div className="flex flex-col justify-center px-8 pt-5 pb-4">
 							<h3 className="text-3xl pb-2 leading-tight font-bold font-roboto">
-								Access to Past Questions and Answers
+								E-Test: Past Questions and Practice
 							</h3>
 							<p className="text-xl font-roboto">
-								Ace your exams with free access to a
-								comprehensive database of past questions and
-								answers, specifically tailored to FUTMINNA
-								courses and exams.
+								Ace your exams with our E-Test practice feature: take timed past-question tests by course, get instant scores, and review answers with explanations – all tailored to FUTMINNA courses.
 							</p>
+							<Link to="/e-test" className="button-1 mt-3 inline-block w-fit">Try E-Test</Link>
 						</div>
 						<div className="md:w-full flex justify-center md:justify-end m-auto p-3">
 							<img src={Image4} alt="" />

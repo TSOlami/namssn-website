@@ -1,10 +1,22 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const raw = process.env.VITE_REACT_APP_API_URL;
-const API_TARGET = typeof raw === "string" && raw ? (raw.endsWith("/") ? raw.slice(0, -1) : raw) : "https://api-namssn-futminna.onrender.com";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
+function getApiTarget(mode) {
+	const rootDir = path.resolve(__dirname, "..");
+	const env = loadEnv(mode, rootDir, "");
+	const raw = env.VITE_REACT_APP_API_URL || process.env.VITE_REACT_APP_API_URL;
+	const base = typeof raw === "string" && raw ? (raw.endsWith("/") ? raw.slice(0, -1) : raw) : "";
+	if (base) return base;
+	return mode === "development" ? "http://localhost:5000" : "https://api-namssn-futminna.onrender.com";
+}
+
+export default defineConfig(({ mode }) => {
+	const API_TARGET = getApiTarget(mode);
+	return {
 	plugins: [react()],
 	server: {
 		port: 3000,
@@ -72,4 +84,5 @@ export default defineConfig({
 		environment: "happy-dom",
 		setupFiles: "tests/setup.js",
 	},
+	};
 });

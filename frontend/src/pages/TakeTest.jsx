@@ -32,7 +32,11 @@ const TakeTest = () => {
   }, [test?.timeLimitMinutes, startedAt]);
 
   const handleSelect = (questionId, selectedIndex) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: selectedIndex }));
+    const key = questionId != null ? String(questionId) : '';
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ETEST-DEBUG] handleSelect', { questionId, key, selectedIndex, questionIdType: typeof questionId });
+    }
+    setAnswers((prev) => ({ ...prev, [key]: selectedIndex }));
   };
 
   const handleSubmit = async () => {
@@ -41,19 +45,40 @@ const TakeTest = () => {
       return;
     }
     const questions = test?.questions || [];
-    const attemptAnswers = questions.map((q) => ({
-      questionId: q._id,
-      selectedIndex: answers[q._id] ?? -1,
-    }));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ETEST-SUBMIT] === FRONTEND SUBMIT ===');
+      console.log('[ETEST-SUBMIT] testId:', testId);
+      console.log('[ETEST-SUBMIT] questions count:', questions.length);
+      console.log('[ETEST-SUBMIT] first question keys:', questions[0] ? Object.keys(questions[0]) : 'none');
+      console.log('[ETEST-SUBMIT] first question _id:', questions[0]?._id, 'type:', typeof questions[0]?._id);
+      console.log('[ETEST-SUBMIT] answers state (keys):', Object.keys(answers));
+      console.log('[ETEST-SUBMIT] answers state (full):', JSON.stringify(answers, null, 2));
+    }
+    const attemptAnswers = questions.map((q) => {
+      const key = q._id;
+      const raw = answers[key];
+      const selectedIndex = typeof raw === 'number' && raw >= 0 ? raw : -1;
+      if (process.env.NODE_ENV === 'development' && questions.indexOf(q) < 2) {
+        console.log('[ETEST-SUBMIT] map q._id:', key, 'answers[q._id]:', raw, 'selectedIndex:', selectedIndex);
+      }
+      return { questionId: q._id, selectedIndex };
+    });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ETEST-SUBMIT] attemptAnswers (payload):', JSON.stringify(attemptAnswers, null, 2));
+      console.log('[ETEST-SUBMIT] timeSpentSeconds:', timeSpentSeconds);
+    }
     try {
       const result = await submitAttempt({
         testId,
         answers: attemptAnswers,
         timeSpentSeconds,
       }).unwrap();
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[ETEST-SUBMIT] result:', result?.score, '/', result?.totalQuestions);
+      }
       navigate(`/e-test/attempt/${result._id}`, { replace: true });
     } catch (err) {
-      console.error(err);
+      console.error('[ETEST-SUBMIT] submit error:', err);
       alert(err?.data?.message || "Failed to submit. Please try again.");
     }
   };
@@ -150,7 +175,7 @@ const TakeTest = () => {
                   <label
                     key={optIndex}
                     className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                      answers[q._id] === optIndex
+                      answers[q._id != null ? String(q._id) : ''] === optIndex
                         ? "border-primary bg-primary/5"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
@@ -158,7 +183,7 @@ const TakeTest = () => {
                     <input
                       type="radio"
                       name={`q-${q._id}`}
-                      checked={answers[q._id] === optIndex}
+                      checked={answers[q._id != null ? String(q._id) : ''] === optIndex}
                       onChange={() => handleSelect(q._id, optIndex)}
                       className="w-4 h-4 text-primary"
                     />

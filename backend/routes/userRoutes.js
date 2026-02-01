@@ -366,26 +366,15 @@ router
   .post(postUserResources)
   .get(getUserResources);
 
-router
-  .get('/:level/resources', getSpecifiedLevelResources)
+router.get('/search', getSearchResults);
 
-router
-  .get('/search', getSearchResults);
-
-/**
- * E-Test (Past Questions) routes.
- * GET /api/v1/users/etest/courses - list courses (optional ?level=100)
- * GET /api/v1/users/etest/courses/:courseId/tests - list published tests for course
- * GET /api/v1/users/etest/tests/:testId - get test with questions (for taking)
- * POST /api/v1/users/etest/tests/:testId/attempt - submit attempt (protect)
- * GET /api/v1/users/etest/attempts - current user's attempts (protect)
- * GET /api/v1/users/etest/attempts/:attemptId - get attempt for review (protect)
- */
 router.get('/etest/courses', getCourses);
 router.get('/etest/courses/:courseId/tests', getTestsByCourse);
 router.get('/etest/tests/:testId', getTestById);
 router.post('/etest/tests/:testId/attempt', protect, submitAttempt);
 router.get('/etest/attempts', protect, getUserAttempts);
 router.get('/etest/attempts/:attemptId', protect, getAttemptById);
+
+router.get('/:level/resources', getSpecifiedLevelResources);
 
 export default router;
