@@ -43,51 +43,61 @@ const HeaderComponent = ({ title, url, back }) => {
 	};
 
 	return (
-		<div className="flex flex-row border-b-2 border-blue-700 justify-between w-[100%] items-center gap-2 p-5 md:py-2 drop-shadow-md pr-14 md:pr-5">
-			{back && (
-				<div
-					onClick={handleBack}
-					className="text-2xl p-2 pr-5 cursor-pointer"
-				>
-					<IoChevronBackSharp />
-				</div>
-			)}
-			<img
-				src={Avatar}
-				alt="avatar"
-				className={location.pathname === '/home' ? "lg:hidden profile-image-small" : "lg:hidden profile-image-small mr-auto"}
-				onClick={handleNavOpen}
-			/>
-			{/* <h1 className="text-xl text-center w-full md:text-3xl">{title}</h1> */}
-			<div className="">
-				<span className="px-4  font-bold font-crimson sm:text-xl text-blue-900 text-xl">
+		<div className="flex flex-row border-b-2 border-blue-700 justify-between items-center gap-2 sm:gap-3 p-3 sm:p-4 md:py-2 drop-shadow-md w-full min-w-0">
+			{/* Left: back (optional) + avatar (mobile) */}
+			<div className="flex items-center gap-1 flex-shrink-0">
+				{back && (
+					<div
+						onClick={handleBack}
+						className="text-xl sm:text-2xl p-1.5 sm:p-2 cursor-pointer"
+						aria-label="Go back"
+					>
+						<IoChevronBackSharp />
+					</div>
+				)}
+				<img
+					src={Avatar}
+					alt="avatar"
+					className={location.pathname === "/home" ? "lg:hidden profile-image-small w-8 h-8 sm:w-9 sm:h-9" : "lg:hidden profile-image-small w-8 h-8 sm:w-9 sm:h-9 mr-1"}
+					onClick={handleNavOpen}
+					aria-label="Open menu"
+				/>
+			</div>
+			{/* Center: title - flex-1 min-w-0 so it can shrink */}
+			<div className="flex-1 min-w-0 flex items-center justify-center">
+				<span className="text-sm sm:text-base md:text-lg lg:text-xl font-bold font-crimson text-blue-900 truncate px-1">
 					{title.toUpperCase()}
 				</span>
 			</div>
-			{url && (
-				<div className="items-center lg:flex">
+			{/* Right: search + spacer for hamburger on mobile */}
+			<div className="flex items-center gap-3 flex-shrink-0">
+				{url && (
 					<form
 						action=""
 						onSubmit={handleSubmit}
-						className="flex  relative"
+						className="flex relative w-[100px] sm:w-[120px] md:w-[140px] lg:w-[160px] min-w-0 h-9 sm:h-10"
 					>
 						<input
 							type="text"
 							placeholder="Search"
 							name="search"
 							value={search}
-							className="rounded-xl rounded-r-none border-gray-300 border-2 p-1 max-w-[7em]  pl-3 pr-10"
+							className="w-full h-full rounded-xl rounded-r-none border-gray-300 border-2 py-0 px-2 sm:px-3 pr-8 text-xs sm:text-sm min-w-0"
 							onChange={handleSearchChange}
 						/>
-						<a
-							className="absolute right-0 flex self-center justify-center text-white bg-black p-2 rounded-none h-full hover:text-lg"
+						<button
+							type="button"
+							className="absolute right-0 top-0 bottom-0 w-9 sm:w-10 flex items-center justify-center text-white bg-black rounded-r-lg hover:opacity-90"
 							onClick={handleSubmit}
+							aria-label="Search"
 						>
-							<FaMagnifyingGlass />
-						</a>
+							<FaMagnifyingGlass className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+						</button>
 					</form>
-				</div>
-			)}
+				)}
+				{/* Spacer so hamburger (fixed right) doesn't overlap search on mobile */}
+				<div className="w-10 h-10 flex-shrink-0 lg:hidden" aria-hidden="true" />
+			</div>
 		</div>
 	);
 };

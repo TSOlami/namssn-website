@@ -73,8 +73,9 @@ const Sidebar = () => {
 
 	isNavOpen? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
 
-	// Calculate the number of unseen notifications
-  const unseenNotifications = notifications?.filter(notification => !notification?.seen)?.length;
+	// Use unread count from feed when available, else derive from full notifications list
+	const unreadFromList = notifications?.filter(notification => !notification?.seen)?.length ?? 0;
+  const unseenNotifications = useSelector((state) => state.auth.unreadNotificationsCount) ?? unreadFromList;
 
 	// Fetch user info from redux store
 	const name = userInfo?.name;
@@ -218,7 +219,7 @@ const Sidebar = () => {
 								className="transition duration-500 flex flex-row gap-3 items-center hover:bg-primary hover:text-white p-2 rounded-lg"
 							>
 								<FaMoneyBill />
-								<span>Payment</span>
+								<span>Payments</span>
 							</Link>
 						</li>
 						<li>
