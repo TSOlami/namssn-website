@@ -13,37 +13,29 @@ import { ProfileImg, Wrapper } from "../assets";
 import { motion } from "framer-motion";
 
 const PaymentHistory = () => {
-	// Fetch user info from redux store
 	const { userInfo } = useSelector((state) => state.auth);
 	const name = userInfo?.name;
 	const mail = userInfo?.email;
 	const matric = userInfo?.matricNumber;
 	const profileImage = userInfo?.profilePicture;
 	const [verificationResult, setVerificationResult] = useState(null);
-		
-
-	// Use your verification mutation
 	const [verifyUserPayments] = useVerifyUserPaymentsMutation();
-	//payment verication response handler
+	const dispatch = useDispatch();
 
 	const handlePaymentVerification = async (transactionReference) => {
 		try {
 			const response = await verifyUserPayments({ transactionReference });
-
 			if (response.data) {
 				if (response.data.status === "success") {
-					// Payment verification was successful
 					const { amount, method } = response.data;
 					setVerificationResult({ success: true, amount, method });
 				} else if (response.data.status === "failed") {
-					// Payment verification failed
 					setVerificationResult({
 						success: false,
 						error: "Payment not yet made Transaction verification failed.",
 					});
 				}
 			} else {
-				// Handle verification failure
 				setVerificationResult({
 					success: false,
 					error: "Failed to verify payment.",
@@ -58,38 +50,16 @@ const PaymentHistory = () => {
 		}
 	};
 
-	// Fetch number of payments from redux store
-	const dispatch = useDispatch();
-
-	// Fetch user payments from redux store
 	const { data: userPayments, isLoading } = useUserPaymentsQuery(
-		{
-			_id: userInfo?._id,
-		},
-		{
-			select: {
-				category: 1, // Only select the category field for population
-				transactionReference: 1,
-				// Add other fields you need
-			},
-			populate: "category", // Populate the category field
-		}
+		{ _id: userInfo?._id },
+		{ select: { category: 1, transactionReference: 1 }, populate: "category" }
 	);
 
-	// Use useEffect to set payments after component mounts
 	useEffect(() => {
 		if (userPayments) {
 			dispatch(setPayments(userPayments));
 		}
 	}, [dispatch, userPayments]);
-
-	// Manage modal state
-	// Display loading indicator while data is being fetched
-	if (isLoading) {
-		return <Loader />;
-	}
-
-	// Function to handle payment verification
 
 	return (
 		<motion.div
@@ -99,6 +69,12 @@ const PaymentHistory = () => {
 			className="flex flex-row"
 		>
 			<Sidebar />
+			{(isLoading ? (
+				<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
+					<ProfileSkeleton />
+					<PaymentListSkeleton count={5} />
+				</div>
+			) : (
 			<div className="w-full min-w-[370px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] wide:w-[850px]">
 				<div className="p-3 pl-6 flex flex-col">
 					<span className="font-semibold text-black text-lg">
@@ -119,7 +95,6 @@ const PaymentHistory = () => {
 					<PaymentVerificationForm
 						onVerify={handlePaymentVerification}
 					/>
-					{/* Display the verification result, if available */}
 					{verificationResult !== null ? (
 						<div className="verification-result">
 							{verificationResult.success ? (
@@ -160,16 +135,16 @@ const PaymentHistory = () => {
 								matricNo={matric}
 								createdAt={payment.createdAt}
 								image={Wrapper}
-								amount={payment.category.amount} // Access category.amount
-								reference={payment.transactionReference} // Access transactionReference
-								u_id={userInfo._id}
-								category={payment.category.name} // Access category.name
+								amount={payment.category?.amount}
+								reference={payment.transactionReference}
+								u_id={userInfo?._id}
+								category={payment.category?.name}
 							/>
 						))
 					)}
 				</div>
 			</div>
-			)}
+			))}
 			<AnnouncementContainer />
 		</motion.div>
 	);
