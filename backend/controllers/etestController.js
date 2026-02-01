@@ -61,7 +61,6 @@ const getTestById = asyncHandler(async (req, res) => {
  * Body: { answers: [{ questionId, selectedIndex }], timeSpentSeconds }
  */
 const submitAttempt = asyncHandler(async (req, res) => {
-  const DEBUG = process.env.ETEST_DEBUG === 'true' || process.env.NODE_ENV !== 'production';
   const { testId } = req.params;
   const { answers: rawAnswers = [], timeSpentSeconds = 0 } = req.body;
   const answers = Array.isArray(rawAnswers)
@@ -73,15 +72,6 @@ const submitAttempt = asyncHandler(async (req, res) => {
           .map((k) => rawAnswers[k])
       : [];
   const userId = req.user?._id;
-
-  if (DEBUG) {
-    console.log('[ETEST-SUBMIT] === BACKEND SUBMIT ATTEMPT ===');
-    console.log('[ETEST-SUBMIT] testId:', testId, 'userId:', userId?.toString());
-    console.log('[ETEST-SUBMIT] req.body.answers was array:', Array.isArray(rawAnswers), 'normalized length:', answers.length);
-    if (answers.length > 0) {
-      console.log('[ETEST-SUBMIT] first answer:', answers[0], 'selectedIndex type:', typeof answers[0]?.selectedIndex);
-    }
-  }
 
   if (!userId) {
     res.status(401);
@@ -101,15 +91,8 @@ const submitAttempt = asyncHandler(async (req, res) => {
     questions.map((q) => [q._id.toString(), q.correctIndex])
   );
 
-  if (DEBUG) {
-    console.log('[ETEST-SUBMIT] DB questions count:', questions.length);
-    console.log('[ETEST-SUBMIT] correctMap (questionId -> correctIndex):', JSON.stringify(correctMap, null, 2));
-    console.log('[ETEST-SUBMIT] correctMap keys (first 3):', Object.keys(correctMap).slice(0, 3));
-    console.log('[ETEST-SUBMIT] correctIndex types from DB:', questions.slice(0, 3).map((q) => ({ id: q._id.toString(), correctIndex: q.correctIndex, type: typeof q.correctIndex })));
-  }
-
   let score = 0;
-  const normalizedAnswers = (Array.isArray(answers) ? answers : []).map((a, idx) => {
+  const normalizedAnswers = answers.map((a) => {
     const questionId = a.questionId?.toString?.() || (a.questionId && String(a.questionId)) || '';
     let selectedIndex = Number(a.selectedIndex);
     if (Number.isNaN(selectedIndex) || selectedIndex < 0) selectedIndex = -1;
@@ -117,29 +100,9 @@ const submitAttempt = asyncHandler(async (req, res) => {
     const expected = typeof rawExpected === 'number' ? rawExpected : Number(rawExpected);
     const expectedNorm = Number.isNaN(expected) || expected < 0 ? -1 : expected;
     const inMap = Object.prototype.hasOwnProperty.call(correctMap, questionId);
-    const match = inMap && expectedNorm === selectedIndex;
-    if (match) score += 1;
-    if (DEBUG) {
-      console.log(
-        `[ETEST-SUBMIT] answer[${idx}] questionId:`, questionId,
-        'inCorrectMap:', inMap,
-        'selectedIndex:', selectedIndex, '(type:', typeof selectedIndex, ')',
-        'expected(raw):', rawExpected, 'expected(norm):', expectedNorm, '(type:', typeof rawExpected, ')',
-        'match:', match
-      );
-    }
+    if (inMap && expectedNorm === selectedIndex) score += 1;
     return { questionId: a.questionId, selectedIndex };
   });
-
-  if (DEBUG) {
-    const receivedIds = answers.map((a) => a.questionId?.toString?.() || String(a.questionId));
-    const missingInMap = receivedIds.filter((id) => !Object.prototype.hasOwnProperty.call(correctMap, id));
-    const missingInPayload = Object.keys(correctMap).filter((id) => !receivedIds.includes(id));
-    console.log('[ETEST-SUBMIT] final score:', score, '/', questions.length);
-    console.log('[ETEST-SUBMIT] received questionIds NOT in DB correctMap:', missingInMap.length ? missingInMap : 'none');
-    console.log('[ETEST-SUBMIT] DB questionIds NOT in received payload:', missingInPayload.length ? missingInPayload.slice(0, 5) : 'none');
-    console.log('[ETEST-SUBMIT] normalizedAnswers (for DB):', JSON.stringify(normalizedAnswers.map((a) => ({ questionId: a.questionId?.toString?.() || a.questionId, selectedIndex: a.selectedIndex })), null, 2));
-  }
 
   const attempt = await TestAttempt.create({
     user: userId,

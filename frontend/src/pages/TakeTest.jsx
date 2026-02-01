@@ -33,9 +33,6 @@ const TakeTest = () => {
 
   const handleSelect = (questionId, selectedIndex) => {
     const key = questionId != null ? String(questionId) : '';
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[ETEST-DEBUG] handleSelect', { questionId, key, selectedIndex, questionIdType: typeof questionId });
-    }
     setAnswers((prev) => ({ ...prev, [key]: selectedIndex }));
   };
 
@@ -45,40 +42,21 @@ const TakeTest = () => {
       return;
     }
     const questions = test?.questions || [];
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[ETEST-SUBMIT] === FRONTEND SUBMIT ===');
-      console.log('[ETEST-SUBMIT] testId:', testId);
-      console.log('[ETEST-SUBMIT] questions count:', questions.length);
-      console.log('[ETEST-SUBMIT] first question keys:', questions[0] ? Object.keys(questions[0]) : 'none');
-      console.log('[ETEST-SUBMIT] first question _id:', questions[0]?._id, 'type:', typeof questions[0]?._id);
-      console.log('[ETEST-SUBMIT] answers state (keys):', Object.keys(answers));
-      console.log('[ETEST-SUBMIT] answers state (full):', JSON.stringify(answers, null, 2));
-    }
     const attemptAnswers = questions.map((q) => {
-      const key = q._id;
+      const key = q._id != null ? String(q._id) : '';
       const raw = answers[key];
       const selectedIndex = typeof raw === 'number' && raw >= 0 ? raw : -1;
-      if (process.env.NODE_ENV === 'development' && questions.indexOf(q) < 2) {
-        console.log('[ETEST-SUBMIT] map q._id:', key, 'answers[q._id]:', raw, 'selectedIndex:', selectedIndex);
-      }
-      return { questionId: q._id, selectedIndex };
+      return { questionId: key || q._id, selectedIndex };
     });
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[ETEST-SUBMIT] attemptAnswers (payload):', JSON.stringify(attemptAnswers, null, 2));
-      console.log('[ETEST-SUBMIT] timeSpentSeconds:', timeSpentSeconds);
-    }
     try {
       const result = await submitAttempt({
         testId,
         answers: attemptAnswers,
         timeSpentSeconds,
       }).unwrap();
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[ETEST-SUBMIT] result:', result?.score, '/', result?.totalQuestions);
-      }
       navigate(`/e-test/attempt/${result._id}`, { replace: true });
     } catch (err) {
-      console.error('[ETEST-SUBMIT] submit error:', err);
+      console.error('E-Test submit error:', err);
       alert(err?.data?.message || "Failed to submit. Please try again.");
     }
   };
