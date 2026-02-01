@@ -17,13 +17,17 @@ const protect = asyncHandler(async (req, res, next) => {
 
   if (token) {
     try {
-      // Verify and decode the JWT token using the secret key.
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-     
-      // Fetch the user associated with the decoded token, excluding the password field.
       req.user = await User.findById(decoded.userId).select('-password');
-      
 
+      if (!req.user) {
+        res.status(401);
+        throw new Error('Not Authorized, Invalid Token');
+      }
+      if (req.user.isBlocked) {
+        res.status(403).json({ message: 'Your account has been blocked. Please contact an administrator.' });
+        return;
+      }
       next();
     } catch (error) {
       res.status(401);

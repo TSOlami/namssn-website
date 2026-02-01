@@ -86,6 +86,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false, // Default to false
     },
+    isBlocked: {
+      type: Boolean,
+      default: false, // Admin can block user; blocked users cannot use protected routes
+    },
   },
   {
     timestamps: true, // Automatically generate createdAt and updatedAt timestamps

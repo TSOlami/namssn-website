@@ -32,6 +32,8 @@ import {
   deleteEvent,
   makeUserAdmin,
   removeAdmin,
+  blockUser,
+  unblockUser,
   getTotalUsers,
   getTotalPosts,
   getTotalAnnouncements,
@@ -68,6 +70,10 @@ router.route('/make-admin/:userId').put(protect, isAdmin, makeUserAdmin);
 
 // Remove admin privileges from a user
 router.route('/remove-admin/:userId').put(protect, isAdmin, removeAdmin);
+
+// Block / unblock a user
+router.route('/block/:userId').put(protect, isAdmin, blockUser);
+router.route('/unblock/:userId').put(protect, isAdmin, unblockUser);
 
 // Get all users
 router.route('/all-users').get(protect, isAdmin, getAllUsers);

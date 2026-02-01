@@ -98,6 +98,40 @@ const makeUserAdmin = asyncHandler(async (req, res) => {
 });
 
 
+// @desc Block a user (admin only; cannot block other admins)
+// Route PUT /api/v1/admin/block/:userId
+const blockUser = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  if (user.role === 'admin') {
+    res.status(400);
+    throw new Error('Cannot block an admin user');
+  }
+  user.isBlocked = true;
+  await user.save();
+  res.status(200).json({ message: 'User has been blocked' });
+});
+
+// @desc Unblock a user (admin only)
+// Route PUT /api/v1/admin/unblock/:userId
+const unblockUser = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  user.isBlocked = false;
+  await user.save();
+  res.status(200).json({ message: 'User has been unblocked' });
+});
+
 // @desc Remove admin privileges from a user
 // Route PUT /api/v1/admin/users/removeadmin/:userId
 // Access Private (only accessible to admin users)
@@ -499,6 +533,8 @@ export {
   deleteEvent,
   makeUserAdmin,
   removeAdmin,
+  blockUser,
+  unblockUser,
   getTotalUsers,
   getTotalPosts,
   getTotalBlogs,
