@@ -24,12 +24,15 @@ const Features = () => {
 					>
 						<div className="flex flex-col justify-center px-8 pt-5 pb-4">
 							<h3 className="text-3xl pb-2 leading-tight font-bold font-roboto">
-								E-Test: Past Questions and Practice
+								Learning Resources & E-Test
 							</h3>
 							<p className="text-xl font-roboto">
-								Ace your exams with our E-Test practice feature: take timed past-question tests by course, get instant scores, and review answers with explanations – all tailored to FUTMINNA courses.
+								Access study materials by level and ace your exams with E-Test: browse learning resources, take timed past-question tests by course, get instant scores, and review answers – all tailored to FUTMINNA.
 							</p>
-							<Link to="/e-test" className="button-1 mt-3 inline-block w-fit">Try E-Test</Link>
+							<div className="flex flex-wrap gap-3 mt-3">
+								<Link to="/e-test" className="button-1 inline-block w-fit">Try E-Test</Link>
+								<Link to="/resources" className="button-1 inline-block w-fit">Learning Resources</Link>
+							</div>
 						</div>
 						<div className="md:w-full flex justify-center md:justify-end m-auto p-3">
 							<img src={Image4} alt="" />
