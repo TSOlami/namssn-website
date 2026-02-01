@@ -4,9 +4,6 @@ import { FaX } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
 const Event = ({ image, title, date, location }) => {
-
-	// image expansion functionality
-	// State to manage the expanded image
 	const [isExpanded, setIsExpanded] = useState(false);
 	const handleExpand = () => {
 		setIsExpanded(!isExpanded);
@@ -25,13 +22,12 @@ const Event = ({ image, title, date, location }) => {
 						/>
 					</div>
 				)}
-				{/* Expanded image */}
 				{isExpanded && (
 					<motion.div
 						initial={{ opacity: 0, x: 100 }}
 						animate={{ opacity: 1, x: 0 }}
 						exit={{ opacity: 0, x: -100 }}
-						className="fixed top-0 left-0 h-full w-full bg-black bg-opacity-50 blur-filter z-[2000] flex p-3"
+						className="fixed inset-0 z-[10000] bg-black/50 blur-filter flex p-3"
 					>
 						<img
 							src={image}

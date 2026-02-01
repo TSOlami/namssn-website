@@ -2,20 +2,6 @@ import { useCallback, useRef, useEffect } from 'react';
 
 const DEFAULT_ROOT_MARGIN = '100px';
 
-/**
- * Reusable infinite scroll hook using IntersectionObserver.
- * When the sentinel element enters view (within rootMargin), loadMore() is called.
- * Mirrors the pattern used in kiki (ProductGrid, bookmarks): one sentinel ref, observer
- * only fires loadMore when hasNextPage && !isLoadingMore.
- *
- * @param {Object} options
- * @param {() => void} options.loadMore - Called when sentinel is visible
- * @param {boolean} options.hasNextPage - Only trigger when true
- * @param {boolean} options.isLoadingMore - Do not trigger while loading next page
- * @param {string} [options.rootMargin='100px'] - IntersectionObserver rootMargin
- * @param {number} [options.threshold=0] - IntersectionObserver threshold
- * @returns {{ sentinelRef: (node: HTMLElement | null) => void }} ref to attach to the sentinel element
- */
 export function useInfiniteScroll({
   loadMore,
   hasNextPage,

@@ -76,8 +76,8 @@ const FAQs = () => {
             answer="Yes, we welcome contributions from our members. If you have articles, blogs, or other content related to mathematics that you'd like to share, please contact our admin team for more information on how to contribute."
           />
         </div>
-        <div className="max-w-10 mx-auto">
-          <img src={FAQ} alt="FAQ" className="w-full pt-8" />
+        <div className="lg:w-2/5 flex-shrink-0 flex items-center justify-center">
+          <img src={FAQ} alt="FAQ" className="w-full max-w-sm object-contain pt-8" />
         </div>
       </div>
     </section>

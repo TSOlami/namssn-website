@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { FaCircleCheck, FaX } from "react-icons/fa6";
+import { IoSend } from "react-icons/io5";
 import Actions from "./Actions";
+import PostComments from "./PostComments";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,15 +14,19 @@ import {
 	useUpvotePostMutation,
 	useDownvotePostMutation,
 	useDeletePostMutation,
+	usePostCommentsQuery,
+	useCommentPostMutation,
 	setPosts,
 } from "../redux";
 import { ProfileImg } from "../assets";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { CommentListSkeleton } from "./skeletons";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const Post = ({ post, updatePostData, removePost }) => {
-	// State to manage the options menu
 	const [openOptions, setopenOptions] = useState(false);
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
@@ -43,7 +49,6 @@ const Post = ({ post, updatePostData, removePost }) => {
     };
   }, [openOptions]);
 
-	// Get the post details from the props
 	const postId = post?._id;
 	const u_id = post?.user?._id;
 	const upvotes = post?.upvotes;
@@ -57,17 +62,43 @@ const Post = ({ post, updatePostData, removePost }) => {
 	const avatar = post?.user?.profilePicture;
 	const isVerified = post?.user?.isVerified;
 
-	const navigate = useNavigate();
-	const routeToComments = () => {
-		navigate(`/comments/${postId}`);
-	};
-
 	const date = new Date(createdAt);
 
-	// Use the useDispatch hook to dispatch actions
-	const dispatch = useDispatch();
+	const [isCommentsExpanded, setIsCommentsExpanded] = useState(false);
+	const [commentText, setCommentText] = useState("");
+	const { data: commentsData, isLoading: isCommentsLoading, refetch: refetchComments } = usePostCommentsQuery(
+		{ postId },
+		{ skip: !postId || !isCommentsExpanded }
+	);
+	const commentsList = commentsData ?? [];
+	const [commentPost] = useCommentPostMutation();
 
-	// Post deletion
+	const handleToggleComments = () => {
+		setIsCommentsExpanded((prev) => !prev);
+	};
+
+	const handleSubmitComment = async () => {
+		if (!commentText.trim()) return;
+		try {
+			await toast.promise(
+				commentPost({
+					postId,
+					data: { text: commentText },
+				}).unwrap(),
+				{
+					pending: "Submitting comment...",
+					success: "Comment added",
+					error: "Failed to add comment",
+				}
+			);
+			setCommentText("");
+			refetchComments();
+		} catch {
+			/* toast handled by promise */
+		}
+	}
+
+	const dispatch = useDispatch();
 	const [deletePost] = useDeletePostMutation();
 	const handleDeletePost = async () => {
 		try {
@@ -89,35 +120,23 @@ const Post = ({ post, updatePostData, removePost }) => {
 		}
 		handleOpenOptions();
 	};
-	// Get the user ID from the redux store
 	const { _id: userId, role } = useSelector((state) => state.auth.userInfo);
-
-	// Check if the user has upvoted or downvoted the post
 	const isUpvotedInitial = post?.upvotes.includes(userId);
 	const isDownvotedInitial = post?.downvotes.includes(userId);
-
-	// Add a state to keep track of the upvote and downvote status
 	const [isUpvoted, setIsUpvoted] = useState(isUpvotedInitial);
 	const [isDownvoted, setIsDownvoted] = useState(isDownvotedInitial);
-
-	// Add the upvote and downvote mutations
 	const [upvotePost] = useUpvotePostMutation();
 	const [downvotePost] = useDownvotePostMutation();
-
-	// Create a data object to pass user details to the mutation
 	const data = {
 		user: { _id: userId },
 	};
 
-	// Function to handle the upvote action
 	const handleUpvote = async () => {
-		// Add logic to prevent the user from upvoting and downvoting at the same time
 		if (isDownvoted) {
 			setIsDownvoted(false);
 		}
 
 		try {
-			// Perform the upvote logic to send an API call to the server
 			const response = await toast.promise(
 				upvotePost({ postId: postId, data: data }).unwrap(),
 				{
@@ -128,10 +147,8 @@ const Post = ({ post, updatePostData, removePost }) => {
 			);
 
 			if (response.message === "success") {
-				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
 				dispatch(setPosts({ ...response.post }));
-				// Update the post data in Home component with the new data
 				updatePostData(postId, response.post);
 			} else {
 				console.error("Upvote failed:", response);
@@ -141,15 +158,12 @@ const Post = ({ post, updatePostData, removePost }) => {
 		}
 	};
 
-	// Function to handle the downvote action
 	const handleDownvote = async () => {
-		// Add logic to prevent the user from upvoting and downvoting at the same time
 		if (isUpvoted) {
 			setIsUpvoted(false);
 		}
 
 		try {
-			// Perform the downvote logic to send an API call to the server
 			const response = await toast.promise(
 				downvotePost({ postId: postId, data: {} }).unwrap(),
 				{
@@ -173,7 +187,6 @@ const Post = ({ post, updatePostData, removePost }) => {
 		}
 	};
 
-	// State to manage the expanded image
 	const [isExpanded, setIsExpanded] = useState(false);
 	const handleExpand = () => {
 		setIsExpanded(!isExpanded);
@@ -194,7 +207,6 @@ const Post = ({ post, updatePostData, removePost }) => {
 				<div className="flex flex-row gap-1 lg:gap-2 items-center w-full relative">
 					<Link to={`/profile/${u_id}`}>
 						{" "}
-						{/* Wrap the user's name in a Link */}
 						<span className="font-medium flex flex-row items-center gap-1">
 							<span className="font-semibold">
 								{" "}
@@ -218,29 +230,40 @@ const Post = ({ post, updatePostData, removePost }) => {
 						{formatDateToTime(date)}
 					</span>
 
-					<span
-						className="absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
-						onClick={handleOpenOptions}
-					>
-						<div className="cursor-pointer">
-							{role === "admin" || userId === u_id ? (
-								<PiDotsThreeOutlineVerticalFill />
-							) : null}
-						</div>
-					</span>
-					{openOptions && (
-						<button
-							onClick={handleDeletePost}
-							className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2"
-						>
-							<MdDelete /> <span>Delete Post</span>
-						</button>
+					{(role === "admin" || userId === u_id) && (
+						<>
+							<span
+								className="pi-dots-icon absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
+								onClick={(e) => { e.stopPropagation(); handleOpenOptions(); }}
+							>
+								<div className="cursor-pointer">
+									<PiDotsThreeOutlineVerticalFill />
+								</div>
+							</span>
+							{openOptions && (
+								<div className="options-menu absolute right-0 top-10 z-20">
+									<button
+										onClick={() => setShowDeleteConfirm(true)}
+										className="text-red-500 p-2 shadow-lg rounded-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[120px] hover:bg-gray-50"
+									>
+										<MdDelete /> <span>Delete Post</span>
+									</button>
+								</div>
+							)}
+						</>
 					)}
+				<ConfirmDialog
+					isOpen={showDeleteConfirm}
+					onClose={() => setShowDeleteConfirm(false)}
+					onConfirm={() => { handleOpenOptions(); handleDeletePost(); }}
+					title="Delete post?"
+					message="This post will be permanently deleted. This cannot be undone."
+					confirmLabel="Delete Post"
+				/>
 				</div>
 
-				{/* Post content goes here */}
 				<div className="font-roboto text-xl leading-normal">
-					<div onClick={routeToComments}>{text}</div>
+					<div>{text}</div>
 					{image && (
 						<div className="post-image-container pt-2">
 							<img
@@ -253,13 +276,12 @@ const Post = ({ post, updatePostData, removePost }) => {
 					)}
 				</div>
 
-				{/* Expanded image */}
 				{isExpanded && (
 					<motion.div
 						initial={{ opacity: 0, x: 100 }}
 						animate={{ opacity: 1, x: 0 }}
 						exit={{ opacity: 0, x: -100 }}
-						className="fixed top-0 left-0 h-full w-full bg-black bg-opacity-50 blur-filter z-[2000] flex p-3"
+						className="fixed inset-0 z-[10000] bg-black/50 blur-filter flex p-3"
 					>
 						<img
 							src={image}
@@ -275,8 +297,6 @@ const Post = ({ post, updatePostData, removePost }) => {
 					</motion.div>
 				)}
 
-				{/* Post actions */}
-
 				<Actions
 					upvotes={upvotes}
 					downvotes={downvotes}
@@ -286,7 +306,66 @@ const Post = ({ post, updatePostData, removePost }) => {
 					onDownvote={handleDownvote}
 					comments={comments}
 					postId={postId}
+					onToggleComments={handleToggleComments}
+					isCommentsExpanded={isCommentsExpanded}
 				/>
+
+				{isCommentsExpanded && (
+					<motion.div
+						initial={{ opacity: 0, height: 0 }}
+						animate={{ opacity: 1, height: "auto" }}
+						exit={{ opacity: 0, height: 0 }}
+						className="mt-3 pt-3 border-t border-gray-200 min-w-0 overflow-x-hidden"
+					>
+						<div className="flex flex-row gap-2 items-end mb-3 min-w-0">
+							<textarea
+								placeholder="Write a comment..."
+								value={commentText}
+								onChange={(e) => setCommentText(e.target.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" && !e.shiftKey) {
+										e.preventDefault();
+										handleSubmitComment();
+									}
+								}}
+								className="flex-1 min-w-0 resize-none border border-gray-300 rounded-xl p-2 min-h-[44px] text-sm"
+								rows={1}
+							/>
+							<button
+								type="button"
+								onClick={handleSubmitComment}
+								disabled={!commentText.trim()}
+								className="flex-shrink-0 p-2 rounded-xl bg-primary text-white disabled:opacity-50 hover:opacity-90"
+							>
+								<IoSend className="w-5 h-5" />
+							</button>
+						</div>
+						<div className="space-y-1 max-h-80 overflow-y-auto overflow-x-hidden min-w-0">
+							{isCommentsLoading ? (
+								<CommentListSkeleton count={3} />
+							) : commentsList?.length > 0 ? (
+								commentsList.map((comment) => (
+									<PostComments
+										key={comment?._id}
+										postId={comment?.post ?? postId}
+										commentId={comment._id}
+										upvotes={comment?.upvotes ?? []}
+										downvotes={comment?.downvotes ?? []}
+										text={comment?.text}
+										createdAt={comment?.createdAt}
+										u_id={comment?.user?._id}
+										isVerified={comment?.user?.isVerified}
+										username={comment?.user?.username}
+										name={comment?.user?.name}
+										image={comment?.user?.profilePicture}
+									/>
+								))
+							) : (
+								<p className="text-gray-500 text-sm py-2">No comments yet. Be the first to comment.</p>
+							)}
+						</div>
+					</motion.div>
+				)}
 			</div>
 		</div>
 	);

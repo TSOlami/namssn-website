@@ -36,31 +36,32 @@ const Modal = ({ isOpen, onClose, children }) => {
 		return () => document.removeEventListener("keydown", handleKeyDown);
 	}, [isOpen, onClose]);
 
+	if (!isOpen) return null;
+
 	return (
 		<motion.div
-			initial={{ opacity: 0, height: 0 }}
-			animate={{ opacity: 1, height: "auto" }}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
 			exit={{ opacity: 0 }}
-			transition={{ duration: 0.8 }}
-			className={`modal-overlay p-4 ${isOpen ? "modal-open" : ""}`}
+			transition={{ duration: 0.2 }}
+			className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/50"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Modal"
+			onClick={(e) => e.target === e.currentTarget && onClose()}
 		>
-			{isOpen && (
-				<div className="modal-content" ref={contentRef}>
-					<button
-						ref={closeButtonRef}
-						type="button"
-						className="modal-close-button p-2 rounded-lg text-white bg-red-500"
-						onClick={onClose}
-						aria-label="Close modal"
-					>
-						Close
-					</button>
-					{children}
-				</div>
-			)}
+			<div className="bg-white rounded-xl shadow-xl max-h-[90vh] overflow-y-auto max-w-lg w-full" ref={contentRef} onClick={(e) => e.stopPropagation()}>
+				<button
+					ref={closeButtonRef}
+					type="button"
+					className="modal-close-button p-2 rounded-lg text-white bg-red-500 hover:bg-red-600"
+					onClick={onClose}
+					aria-label="Close modal"
+				>
+					Close
+				</button>
+				{children}
+			</div>
 		</motion.div>
 	);
 };

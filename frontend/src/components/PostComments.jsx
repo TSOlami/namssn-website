@@ -3,7 +3,7 @@ import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
 	useDeleteCommentMutation,
@@ -12,7 +12,7 @@ import {
 } from "../redux";
 import { formatDateToTime } from "../utils";
 import { ProfileImg } from "../assets";
-import { CommentActions } from "../components";
+import { CommentActions, ConfirmDialog } from "../components";
 import { toast } from "react-toastify";
 
 const PostComments = ({
@@ -29,9 +29,24 @@ const PostComments = ({
 	downvotes,
 }) => {
 	const [openOptions, setopenOptions] = useState(false);
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const handleOpenOptions = () => {
 		setopenOptions(!openOptions);
 	};
+
+	useEffect(() => {
+		const handleOutsideClick = (event) => {
+			if (
+				openOptions &&
+				!event.target.closest(".options-menu") &&
+				!event.target.closest(".pi-dots-icon")
+			) {
+				setopenOptions(false);
+			}
+		};
+		document.body.addEventListener("click", handleOutsideClick);
+		return () => document.body.removeEventListener("click", handleOutsideClick);
+	}, [openOptions]);
 
 	const { _id: userId, role } = useSelector((state) => state.auth.userInfo);
 
@@ -50,9 +65,7 @@ const PostComments = ({
 	const [upvoteComment] = useUpvoteCommentMutation();
 	const [downvoteComment] = useDownvoteCommentMutation();
 
-	// Handle comment upvote
 	const handleUpvote = async () => {
-		// Add logic to prevent the user from upvoting and downvoting at the same time
 		if (isDownvoted) {
 			setIsDownvoted(false);
 		}
@@ -68,7 +81,6 @@ const PostComments = ({
 			);
 
 			if (response.message === "success") {
-				// Toggle the upvote state
 				setIsUpvoted(!isUpvoted);
 			}
 		} catch (error) {
@@ -93,8 +105,6 @@ const PostComments = ({
 				}
 			);
 			if (response.message === "success") {
-
-				// Toggle the downvote state
 				setIsDownvoted(!isDownvoted);
 			}
 		} catch (error) {
@@ -121,8 +131,8 @@ const PostComments = ({
 	};
 
 	return (
-		<div className="border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-[340px] md:min-w-[450px] lg:min-w-[500px] xl:w-[700px] pl:15 md:pl-24 m-2">
-			<div>
+		<div className="border-gray-300 p-4 flex flex-row gap-2 h-fit min-w-0 max-w-full pl:15 md:pl-24 m-2">
+			<div className="flex-shrink-0">
 				<Link to={`/profile/${u_id}`}>
 					<img
 						src={image || ProfileImg}
@@ -132,11 +142,10 @@ const PostComments = ({
 				</Link>
 			</div>
 
-			<div className="flex flex-col gap-2 w-full">
+			<div className="flex flex-col gap-2 min-w-0 flex-1">
 				<div className="flex flex-row gap-2 lg:gap-2 items-center w-full relative">
 					<Link to={`/profile/${u_id}`}>
 						{" "}
-						{/* Wrap the user's name in a Link */}
 						<span className="font-medium flex flex-row items-center gap-2">
 							<span className="font-semibold">
 								{name.length > 10 ? (
@@ -160,28 +169,39 @@ const PostComments = ({
 						{formatDateToTime(date)}
 					</span>
 
-					<span
-						className="absolute right-0 active:bg-greyish rounded-md p-2"
-						onClick={handleOpenOptions}
-					>
-						<div className="cursor-pointer">
-							{role === "admin" || userId === u_id ? (
-								<PiDotsThreeOutlineVerticalFill />
-							) : null}
-						</div>
-					</span>
-					{openOptions && (
-						<button
-							onClick={handleDeleteComment}
-							className="text-red-500 p-2 shadow-lg absolute bg-white right-0 top-6 flex items-center gap-2"
-						>
-							<MdDelete /> <span>Delete</span>
-						</button>
+					{(role === "admin" || userId === u_id) && (
+						<>
+							<span
+								className="pi-dots-icon absolute right-0 active:bg-greyish rounded-md p-2 cursor-pointer"
+								onClick={(e) => { e.stopPropagation(); handleOpenOptions(); }}
+							>
+								<div className="cursor-pointer">
+									<PiDotsThreeOutlineVerticalFill />
+								</div>
+							</span>
+							{openOptions && (
+								<div className="options-menu absolute right-0 top-10 z-20">
+									<button
+										onClick={() => setShowDeleteConfirm(true)}
+										className="text-red-500 p-2 shadow-lg rounded-md bg-white border border-gray-200 flex items-center gap-2 w-full min-w-[100px] hover:bg-gray-50"
+									>
+										<MdDelete /> <span>Delete</span>
+									</button>
+								</div>
+							)}
+						</>
 					)}
 				</div>
+				<ConfirmDialog
+					isOpen={showDeleteConfirm}
+					onClose={() => setShowDeleteConfirm(false)}
+					onConfirm={() => { handleOpenOptions(); handleDeleteComment(); }}
+					title="Delete comment?"
+					message="This comment will be permanently deleted. This cannot be undone."
+					confirmLabel="Delete"
+				/>
 
-				{/* Post content goes here */}
-				<div className="body-text">{text}</div>
+				<div className="body-text break-words min-w-0">{text}</div>
 
 				<CommentActions
 					upvotes={upvotes}
