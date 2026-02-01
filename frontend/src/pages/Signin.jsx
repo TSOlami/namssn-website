@@ -1,8 +1,12 @@
+import { useSearchParams } from "react-router-dom";
 import { SignInForm } from "../components";
 import { SignInImage } from "../assets";
 import { motion } from "framer-motion";
 
 const SignIn = () => {
+	const [searchParams] = useSearchParams();
+	const isBlocked = searchParams.get("blocked") === "1";
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: 100 }}
@@ -18,6 +22,12 @@ const SignIn = () => {
 				<div className="w-40 h-40 border-[40px] border-primary rounded-full absolute bottom-[-5rem] left-[-5rem]"></div>
 
 				{/* Page content */}
+
+				{isBlocked && (
+					<div className="mb-4 p-4 rounded-lg bg-red-100 border border-red-300 text-red-800 text-sm text-center">
+						Your account has been blocked. Please contact an administrator if you believe this is an error.
+					</div>
+				)}
 
 				<h1 className="font-bold text-2xl text-center pb-2">
 					Welcome Back To NAMSSN Website

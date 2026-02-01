@@ -73,6 +73,7 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        providesTags: ['User'],
       }),
 
       // Send mail to all users
@@ -102,6 +103,28 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         query(_id) {
           return {
             url: `${ADMIN_URL}/remove-admin/${_id}`,
+            method: 'PUT',
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
+
+      // Block a user (admin only)
+      blockUser: builder.mutation({
+        query(userId) {
+          return {
+            url: `${ADMIN_URL}/block/${userId}`,
+            method: 'PUT',
+          };
+        },
+        invalidatesTags: ['User'],
+      }),
+
+      // Unblock a user (admin only)
+      unblockUser: builder.mutation({
+        query(userId) {
+          return {
+            url: `${ADMIN_URL}/unblock/${userId}`,
             method: 'PUT',
           };
         },
@@ -249,6 +272,17 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         }),
         invalidatesTags: ['ETest'],
       }),
+      extractQuestionsFromPdf: builder.mutation({
+        query: (file) => {
+          const formData = new FormData();
+          formData.append('pdf', file);
+          return {
+            url: `${ADMIN_URL}/etest/extract-questions`,
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),
       addQuestion: builder.mutation({
         query: ({ testId, ...body }) => ({
           url: `${ADMIN_URL}/etest/tests/${testId}/questions`,
@@ -313,6 +347,8 @@ export const {
   useGetTotalPaymentsQuery,
   useMakeUserAdminMutation,
   useRemoveAdminMutation,
+  useBlockUserMutation,
+  useUnblockUserMutation,
   useGetAllPaymentsQuery,
   useCreateBlogMutation,
   useDeleteBlogMutation,
@@ -331,6 +367,7 @@ export const {
   useUpdateTestMutation,
   useDeleteTestMutation,
   useBulkAddQuestionsMutation,
+  useExtractQuestionsFromPdfMutation,
   useGetQuestionsByTestQuery,
   useAddQuestionMutation,
   useUpdateQuestionMutation,
