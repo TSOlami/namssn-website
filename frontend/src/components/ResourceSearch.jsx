@@ -23,7 +23,7 @@ const ResourceSearch = ({ query }) => {
             const newData = {};
             if (query && query.trim()) {
                 const lower = query.toLowerCase();
-                tempData2.forEach((obj, index) => {
+                tempData2.forEach((obj) => {
                     const file = Object.keys(obj)[0];
                     const item = obj[file];
                     if (!item?.title || !item.title.toLowerCase().includes(lower)) return;

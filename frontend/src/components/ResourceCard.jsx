@@ -10,6 +10,7 @@ import { FaCloudDownloadAlt } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { getResourcesUrl } from "../config/api";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 const ResourceCard = ({
   uploaderUsername,
@@ -54,6 +55,8 @@ const ResourceCard = ({
   };
 
   const [showDetails, setShowDetails] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [urlToDelete, setUrlToDelete] = useState(null);
   const handleSetShowDetails = (e) => {
     e.stopPropagation();
     setShowDetails(!showDetails);
@@ -125,11 +128,17 @@ const ResourceCard = ({
   const handleNewDelete = (e) => {
     e.stopPropagation();
     const base = getResourcesUrl().replace(/\/$/, '');
-    if (isLarge === true) {
-      const newFileUrl = fileUrl2.replace(new RegExp('/', 'g'), '%2F');
-      handleFileDelete(`${base}/${newFileUrl}`);
-    } else {
-      handleFileDelete(fileUrl);
+    const url = isLarge === true
+      ? `${base}/${(fileUrl2 || '').replace(new RegExp('/', 'g'), '%2F')}`
+      : fileUrl;
+    setUrlToDelete(url);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (urlToDelete) {
+      handleFileDelete(urlToDelete);
+      setUrlToDelete(null);
     }
   };
 
@@ -180,6 +189,14 @@ const ResourceCard = ({
             </div>
           )}
         </div>
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          onClose={() => { setShowDeleteConfirm(false); setUrlToDelete(null); }}
+          onConfirm={handleConfirmDelete}
+          title="Delete file?"
+          message="This file will be permanently deleted. This cannot be undone."
+          confirmLabel="Delete File"
+        />
         <div className="flex justify-around gap-10 pt-2 -4">
           {isLarge===false && (<FaCloudDownloadAlt onClick={() => downloadFile(fileUrl)} className="w-[25px] h-[25px] hover:animate-pulse hover:fill-blue-600"/>)}
           {isLarge===false ? (

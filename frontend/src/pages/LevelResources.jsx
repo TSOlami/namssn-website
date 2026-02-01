@@ -1,52 +1,25 @@
 import { useParams } from "react-router-dom";
 import { HeaderComponent, ResourceCard, Sidebar, AnnouncementContainer } from "../components";
 import { formatDateToTime } from "../utils";
-import { useState, useEffect, useMemo } from "react";
-import axios from "axios";
+import { useState, useMemo } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { ResourceListSkeleton } from "../components/skeletons";
 import ErrorPage from "./ErrorPage";
-import { getApiUrl, getResourcesUrl } from "../config/api";
+import { getResourcesUrl } from "../config/api";
+import { useGetResourcesByLevelQuery } from "../redux";
 
 const ROUTES = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level', 'telegram'];
 
 const LevelResources = () => {
-    const {level} = useParams()
-    let modifiedString = level.replace(/ /g, " ");
-    if (level === 'telegram') {
-        modifiedString = 'telegram'
-    }
+    const { level } = useParams();
+    const [value, setValue] = useState("");
+    const modifiedString = level === "telegram" ? "telegram" : (level || "").replace(/ /g, " ");
+    const skip = !modifiedString || !ROUTES.includes(level);
+    const { data, isLoading, isError, refetch } = useGetResourcesByLevelQuery(modifiedString, { skip });
 
-    if (!ROUTES.includes(level)) {
-        return (
-            <div>
-                <ErrorPage/>
-            </div>
-            )
-    }
-    const [data, setData] = useState(null)
-    const [value, setValue] = useState("")
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get(getApiUrl(`/api/v1/users/${encodeURIComponent(modifiedString)}/resources/`));
-                if (res) {
-                    setData(res.data);
-                }
-            } catch (err) {
-                setData("error");
-            }
-        };
-        fetchData();
-    }, [modifiedString]);
-
-    const handleSearch = (e) => {
-        setValue(e.target.value)
-    }
-
+    const handleSearch = (e) => setValue(e.target.value);
     const displayedData = useMemo(() => {
-        if (!data || data === "error" || !Array.isArray(data)) return data;
+        if (!data || !Array.isArray(data)) return data;
         if (!value.trim()) return data;
         const lower = value.toLowerCase();
         return data.filter((obj) => {
@@ -55,10 +28,17 @@ const LevelResources = () => {
             return item?.title && item.title.toLowerCase().includes(lower);
         });
     }, [data, value]);
+    const handleReload = () => refetch();
 
-    const handleReload = () => window.location.reload();
-    
-    if (displayedData && displayedData !== "error") {
+    if (!level || !ROUTES.includes(level)) {
+        return (
+            <div>
+                <ErrorPage/>
+            </div>
+        );
+    }
+
+    if (data && Array.isArray(data) && !isError && displayedData) {
         const fileList = displayedData.map(obj => Object.keys(obj)[0])
         return (
             <div className="flex">
@@ -100,7 +80,7 @@ const LevelResources = () => {
                 </div>
             </div>
         )
-    } else if (data && data === "error") {
+    } else if (isError) {
         return (
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>
@@ -113,7 +93,7 @@ const LevelResources = () => {
                 </div>
             </div>
         )
-    } else if (data === null) {
+    } else {
         return (
             <div className="w-[100%] flex justify-between">
                 <Sidebar/>

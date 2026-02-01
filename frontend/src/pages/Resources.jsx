@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
 	HeaderComponent,
@@ -8,17 +8,17 @@ import {
 import { Sidebar } from "../components";
 import { ResourceCard } from "../components";
 import { formatDateToTime } from "../utils";
-import axios from "axios";
 import { ResourcePageSkeleton } from '../components/skeletons';
 import { Link } from "react-router-dom";
 import { BiSolidUpvote, BiCaretDown, BiCaretUp } from "react-icons/bi";
-import { getApiUrl, getResourcesUrl } from "../config/api";
+import { getResourcesUrl } from "../config/api";
+import { useGetResourcesQuery } from "../redux";
 
 const levelStyle = "w-[100%] cursor-pointer  h-8 flex justify-end pr-2 rounded-lg items-center shadow-lg hover:ring-2";
 
 const Resources = () => {
     const userInfo = useSelector((state) => state.auth?.userInfo);
-    const [data, setData] = useState(null);
+    const { data, isLoading, isError, refetch } = useGetResourcesQuery();
     const [isPopUpVisible, setPopUpVisible] = useState(false);
     const [dropDown1, setDropDown1] = useState(1);
     const [dropDown2, setDropDown2] = useState(2);
@@ -26,11 +26,7 @@ const Resources = () => {
     const [dropDown4, setDropDown4] = useState(4);
     const [dropDown5, setDropDown5] = useState(5);
     const [dropDown6, setDropDown6] = useState(6);
-    const handleReload = () => {
-        window.location.reload();
-    }
-
-    let isLoading = true;
+    const handleReload = () => refetch();
 
     const handlePopUpOpen = () => {
         setPopUpVisible(true);
@@ -39,18 +35,6 @@ const Resources = () => {
     const handlePopUpClose = () => {
         setPopUpVisible(false);
     };
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get(getApiUrl("/api/v1/users/resources"));
-                if (res) setData(res.data);
-            } catch (err) {
-                setData("error");
-            }
-        };
-        fetchData();
-    }, []);
 
     const toggleDropDown1 = () => {
         setDropDown1(dropDown1 * -1)
@@ -71,7 +55,7 @@ const Resources = () => {
         setDropDown6(dropDown6 * -1)
     }
 
-    if (data === null) {
+    if (isLoading) {
         return (
         <div className="w-[100%] flex justify-between">
             <Sidebar/>
@@ -304,7 +288,7 @@ const Resources = () => {
                 </div>
             </div>  
         );
-    } else if (data && data !== "error" && !hasData) {
+    } else if (data && !hasData) {
             return (
             <div className="flex">
                 <Sidebar/>
@@ -324,7 +308,7 @@ const Resources = () => {
                 </div>
             </div>
         )
-    } else if (data==="error") {
+    } else if (isError) {
         return (
             <div className="lg:flex lg:justify-between">
                 <Sidebar/>
