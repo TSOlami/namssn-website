@@ -6,8 +6,9 @@ import photoUploader from './utils/botUtils/photoUploader.js';
 dotenv.config();
 
 import connectDb from './config/db.js';
-import path from 'path'
+import path from 'path';
 import createServer from './utils/server.js';
+import { runAuditRetention } from './utils/auditLogger.js';
 
 const app = createServer();
 
@@ -85,6 +86,8 @@ app.listen(port, async () => {
     console.error('Database connection error:', error);
     process.exit(1);
   }
+
+  runAuditRetention().catch((err) => console.error('[audit] Startup retention failed:', err.message));
 
   console.log(`Server is started on port ${port}`);
 });

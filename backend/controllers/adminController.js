@@ -4,9 +4,10 @@ import Post from '../models/postModel.js';
 import Category from '../models/categoryModel.js';
 import Payment from '../models/paymentModel.js';
 import Blog from '../models/blogModel.js';
-import Announcement from '../models/announcementModel.js'
+import Announcement from '../models/announcementModel.js';
 import { verifyPayments } from '../utils/paymentLogic.js';
 import Event from '../models/eventModel.js';
+import { logAuditEvent } from '../utils/auditLogger.js';
 
 
 // @desc Get Total Number of Users
@@ -122,6 +123,14 @@ const makeUserAdmin = asyncHandler(async (req, res) => {
   // Save the updated user
   await user.save();
 
+  logAuditEvent({
+    action: 'user.make_admin',
+    resourceType: 'User',
+    resourceId: userId,
+    details: { targetUsername: user.username },
+    outcome: 'success',
+  }, req);
+
   res.status(200).json({ message: 'User is now an admin' });
 });
 
@@ -142,6 +151,15 @@ const blockUser = asyncHandler(async (req, res) => {
   }
   user.isBlocked = true;
   await user.save();
+
+  logAuditEvent({
+    action: 'user.block',
+    resourceType: 'User',
+    resourceId: userId,
+    details: { targetUsername: user.username },
+    outcome: 'success',
+  }, req);
+
   res.status(200).json({ message: 'User has been blocked' });
 });
 
@@ -157,6 +175,15 @@ const unblockUser = asyncHandler(async (req, res) => {
   }
   user.isBlocked = false;
   await user.save();
+
+  logAuditEvent({
+    action: 'user.unblock',
+    resourceType: 'User',
+    resourceId: userId,
+    details: { targetUsername: user.username },
+    outcome: 'success',
+  }, req);
+
   res.status(200).json({ message: 'User has been unblocked' });
 });
 
@@ -185,6 +212,14 @@ const removeAdmin = asyncHandler(async (req, res) => {
 
   // Save the updated user
   await user.save();
+
+  logAuditEvent({
+    action: 'user.remove_admin',
+    resourceType: 'User',
+    resourceId: userId,
+    details: { targetUsername: user.username },
+    outcome: 'success',
+  }, req);
 
   res.status(200).json({ message: 'User is no longer an admin' });
 });

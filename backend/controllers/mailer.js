@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import User from '../models/userModel.js';
+import { logAuditEvent } from '../utils/auditLogger.js';
 
 // https://ethereal.email/create
 let nodeconfig = {
@@ -164,7 +165,8 @@ export const mailNotice = asyncHandler(async (req, res) => {
 
 /**
  * POST /api/v1/admin/send-user-mail
- * @desc Send a personal email to a single user (admin only)
+ * @desc Send a personal email TO a single user (admin only). The admin composes subject + message;
+ *      we send that email to the user's email address (we do NOT send account/credentials to anyone).
  * @access Private (admin)
  */
 export const sendUserMail = asyncHandler(async (req, res) => {
@@ -204,6 +206,13 @@ export const sendUserMail = asyncHandler(async (req, res) => {
   };
 
   await transporter.sendMail(message);
+  logAuditEvent({
+    action: 'mail.send_user',
+    resourceType: 'User',
+    resourceId: userId,
+    details: { to: userEmail, subjectLength: subject?.length },
+    outcome: 'success',
+  }, req);
   console.log('Personal email sent to:', userEmail);
   res.status(200).json({ msg: 'Email sent successfully!' });
 });
