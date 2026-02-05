@@ -1,7 +1,7 @@
 import { BsPlusLg } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -21,6 +21,7 @@ import { apiSlice } from "../redux/slices/apiSlice";
 const Home = () => {
   const page = useSelector((state) => state.auth.currentPage);
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const [logutUser] = useLogoutMutation();
   const [postData, setPostData] = useState([]);
@@ -67,6 +68,23 @@ const Home = () => {
   }, [posts]);
 
   const totalPages = posts?.totalPages;
+
+  // Scroll to a specific post when navigated from a notification (/home?postId=...)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const focusPostId = searchParams.get("postId");
+    if (!focusPostId) return;
+
+    // small timeout so DOM has rendered posts
+    const timeout = setTimeout(() => {
+      const el = document.getElementById(`post-${focusPostId}`);
+      if (el && typeof el.scrollIntoView === "function") {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [location.search, postData]);
 
   // Prefetch next page when current feed is loaded to speed up infinite scroll
   useEffect(() => {

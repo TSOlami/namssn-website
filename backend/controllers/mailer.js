@@ -8,16 +8,35 @@ import User from '../models/userModel.js';
 import { logAuditEvent } from '../utils/auditLogger.js';
 
 // https://ethereal.email/create
-let nodeconfig = {
+const nodeconfig = {
   service: 'gmail',
-	auth: {
-	  // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-	  user: process.env.EMAIL,
-	  pass: process.env.EMAIL_PASSWORD,
-	},
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 };
 
-let transporter = nodemailer.createTransport(nodeconfig); // create reusable transporter object using the default SMTP transport
+const transporter = nodemailer.createTransport(nodeconfig);
+
+let smtpVerified = false;
+async function ensureSmtpVerified() {
+  if (smtpVerified) return;
+  if (!process.env.EMAIL || !process.env.EMAIL_PASSWORD) {
+    console.warn('[mailer] EMAIL or EMAIL_PASSWORD not set; outgoing mail will fail.');
+    smtpVerified = true;
+    return;
+  }
+  try {
+    await transporter.verify();
+    smtpVerified = true;
+    console.log('[mailer] SMTP connection verified for', process.env.EMAIL);
+  } catch (err) {
+    console.error('[mailer] SMTP verify failed:', err.message);
+    if (err.code === 'EAUTH') {
+      console.error('[mailer] Use a Gmail App Password (not your normal password): https://myaccount.google.com/apppasswords');
+    }
+  }
+}
 
 let MailGenerator = new Mailgen({
   theme: 'default',
@@ -65,14 +84,15 @@ export const registerMail = asyncHandler(async (req,res) => {
     html: emailBody
   };
   
-  console.log("Sending Mail to: ", message.to);
-  // Send the email
-  await transporter.sendMail(message)
-  .then(() => {
-    console.log("Email sent successfully!")
-    return res.status(200).send({msg: 'You should receive an email from us shortly!'})
-  })
-  .catch(error => res.status(500).send({error}))
+  await ensureSmtpVerified();
+  try {
+    await transporter.sendMail(message);
+    console.log('Email sent to:', message.to);
+    return res.status(200).send({ msg: 'You should receive an email from us shortly!' });
+  } catch (err) {
+    console.error('[mailer] registerMail failed:', err.message, err.code || '');
+    return res.status(500).send({ error: 'Failed to send email. Please try again later.' });
+  }
 });
 
 /**
@@ -90,23 +110,23 @@ export const contactUs = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  console.log("Sending message to admin");
-
-  // Message object
-  let msg = {
-    from: email,
+  const msg = {
+    from: process.env.EMAIL,
     to: process.env.EMAIL,
-    subject: subject,
-    text: message
+    replyTo: email,
+    subject: `[Contact] ${subject}`,
+    text: `From: ${name} <${email}>\n\n${message}`,
   };
 
-  // Send the email
-  await transporter.sendMail(msg)
-  .then(() => {
-    console.log("Email sent successfully!")
-    return res.status(200).send({msg: 'Your message has been sent successfully!'})
-  })
-  .catch(error => res.status(500).send({error}))
+  await ensureSmtpVerified();
+  try {
+    await transporter.sendMail(msg);
+    console.log('Contact form email sent from', email);
+    return res.status(200).send({ msg: 'Your message has been sent successfully!' });
+  } catch (err) {
+    console.error('[mailer] contactUs failed:', err.message, err.code || '');
+    return res.status(500).send({ error: 'Failed to send message. Please try again later.' });
+  }
 });
 
 /**
@@ -137,29 +157,38 @@ export const mailNotice = asyncHandler(async (req, res) => {
     return;
   }
 
-  const emailPromises = userEmails.map(async (userEmail) => {
-    var email = {
-      body: {
-        intro: text || 'Welcome to NAMSSN, FUTMINNA chapter! We\'re very excited to have you on board.',
-        outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.',
-      }
-    };
-
-    var emailBody = await MailGenerator.generate(email);
-
-    let message = {
-      from: process.env.EMAIL,
-      to: userEmail,
-      subject: subject || 'Welcome to NAMSSN, FUTMINNA chapter!',
-      html: emailBody
-    };
-
-    await transporter.sendMail(message);
-  });
-
-  await Promise.all(emailPromises);
-
-  console.log("Emails sent successfully!");
+  await ensureSmtpVerified();
+  const failures = [];
+  for (const userEmail of userEmails) {
+    try {
+      const email = {
+        body: {
+          intro: text || 'Welcome to NAMSSN, FUTMINNA chapter! We\'re very excited to have you on board.',
+          outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.',
+        },
+      };
+      const emailBody = await MailGenerator.generate(email);
+      const message = {
+        from: process.env.EMAIL,
+        to: userEmail,
+        subject: subject || 'Welcome to NAMSSN, FUTMINNA chapter!',
+        html: emailBody,
+      };
+      await transporter.sendMail(message);
+    } catch (err) {
+      console.error('[mailer] notice-mail failed for', userEmail, err.message);
+      failures.push(userEmail);
+    }
+  }
+  if (failures.length > 0) {
+    console.warn('[mailer] notice-mail: failed for', failures.length, 'recipients');
+    return res.status(207).json({
+      msg: `Emails sent; ${failures.length} failed.`,
+      failedCount: failures.length,
+      total: userEmails.length,
+    });
+  }
+  console.log('Notice emails sent to', userEmails.length, 'recipients');
   res.status(200).json({ msg: 'Emails sent successfully!' });
 });
 
@@ -205,7 +234,21 @@ export const sendUserMail = asyncHandler(async (req, res) => {
     html: emailBody,
   };
 
-  await transporter.sendMail(message);
+  await ensureSmtpVerified();
+  try {
+    await transporter.sendMail(message);
+  } catch (err) {
+    console.error('[mailer] sendUserMail failed:', err.message, err.code || '');
+    logAuditEvent({
+      action: 'mail.send_user',
+      resourceType: 'User',
+      resourceId: userId,
+      details: { to: userEmail, error: err.message },
+      outcome: 'failure',
+      errorMessage: err.message,
+    }, req);
+    return res.status(500).json({ error: 'Failed to send email. Please try again later.' });
+  }
   logAuditEvent({
     action: 'mail.send_user',
     resourceType: 'User',

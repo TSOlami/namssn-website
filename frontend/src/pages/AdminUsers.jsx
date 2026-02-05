@@ -14,11 +14,12 @@ import { ConfirmDialog } from "../components";
 import { FaMagnifyingGlass, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const PAGE_SIZE = 10;
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 const DEBOUNCE_MS = 300;
 
 const AdminUsers = () => {
 	const [page, setPage] = useState(1);
-	const [limit] = useState(PAGE_SIZE);
+	const [limit, setLimit] = useState(PAGE_SIZE);
 	const [searchInput, setSearchInput] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -152,7 +153,7 @@ const AdminUsers = () => {
 						</div>
 					</div>
 					{isLoading ? (
-						<TableSkeleton rows={10} columns={6} />
+						<TableSkeleton rows={limit} columns={6} />
 					) : users?.length === 0 ? (
 						<div className="text-center py-12 text-gray-500">No users found.</div>
 					) : (
@@ -231,7 +232,24 @@ const AdminUsers = () => {
 						</table>
 					)}
 					{!isLoading && total > 0 && (
-						<div className="flex flex-wrap items-center justify-between gap-2 mt-4">
+						<div className="flex flex-wrap items-center justify-between gap-3 mt-4">
+							<div className="flex items-center gap-2 text-sm text-gray-600">
+								<span>Rows per page:</span>
+								<select
+									value={limit}
+									onChange={(e) => {
+										setLimit(Number(e.target.value));
+										setPage(1);
+									}}
+									className="border border-gray-300 rounded px-2 py-1 text-sm bg-white"
+								>
+									{PAGE_SIZE_OPTIONS.map((size) => (
+										<option key={size} value={size}>
+											{size}
+										</option>
+									))}
+								</select>
+							</div>
 							<p className="text-sm text-gray-600">
 								Page {page} of {totalPages}
 							</p>

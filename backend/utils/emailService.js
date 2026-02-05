@@ -14,6 +14,26 @@ const nodeconfig = {
 
 const transporter = nodemailer.createTransport(nodeconfig);
 
+let smtpVerified = false;
+export async function verifyEmailTransport() {
+  if (smtpVerified) return;
+  if (!process.env.EMAIL || !process.env.EMAIL_PASSWORD) {
+    console.warn('[emailService] EMAIL or EMAIL_PASSWORD not set.');
+    smtpVerified = true;
+    return;
+  }
+  try {
+    await transporter.verify();
+    smtpVerified = true;
+    console.log('[emailService] SMTP verified for', process.env.EMAIL);
+  } catch (err) {
+    console.error('[emailService] SMTP verify failed:', err.message);
+    if (err.code === 'EAUTH') {
+      console.error('[emailService] Use a Gmail App Password: https://myaccount.google.com/apppasswords');
+    }
+  }
+}
+
 const MailGenerator = new Mailgen({
   theme: 'default',
   product: {
@@ -56,10 +76,11 @@ export const sendOTPEmail = async (userEmail, username, otp) => {
   };
 
   try {
+    await verifyEmailTransport();
     await transporter.sendMail(message);
     return { success: true };
   } catch (error) {
-    console.error('Error sending OTP email:', error);
+    console.error('[emailService] OTP send failed:', error.message, error.code || '');
     throw new Error('Failed to send OTP email');
   }
 };
@@ -89,11 +110,11 @@ export const sendPasswordResetConfirmation = async (userEmail, username) => {
   };
 
   try {
+    await verifyEmailTransport();
     await transporter.sendMail(message);
     return { success: true };
   } catch (error) {
-    console.error('Error sending password reset confirmation:', error);
-    // Don't throw here - this is a non-critical notification
+    console.error('[emailService] Password reset confirmation failed:', error.message);
     return { success: false };
   }
 };

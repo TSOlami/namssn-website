@@ -141,12 +141,12 @@ const Sidebar = () => {
 			<div
 				className={
 					isNavOpen
-						? " bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[0%] lg:left-0 z-[400] transition-all duration-300"
-						: "z-[400] bg-greyish h-screen lg:flex flex-col gap-20 p-5 min-w-[250px] fixed left-[-105%] lg:left-0 transition-all duration-300"
+						? "bg-greyish h-screen lg:flex flex-col gap-10 p-5 min-w-[250px] fixed left-[0%] lg:left-0 z-[400] transition-all duration-300 overflow-y-auto"
+						: "z-[400] bg-greyish h-screen lg:flex flex-col gap-10 p-5 min-w-[250px] fixed left-[-105%] lg:left-0 transition-all duration-300 overflow-y-auto"
 				}
 			>
 				{/* profile info */}
-				<div className="z-[400] pb-8 flex gap-2">
+				<div className="z-[400] pb-4 flex gap-2">
 					<div>
 						<img
 							src={profileImage || ProfileImg}
@@ -248,8 +248,7 @@ const Sidebar = () => {
 				</div>
 
 				{/* Log-out */}
-
-				<div className="pt-10">
+				<div className="mt-auto mb-4">
 					<Link
 						to="/"
 						onClick={logoutHandler}

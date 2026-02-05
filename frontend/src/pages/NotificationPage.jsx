@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";	
 
 
@@ -14,17 +14,27 @@ import {
 } from "../components";
 import { NotificationListSkeleton } from "../components/skeletons";
 import {
-	useGetNotificationsQuery,
+	useGetNotificationsPagedQuery,
 	useClearNotificationsMutation,
 	setNotifications,
 	logout,
 	useLogoutMutation,
 } from "../redux";
 import { FaTrash } from "react-icons/fa6";
+import { InfiniteScrollSentinel } from "../components/InfiniteScrollSentinel";
 
 const NotificationPage = () => {
-	// Use the hook to get notifications from the backend
-	const { data: notifications, isLoading, error } = useGetNotificationsQuery();
+	const [page, setPage] = useState(1);
+	const [items, setItems] = useState([]);
+	const [hasMore, setHasMore] = useState(true);
+
+	// Paginated notifications from the backend
+	const {
+		data: notificationsPage,
+		isLoading,
+		isFetching,
+		error,
+	} = useGetNotificationsPagedQuery({ page, limit: 20 });
 
 	// Use the navigate hook from the react-router-dom to navigate to a different route
 	const navigate = useNavigate();
@@ -50,19 +60,41 @@ const NotificationPage = () => {
 	// Use the hook to clear notifications from the backend
 	const [clearNotifications] = useClearNotificationsMutation();
 
+	// Merge paginated results into a single list
+	useEffect(() => {
+		if (!notificationsPage?.data) return;
+
+		const { data, page: currentPage, totalPages } = notificationsPage;
+		setItems((prev) => {
+			if (currentPage === 1) return data;
+			const existingIds = new Set(prev.map((n) => n._id));
+			const newOnes = data.filter((n) => !existingIds.has(n._id));
+			return [...prev, ...newOnes];
+		});
+		setHasMore(currentPage < (totalPages || 1));
+
+		// keep Redux slice in sync for sidebar/unread badge
+		dispatch(setNotifications(notificationsPage.data));
+	}, [notificationsPage, dispatch]);
+
+	const handleLoadMore = () => {
+		if (isFetching || !hasMore) return;
+		setPage((prev) => prev + 1);
+	};
+
 	// Clear notifications
 	const handleClearNotifications = async () => {
 		// Call the clearNotifications mutation to clear notifications
 		try {
-			await toast.promise(
-				clearNotifications(),
-				{
-					pending: "Clearing notifications...",
-					success: "Notifications cleared successfully!",
-				},
-			);
-			// If successful, show a toast notification
+			await toast.promise(clearNotifications(), {
+				pending: "Clearing notifications...",
+				success: "Notifications cleared successfully!",
+			});
+
 			dispatch(setNotifications([]));
+			setItems([]);
+			setHasMore(false);
+			setPage(1);
 		} catch (err) {
 			// Handle any errors if necessary
 			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
@@ -79,22 +111,29 @@ const NotificationPage = () => {
 			<Sidebar />
 			<div className="w-full relative">
 				<HeaderComponent title="Notifications" />
-				{isLoading ? (
+
+				{/* Header actions row */}
+				<div className="flex justify-end items-center px-4 py-3 border-b border-gray-200">
+					{items.length > 0 && (
+						<button
+							onClick={handleClearNotifications}
+							className="button-2 flex items-center gap-2 text-sm hover:opacity-80"
+						>
+							<FaTrash className="text-xs" />
+							Clear all
+						</button>
+					)}
+				</div>
+
+				{isLoading && page === 1 ? (
 					<NotificationListSkeleton count={6} />
-				) : notifications?.length === 0 ? (
+				) : items.length === 0 ? (
 					<div className="flex items-center justify-center text-lg w-full mt-20">
 						No notifications to display.
 					</div>
 				) : (
 					<div className="w-full">
-						<button
-							onClick={handleClearNotifications}
-							className="button-2 absolute hover:opacity-70 bottom-20 sm:bottom-16 right-[7vw] md:right-[5vw] lg:right-[20vw] cursor-pointer"
-						>
-							<FaTrash />
-							Clear Notifications
-						</button>
-						{notifications?.map((notification, index) => {
+						{items.map((notification, index) => {
 							return (
 								<Notification
 									key={index}
@@ -120,6 +159,13 @@ const NotificationPage = () => {
 								/>
 							);
 						})}
+
+						<InfiniteScrollSentinel
+							onLoadMore={handleLoadMore}
+							hasNextPage={hasMore}
+							isLoadingMore={isFetching}
+							className="h-10 w-full"
+						/>
 					</div>
 				)}
 				<div className="w-full h-20 md:hidden"></div>

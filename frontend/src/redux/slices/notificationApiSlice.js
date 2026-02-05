@@ -6,12 +6,19 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Define a `getNotifications` endpoint that queries `NOTIFICATION_URL/notifications`
     getNotifications: builder.query({
-      query: () => {
-        return {
-          url: `${NOTIFICATION_URL}/notifications`,
-          method: "GET",
-        };
-      },
+      query: () => ({
+        url: `${NOTIFICATION_URL}/notifications`,
+        method: "GET",
+      }),
+      providesTags: ["Notification"],
+    }),
+
+    // Paginated notifications for infinite scroll UI
+    getNotificationsPaged: builder.query({
+      query: ({ page = 1, limit = 20 } = {}) => ({
+        url: `${NOTIFICATION_URL}/notifications?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
       providesTags: ["Notification"],
     }),
 
@@ -49,6 +56,7 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetNotificationsQuery,
+  useGetNotificationsPagedQuery,
   useDeleteNotificationMutation,
   useMarkNotificationsAsSeenMutation,
   useClearNotificationsMutation,

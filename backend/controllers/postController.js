@@ -738,22 +738,54 @@ const downvoteComment = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc Get all notifications for the currently logged-in user.
+ * @desc Get notifications for the currently logged-in user.
+ *       Supports optional pagination via ?page=&limit= query params.
+ *       - Without query params: returns full array (backwards compatible).
+ *       - With ?page,limit: returns { data, page, totalPages, total }.
  * @route GET /api/v1/users/notifications
  * @access Private (Requires authentication)
  */
 const getNotifications = asyncHandler(async (req, res) => {
   try {
-    // Fetch notifications from the database and populate the "user" field
-    const notifications = await Notification.find({ user: req.user._id })
-      .sort({ createdAt: -1 })
-      .populate({
-        path: "triggeredBy",
-        select: "-password", // Exclude the password field
-      });
-    res.status(200).json(notifications);
+    const hasPagination = req.query.page || req.query.limit;
+    const page = Math.max(1, parseInt(req.query.page || "1", 10));
+    const limit = Math.max(1, Math.min(50, parseInt(req.query.limit || "20", 10)));
+    const filter = { user: req.user._id };
+
+    if (!hasPagination) {
+      const notifications = await Notification.find(filter)
+        .sort({ createdAt: -1 })
+        .populate({
+          path: "triggeredBy",
+          select: "-password",
+        });
+      return res.status(200).json(notifications);
+    }
+
+    const skip = (page - 1) * limit;
+    const [notifications, total] = await Promise.all([
+      Notification.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate({
+          path: "triggeredBy",
+          select: "-password",
+        }),
+      Notification.countDocuments(filter),
+    ]);
+
+    const totalPages = total > 0 ? Math.ceil(total / limit) : 1;
+
+    return res.status(200).json({
+      data: notifications,
+      page,
+      totalPages,
+      total,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error("getNotifications failed:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
