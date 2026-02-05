@@ -1,7 +1,10 @@
+import dns from 'dns';
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 import dotenv from 'dotenv';
 dotenv.config();
+
+dns.setDefaultResultOrder('ipv4first');
 
 const nodeconfig = {
   service: 'gmail',

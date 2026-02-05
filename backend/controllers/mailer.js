@@ -1,11 +1,13 @@
+import dns from 'dns';
 import asyncHandler from 'express-async-handler';
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 import dotenv from 'dotenv';
-dotenv.config();
-
 import User from '../models/userModel.js';
 import { logAuditEvent } from '../utils/auditLogger.js';
+
+dotenv.config();
+dns.setDefaultResultOrder('ipv4first');
 
 const nodeconfig = {
   service: 'gmail',
