@@ -92,6 +92,7 @@ import {
 
 import {
 	useGetNotificationsQuery,
+	useGetNotificationsPagedQuery,
 	useDeleteNotificationMutation,
 	useMarkNotificationsAsSeenMutation,
 	useClearNotificationsMutation,
@@ -165,6 +166,7 @@ export {
 	useGetTotalEventsQuery,
   useGetAllUsersQuery,
 	useGetNotificationsQuery,
+		useGetNotificationsPagedQuery,
 	useDeleteNotificationMutation,
 	useMarkNotificationsAsSeenMutation,
 	useClearNotificationsMutation,
