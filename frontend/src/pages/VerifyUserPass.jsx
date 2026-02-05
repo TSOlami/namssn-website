@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { VerifyEmailSVG } from "../assets";
 import { VerifyCodeInput } from "../components";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 const VerifyUserPass = () => {
 	// Get the username parameter from the URL
 	const { username } = useParams();
+  const navigate = useNavigate();
 
 	// Set state to manage when a user can resend OTP
   const [canResendOTP, setCanResendOTP] = useState(false);
@@ -80,7 +81,7 @@ const VerifyUserPass = () => {
 				</p>
 
 				<VerifyCodeInput codeLength={6} />
-				<p >
+				<p>
           Didn&apos;t receive an OTP? {canResendOTP ? (
             `Click the button below to resend.`
           ) : (
@@ -92,6 +93,13 @@ const VerifyUserPass = () => {
             Resend OTP
           </button>
         )}
+        <button
+          type="button"
+          onClick={() => navigate("/forgot-password")}
+          className="mt-4 text-sm text-primary underline"
+        >
+          Enter a different username
+        </button>
 			</div>
 		</motion.div>
 	);
