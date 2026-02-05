@@ -7,33 +7,49 @@ dotenv.config();
 import User from '../models/userModel.js';
 import { logAuditEvent } from '../utils/auditLogger.js';
 
-// https://ethereal.email/create
 const nodeconfig = {
   service: 'gmail',
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,
   },
+  connectionTimeout: 10000,
+  socketTimeout: 10000,
+  greetingTimeout: 10000,
+  pool: true,
+  maxConnections: 1,
+  maxMessages: 3,
 };
 
 const transporter = nodemailer.createTransport(nodeconfig);
 
 let smtpVerified = false;
+let smtpVerificationAttempted = false;
+
 async function ensureSmtpVerified() {
-  if (smtpVerified) return;
+  if (smtpVerified || smtpVerificationAttempted) return;
   if (!process.env.EMAIL || !process.env.EMAIL_PASSWORD) {
     console.warn('[mailer] EMAIL or EMAIL_PASSWORD not set; outgoing mail will fail.');
-    smtpVerified = true;
+    smtpVerificationAttempted = true;
     return;
   }
+  smtpVerificationAttempted = true;
   try {
-    await transporter.verify();
+    const verifyPromise = transporter.verify();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Verification timeout')), 8000)
+    );
+    await Promise.race([verifyPromise, timeoutPromise]);
     smtpVerified = true;
     console.log('[mailer] SMTP connection verified for', process.env.EMAIL);
   } catch (err) {
-    console.error('[mailer] SMTP verify failed:', err.message);
-    if (err.code === 'EAUTH') {
-      console.error('[mailer] Use a Gmail App Password (not your normal password): https://myaccount.google.com/apppasswords');
+    if (err.message === 'Verification timeout') {
+      console.warn('[mailer] SMTP verification timed out (non-blocking). Emails will still attempt to send.');
+    } else {
+      console.error('[mailer] SMTP verify failed:', err.message);
+      if (err.code === 'EAUTH') {
+        console.error('[mailer] Use a Gmail App Password (not your normal password): https://myaccount.google.com/apppasswords');
+      }
     }
   }
 }
@@ -86,11 +102,19 @@ export const registerMail = asyncHandler(async (req,res) => {
   
   await ensureSmtpVerified();
   try {
-    await transporter.sendMail(message);
+    const sendPromise = transporter.sendMail(message);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Send timeout')), 15000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
     console.log('Email sent to:', message.to);
     return res.status(200).send({ msg: 'You should receive an email from us shortly!' });
   } catch (err) {
-    console.error('[mailer] registerMail failed:', err.message, err.code || '');
+    if (err.message === 'Send timeout') {
+      console.error('[mailer] registerMail timed out after 15s');
+    } else {
+      console.error('[mailer] registerMail failed:', err.message, err.code || '');
+    }
     return res.status(500).send({ error: 'Failed to send email. Please try again later.' });
   }
 });
@@ -120,11 +144,19 @@ export const contactUs = asyncHandler(async (req, res) => {
 
   await ensureSmtpVerified();
   try {
-    await transporter.sendMail(msg);
+    const sendPromise = transporter.sendMail(msg);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Send timeout')), 15000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
     console.log('Contact form email sent from', email);
     return res.status(200).send({ msg: 'Your message has been sent successfully!' });
   } catch (err) {
-    console.error('[mailer] contactUs failed:', err.message, err.code || '');
+    if (err.message === 'Send timeout') {
+      console.error('[mailer] contactUs timed out after 15s');
+    } else {
+      console.error('[mailer] contactUs failed:', err.message, err.code || '');
+    }
     return res.status(500).send({ error: 'Failed to send message. Please try again later.' });
   }
 });
@@ -174,9 +206,17 @@ export const mailNotice = asyncHandler(async (req, res) => {
         subject: subject || 'Welcome to NAMSSN, FUTMINNA chapter!',
         html: emailBody,
       };
-      await transporter.sendMail(message);
+      const sendPromise = transporter.sendMail(message);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Send timeout')), 15000)
+      );
+      await Promise.race([sendPromise, timeoutPromise]);
     } catch (err) {
-      console.error('[mailer] notice-mail failed for', userEmail, err.message);
+      if (err.message === 'Send timeout') {
+        console.error('[mailer] notice-mail timed out for', userEmail);
+      } else {
+        console.error('[mailer] notice-mail failed for', userEmail, err.message);
+      }
       failures.push(userEmail);
     }
   }
@@ -236,9 +276,17 @@ export const sendUserMail = asyncHandler(async (req, res) => {
 
   await ensureSmtpVerified();
   try {
-    await transporter.sendMail(message);
+    const sendPromise = transporter.sendMail(message);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Send timeout')), 15000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
   } catch (err) {
-    console.error('[mailer] sendUserMail failed:', err.message, err.code || '');
+    if (err.message === 'Send timeout') {
+      console.error('[mailer] sendUserMail timed out after 15s');
+    } else {
+      console.error('[mailer] sendUserMail failed:', err.message, err.code || '');
+    }
     logAuditEvent({
       action: 'mail.send_user',
       resourceType: 'User',

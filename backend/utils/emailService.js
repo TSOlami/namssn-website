@@ -3,33 +3,49 @@ import Mailgen from 'mailgen';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Configure nodemailer transport
 const nodeconfig = {
   service: 'gmail',
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,
   },
+  connectionTimeout: 10000,
+  socketTimeout: 10000,
+  greetingTimeout: 10000,
+  pool: true,
+  maxConnections: 1,
+  maxMessages: 3,
 };
 
 const transporter = nodemailer.createTransport(nodeconfig);
 
 let smtpVerified = false;
+let smtpVerificationAttempted = false;
+
 export async function verifyEmailTransport() {
-  if (smtpVerified) return;
+  if (smtpVerified || smtpVerificationAttempted) return;
   if (!process.env.EMAIL || !process.env.EMAIL_PASSWORD) {
     console.warn('[emailService] EMAIL or EMAIL_PASSWORD not set.');
-    smtpVerified = true;
+    smtpVerificationAttempted = true;
     return;
   }
+  smtpVerificationAttempted = true;
   try {
-    await transporter.verify();
+    const verifyPromise = transporter.verify();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Verification timeout')), 8000)
+    );
+    await Promise.race([verifyPromise, timeoutPromise]);
     smtpVerified = true;
     console.log('[emailService] SMTP verified for', process.env.EMAIL);
   } catch (err) {
-    console.error('[emailService] SMTP verify failed:', err.message);
-    if (err.code === 'EAUTH') {
-      console.error('[emailService] Use a Gmail App Password: https://myaccount.google.com/apppasswords');
+    if (err.message === 'Verification timeout') {
+      console.warn('[emailService] SMTP verification timed out (non-blocking). Emails will still attempt to send.');
+    } else {
+      console.error('[emailService] SMTP verify failed:', err.message);
+      if (err.code === 'EAUTH') {
+        console.error('[emailService] Use a Gmail App Password: https://myaccount.google.com/apppasswords');
+      }
     }
   }
 }
@@ -77,9 +93,17 @@ export const sendOTPEmail = async (userEmail, username, otp) => {
 
   try {
     await verifyEmailTransport();
-    await transporter.sendMail(message);
+    const sendPromise = transporter.sendMail(message);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Send timeout')), 15000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
     return { success: true };
   } catch (error) {
+    if (error.message === 'Send timeout') {
+      console.error('[emailService] OTP send timed out after 15s');
+      throw new Error('Email service timeout. Please try again.');
+    }
     console.error('[emailService] OTP send failed:', error.message, error.code || '');
     throw new Error('Failed to send OTP email');
   }
@@ -111,10 +135,18 @@ export const sendPasswordResetConfirmation = async (userEmail, username) => {
 
   try {
     await verifyEmailTransport();
-    await transporter.sendMail(message);
+    const sendPromise = transporter.sendMail(message);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Send timeout')), 15000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
     return { success: true };
   } catch (error) {
-    console.error('[emailService] Password reset confirmation failed:', error.message);
+    if (error.message === 'Send timeout') {
+      console.error('[emailService] Password reset confirmation timed out after 15s');
+    } else {
+      console.error('[emailService] Password reset confirmation failed:', error.message);
+    }
     return { success: false };
   }
 };
