@@ -35,7 +35,7 @@ const Features = () => {
 							</div>
 						</div>
 						<div className="md:w-full flex justify-center md:justify-end m-auto p-3">
-							<img src={Image4} alt="" />
+							<img src={Image4} alt="" loading="lazy" decoding="async" />
 						</div>
 					</motion.div>
 					<div className="flex flex-row bg-tertiary rounded-2xl max-w-[25rem] mx-auto shadow-xl">
@@ -98,6 +98,8 @@ const Features = () => {
 							src={Image6}
 							alt=""
 							className="w-fit self-center"
+							loading="lazy"
+							decoding="async"
 						/>
 					</motion.div>
 				</div>

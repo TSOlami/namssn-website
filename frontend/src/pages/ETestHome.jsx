@@ -43,7 +43,7 @@ const ETestHome = () => {
   if (debouncedSearch) queryParams.search = debouncedSearch;
   const { data: courses, isLoading } = useGetCoursesQuery(queryParams);
   const { data: attempts = [], isLoading: attemptsLoading } = useGetUserAttemptsQuery(undefined, {
-    skip: !userInfo,
+    skip: !userInfo || activeTab !== TAB_ATTEMPTS,
   });
 
   const tabStyle = (tab) =>

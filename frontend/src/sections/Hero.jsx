@@ -34,8 +34,10 @@ const Hero = () => {
     </div>
     <div className="pt-5 px-10">
       <img
-      src={heroImage}
-      alt="Hero"
+        src={heroImage}
+        alt="Hero"
+        loading="lazy"
+        decoding="async"
       />
     </div>
   </section>

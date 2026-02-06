@@ -17,6 +17,8 @@ const AboutUs = () => {
           alt="About Us"
           width={70}
           height={70}
+          loading="lazy"
+          decoding="async"
         /> <h1 className='header-text'>About Us</h1>
       </div>
       <div className='flex flex-col gap-5'>

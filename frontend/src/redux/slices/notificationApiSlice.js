@@ -11,6 +11,10 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Notification"],
+      keepUnusedDataFor: 300,
+      refetchOnMountOrArgChange: false,
+      refetchOnFocus: false,
+      refetchOnReconnect: false,
     }),
 
     // Paginated notifications for infinite scroll UI
@@ -20,6 +24,10 @@ export const notificationApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Notification"],
+      keepUnusedDataFor: 300,
+      refetchOnMountOrArgChange: false,
+      refetchOnFocus: false,
+      refetchOnReconnect: false,
     }),
 
     // Define a `deleteNotification` endpoint that queries `NOTIFICATION_URL/notifications/:notificationId`

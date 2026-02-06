@@ -103,6 +103,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: ['User'],
+        keepUnusedDataFor: 1800,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Update User Query
@@ -138,6 +142,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: ['Blog'],
+        keepUnusedDataFor: 1800,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
       
     };

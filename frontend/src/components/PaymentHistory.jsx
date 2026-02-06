@@ -85,7 +85,13 @@ const PaymentHistory = () => {
 				{/* profile image and cover image */}
 				{coverPhoto ? (
 					<div className="w-full h-32 z-[-1] overflow-hidden">
-						<img src={coverPhoto} alt="Cover" className="w-full h-full object-cover" />
+						<img
+							src={coverPhoto}
+							alt="Cover"
+							className="w-full h-full object-cover"
+							loading="lazy"
+							decoding="async"
+						/>
 					</div>
 				) : (
 					<div className="w-full h-32 bg-primary z-[-1]"></div>
@@ -95,6 +101,7 @@ const PaymentHistory = () => {
 						src={profileImage || ProfileImg}
 						alt="avatar"
 						className="profile-image"
+						loading="lazy"
 					/>{" "}
 				</div>
 

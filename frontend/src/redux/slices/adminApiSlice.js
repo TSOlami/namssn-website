@@ -13,6 +13,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get Total Posts Query
@@ -23,6 +27,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get Total Announcements Query
@@ -33,6 +41,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get Total Blogs Query
@@ -43,6 +55,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get Total Events Query
@@ -53,6 +69,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get Total Payments Query
@@ -63,6 +83,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
             method: 'GET',
           };
         },
+        keepUnusedDataFor: 600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       // Get all users (paginated, searchable)

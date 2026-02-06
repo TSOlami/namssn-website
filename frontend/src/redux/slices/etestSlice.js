@@ -17,6 +17,10 @@ export const etestApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: ['ETest'],
+        keepUnusedDataFor: 3600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       getTestsByCourse: builder.query({
@@ -27,6 +31,10 @@ export const etestApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: (result, error, courseId) => [{ type: 'ETest', id: `course-${courseId}` }],
+        keepUnusedDataFor: 3600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       getTestById: builder.query({
@@ -37,6 +45,10 @@ export const etestApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: (result, error, testId) => [{ type: 'ETest', id: `test-${testId}` }],
+        keepUnusedDataFor: 3600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       submitAttempt: builder.mutation({
@@ -61,6 +73,10 @@ export const etestApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: ['ETest'],
+        keepUnusedDataFor: 3600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
 
       getAttemptById: builder.query({
@@ -71,6 +87,10 @@ export const etestApiSlice = apiSlice.injectEndpoints({
           };
         },
         providesTags: (result, error, attemptId) => [{ type: 'ETest', id: `attempt-${attemptId}` }],
+        keepUnusedDataFor: 3600,
+        refetchOnMountOrArgChange: false,
+        refetchOnFocus: false,
+        refetchOnReconnect: false,
       }),
     };
   },

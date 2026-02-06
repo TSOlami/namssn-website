@@ -59,7 +59,12 @@ const Notification = ({
 			</div>
 			<div className="flex flex-col">
 				<div onClick={goToProfile}>
-					<img src={avatar || ProfileImg} alt="" className="profile-image-small" />
+					<img
+						src={avatar || ProfileImg}
+						alt=""
+						className="profile-image-small"
+						loading="lazy"
+					/>
 				</div>
 				<div className="flex flex-row gap-2 flex-wrap">
 					<span onClick={goToProfile} className="font-semibold inline-flex flex-row items-center gap-2">
