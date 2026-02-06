@@ -11,6 +11,7 @@ import {
 	Notification,
 	Sidebar,
 	HeaderComponent,
+	ConfirmDialog,
 } from "../components";
 import { NotificationListSkeleton } from "../components/skeletons";
 import {
@@ -99,6 +100,7 @@ const NotificationPage = () => {
 			// Handle any errors if necessary
 			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error)
 		}
+		setShowClearConfirm(false);
 	};
 
 	return (
@@ -172,6 +174,15 @@ const NotificationPage = () => {
 			</div>
 			<AnnouncementContainer />
 			<BottomNav />
+			<ConfirmDialog
+				isOpen={showClearConfirm}
+				onClose={() => setShowClearConfirm(false)}
+				onConfirm={handleClearNotifications}
+				title="Clear all notifications?"
+				message={`You are about to delete all ${items.length} notification(s). This cannot be undone.`}
+				confirmLabel="Clear all"
+				variant="danger"
+			/>
 		</motion.div>
 	);
 };

@@ -10,11 +10,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useResetPasswordMutation, useSendMailMutation } from "../redux";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { ConfirmDialog } from "../components";
 
 const ResetPassword = () => {
 	// State to manage the password visibility
 	const [showPassword, setShowPassword] = useState(false);
-	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
 	// Function to toggle the password visibility
 	const handleShowPassword = () => {
@@ -59,9 +61,7 @@ const ResetPassword = () => {
 		onSubmit: async (values) => {
 			const password = values.newPassword;
 
-			// Reset the password
 			try {
-				// Reset the password
 				const res = await toast.promise(
 					resetPassword({ username, password }),
 					{
@@ -70,34 +70,51 @@ const ResetPassword = () => {
 				);
 
 				if (res.data) {
-					// Send a congratulatory email to the user
+					// Send a notification email to the user
 					await sendMail({
 						username,
 						userEmail: res?.data?.email,
 						text: msg,
 					});
-					// Display a success message
 					toast.success(
 						"Password reset successfully. You will be redirected to the sign-in page to login with your new password."
 					);
 					setTimeout(() => {
 						navigate("/signin");
-					}, 3000); // Redirect to sign-in page after 3 seconds
+					}, 3000);
+				} else if (res.error) {
+					toast.error(
+						res?.error?.error?.data?.message ||
+							res?.error?.data?.message ||
+							"Failed to reset password."
+					);
 				}
-
-				toast.error(
-					res?.error?.error?.data?.message ||
-						res?.error?.data?.message
-				);
 			} catch (err) {
 				toast.error(
 					err?.error?.response?.data?.message ||
 						err?.data?.message ||
-						err?.error
+						err?.error ||
+						"Something went wrong while resetting your password."
 				);
 			}
 		},
 	});
+
+	const handleSubmitClick = async (e) => {
+		e.preventDefault();
+		const errors = await formik.validateForm();
+		if (Object.keys(errors).length > 0) {
+			// Let Formik mark fields as touched to show errors
+			formik.handleSubmit();
+			return;
+		}
+		setShowConfirmDialog(true);
+	};
+
+	const handleConfirmSubmit = () => {
+		setShowConfirmDialog(false);
+		formik.handleSubmit();
+	};
 
 	return (
 		<motion.div
@@ -114,7 +131,7 @@ const ResetPassword = () => {
 				/>
 			</div>
 			<form
-				onSubmit={formik.handleSubmit}
+				onSubmit={handleSubmitClick}
 				className="flex items-center flex-col gap-5 w-[300px]"
 			>
 				<h1 className="text-3xl font-bold">Reset Your Password</h1>
@@ -178,6 +195,15 @@ const ResetPassword = () => {
 					Submit
 				</button>
 			</form>
+			<ConfirmDialog
+				isOpen={showConfirmDialog}
+				onClose={() => setShowConfirmDialog(false)}
+				onConfirm={handleConfirmSubmit}
+				title="Reset password?"
+				message="You are about to reset your password. You will need to use the new password to sign in going forward."
+				confirmLabel="Reset password"
+				variant="danger"
+			/>
 		</motion.div>
 	);
 };

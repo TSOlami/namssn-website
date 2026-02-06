@@ -25,6 +25,7 @@ const AdminUserView = () => {
 	const [showRemoveAdminConfirm, setShowRemoveAdminConfirm] = useState(false);
 	const [showBlockConfirm, setShowBlockConfirm] = useState(false);
 	const [showUnblockConfirm, setShowUnblockConfirm] = useState(false);
+	const [showMakeAdminConfirm, setShowMakeAdminConfirm] = useState(false);
 	const [showSendMailModal, setShowSendMailModal] = useState(false);
 
 	const { data: user, isLoading: userLoading, refetch: refetchUser } = useGetUserQuery({ _id: userId });
@@ -81,6 +82,7 @@ const AdminUserView = () => {
 		} catch (err) {
 			toast.error(err?.error?.response?.data?.message || err?.data?.message || err?.error);
 		}
+		setShowMakeAdminConfirm(false);
 	};
 
 	const handleRemoveAdmin = async () => {
@@ -176,7 +178,7 @@ const AdminUserView = () => {
 												</button>
 											)}
 											<button
-												onClick={handleMakeUserAdmin}
+												onClick={() => setShowMakeAdminConfirm(true)}
 												className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-green-50 hover:border-green-200 hover:text-green-700"
 											>
 												Make Admin
@@ -311,6 +313,14 @@ const AdminUserView = () => {
 				title="Unblock user?"
 				message={`${name || "This user"} will be able to sign in and use the app again.`}
 				confirmLabel="Unblock"
+			/>
+			<ConfirmDialog
+				isOpen={showMakeAdminConfirm}
+				onClose={() => setShowMakeAdminConfirm(false)}
+				onConfirm={handleMakeUserAdmin}
+				title="Make admin?"
+				message={`${name || "This user"} will have full admin access and privileges.`}
+				confirmLabel="Make admin"
 			/>
 			<SendPersonalMailModal
 				isOpen={showSendMailModal}

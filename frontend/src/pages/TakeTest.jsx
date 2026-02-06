@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Sidebar, HeaderComponent } from "../components";
+import { Sidebar, HeaderComponent, ConfirmDialog } from "../components";
 import {
   useGetTestByIdQuery,
   useSubmitAttemptMutation,
@@ -22,6 +22,7 @@ const TakeTest = () => {
   const [answers, setAnswers] = useState({});
   const [timeSpentSeconds, setTimeSpentSeconds] = useState(0);
   const [startedAt] = useState(() => Date.now());
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
 
   useEffect(() => {
     if (!test?.timeLimitMinutes) return;
@@ -176,7 +177,7 @@ const TakeTest = () => {
             <div className="flex justify-end pt-4">
               <button
                 type="button"
-                onClick={handleSubmit}
+                onClick={() => setShowSubmitConfirm(true)}
                 disabled={isSubmitting}
                 className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
               >
@@ -186,6 +187,15 @@ const TakeTest = () => {
           )}
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={showSubmitConfirm}
+        onClose={() => setShowSubmitConfirm(false)}
+        onConfirm={handleSubmit}
+        title="Submit test?"
+        message={`You have answered ${Object.keys(answers).length} of ${questions.length} questions. You won't be able to change your answers after submitting.`}
+        confirmLabel="Submit"
+        variant="danger"
+      />
     </motion.div>
   );
 };

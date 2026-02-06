@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { Sidebar, HeaderComponent, Select } from "../components";
+import { Sidebar, HeaderComponent, Select, ConfirmDialog } from "../components";
 import {
   useAdminGetTestsByCourseQuery,
   useCreateTestMutation,
@@ -64,12 +64,44 @@ const AdminETestCourse = () => {
   const handlePublishToggle = async (test) => {
     try {
       await updateTest({ testId: test._id, isPublished: !test.isPublished }).unwrap();
+      toast.success(test.isPublished ? "Test unpublished" : "Test published");
     } catch (err) {
-      alert(err?.data?.message || "Failed to update");
+      toast.error(err?.data?.message || "Failed to update");
     }
+    setPublishConfirm(null);
   };
 
-  const handleBulkAdd = async (e) => {
+  const handleBulkAdd = async () => {
+    if (!selectedTestId || !bulkJson.trim()) {
+      toast.warning("Select a test and paste questions JSON.");
+      return;
+    }
+    let questions;
+    try {
+      questions = JSON.parse(bulkJson);
+    } catch {
+      toast.error("Invalid JSON. Use format: [{ \"text\": \"...\", \"options\": [\"A\", \"B\", \"C\", \"D\"], \"correctIndex\": 0 }]");
+      setBulkAddConfirm(false);
+      return;
+    }
+    if (!Array.isArray(questions) || questions.length === 0) {
+      toast.error("Questions must be a non-empty array.");
+      setBulkAddConfirm(false);
+      return;
+    }
+    try {
+      const result = await bulkAddQuestions({ testId: selectedTestId, questions }).unwrap();
+      const count = result?.count ?? questions.length;
+      toast.success(`Added ${count} question(s).`);
+      setBulkJson("");
+      setSelectedTestId("");
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to add questions");
+    }
+    setBulkAddConfirm(false);
+  };
+
+  const handleBulkAddClick = (e) => {
     e.preventDefault();
     if (!selectedTestId || !bulkJson.trim()) {
       toast.warning("Select a test and paste questions JSON.");
@@ -86,15 +118,7 @@ const AdminETestCourse = () => {
       toast.error("Questions must be a non-empty array.");
       return;
     }
-    try {
-      const result = await bulkAddQuestions({ testId: selectedTestId, questions }).unwrap();
-      const count = result?.count ?? questions.length;
-      toast.success(`Added ${count} question(s).`);
-      setBulkJson("");
-      setSelectedTestId("");
-    } catch (err) {
-      toast.error(err?.data?.message || "Failed to add questions");
-    }
+    setBulkAddConfirm(true);
   };
 
   if (!courseId) return null;
@@ -219,7 +243,7 @@ const AdminETestCourse = () => {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => handlePublishToggle(test)}
+                      onClick={() => setPublishConfirm(test)}
                       className={`px-3 py-1.5 text-sm rounded-lg ${test.isPublished ? "bg-gray-200 text-gray-700" : "bg-green-100 text-green-700"}`}
                     >
                       {test.isPublished ? "Unpublish" : "Publish"}
@@ -273,6 +297,32 @@ const AdminETestCourse = () => {
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={!!publishConfirm}
+        onClose={() => setPublishConfirm(null)}
+        onConfirm={() => publishConfirm && handlePublishToggle(publishConfirm)}
+        title={publishConfirm?.isPublished ? "Unpublish test?" : "Publish test?"}
+        message={publishConfirm?.isPublished 
+          ? `Unpublish "${publishConfirm.title}"? Students will no longer be able to take this test.`
+          : `Publish "${publishConfirm?.title}"? Students will be able to take this test.`}
+        confirmLabel={publishConfirm?.isPublished ? "Unpublish" : "Publish"}
+      />
+      <ConfirmDialog
+        isOpen={bulkAddConfirm}
+        onClose={() => setBulkAddConfirm(false)}
+        onConfirm={handleBulkAdd}
+        title="Add questions from JSON?"
+        message={`You are about to add ${(() => {
+          try {
+            const parsed = JSON.parse(bulkJson);
+            return Array.isArray(parsed) ? parsed.length : 0;
+          } catch {
+            return 0;
+          }
+        })()} question(s) to the selected test. This cannot be undone.`}
+        confirmLabel="Add questions"
+        variant="danger"
+      />
     </motion.div>
   );
 };

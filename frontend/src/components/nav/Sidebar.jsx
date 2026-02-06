@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import {
 	FaHouse,
@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogoutMutation, useGetNotificationsQuery, setNotifications } from "../../redux";
 import { logout } from "../../redux/slices/authSlice";
 import { setNavOpen } from "../../redux/slices/navSlice";
+import { ConfirmDialog } from "../ConfirmDialog";
 // import { useEffect } from "react";
 
 const Sidebar = () => {
@@ -88,6 +89,7 @@ const Sidebar = () => {
 
 	const navigate = useNavigate();
 	const [logoutApiCall] = useLogoutMutation();
+	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
 	const logoutHandler = async () => {
 		try {
@@ -152,6 +154,7 @@ const Sidebar = () => {
 							src={profileImage || ProfileImg}
 							alt=""
 							className="profile-image-small"
+							loading="lazy"
 						/>
 					</div>
 					<div className="flex flex-col text-sm">
@@ -249,15 +252,25 @@ const Sidebar = () => {
 
 				{/* Log-out */}
 				<div className="mt-auto mb-4">
-					<Link
-						to="/"
-						onClick={logoutHandler}
-						className="transition duration-500 text-red-500 flex flex-row gap-3 items-center hover:bg-red-500 hover:text-white p-2 rounded-lg"
+					<button
+						type="button"
+						onClick={() => setShowLogoutConfirm(true)}
+						className="w-full text-left transition duration-500 text-red-500 flex flex-row gap-3 items-center hover:bg-red-500 hover:text-white p-2 rounded-lg"
 					>
 						<FaArrowRightFromBracket /> Log Out
-					</Link>
+					</button>
 				</div>
 			</div>
+
+			<ConfirmDialog
+				isOpen={showLogoutConfirm}
+				onClose={() => setShowLogoutConfirm(false)}
+				onConfirm={logoutHandler}
+				title="Log out?"
+				message="You will be signed out and need to log in again to use the app."
+				confirmLabel="Log out"
+				variant="danger"
+			/>
 			{/* </div> */}
 		</>
 	);

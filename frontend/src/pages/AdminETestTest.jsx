@@ -57,6 +57,8 @@ export default function AdminETestTest() {
   const [extractedTextFromApi, setExtractedTextFromApi] = useState(false);
   const [editingExtractedIndex, setEditingExtractedIndex] = useState(null);
   const [questionSearch, setQuestionSearch] = useState("");
+  const [bulkAddConfirm, setBulkAddConfirm] = useState(false);
+  const [pdfAddConfirm, setPdfAddConfirm] = useState(false);
   const extractedTextAreaRef = useRef(null);
 
   const { data: tests } = useAdminGetTestsByCourseQuery(courseId, {
@@ -180,6 +182,44 @@ export default function AdminETestTest() {
   const handleBulkAdd = async () => {
     if (!testId || !bulkJson.trim()) {
       toast.warning("Select a test and paste questions JSON.");
+      setBulkAddConfirm(false);
+      return;
+    }
+    if (bulkPreview?.error) {
+      toast.error(bulkPreview.error);
+      setBulkAddConfirm(false);
+      return;
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(bulkJson);
+    } catch {
+      toast.error("Invalid JSON.");
+      setBulkAddConfirm(false);
+      return;
+    }
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      toast.error("Questions must be a non-empty array.");
+      setBulkAddConfirm(false);
+      return;
+    }
+    try {
+      const result = await bulkAddQuestions({
+        testId,
+        questions: parsed,
+      }).unwrap();
+      toast.success(`Added ${result?.count ?? parsed.length} question(s).`);
+      setBulkJson("");
+      setShowBulkPreview(false);
+    } catch (err) {
+      toast.error(err?.data?.message ?? "Failed to add questions");
+    }
+    setBulkAddConfirm(false);
+  };
+
+  const handleBulkAddClick = () => {
+    if (!testId || !bulkJson.trim()) {
+      toast.warning("Select a test and paste questions JSON.");
       return;
     }
     if (bulkPreview?.error) {
@@ -197,17 +237,7 @@ export default function AdminETestTest() {
       toast.error("Questions must be a non-empty array.");
       return;
     }
-    try {
-      const result = await bulkAddQuestions({
-        testId,
-        questions: parsed,
-      }).unwrap();
-      toast.success(`Added ${result?.count ?? parsed.length} question(s).`);
-      setBulkJson("");
-      setShowBulkPreview(false);
-    } catch (err) {
-      toast.error(err?.data?.message ?? "Failed to add questions");
-    }
+    setBulkAddConfirm(true);
   };
 
   const handlePdfFileSelect = async (e) => {
@@ -267,6 +297,7 @@ export default function AdminETestTest() {
   const handleConfirmPdfQuestions = async () => {
     if (!testId || extractedQuestions.length === 0) {
       toast.warning("No questions to add.");
+      setPdfAddConfirm(false);
       return;
     }
     try {
@@ -282,6 +313,15 @@ export default function AdminETestTest() {
     } catch (err) {
       toast.error(err?.data?.message ?? "Failed to add questions");
     }
+    setPdfAddConfirm(false);
+  };
+
+  const handlePdfAddClick = () => {
+    if (!testId || extractedQuestions.length === 0) {
+      toast.warning("No questions to add.");
+      return;
+    }
+    setPdfAddConfirm(true);
   };
 
   if (!courseId || !testId) return null;
@@ -595,7 +635,7 @@ export default function AdminETestTest() {
                     </div>
                     <button
                       type="button"
-                      onClick={handleConfirmPdfQuestions}
+                      onClick={handlePdfAddClick}
                       disabled={isBulkAdding}
                       className="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                     >
@@ -663,7 +703,7 @@ export default function AdminETestTest() {
             />
                 <button
                   type="button"
-                  onClick={handleBulkAdd}
+                  onClick={handleBulkAddClick}
                   disabled={
                     isBulkAdding ||
                     !bulkJson.trim() ||
@@ -686,6 +726,31 @@ export default function AdminETestTest() {
         title="Delete question?"
         message="This question will be permanently deleted. This cannot be undone."
         confirmLabel="Delete"
+      />
+      <ConfirmDialog
+        isOpen={bulkAddConfirm}
+        onClose={() => setBulkAddConfirm(false)}
+        onConfirm={handleBulkAdd}
+        title="Add questions from JSON?"
+        message={`You are about to add ${(() => {
+          try {
+            const parsed = JSON.parse(bulkJson);
+            return Array.isArray(parsed) ? parsed.length : 0;
+          } catch {
+            return 0;
+          }
+        })()} question(s) to this test. This cannot be undone.`}
+        confirmLabel="Add questions"
+        variant="danger"
+      />
+      <ConfirmDialog
+        isOpen={pdfAddConfirm}
+        onClose={() => setPdfAddConfirm(false)}
+        onConfirm={handleConfirmPdfQuestions}
+        title="Add questions from PDF?"
+        message={`You are about to add ${extractedQuestions.length} question(s) detected from the PDF to this test. This cannot be undone.`}
+        confirmLabel="Add questions"
+        variant="danger"
       />
     </motion.div>
   );
