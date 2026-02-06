@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import axios from 'axios';
+import apiClient from '../../utils/apiClient';
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
@@ -29,9 +29,11 @@ const FileForm = (props) => {
     useEffect(() => {
     }, [selectedOption1]);
 
+    const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50MB hard cap for unreliable networks
+
     const validationSchema = Yup.object().shape({
         file: Yup.mixed()
-        .test('fileSize', 'File is too large', (value) => value && value.size <= 500000000)
+        .test('fileSize', 'File is too large (max 50MB)', (value) => value && value.size <= MAX_FILE_SIZE_BYTES)
         .test('fileType', 'Videos are not allowed', (value) => value && value.type && value.type.indexOf('video') === -1)
     });
 
@@ -54,7 +56,17 @@ const FileForm = (props) => {
                 formData.append('course', selectedOption2)
                 try {
 
-                    await toast.promise(axios.post(post_url, formData), {
+                    await toast.promise(apiClient.post(post_url, formData, {
+                        onUploadProgress: (event) => {
+                            if (!event.total) return;
+                            const percent = Math.round((event.loaded * 100) / event.total);
+                            if (percent % 10 === 0) {
+                                // Lightweight progress feedback without additional UI state
+                                // eslint-disable-next-line no-console
+                                console.log(`Upload progress: ${percent}%`);
+                            }
+                        },
+                    }), {
                         pending: 'Uploading file...',
                         success: 'File uploaded successfully',
                     });

@@ -1,10 +1,8 @@
-import axios from "axios";
-
-axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
+import apiClient from "./apiClient";
 
 export async function resendOTP(username) {
 	try {
-		const { data, status } = await axios.get(`/api/v1/users/resend-otp/${username}`);
+		const { data, status } = await apiClient.get(`/api/v1/users/resend-otp/${username}`);
 
 		if (status === 201) {
 			return Promise.resolve({ message: data.message });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaXmark } from "react-icons/fa6";
@@ -50,8 +50,14 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
         );
 
         // Append the newly created post to your local state
-        // Call the appendNewPost function to append the newly created post
         appendNewPost(res);
+
+        // Clear any locally stored draft once successfully posted
+        try {
+          window.localStorage.removeItem("addPostDraft");
+        } catch {
+          // ignore storage failures
+        }
 
         // Close the modal
         handleModalOpen(); 
@@ -61,6 +67,31 @@ const AddPostForm = ({handleModalOpen, appendNewPost}) => {
       }
     },
   });
+
+  // Persist draft text locally so users on flaky networks don't lose work
+  useEffect(() => {
+    try {
+      const savedDraft = window.localStorage.getItem("addPostDraft");
+      if (savedDraft && !formik.values.text) {
+        formik.setFieldValue("text", savedDraft);
+      }
+    } catch {
+      // ignore storage failures
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (formik.values.text) {
+        window.localStorage.setItem("addPostDraft", formik.values.text);
+      } else {
+        window.localStorage.removeItem("addPostDraft");
+      }
+    } catch {
+      // ignore storage failures
+    }
+  }, [formik.values.text]);
 
   // File upload handler
   const onUpload = async e => {

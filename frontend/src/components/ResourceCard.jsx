@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -108,7 +108,7 @@ const ResourceCard = ({
 
   const handleFileDelete = async (fileUrl) => {	
     handleSetOpenOptions();
-    await toast.promise(axios
+    await toast.promise(apiClient
       .delete(fileUrl, { data: { _id: userInfo?._id, level: semester } })
       .then((res) => {
         if (res.data === "Access Approved") {

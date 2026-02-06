@@ -86,9 +86,22 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [location.search, postData]);
 
-  // Prefetch next page when current feed is loaded to speed up infinite scroll
+  // Prefetch next page only on fast connections to avoid wasting bandwidth on slow networks
   useEffect(() => {
     if (!feed || !totalPages || page >= totalPages) return;
+
+    const navConnection =
+      typeof navigator !== "undefined"
+        ? navigator.connection || navigator.mozConnection || navigator.webkitConnection
+        : null;
+
+    const effectiveType = navConnection?.effectiveType;
+    const isFastConnection = effectiveType && (effectiveType === "4g" || effectiveType === "5g");
+
+    if (!isFastConnection) {
+      return;
+    }
+
     dispatch(apiSlice.util.prefetch('getFeed', { page: page + 1, sort: 'recommended' }, {}));
   }, [feed, page, totalPages, dispatch]);
 

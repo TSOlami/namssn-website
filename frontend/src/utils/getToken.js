@@ -1,8 +1,3 @@
-import axios from "axios";
-
-// Set the base URL
-axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
-
 // Function to get the user's token (e.g., from a cookie or localStorage)
 export async function getToken() {
   if (typeof document === 'undefined') {

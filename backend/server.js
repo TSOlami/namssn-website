@@ -78,7 +78,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(port, async () => {
+const server = app.listen(port, async () => {
   try {
     await connectDb();
     console.log('Database connection successful');
@@ -91,3 +91,7 @@ app.listen(port, async () => {
 
   console.log(`Server is started on port ${port}`);
 });
+
+// Set an upper bound on how long any single HTTP request can run.
+// This helps prevent hung connections, which are especially painful on poor networks.
+server.setTimeout(60000);

@@ -253,68 +253,60 @@ const upvotePost = asyncHandler(async (req, res) => {
   // Find the post by ID and populate the user information excluding the password field
   const post = await Post.findById(postId).populate('user', '-password');
 
-  if (post) {
-    // Check if the user has already upvoted the post
-    const upvotedIndex = post.upvotes.indexOf(userId);
-    const downvotedIndex = post.downvotes.indexOf(userId);
-
-    if (downvotedIndex !== -1) {
-      // The user has already downvoted the post, so remove their ID from the downvotes array.
-      post.downvotes.splice(downvotedIndex, 1);
-
-      // Deduct 2 points for removing a downvote
-      const user = await User.findById(post.user);
-      if (user) {
-        user.points -= 2;
-        await user.save();
-      }
-    }
-
-				
-		if (upvotedIndex !== -1) {
-			// The user has already upvoted the post, so remove their ID from the upvotes array.
-			post.upvotes.splice(upvotedIndex, 1);
-
-			// Deduct 5 points for removing an upvote
-			const user = await User.findById(post.user);
-			if (user) {
-				user.points -= 5;
-				await user.save();
-			}
-		} else {
-			// The user hasn't upvoted the post, so add their ID to the upvotes array.
-			post.upvotes.push(userId);
-
-			// Add 5 points for upvoting
-			const user = await User.findById(post.user);
-			if (user) {
-				user.points += 5;
-				await user.save();
-			}
-
-			if (post.user.username !== req.user.username) {
-				// Create a notification for the post owner
-				const notification = new Notification({
-					text: `${req.user.username} upvoted your post.`,
-					upvote: true,
-					user: post.user, // ID of the post owner
-					triggeredBy: req.user._id, // ID of the user who triggered the notification
-					post: postId,
-				});
-				await notification.save();
-			}
-		}
-
-		await post.save();
-
-    res.status(200).json({
-      message: "success",
-      post,
-    });
-  } else {
+  if (!post) {
     res.status(404);
     throw new Error('Post not found');
   }
+
+  const upvotedIndex = post.upvotes.indexOf(userId);
+  const downvotedIndex = post.downvotes.indexOf(userId);
+
+  let pointsDelta = 0;
+
+  if (downvotedIndex !== -1) {
+    // The user has already downvoted the post, so remove their ID from the downvotes array.
+    post.downvotes.splice(downvotedIndex, 1);
+    // Deduct 2 points for removing a downvote
+    pointsDelta -= 2;
+  }
+
+  if (upvotedIndex !== -1) {
+    // The user has already upvoted the post, so remove their ID from the upvotes array.
+    post.upvotes.splice(upvotedIndex, 1);
+    // Deduct 5 points for removing an upvote
+    pointsDelta -= 5;
+  } else {
+    // The user hasn't upvoted the post, so add their ID to the upvotes array.
+    post.upvotes.push(userId);
+    // Add 5 points for upvoting
+    pointsDelta += 5;
+
+    if (post.user.username !== req.user.username) {
+      // Create a notification for the post owner
+      const notification = new Notification({
+        text: `${req.user.username} upvoted your post.`,
+        upvote: true,
+        user: post.user, // ID of the post owner
+        triggeredBy: req.user._id, // ID of the user who triggered the notification
+        post: postId,
+      });
+      await notification.save();
+    }
+  }
+
+  if (pointsDelta !== 0) {
+    await User.updateOne(
+      { _id: post.user._id ?? post.user },
+      { $inc: { points: pointsDelta } }
+    );
+  }
+
+  await post.save();
+
+  res.status(200).json({
+    message: "success",
+    post,
+  });
 });
 
 
@@ -328,66 +320,60 @@ const downvotePost = asyncHandler(async (req, res) => {
 	// Find the post by ID and populate the user information excluding the password field
   const post = await Post.findById(postId).populate('user', '-password');
 
-	if (post) {
-		// Check if the user has already downvoted the post
-		const upvotedIndex = post.upvotes.indexOf(userId);
-		const downvotedIndex = post.downvotes.indexOf(userId);
-
-		if (upvotedIndex !== -1) {
-			// The user has already upvoted the post, so remove their ID from the upvotes array.
-			post.upvotes.splice(upvotedIndex, 1);
-
-			// Deduct 5 points for removing an upvote
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points -= 5;
-			  await user.save();
-			}
-		}
-
-		if (downvotedIndex !== -1) {
-			// The user has already downvoted the post, so remove their ID from the downvotes array.
-			post.downvotes.splice(downvotedIndex, 1);
-
-			// Add 2 points for removing a downvote
-			const user = await User.findById(post.user);
-			if (user) {
-			  user.points += 2;
-			  await user.save();
-			}
-		} else {
-			// The user hasn't downvoted the post, so add their ID to the downvotes array.
-			post.downvotes.push(userId);
-
-			// Deduct 2 points for downvoting
-			const user = await User.findById(post.user);
-			if (user) {
-				user.points -= 2;
-				await user.save();
-			}
-
-			if (post.user.username !== req.user.username) {
-				// Create a notification for the post owner
-				const notification = new Notification({
-					text: `${req.user.username} downvoted your post.`,
-					downvote: true,
-					user: post.user, // ID of the post owner
-					triggeredBy: req.user._id, // ID of the user who triggered the notification
-					post: postId,
-				});
-				await notification.save();
-			}
-		}
-
-		await post.save();
-		res.status(200).json({
-      message: "success",
-      post
-    });
-	} else {
+	if (!post) {
 		res.status(404);
 		throw new Error('Post not found');
 	}
+
+	// Check if the user has already downvoted the post
+	const upvotedIndex = post.upvotes.indexOf(userId);
+	const downvotedIndex = post.downvotes.indexOf(userId);
+
+	let pointsDelta = 0;
+
+	if (upvotedIndex !== -1) {
+		// The user has already upvoted the post, so remove their ID from the upvotes array.
+		post.upvotes.splice(upvotedIndex, 1);
+		// Deduct 5 points for removing an upvote
+		pointsDelta -= 5;
+	}
+
+	if (downvotedIndex !== -1) {
+		// The user has already downvoted the post, so remove their ID from the downvotes array.
+		post.downvotes.splice(downvotedIndex, 1);
+		// Add 2 points for removing a downvote
+		pointsDelta += 2;
+	} else {
+		// The user hasn't downvoted the post, so add their ID to the downvotes array.
+		post.downvotes.push(userId);
+		// Deduct 2 points for downvoting
+		pointsDelta -= 2;
+
+		if (post.user.username !== req.user.username) {
+			// Create a notification for the post owner
+			const notification = new Notification({
+				text: `${req.user.username} downvoted your post.`,
+				downvote: true,
+				user: post.user, // ID of the post owner
+				triggeredBy: req.user._id, // ID of the user who triggered the notification
+				post: postId,
+			});
+			await notification.save();
+		}
+	}
+
+	if (pointsDelta !== 0) {
+		await User.updateOne(
+			{ _id: post.user._id ?? post.user },
+			{ $inc: { points: pointsDelta } }
+		);
+	}
+
+	await post.save();
+	res.status(200).json({
+		message: "success",
+		post
+	});
 });
 
 /**
@@ -594,16 +580,14 @@ const upvoteComment = asyncHandler(async (req, res) => {
 		const upvotedIndex = comment.upvotes.indexOf(userId);
 		const downvotedIndex = comment.downvotes.indexOf(userId);
   
+		let pointsDelta = 0;
+
 		if (downvotedIndex !== -1) {
 		  // The user has already downvoted the comment, so remove their ID from the downvotes array.
 		  comment.downvotes.splice(downvotedIndex, 1);
   
 		  // Deduct 2 points for removing a downvote
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 2;
-			await user.save();
-		  }
+		  pointsDelta -= 2;
 		}
   
 		if (upvotedIndex !== -1) {
@@ -611,21 +595,13 @@ const upvoteComment = asyncHandler(async (req, res) => {
 			comment.upvotes.splice(upvotedIndex, 1);
 
 			// Deduct 5 points for removing an upvote
-			const user = await User.findById(comment.user);
-			if (user) {
-				user.points -= 5;
-				await user.save();
-			}
+			pointsDelta -= 5;
 		} else {
 			// The user hasn't upvoted the comment, so add their ID to the upvotes array.
 			comment.upvotes.push(userId);
 
 			// Add 5 points for upvoting
-			const user = await User.findById(comment.user);
-			if (user) {
-				user.points += 5;
-				await user.save();
-			}
+			pointsDelta += 5;
 
 			if (post.user.username !== req.user.username) {
 				// Create a notification for the comment owner
@@ -639,6 +615,13 @@ const upvoteComment = asyncHandler(async (req, res) => {
 				});
 				await notification.save();
 			}
+		}
+
+		if (pointsDelta !== 0) {
+			await User.updateOne(
+				{ _id: comment.user._id ?? comment.user },
+				{ $inc: { points: pointsDelta } }
+			);
 		}
   
 		await comment.save();
@@ -677,16 +660,14 @@ const downvoteComment = asyncHandler(async (req, res) => {
 		const upvotedIndex = comment.upvotes.indexOf(userId);
 		const downvotedIndex = comment.downvotes.indexOf(userId);
   
+		let pointsDelta = 0;
+
 		if (upvotedIndex !== -1) {
 		  // The user has already upvoted the comment, so remove their ID from the upvotes array.
 		  comment.upvotes.splice(upvotedIndex, 1);
   
 		  // Deduct 5 points for removing an upvote
-		  const user = await User.findById(comment.user);
-		  if (user) {
-			user.points -= 5;
-			await user.save();
-		  }
+		  pointsDelta -= 5;
 		}
 
 		if (downvotedIndex !== -1) {
@@ -694,21 +675,13 @@ const downvoteComment = asyncHandler(async (req, res) => {
 			comment.downvotes.splice(downvotedIndex, 1);
 
 			// Add 2 points for removing a downvote
-			const user = await User.findById(comment.user);
-			if (user) {
-			  user.points += 2;
-			  await user.save();
-			}
+			pointsDelta += 2;
 		} else {
 			// The user hasn't downvoted the comment, so add their ID to the downvotes array.
 			comment.downvotes.push(userId);
 
 			// Deduct 2 points for downvoting
-			const user = await User.findById(comment.user);
-			if (user) {
-				user.points -= 2;
-				await user.save();
-			}
+			pointsDelta -= 2;
 
 			if (post.user.username !== req.user.username) {
 				// Create a notification for the comment owner
@@ -722,6 +695,13 @@ const downvoteComment = asyncHandler(async (req, res) => {
 				});
 				await notification.save();
 			}
+		}
+
+		if (pointsDelta !== 0) {
+			await User.updateOne(
+				{ _id: comment.user._id ?? comment.user },
+				{ $inc: { points: pointsDelta } }
+			);
 		}
   
 		await comment.save();

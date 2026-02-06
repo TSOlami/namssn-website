@@ -18,6 +18,8 @@ const Event = ({ image, title, date, location }) => {
 							src={image}
 							alt="Post Image"
 							className="rounded-l-2xl max-h-[500px] cursor-pointer "
+							loading="lazy"
+							decoding="async"
 							onClick={handleExpand}
 						/>
 					</div>
@@ -32,6 +34,8 @@ const Event = ({ image, title, date, location }) => {
 						<img
 							src={image}
 							className="m-auto max-h-full max-w-full"
+							loading="lazy"
+							decoding="async"
 						/>
 
 						<button

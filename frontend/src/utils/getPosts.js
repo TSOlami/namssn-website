@@ -1,7 +1,5 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 import { getToken } from "./getToken";
-
-axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_URL;
 
 export async function getPosts(page, pageSize) {
 	try {
@@ -11,7 +9,7 @@ export async function getPosts(page, pageSize) {
 		};
 
 
-		const { data, status } = await axios.get(`/api/v1/users/posts?page=${page}&pageSize=${pageSize}`, { headers });
+		const { data, status } = await apiClient.get(`/api/v1/users/posts?page=${page}&pageSize=${pageSize}`, { headers });
 		if (status === 200) {
 			if (data.posts.length === 0) {
 				return { noMorePosts: true };

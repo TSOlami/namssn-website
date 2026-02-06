@@ -67,9 +67,34 @@ function createServer() {
   app.use(cors(corsOptions));
   
   app.use(bodyParser.json());
-  app.use(fileUpload());
+  app.use(fileUpload({
+    limits: {
+      fileSize: 50 * 1024 * 1024, // 50MB max per file to keep uploads realistic on poor networks
+    },
+    abortOnLimit: true,
+  }));
   
   const apiVersion = process.env.API_VERSION || 'v1';
+
+  // Lightweight HTTP caching headers for public, mostly-read endpoints
+  app.use((req, res, next) => {
+    if (req.method === 'GET') {
+      const path = req.path || '';
+      const cacheablePrefixes = [
+        `/api/${apiVersion}/users/events`,
+        `/api/${apiVersion}/users/announcements`,
+        `/api/${apiVersion}/users/blogs`,
+        `/api/${apiVersion}/users/feed`,
+        `/api/${apiVersion}/users/posts`,
+        `/api/${apiVersion}/users/resources`,
+      ];
+
+      if (cacheablePrefixes.some((prefix) => path.startsWith(prefix))) {
+        res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+      }
+    }
+    next();
+  });
 
   app.use(`/api/${apiVersion}/users/auth`, authLimiter);
   app.use(`/api/${apiVersion}/users/generate-otp`, otpLimiter);

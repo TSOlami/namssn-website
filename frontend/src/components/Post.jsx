@@ -219,6 +219,7 @@ const Post = ({ post, updatePostData, removePost }) => {
 						src={avatar || ProfileImg}
 						alt="avatar"
 						className="profile-image-small"
+						loading="lazy"
 					/>
 				</Link>
 			</div>
@@ -308,6 +309,8 @@ const Post = ({ post, updatePostData, removePost }) => {
 								src={image}
 								alt="Post Image"
 								className="post-image cursor-pointer "
+								loading="lazy"
+								decoding="async"
 								onClick={handleExpand}
 							/>
 						</div>
@@ -324,6 +327,8 @@ const Post = ({ post, updatePostData, removePost }) => {
 						<img
 							src={image}
 							className="m-auto max-h-full max-w-full"
+							loading="lazy"
+							decoding="async"
 						/>
 
 						<button
