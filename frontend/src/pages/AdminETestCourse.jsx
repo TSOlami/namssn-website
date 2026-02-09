@@ -23,6 +23,8 @@ const AdminETestCourse = () => {
   const [selectedTestId, setSelectedTestId] = useState("");
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [testSearch, setTestSearch] = useState("");
+  const [publishConfirm, setPublishConfirm] = useState(null);
+  const [bulkAddConfirm, setBulkAddConfirm] = useState(false);
 
   const { data: tests, isLoading } = useAdminGetTestsByCourseQuery(courseId, { skip: !courseId });
   const filteredTests = useMemo(() => {
@@ -286,7 +288,7 @@ const AdminETestCourse = () => {
                 />
                 <button
                   type="button"
-                  onClick={handleBulkAdd}
+                  onClick={handleBulkAddClick}
                   disabled={isAddingQuestions || !selectedTestId || !bulkJson.trim()}
                   className="mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                 >
