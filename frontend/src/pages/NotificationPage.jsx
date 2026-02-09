@@ -28,6 +28,7 @@ const NotificationPage = () => {
 	const [page, setPage] = useState(1);
 	const [items, setItems] = useState([]);
 	const [hasMore, setHasMore] = useState(true);
+	const [showClearConfirm, setShowClearConfirm] = useState(false);
 
 	// Paginated notifications from the backend
 	const {
@@ -118,7 +119,7 @@ const NotificationPage = () => {
 				<div className="flex justify-end items-center px-4 py-3 border-b border-gray-200">
 					{items.length > 0 && (
 						<button
-							onClick={handleClearNotifications}
+							onClick={() => setShowClearConfirm(true)}
 							className="button-2 flex items-center gap-2 text-sm hover:opacity-80"
 						>
 							<FaTrash className="text-xs" />
